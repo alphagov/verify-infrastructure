@@ -1,0 +1,19 @@
+[
+  {
+    "name": "squid",
+    "image": "tlwr/squid",
+    "cpu": 0,
+    "memory": 3500,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ],
+    "environment": [{
+      "Name": "WHITELIST",
+      "Value": "${whitelist_base64}"
+    }]
+  }
+]
