@@ -1,0 +1,2 @@
+variable "deployment" {}
+variable "domain" {}

@@ -1,0 +1,19 @@
+[
+  {
+    "name": "nginx",
+    "image": "tlwr/nginx-tls",
+    "cpu": 0,
+    "memory": 3500,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8443,
+        "hostPort": 8443
+      }
+    ],
+    "environment": [{
+      "Name": "LOCATION_BLOCKS",
+      "Value": "${location_blocks_base64}"
+    }]
+  }
+]

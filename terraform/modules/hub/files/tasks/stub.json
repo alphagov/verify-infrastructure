@@ -1,0 +1,24 @@
+[
+  {
+    "name": "stub",
+    "image": "ruby:2.5.3",
+    "cpu": 0,
+    "memory": 3500,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ],
+    "entryPoint": [
+      "ruby",
+      "-e",
+      "require 'webrick'; class S < WEBrick::HTTPServlet::AbstractServlet; def do_GET(req,res); res.status = 200; res.content_type = 'text/plain'; app = ENV['APP_NAME']; res.body = 'hello from ' + app; end; end; server = WEBrick::HTTPServer.new(Port: 8080); server.mount('/', S); server.start"
+    ],
+    "environment": [{
+      "Name": "APP_NAME",
+      "Value": "${app}"
+    }]
+  }
+]

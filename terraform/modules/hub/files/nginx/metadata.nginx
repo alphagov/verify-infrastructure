@@ -1,0 +1,26 @@
+location = /SAML2/metadata/federation {
+  # alias /srv/www/metadata/federation.xml;
+  # default_type application/samlmetadata+xml;
+  return 200 'federation metadata';
+}
+
+location = /SAML2/metadata/connector {
+  alias /tmp/SAML2/metadata/connector.xml;
+  default_type application/samlmetadata+xml;
+}
+
+location = /SAML2/metadata/trust-anchor {
+  # alias /srv/www/metadata/trust-anchor.jws;
+  # default_type application/jose;
+  return 200 'trust-anchor metadata';
+}
+
+# Upstream URL is set via extraHosts in ECS task definition
+set $metadata_aggregator_upstream "metadata-aggregator-upstream";
+
+location /SAML2/metadata/aggregator {
+  rewrite /SAML2/metadata/aggregator/([^/]+) $1 break;
+  # proxy_pass $metadata_aggregator_upstream/$uri;
+  # default_type application/samlmetadata+xml;
+  return 200 '$uri';
+}
