@@ -20,7 +20,7 @@ variable "additional_instance_security_group_ids" {
   default = []
 }
 
-variable "additional_instance_iam_policy_arns" {
+variable "additional_instance_role_policy_arns" {
   default = []
 }
 

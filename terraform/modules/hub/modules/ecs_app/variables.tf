@@ -5,6 +5,7 @@ variable "deployment" {}
 variable "domain" {}
 variable "task_definition" {}
 variable "vpc_id" {}
+variable "tools_account_id" {}
 
 variable "task_subnets" {
   type = "list"
@@ -22,7 +23,11 @@ variable "additional_task_security_group_ids" {
   default = []
 }
 
-variable "additional_task_iam_policy_arns" {
+variable "additional_task_role_policy_arns" {
+  default = []
+}
+
+variable "additional_execution_role_policy_arns" {
   default = []
 }
 

@@ -57,9 +57,3 @@ resource "aws_route_table_association" "internal_private" {
   subnet_id      = "${element(aws_subnet.internal.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 }
-
-resource "aws_route_table_association" "egress_proxy_nlb_private" {
-  count          = "${var.number_of_availability_zones}"
-  subnet_id      = "${element(aws_subnet.internal.*.id, count.index)}"
-  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
-}

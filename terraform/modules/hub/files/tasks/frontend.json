@@ -1,0 +1,114 @@
+[
+  {
+    "name": "frontend",
+    "image": "${image_and_tag}",
+    "cpu": 0,
+    "memory": 3500,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ],
+    "entryPoint": [
+      "rails",
+      "server",
+      "-p",
+      "8080",
+      "-b",
+      "0.0.0.0"
+    ],
+    "environment": [{
+      "Name": "SESSION_COOKIE_DURATION_IN_HOURS",
+      "Value": "2"
+    }, {
+      "Name": "CONFIG_API_HOST",
+      "Value": "https://config.${domain}:443"
+    }, {
+      "Name": "POLICY_HOST",
+      "Value": "https://policy.${domain}:443"
+    }, {
+      "Name": "CYCLE_3_DISPLAY_LOCALES",
+      "Value": "/app/federation/configuration/display-locales/cycle_3"
+    }, {
+      "Name": "IDP_DISPLAY_LOCALES",
+      "Value": "/app/federation/configuration/display-locales/idps"
+    }, {
+      "Name": "COUNTRY_DISPLAY_LOCALES",
+      "Value": "/app/federation/configuration/display-locales/countries"
+    }, {
+      "Name": "COUNTRY_FLAGS_DIRECTORY",
+      "Value": "/app/federation/configuration/eidas/country-flags"
+    }, {
+      "Name": "EIDAS_SCHEMES_DIRECTORY",
+      "Value": "/app/federation/configuration/eidas/schemes"
+    }, {
+      "Name": "EIDAS_SCHEME_LOGOS_DIRECTORY",
+      "Value": "/app/federation/configuration/eidas/scheme-logos"
+    }, {
+      "Name": "LOGO_DIRECTORY",
+      "Value": "/app/federation/configuration/idp-logos"
+    }, {
+      "Name": "WHITE_LOGO_DIRECTORY",
+      "Value": "/app/federation/configuration/idp-logos/white"
+    }, {
+      "Name": "ZDD_LATCH",
+      "Value": ".service_unavailable"
+    }, {
+      "Name": "POLLING_WAIT_TIME",
+      "Value": "2"
+    }, {
+      "Name": "METRICS_ENABLED",
+      "Value": "false"
+    }, {
+      "Name": "LOG_LEVEL",
+      "Value": "debug"
+    }, {
+      "Name": "RULES_DIRECTORY",
+      "Value": "/app/federation/configuration/idp-rules"
+    }, {
+      "Name": "RP_CONFIG",
+      "Value": "/app/federation/configuration/relying_parties.yml"
+    }, {
+      "Name": "IDP_CONFIG",
+      "Value": "/app/federation/configuration/identity_providers.yml"
+    }, {
+      "Name": "CYCLE_THREE_ATTRIBUTES_DIRECTORY",
+      "Value": "/app/federation/configuration/cycle-three-attributes"
+    }, {
+      "Name": "AB_TEST_FILE",
+      "Value": "/app/federation/configuration/ab_test/ab_test.yml"
+    }, {
+      "Name": "SEGMENT_DEFINITIONS",
+      "Value": "/app/federation/configuration/segment_definitions.yml"
+    }, {
+      "Name": "PUBLIC_PIWIK_HOST",
+      "Value": "https://www.${domain}:443/analytics"
+    }, {
+      "Name": "INTERNAL_PIWIK_HOST",
+      "Value": "https://www.${domain}:443/piwik.php"
+    }, {
+      "Name": "PIWIK_SITE_ID",
+      "Value": "1"
+    }, {
+      "Name": "ZENDESK_URL",
+      "Value": "https://example.com"
+    }, {
+      "Name": "ZENDESK_USERNAME",
+      "Value": "fake@zendesk.user"
+    }, {
+      "Name": "ZENDESK_TOKEN",
+      "Value": "123"
+    }, {
+      "Name": "SAML_PROXY_HOST",
+      "Value": "https://saml-proxy.${domain}:443"
+    }, {
+      "Name": "VERIFY_PRODUCT_PAGE",
+      "Value": "https://govuk-verify.cloudapps.digital/"
+    }, {
+      "Name": "RAILS_ENV",
+      "Value": "production"
+    }]
+  }
+]
