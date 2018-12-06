@@ -109,7 +109,7 @@ resource "aws_lb_listener" "ingress_https" {
   load_balancer_arn = "${aws_lb.ingress.arn}"
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = "${aws_acm_certificate.wildcard.arn}"
+  certificate_arn   = "${data.aws_acm_certificate.wildcard.arn}"
 
   default_action {
     type = "forward"
