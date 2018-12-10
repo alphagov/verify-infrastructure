@@ -1,7 +1,7 @@
 [
   {
     "name": "nginx",
-    "image": "tlwr/nginx-tls",
+    "image": "${image_and_tag}",
     "cpu": 0,
     "memory": 3500,
     "essential": true,
@@ -12,8 +12,8 @@
       }
     ],
     "environment": [{
-      "Name": "LOCATION_BLOCKS",
-      "Value": "${location_blocks_base64}"
+      "Name": "DEPLOYMENT",
+      "Value": "${deployment}"
     }]
   }
 ]

@@ -1,7 +1,7 @@
 [
   {
     "name": "squid",
-    "image": "tlwr/squid",
+    "image": "${image_and_tag}",
     "cpu": 0,
     "memory": 3500,
     "essential": true,

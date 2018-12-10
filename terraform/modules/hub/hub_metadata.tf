@@ -19,26 +19,12 @@ resource "aws_security_group_rule" "metadata_egress_to_s3_endpoint" {
   prefix_list_ids   = ["${aws_vpc_endpoint.s3.prefix_list_id}"]
 }
 
-
-locals {
-  metadata_aggregator_upstream = "https://govukverify-eidas-metadata-aggregator-${var.deployment}-a.s3-eu-west-2.amazonaws.com"
-}
-
-data "template_file" "metadata_nginx_location_blocks" {
-  template = "${file("${path.module}/files/nginx/agg.nginx")}"
-
-  vars {
-    metadata_aggregator_upstream = "${local.metadata_aggregator_upstream}"
-  }
-}
-
 data "template_file" "metadata_task_def" {
   template = "${file("${path.module}/files/tasks/metadata.json")}"
 
   vars {
-    location_blocks_base64 = "${base64encode(
-      data.template_file.metadata_nginx_location_blocks.rendered
-    )}"
+    deployment    = "${var.deployment}"
+    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-metadata:latest"
   }
 }
 
@@ -48,12 +34,14 @@ module "metadata_ecs_roles" {
   deployment       = "${var.deployment}"
   service_name     = "metadata"
   tools_account_id = "${var.tools_account_id}"
+  image_name       = "verify-nginx-tls"
 }
 
 resource "aws_ecs_task_definition" "metadata" {
   family                = "${var.deployment}-metadata"
   container_definitions = "${data.template_file.metadata_task_def.rendered}"
   network_mode          = "awsvpc"
+  execution_role_arn    = "${module.metadata_ecs_roles.execution_role_arn}"
 }
 
 resource "aws_ecs_service" "metadata" {
