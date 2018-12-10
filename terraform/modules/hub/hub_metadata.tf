@@ -48,12 +48,14 @@ module "metadata_ecs_roles" {
   deployment       = "${var.deployment}"
   service_name     = "metadata"
   tools_account_id = "${var.tools_account_id}"
+  image_name       = "verify-nginx-tls"
 }
 
 resource "aws_ecs_task_definition" "metadata" {
   family                = "${var.deployment}-metadata"
   container_definitions = "${data.template_file.metadata_task_def.rendered}"
   network_mode          = "awsvpc"
+  execution_role_arn    = "${module.metadata_ecs_roles.execution_role_arn}"
 }
 
 resource "aws_ecs_service" "metadata" {

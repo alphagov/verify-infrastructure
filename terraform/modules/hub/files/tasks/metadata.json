@@ -1,7 +1,7 @@
 [
   {
     "name": "nginx",
-    "image": "tlwr/nginx-tls",
+    "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-nginx-tls",
     "cpu": 0,
     "memory": 3500,
     "essential": true,

@@ -136,14 +136,16 @@ resource "aws_ecs_cluster" "egress_proxy" {
 module "egress_proxy_ecs_roles" {
   source = "modules/ecs_iam_role_pair"
 
-  deployment   = "${var.deployment}"
-  service_name = "egress-proxy"
+  deployment       = "${var.deployment}"
+  service_name     = "egress-proxy"
   tools_account_id = "${var.tools_account_id}"
+  image_name       = "verify-squid"
 }
 
 resource "aws_ecs_task_definition" "egress_proxy" {
   family                = "${var.deployment}-egress-proxy"
   container_definitions = "${data.template_file.egress_proxy_task_def.rendered}"
+  execution_role_arn    = "${module.egress_proxy_ecs_roles.execution_role_arn}"
 }
 
 resource "aws_ecs_service" "egress_proxy" {
