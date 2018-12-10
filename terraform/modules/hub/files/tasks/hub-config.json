@@ -1,0 +1,35 @@
+[
+  {
+    "name": "config",
+    "image": "${image_and_tag}",
+    "cpu": 0,
+    "memory": 3500,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ],
+    "entryPoint": [
+      "/config/bin/config",
+      "server",
+      "/tmp/config.yml"
+    ],
+    "environment": [{
+      "Name": "CONFIG_DATA_PATH",
+      "Value": "/tmp/federation/configuration/config-service-data/${deployment}"
+    }, {
+      "Name": "RP_TRUSTSTORE_PASSWORD",
+      "Value": "${truststore_password}"
+    }, {
+      "Name": "CLIENT_TRUSTSTORE_PASSWORD",
+      "Value": "${truststore_password}"
+    }, {
+      "Name": "DEPLOYMENT",
+      "Value": "${deployment}"
+    }, {
+      "Name": "JAVA_OPTS",
+      "Value": "-Dservice.name=config -XX:+HeapDumpOnOutOfMemoryError -Dhttp.proxyHost=\"egress-proxy.${domain}\" -Dhttp.proxyPort=\"8080\" -Dhttps.proxyHost=\"egress-proxy.${domain}\" -Dhttps.proxyPort=\"8080\" -Dhttp.nonProxyHosts=\"\" -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5" }]
+  }
+]

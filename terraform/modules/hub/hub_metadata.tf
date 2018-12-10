@@ -34,7 +34,7 @@ module "metadata_ecs_roles" {
   deployment       = "${var.deployment}"
   service_name     = "metadata"
   tools_account_id = "${var.tools_account_id}"
-  image_name       = "verify-nginx-tls"
+  image_name       = "verify-metadata"
 }
 
 resource "aws_ecs_task_definition" "metadata" {

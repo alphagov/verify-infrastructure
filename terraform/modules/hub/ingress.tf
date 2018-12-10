@@ -30,7 +30,7 @@ resource "aws_security_group_rule" "ingress_ingress_from_internet_over_http" {
   to_port   = 80
 
   security_group_id = "${aws_security_group.ingress.id}"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
 }
 
 resource "aws_security_group_rule" "ingress_ingress_from_internet_over_https" {
@@ -40,7 +40,7 @@ resource "aws_security_group_rule" "ingress_ingress_from_internet_over_https" {
   to_port   = 443
 
   security_group_id = "${aws_security_group.ingress.id}"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
 }
 
 resource "aws_lb_target_group" "ingress_metadata" {
@@ -172,7 +172,7 @@ module "ingress_ecs_asg" {
   cluster             = "ingress"
   vpc_id              = "${aws_vpc.hub.id}"
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
-  number_of_instances = "${var.number_of_availability_zones}"
+  number_of_instances = "${var.number_of_availability_zones + 1}"
   domain              = "${var.domain}"
 
   additional_instance_security_group_ids = [

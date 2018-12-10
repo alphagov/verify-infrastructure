@@ -8,12 +8,14 @@ module "cluster_ecs_roles" {
   deployment       = "${var.deployment}"
   service_name     = "${var.cluster}"
   tools_account_id = "${var.tools_account_id}"
+  image_name       = "${var.image_name}"
 }
 
 resource "aws_ecs_task_definition" "cluster" {
   family                = "${local.identifier}"
   container_definitions = "${var.task_definition}"
-  network_mode          = "awsvpc"
+  execution_role_arn    = "${module.cluster_ecs_roles.execution_role_arn}"
+  network_mode          = "bridge"
 }
 
 resource "aws_ecs_service" "cluster" {
@@ -26,14 +28,5 @@ resource "aws_ecs_service" "cluster" {
     target_group_arn = "${aws_lb_target_group.task.arn}"
     container_name   = "${var.container_name}"
     container_port   = "${var.container_port}"
-  }
-
-  network_configuration {
-    subnets = ["${var.task_subnets}"]
-
-    security_groups = [
-      "${aws_security_group.task.id}",
-      "${var.additional_task_security_group_ids}",
-    ]
   }
 }

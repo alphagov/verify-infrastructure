@@ -6,8 +6,14 @@ variable "domain" {}
 variable "task_definition" {}
 variable "vpc_id" {}
 variable "tools_account_id" {}
+variable "instance_security_group_id" {}
+variable "certificate_arn" {}
 
-variable "task_subnets" {
+variable "image_name" {
+  default = ""
+}
+
+variable "lb_subnets" {
   type = "list"
 }
 
@@ -17,10 +23,6 @@ locals {
 
 variable "number_of_tasks" {
   default = 2
-}
-
-variable "additional_task_security_group_ids" {
-  default = []
 }
 
 variable "additional_task_role_policy_arns" {

@@ -4,7 +4,7 @@ resource "aws_lb" "cluster" {
   name            = "${local.identifier}"
   internal        = true
   security_groups = ["${aws_security_group.lb.id}"]
-  subnets         = ["${var.task_subnets}"]
+  subnets         = ["${var.lb_subnets}"]
 
   tags {
     Deployment = "${var.deployment}"
@@ -15,7 +15,7 @@ resource "aws_lb_target_group" "task" {
   name                 = "${local.identifier}-task"
   port                 = 80
   protocol             = "HTTP"
-  target_type          = "ip"
+  target_type          = "instance"
   vpc_id               = "${var.vpc_id}"
   deregistration_delay = 60
 
@@ -36,6 +36,24 @@ resource "aws_lb_listener" "cluster_http" {
   load_balancer_arn = "${aws_lb.cluster.arn}"
   port              = "80"
   protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_lb_listener" "cluster_https" {
+  load_balancer_arn = "${aws_lb.cluster.arn}"
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2015-05"
+  certificate_arn   = "${var.certificate_arn}"
 
   default_action {
     type             = "forward"

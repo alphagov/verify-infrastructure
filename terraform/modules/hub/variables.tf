@@ -13,3 +13,9 @@ variable "tools_account_id" {
 variable "number_of_availability_zones" {
   default = 2
 }
+
+variable "publically_accessible_from_cidrs" {
+  default = ["0.0.0.0/0"]
+}
+
+variable "truststore_password" {}
