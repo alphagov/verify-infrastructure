@@ -35,17 +35,20 @@ resource "aws_security_group_rule" "egress_proxy_instance_egress_to_internet_ove
 
 locals {
   egress_proxy_whitelist_list = [
-    "amazonlinux\\.eu-west-2\\.amazonaws\\.com",   # Yum
-    "repo\\.eu-west-2\\.amazonaws\\.com",          # Yum
-    "packages\\.eu-west-2\\.amazonaws\\.com",      # Yum
-    "amazon-ssm-eu-west-2\\.s3\\.amazonaws\\.com", # Where the package is from
-    "ec2messages\\.eu-west-2\\.amazonaws\\.com",   # SSM agent
-    "ssmmessages\\.eu-west-2\\.amazonaws\\.com",   # SSM agent
-    "ssm\\.eu-west-2\\.amazonaws\\.com",           # SSM agent
-    "ecs[^.]*\\.eu-west-2\\.amazonaws\\.com",      # ECS agent
-    "registry-1\\.docker\\.io",                    # Docker Hub
-    "auth\\.docker\\.io",                          # Docker Hub
-    "production\\.cloudflare\\.docker\\.com",      # Docker Hub
+    "amazonlinux\\.eu-west-2\\.amazonaws\\.com",                               # Yum
+    "repo\\.eu-west-2\\.amazonaws\\.com",                                      # Yum
+    "packages\\.eu-west-2\\.amazonaws\\.com",                                  # Yum
+    "amazon-ssm-eu-west-2\\.s3\\.amazonaws\\.com",                             # Where the package is from
+    "ec2messages\\.eu-west-2\\.amazonaws\\.com",                               # SSM agent
+    "ssmmessages\\.eu-west-2\\.amazonaws\\.com",                               # SSM agent
+    "ssm\\.eu-west-2\\.amazonaws\\.com",                                       # SSM agent
+    "ecs[^.]*\\.eu-west-2\\.amazonaws\\.com",                                  # ECS agent
+    "ecr\\.eu-west-2\\.amazonaws\\.com",                                       # ECR
+    "prod-eu-west-2-starport-layer-bucket\\.s3\\.eu-west-2\\.amazonaws\\.com", # ECR s3 bucket
+    "${var.tools_account_id}\\.dkr\\.ecr\\.eu-west-2\\.amazonaws\\.com",       # Tools ECR auth
+    "registry-1\\.docker\\.io",                                                # Docker Hub
+    "auth\\.docker\\.io",                                                      # Docker Hub
+    "production\\.cloudflare\\.docker\\.com",                                  # Docker Hub
   ]
 
   egress_proxy_whitelist = "${join(" ", local.egress_proxy_whitelist_list)}"
@@ -128,6 +131,14 @@ resource "aws_security_group_rule" "egress_proxy_lb_ingress_from_egress_via_prox
 
 resource "aws_ecs_cluster" "egress_proxy" {
   name = "${var.deployment}-egress-proxy"
+}
+
+module "egress_proxy_ecs_roles" {
+  source = "modules/ecs_iam_role_pair"
+
+  deployment   = "${var.deployment}"
+  service_name = "egress-proxy"
+  tools_account_id = "${var.tools_account_id}"
 }
 
 resource "aws_ecs_task_definition" "egress_proxy" {

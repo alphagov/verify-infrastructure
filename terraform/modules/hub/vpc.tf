@@ -33,7 +33,8 @@ resource "aws_vpc_endpoint" "s3" {
             ],
             "Resource": [
                 "arn:aws:s3:::govukverify-eidas-metadata-aggregator-${var.deployment}-a/*",
-                "arn:aws:s3:::govukverify-eidas-metadata-aggregator-${var.deployment}-a"
+                "arn:aws:s3:::govukverify-eidas-metadata-aggregator-${var.deployment}-a",
+                "*"
             ]
         }
     ]

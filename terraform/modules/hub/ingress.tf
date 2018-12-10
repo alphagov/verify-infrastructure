@@ -10,6 +10,8 @@ module "ingress_can_connect_to_frontend_task" {
 
   source_sg_id      = "${aws_security_group.ingress.id}"
   destination_sg_id = "${aws_security_group.frontend_task.id}"
+
+  port = 8080
 }
 
 module "ingress_can_connect_to_metadata_task" {
@@ -57,6 +59,23 @@ resource "aws_lb_target_group" "ingress_metadata" {
   }
 }
 
+resource "aws_lb_target_group" "ingress_frontend" {
+  name                 = "${var.deployment}-ingress-frontend"
+  port                 = 8080
+  protocol             = "HTTP"
+  vpc_id               = "${aws_vpc.hub.id}"
+  target_type          = "ip"
+  deregistration_delay = 60
+
+  health_check {
+    path     = "/"
+    protocol = "HTTP"
+    interval = 10
+    timeout  = 5
+    matcher  = "200,301"
+  }
+}
+
 resource "aws_lb" "ingress" {
   name               = "${var.deployment}-ingress"
   internal           = false
@@ -90,16 +109,11 @@ resource "aws_lb_listener" "ingress_https" {
   load_balancer_arn = "${aws_lb.ingress.arn}"
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = "${aws_acm_certificate.wildcard.arn}"
+  certificate_arn   = "${data.aws_acm_certificate.wildcard.arn}"
 
   default_action {
-    type = "fixed-response"
-
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "🔰 forward to frontend"
-      status_code  = "200"
-    }
+    type = "forward"
+    target_group_arn = "${aws_lb_target_group.ingress_frontend.arn}"
   }
 }
 

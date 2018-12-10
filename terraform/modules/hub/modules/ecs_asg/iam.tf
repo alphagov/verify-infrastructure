@@ -116,7 +116,7 @@ resource "aws_iam_role_policy_attachment" "instance" {
 }
 
 resource "aws_iam_role_policy_attachment" "instance_additional" {
-  count      = "${length(var.additional_instance_iam_policy_arns)}"
+  count      = "${length(var.additional_instance_role_policy_arns)}"
   role       = "${aws_iam_role.instance.name}"
-  policy_arn = "${element(var.additional_instance_iam_policy_arns, count.index)}"
+  policy_arn = "${element(var.additional_instance_role_policy_arns, count.index)}"
 }

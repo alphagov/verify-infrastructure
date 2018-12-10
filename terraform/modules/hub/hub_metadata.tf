@@ -19,6 +19,7 @@ resource "aws_security_group_rule" "metadata_egress_to_s3_endpoint" {
   prefix_list_ids   = ["${aws_vpc_endpoint.s3.prefix_list_id}"]
 }
 
+
 locals {
   metadata_aggregator_upstream = "https://govukverify-eidas-metadata-aggregator-${var.deployment}-a.s3-eu-west-2.amazonaws.com"
 }
@@ -39,6 +40,14 @@ data "template_file" "metadata_task_def" {
       data.template_file.metadata_nginx_location_blocks.rendered
     )}"
   }
+}
+
+module "metadata_ecs_roles" {
+  source = "modules/ecs_iam_role_pair"
+
+  deployment       = "${var.deployment}"
+  service_name     = "metadata"
+  tools_account_id = "${var.tools_account_id}"
 }
 
 resource "aws_ecs_task_definition" "metadata" {
