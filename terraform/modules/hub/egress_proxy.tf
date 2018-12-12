@@ -186,11 +186,22 @@ resource "aws_route53_record" "egress_proxy_lb" {
   }
 }
 
-module "egress_proxy_instance_can_connect_to_config" {
+module "egress_proxy_instance_can_connect_to_config_https" {
   source = "modules/microservice_connection"
 
   source_sg_id      = "${module.egress_proxy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.config.lb_sg_id}"
+
+  port = 443
+}
+
+module "egress_proxy_instance_can_connect_to_config_http" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.egress_proxy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${module.config.lb_sg_id}"
+
+  port = 80
 }
 
 module "egress_proxy_instance_can_connect_to_policy" {

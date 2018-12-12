@@ -29,15 +29,13 @@ module "saml_proxy" {
   cluster               = "saml-proxy"
   domain                = "${var.domain}"
   vpc_id                = "${aws_vpc.hub.id}"
-  task_subnets               = ["${aws_subnet.internal.*.id}"]
+  lb_subnets            = ["${aws_subnet.internal.*.id}"]
   task_definition       = "${data.template_file.saml_proxy_task_def.rendered}"
   container_name        = "stub"
   container_port        = "8080"
   number_of_tasks       = 1
   health_check_protocol = "HTTP"
   tools_account_id      = "${var.tools_account_id}"
-
-  additional_task_security_group_ids = [
-    "${aws_security_group.egress_via_proxy.id}"
-  ]
+  instance_security_group_id = "${module.saml_proxy_ecs_asg.instance_sg_id}"
+  certificate_arn            = "${data.aws_acm_certificate.wildcard.arn}"
 }
