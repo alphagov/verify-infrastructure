@@ -30,7 +30,12 @@ resource "aws_security_group_rule" "ingress_ingress_from_internet_over_http" {
   to_port   = 80
 
   security_group_id = "${aws_security_group.ingress.id}"
-  cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
+  cidr_blocks       = ["${
+    concat(
+      var.publically_accessible_from_cidrs,
+      formatlist("%s/32", aws_eip.egress.*.public_ip),
+    )
+  }"] # adding the egress IPs is a hack to let us access metadata through egress proxy
 }
 
 resource "aws_security_group_rule" "ingress_ingress_from_internet_over_https" {
@@ -40,7 +45,12 @@ resource "aws_security_group_rule" "ingress_ingress_from_internet_over_https" {
   to_port   = 443
 
   security_group_id = "${aws_security_group.ingress.id}"
-  cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
+  cidr_blocks       = ["${
+    concat(
+      var.publically_accessible_from_cidrs,
+      formatlist("%s/32", aws_eip.egress.*.public_ip),
+    )
+  }"] # adding the egress IPs is a hack to let us access metadata through egress proxy
 }
 
 resource "aws_lb_target_group" "ingress_metadata" {

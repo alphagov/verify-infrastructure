@@ -37,6 +37,7 @@ module "saml_proxy" {
   container_port             = "8080"
   number_of_tasks            = 1
   health_check_protocol      = "HTTP"
+  health_check_path          = "/service-status"
   tools_account_id           = "${var.tools_account_id}"
   instance_security_group_id = "${module.saml_proxy_ecs_asg.instance_sg_id}"
   certificate_arn            = "${data.aws_acm_certificate.wildcard.arn}"
