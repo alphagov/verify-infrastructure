@@ -49,6 +49,7 @@ locals {
     "registry-1\\.docker\\.io",                                                # Docker Hub
     "auth\\.docker\\.io",                                                      # Docker Hub
     "production\\.cloudflare\\.docker\\.com",                                  # Docker Hub
+    "www\\.e\\.${var.deployment}\\.signin\\.service\\.gov\\.uk",               # Metadata
   ]
 
   egress_proxy_whitelist = "${join(" ", local.egress_proxy_whitelist_list)}"
