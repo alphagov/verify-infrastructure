@@ -1,0 +1,26 @@
+[
+  {
+    "name": "saml-soap-proxy",
+    "image": "${image_and_tag}",
+    "cpu": 0,
+    "memory": 3500,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ],
+    "entryPoint": [
+      "/saml-soap-proxy/bin/saml-soap-proxy",
+      "server",
+      "/tmp/saml-soap-proxy.yml"
+    ],
+    "environment": [{
+      "Name": "DEPLOYMENT",
+      "Value": "${deployment}"
+    }, {
+      "Name": "JAVA_OPTS",
+      "Value": "-Dservice.name=saml-soap-proxy -Xms3000m -Xmx3200m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.proxyHost=\"egress-proxy.${domain}\" -Dhttp.proxyPort=\"8080\" -Dhttps.proxyHost=\"egress-proxy.${domain}\" -Dhttps.proxyPort=\"8080\" -Dhttp.nonProxyHosts=\"config.${domain}\" -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5" }]
+  }
+]
