@@ -45,25 +45,31 @@ module "policy" {
   certificate_arn            = "${data.aws_acm_certificate.wildcard.arn}"
 }
 
-# 
-# module "policy_can_connect_to_config" {
-#   source = "modules/microservice_connection"
-# 
-#   source_sg_id      = "${module.policy.task_sg_id}"
-#   destination_sg_id = "${module.config.lb_sg_id}"
-# }
-# 
-# module "policy_can_connect_to_saml_engine" {
-#   source = "modules/microservice_connection"
-# 
-#   source_sg_id      = "${module.policy.task_sg_id}"
-#   destination_sg_id = "${module.saml_engine.lb_sg_id}"
-# }
-# 
-# module "policy_can_connect_to_saml_soap_proxy" {
-#   source = "modules/microservice_connection"
-# 
-#   source_sg_id      = "${module.policy.task_sg_id}"
-#   destination_sg_id = "${module.saml_soap_proxy.lb_sg_id}"
-# }
 
+module "policy_can_connect_to_config" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${module.config.lb_sg_id}"
+}
+
+module "policy_can_connect_to_saml_engine" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${module.saml_engine.lb_sg_id}"
+}
+
+module "policy_can_connect_to_saml_proxy" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${module.saml_proxy.lb_sg_id}"
+}
+
+module "policy_can_connect_to_saml_soap_proxy" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${module.saml_soap_proxy.lb_sg_id}"
+}
