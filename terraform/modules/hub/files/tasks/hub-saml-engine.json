@@ -11,11 +11,7 @@
         "hostPort": 8080
       }
     ],
-    "entryPoint": [
-      "/saml-engine/bin/saml-engine",
-      "server",
-      "/tmp/saml-engine.yml"
-    ],
+    "entryPoint": ["/tmp/saml-engine-entrypoint.sh"],
     "environment": [{
       "Name": "DEPLOYMENT",
       "Value": "${deployment}"
