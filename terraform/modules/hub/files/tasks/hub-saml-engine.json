@@ -1,0 +1,25 @@
+[
+  {
+    "name": "saml-engine",
+    "image": "${image_and_tag}",
+    "cpu": 0,
+    "memory": 3500,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ],
+    "entryPoint": ["/tmp/saml-engine-entrypoint.sh"],
+    "environment": [{
+      "Name": "DEPLOYMENT",
+      "Value": "${deployment}"
+    }, {
+      "Name": "DOMAIN",
+      "Value": "${domain}"
+    }, {
+      "Name": "JAVA_OPTS",
+      "Value": "-Dservice.name=config -Xms3000m -Xmx3200m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.proxyHost=\"egress-proxy.${domain}\" -Dhttp.proxyPort=\"8080\" -Dhttps.proxyHost=\"egress-proxy.${domain}\" -Dhttps.proxyPort=\"8080\" -Dhttp.nonProxyHosts=\"config.${domain}|policy.${domain}|saml-soap-proxy.${domain}|saml-soap-proxy.${domain}\" -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5" }]
+  }
+]

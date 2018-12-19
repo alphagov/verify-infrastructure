@@ -37,7 +37,7 @@ module "saml_soap_proxy" {
   container_port             = "8080"
   number_of_tasks            = 1
   health_check_protocol      = "HTTP"
-  health_check_path          = "/saml-soap-proxy/matching-service-health-check"
+  health_check_path          = "/service-status"
   tools_account_id           = "${var.tools_account_id}"
   instance_security_group_id = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
   certificate_arn            = "${data.aws_acm_certificate.wildcard.arn}"
@@ -49,6 +49,24 @@ module "saml_soap_proxy_can_connect_to_config" {
 
   source_sg_id      = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.config.lb_sg_id}"
+
+  port = 443
+}
+
+module "saml_soap_proxy_can_connect_to_policy" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${module.policy.lb_sg_id}"
+
+  port = 443
+}
+
+module "saml_soap_proxy_can_connect_to_saml_engine" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${module.saml_engine.lb_sg_id}"
 
   port = 443
 }

@@ -43,3 +43,17 @@ module "saml_proxy" {
   certificate_arn            = "${data.aws_acm_certificate.wildcard.arn}"
   image_name                 = "verify-saml-proxy"
 }
+
+module "saml_proxy_can_connect_to_config" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.saml_proxy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${module.config.lb_sg_id}"
+}
+
+module "saml_proxy_can_connect_to_policy" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.saml_proxy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${module.policy.lb_sg_id}"
+}
