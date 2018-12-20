@@ -9,3 +9,4 @@ data "aws_ami" "awslinux2" {
   owners = ["amazon"]
 }
 
+data "aws_caller_identity" "account" {}
