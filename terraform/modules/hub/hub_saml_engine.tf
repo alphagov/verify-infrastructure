@@ -40,6 +40,7 @@ module "saml_engine" {
   container_port             = "8080"
   number_of_tasks            = 1
   health_check_protocol      = "HTTP"
+  health_check_path          = "/service-status"
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-saml-engine"
   instance_security_group_id = "${module.saml_engine_ecs_asg.instance_sg_id}"
