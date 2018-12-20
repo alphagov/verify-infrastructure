@@ -11,7 +11,21 @@
         "hostPort": 8080
       }
     ],
-    "entryPoint": ["/tmp/saml-engine-entrypoint.sh"],
+    "secrets": [
+      {
+        "name": "HUB_SIGNING_PRIVATE_KEY",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}-hub-signing-private-key"
+      },
+      {
+        "name": "PRIMARY_HUB_ENCRYPTION_PRIVATE_KEY",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}-primary-hub-encryption-private-key"
+      },
+      {
+        "name": "SECONDARY_HUB_ENCRYPTION_PRIVATE_KEY",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}-secondary-hub-encryption-private-key"
+      }
+    ],
+    "entryPoint": ["/saml-engine/bin/saml-engine", "server", "/tmp/saml-engine.yml"],
     "environment": [{
       "Name": "DEPLOYMENT",
       "Value": "${deployment}"
