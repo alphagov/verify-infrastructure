@@ -8,7 +8,7 @@ module "config_ecs_asg" {
   instance_subnets = ["${aws_subnet.internal.*.id}"]
 
   number_of_instances = "${var.number_of_availability_zones}"
-  domain              = "${var.domain}"
+  domain              = "${local.root_domain}"
 
   additional_instance_security_group_ids = [
     "${aws_security_group.egress_via_proxy.id}",
@@ -20,7 +20,7 @@ data "template_file" "config_task_def" {
 
   vars {
     image_and_tag       = "${local.tools_account_ecr_url_prefix}-verify-config:latest"
-    domain              = "${var.domain}"
+    domain              = "${local.root_domain}"
     deployment          = "${var.deployment}"
     truststore_password = "${var.truststore_password}"
   }
@@ -31,7 +31,7 @@ module "config" {
 
   deployment                 = "${var.deployment}"
   cluster                    = "config"
-  domain                     = "${var.domain}"
+  domain                     = "${local.root_domain}"
   vpc_id                     = "${aws_vpc.hub.id}"
   lb_subnets                 = ["${aws_subnet.internal.*.id}"]
   task_definition            = "${data.template_file.config_task_def.rendered}"
@@ -43,5 +43,5 @@ module "config" {
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-config"
   instance_security_group_id = "${module.config_ecs_asg.instance_sg_id}"
-  certificate_arn            = "${data.aws_acm_certificate.wildcard.arn}"
+  certificate_arn            = "${local.wildcard_cert_arn}"
 }

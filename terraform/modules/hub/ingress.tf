@@ -119,7 +119,7 @@ resource "aws_lb_listener" "ingress_https" {
   load_balancer_arn = "${aws_lb.ingress.arn}"
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = "${data.aws_acm_certificate.wildcard.arn}"
+  certificate_arn   = "${local.wildcard_cert_arn}"
 
   default_action {
     type = "forward"
@@ -162,10 +162,22 @@ resource "aws_lb_listener_rule" "ingress_analytics" {
   }
 }
 
+resource "aws_route53_zone" "ingress_www" {
+  name = "www.${local.root_domain}."
+
+  vpc {
+    vpc_id = "${aws_vpc.hub.id}"
+  }
+
+  tags {
+    Deployment = "${var.deployment}"
+  }
+}
+
 resource "aws_route53_record" "ingress_www" {
-  name    = "www.${var.domain}"
+  name    = "${var.signin_domain}"
   type    = "A"
-  zone_id = "${data.aws_route53_zone.account_public_root.id}"
+  zone_id = "${aws_route53_zone.ingress_www.id}"
 
   alias {
     name                   = "${aws_lb.ingress.dns_name}"
@@ -183,7 +195,7 @@ module "ingress_ecs_asg" {
   vpc_id              = "${aws_vpc.hub.id}"
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
   number_of_instances = "${var.number_of_availability_zones + 1}"
-  domain              = "${var.domain}"
+  domain              = "${local.root_domain}"
 
   additional_instance_security_group_ids = [
     "${aws_security_group.egress_via_proxy.id}",

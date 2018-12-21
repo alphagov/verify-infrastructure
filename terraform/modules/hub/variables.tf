@@ -2,8 +2,8 @@ variable "deployment" {
   description = "Name of the deployment; {joint,staging,prod,integration}"
 }
 
-variable "domain" {
-  description = "Root domain of the deployment; will be used for TLS certificates; e.g. staging.signin.service.gov.uk"
+variable "signin_domain" {
+  description = "Domain of the frontend of the deployment; will be used for TLS certificates; e.g. www.staging.signin.service.gov.uk"
 }
 
 variable "tools_account_id" {
@@ -19,3 +19,11 @@ variable "publically_accessible_from_cidrs" {
 }
 
 variable "truststore_password" {}
+
+locals {
+  root_domain = "${replace(var.signin_domain, "/www[.]/", "")}"
+}
+
+variable "wildcard_cert_arn" {
+  default = "ACM cert arn for wildcard of signin_domain"
+}

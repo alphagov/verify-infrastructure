@@ -8,7 +8,7 @@ module "saml_engine_ecs_asg" {
   instance_subnets = ["${aws_subnet.internal.*.id}"]
 
   number_of_instances = "${var.number_of_availability_zones}"
-  domain              = "${var.domain}"
+  domain              = "${local.root_domain}"
 
   additional_instance_security_group_ids = [
     "${aws_security_group.egress_via_proxy.id}",
@@ -21,7 +21,7 @@ data "template_file" "saml_engine_task_def" {
   vars {
     account_id    = "${data.aws_caller_identity.account.account_id}"
     deployment    = "${var.deployment}"
-    domain        = "${var.domain}"
+    domain        = "${local.root_domain}"
     image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-saml-engine:latest"
     region        = "${data.aws_region.region.id}"
   }
@@ -32,7 +32,7 @@ module "saml_engine" {
 
   deployment                 = "${var.deployment}"
   cluster                    = "saml-engine"
-  domain                     = "${var.domain}"
+  domain                     = "${local.root_domain}"
   vpc_id                     = "${aws_vpc.hub.id}"
   lb_subnets                 = ["${aws_subnet.internal.*.id}"]
   task_definition            = "${data.template_file.saml_engine_task_def.rendered}"
@@ -44,7 +44,7 @@ module "saml_engine" {
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-saml-engine"
   instance_security_group_id = "${module.saml_engine_ecs_asg.instance_sg_id}"
-  certificate_arn            = "${data.aws_acm_certificate.wildcard.arn}"
+  certificate_arn            = "${local.wildcard_cert_arn}"
 }
 
 module "saml_engine_can_connect_to_config" {

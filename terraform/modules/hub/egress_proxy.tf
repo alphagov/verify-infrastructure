@@ -8,7 +8,7 @@ module "egress_proxy_ecs_asg" {
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
   number_of_instances = "${var.number_of_availability_zones}"
   use_egress_proxy    = false
-  domain              = "${var.domain}"
+  domain              = "${local.root_domain}"
 }
 
 # Egress proxy instance has to be able to access the internet directly (HTTP)
@@ -49,7 +49,8 @@ locals {
     "registry-1\\.docker\\.io",                                                # Docker Hub
     "auth\\.docker\\.io",                                                      # Docker Hub
     "production\\.cloudflare\\.docker\\.com",                                  # Docker Hub
-    "www\\.e\\.${var.deployment}\\.signin\\.service\\.gov\\.uk",               # Metadata
+    "www\\.${var.deployment}\\.signin\\.service\\.gov\\.uk",                   # Metadata
+    "test-rp-msa-stub-${var.deployment}.ida.digital.cabinet-office.gov.uk",    # Test RP
   ]
 
   egress_proxy_whitelist = "${join(" ", local.egress_proxy_whitelist_list)}"
@@ -164,7 +165,7 @@ resource "aws_ecs_service" "egress_proxy" {
 }
 
 resource "aws_route53_zone" "egress_proxy" {
-  name = "egress-proxy.${var.domain}."
+  name = "egress-proxy.${local.root_domain}."
 
   vpc {
     vpc_id = "${aws_vpc.hub.id}"
@@ -177,7 +178,7 @@ resource "aws_route53_zone" "egress_proxy" {
 
 resource "aws_route53_record" "egress_proxy_lb" {
   zone_id = "${aws_route53_zone.egress_proxy.zone_id}"
-  name    = "egress-proxy.${var.domain}."
+  name    = "egress-proxy.${local.root_domain}."
   type    = "A"
 
   alias {
