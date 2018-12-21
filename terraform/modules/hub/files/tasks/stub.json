@@ -14,11 +14,7 @@
     "entryPoint": [
       "ruby",
       "-e",
-      "require 'webrick'; class S < WEBrick::HTTPServlet::AbstractServlet; def do_GET(req,res); res.status = 200; res.content_type = 'text/plain'; app = ENV['APP_NAME']; res.body = 'hello from ' + app; end; end; server = WEBrick::HTTPServer.new(Port: 8080); server.mount('/', S); server.start"
-    ],
-    "environment": [{
-      "Name": "APP_NAME",
-      "Value": "${app}"
-    }]
+      "require 'webrick'; class S < WEBrick::HTTPServlet::AbstractServlet; def do_GET(req,res); res.status = 200; res.content_type = 'text/plain'; app = ENV['APP_NAME']; res.body = ''; end; def do_POST(req,res); res.status = 200; res.content_type = 'text/plain'; app = ENV['APP_NAME']; res.body = ''; end; end; server = WEBrick::HTTPServer.new(Port: 8080); server.mount('/', S); server.start"
+    ]
   }
 ]

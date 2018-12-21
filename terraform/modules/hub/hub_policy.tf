@@ -8,7 +8,7 @@ module "policy_ecs_asg" {
   instance_subnets = ["${aws_subnet.internal.*.id}"]
 
   number_of_instances = "${var.number_of_availability_zones}"
-  domain              = "${var.domain}"
+  domain              = "${local.root_domain}"
 
   additional_instance_security_group_ids = [
     "${aws_security_group.egress_via_proxy.id}",
@@ -20,7 +20,7 @@ data "template_file" "policy_task_def" {
 
   vars {
     image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-policy:latest"
-    domain        = "${var.domain}"
+    domain        = "${local.root_domain}"
     deployment    = "${var.deployment}"
   }
 }
@@ -30,7 +30,7 @@ module "policy" {
 
   deployment                 = "${var.deployment}"
   cluster                    = "policy"
-  domain                     = "${var.domain}"
+  domain                     = "${local.root_domain}"
   vpc_id                     = "${aws_vpc.hub.id}"
   lb_subnets                 = ["${aws_subnet.internal.*.id}"]
   task_definition            = "${data.template_file.policy_task_def.rendered}"
@@ -42,7 +42,7 @@ module "policy" {
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-policy"
   instance_security_group_id = "${module.policy_ecs_asg.instance_sg_id}"
-  certificate_arn            = "${data.aws_acm_certificate.wildcard.arn}"
+  certificate_arn            = "${local.wildcard_cert_arn}"
 }
 
 
@@ -72,4 +72,11 @@ module "policy_can_connect_to_saml_soap_proxy" {
 
   source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.saml_soap_proxy.lb_sg_id}"
+}
+
+module "policy_can_connect_to_event_sink" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${module.event_sink.lb_sg_id}"
 }

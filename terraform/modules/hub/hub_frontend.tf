@@ -20,7 +20,7 @@ data "template_file" "frontend_task_def" {
   vars {
     app           = "frontend"
     image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-frontend:latest"
-    domain        = "${var.domain}"
+    domain        = "${local.root_domain}"
   }
 }
 
@@ -63,6 +63,18 @@ module "frontend_can_connect_to_config" {
 
   source_sg_id      = "${aws_security_group.frontend_task.id}"
   destination_sg_id = "${module.config.lb_sg_id}"
+}
 
-  port = 443
+module "frontend_can_connect_to_policy" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.frontend_task.id}"
+  destination_sg_id = "${module.policy.lb_sg_id}"
+}
+
+module "frontend_can_connect_to_saml_proxy" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.frontend_task.id}"
+  destination_sg_id = "${module.saml_proxy.lb_sg_id}"
 }
