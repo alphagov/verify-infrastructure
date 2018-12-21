@@ -57,3 +57,12 @@ resource "aws_ecs_service" "frontend" {
     security_groups = ["${aws_security_group.frontend_task.id}"]
   }
 }
+
+module "frontend_can_connect_to_config" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.frontend_task.id}"
+  destination_sg_id = "${module.config.lb_sg_id}"
+
+  port = 443
+}
