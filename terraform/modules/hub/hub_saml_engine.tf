@@ -78,7 +78,6 @@ resource "aws_iam_policy" "saml_engine_parameter_execution" {
       "Effect": "Allow",
       "Action": [
         "ssm:GetParameters",
-        "secretsmanager:GetSecretValue",
         "kms:Decrypt"
       ],
       "Resource": [
