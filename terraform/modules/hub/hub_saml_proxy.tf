@@ -1,7 +1,7 @@
 module "saml_proxy_ecs_asg" {
   source = "modules/ecs_asg"
 
-  ami_id              = "${data.aws_ami.awslinux2.id}"
+  ami_id              = "${data.aws_ami.ubuntu_bionic.id}"
   deployment          = "${var.deployment}"
   cluster             = "saml-proxy"
   vpc_id              = "${aws_vpc.hub.id}"
