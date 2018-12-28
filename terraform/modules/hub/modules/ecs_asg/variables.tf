@@ -31,3 +31,6 @@ variable "instance_type" {
 variable "use_egress_proxy" {
   default = true
 }
+
+variable "logit_api_key" {}
+variable "logit_elasticsearch_url" {}

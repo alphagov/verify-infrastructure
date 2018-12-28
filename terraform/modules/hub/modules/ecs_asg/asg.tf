@@ -12,15 +12,24 @@ locals {
     ? "HTTP_PROXY=${local.egress_proxy_url}"
     : "NOT_USING_HTTP_PROXY=yes"
   }"
+
+  journalbeat_egress_proxy_setting = "${
+    var.use_egress_proxy
+    ? "proxy_url: ${local.egress_proxy_url_with_protocol}"
+    : ""
+  }"
 }
 
 data "template_file" "cloud_init" {
   template = "${file("${path.module}/files/cloud-init.sh")}"
 
   vars {
-    cluster                        = "${local.identifier}"
-    egress_proxy_url_with_protocol = "${local.egress_proxy_url_with_protocol}"
-    ecs_egress_proxy_setting       = "${local.ecs_egress_proxy_setting}"
+    cluster                          = "${local.identifier}"
+    egress_proxy_url_with_protocol   = "${local.egress_proxy_url_with_protocol}"
+    ecs_egress_proxy_setting         = "${local.ecs_egress_proxy_setting}"
+    journalbeat_egress_proxy_setting = "${local.journalbeat_egress_proxy_setting}"
+    logit_elasticsearch_url          = "${var.logit_elasticsearch_url}"
+    logit_api_key                    = "${var.logit_api_key}"
   }
 }
 
