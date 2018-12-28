@@ -27,3 +27,11 @@ locals {
 variable "wildcard_cert_arn" {
   default = "ACM cert arn for wildcard of signin_domain"
 }
+
+variable "logit_api_key" {
+  description = "Api key used for writing to the logit.io stack"
+}
+
+variable "logit_elasticsearch_url" {
+  description = "URL for logit.io elasticsearch, format: $guid-es.logit.io"
+}

@@ -9,6 +9,9 @@ module "egress_proxy_ecs_asg" {
   number_of_instances = "${var.number_of_availability_zones}"
   use_egress_proxy    = false
   domain              = "${local.root_domain}"
+
+  logit_api_key           = "${var.logit_api_key}"
+  logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
 }
 
 # Egress proxy instance has to be able to access the internet directly (HTTP)
@@ -35,29 +38,26 @@ resource "aws_security_group_rule" "egress_proxy_instance_egress_to_internet_ove
 
 locals {
   egress_proxy_whitelist_list = [
-    "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com ",                               # Apt
-    "security\\.ubuntu\\.com",                                                 # Apt
-
-    "amazonlinux\\.eu-west-2\\.amazonaws\\.com",                               # Yum
-    "repo\\.eu-west-2\\.amazonaws\\.com",                                      # Yum
-    "packages\\.eu-west-2\\.amazonaws\\.com",                                  # Yum
-    "amazon-ssm-eu-west-2\\.s3\\.amazonaws\\.com",                             # Where the package is from
-
-    "ec2messages\\.eu-west-2\\.amazonaws\\.com",                               # SSM agent
-    "ssmmessages\\.eu-west-2\\.amazonaws\\.com",                               # SSM agent
-    "ssm\\.eu-west-2\\.amazonaws\\.com",                                       # SSM agent
-
-    "ecs[^.]*\\.eu-west-2\\.amazonaws\\.com",                                  # ECS agent
-    "ecr\\.eu-west-2\\.amazonaws\\.com",                                       # ECR
-    "prod-eu-west-2-starport-layer-bucket\\.s3\\.eu-west-2\\.amazonaws\\.com", # ECR s3 bucket
-    "${var.tools_account_id}\\.dkr\\.ecr\\.eu-west-2\\.amazonaws\\.com",       # Tools ECR auth
-
-    "registry-1\\.docker\\.io",                                                # Docker Hub
-    "auth\\.docker\\.io",                                                      # Docker Hub
-    "production\\.cloudflare\\.docker\\.com",                                  # Docker Hub
-
-    "www\\.${var.deployment}\\.signin\\.service\\.gov\\.uk",                   # Metadata
-    "test-rp-msa-stub-${var.deployment}.ida.digital.cabinet-office.gov.uk",    # Test RP
+    "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com ",                                    # Apt
+    "security\\.ubuntu\\.com",                                                      # Apt
+    "amazonlinux\\.eu-west-2\\.amazonaws\\.com",                                    # Yum
+    "repo\\.eu-west-2\\.amazonaws\\.com",                                           # Yum
+    "packages\\.eu-west-2\\.amazonaws\\.com",                                       # Yum
+    "amazon-ssm-eu-west-2\\.s3\\.amazonaws\\.com",                                  # Where the package is from
+    "artifacts\\.elastic\\.co",                                                     # Journalbeat
+    "ec2messages\\.eu-west-2\\.amazonaws\\.com",                                    # SSM agent
+    "ssmmessages\\.eu-west-2\\.amazonaws\\.com",                                    # SSM agent
+    "ssm\\.eu-west-2\\.amazonaws\\.com",                                            # SSM agent
+    "ecs[^.]*\\.eu-west-2\\.amazonaws\\.com",                                       # ECS agent
+    "ecr\\.eu-west-2\\.amazonaws\\.com",                                            # ECR
+    "prod-eu-west-2-starport-layer-bucket\\.s3\\.eu-west-2\\.amazonaws\\.com",      # ECR s3 bucket
+    "${var.tools_account_id}\\.dkr\\.ecr\\.eu-west-2\\.amazonaws\\.com",            # Tools ECR auth
+    "registry-1\\.docker\\.io",                                                     # Docker Hub
+    "auth\\.docker\\.io",                                                           # Docker Hub
+    "production\\.cloudflare\\.docker\\.com",                                       # Docker Hub
+    "www\\.${var.deployment}\\.signin\\.service\\.gov\\.uk",                        # Metadata
+    "test-rp-msa-stub-${var.deployment}\\.ida.digital\\.cabinet-office\\.gov\\.uk", # Test RP
+    "${replace(var.logit_elasticsearch_url, ".", "\\.")}"                           # Logit
   ]
 
   egress_proxy_whitelist = "${join(" ", local.egress_proxy_whitelist_list)}"
@@ -68,7 +68,7 @@ data "template_file" "egress_proxy_task_def" {
 
   vars {
     whitelist_base64 = "${base64encode(local.egress_proxy_whitelist)}"
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-squid:latest"
+    image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-squid:latest"
   }
 }
 

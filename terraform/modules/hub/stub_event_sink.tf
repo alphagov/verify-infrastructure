@@ -12,6 +12,9 @@ module "event_sink_ecs_asg" {
   additional_instance_security_group_ids = [
     "${aws_security_group.egress_via_proxy.id}",
   ]
+
+  logit_api_key           = "${var.logit_api_key}"
+  logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
 }
 
 data "template_file" "event_sink_task_def" {
