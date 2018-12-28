@@ -30,6 +30,21 @@ Environment="https_proxy=${egress_proxy_url_with_protocol}"
 Environment="no_proxy=169.254.169.254"
 EOF
 fi
+mkdir -p /etc/amazon/ssm
+cat <<EOF > /etc/amazon/ssm/seelog.xml
+<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="warn">
+    <exceptions>
+        <exception filepattern="test*" minlevel="error"/>
+    </exceptions>
+    <outputs formatid="fmtinfo">
+        <console formatid="fmtinfo"/>
+    </outputs>
+    <formats>
+        <format id="fmterror" format="%Date %Time %LEVEL [%FuncShort @ %File.%Line] %Msg%n"/>
+        <format id="fmtdebug" format="%Date %Time %LEVEL [%FuncShort @ %File.%Line] %Msg%n"/>
+    </formats>
+</seelog>
+EOF
 systemctl stop snap.amazon-ssm-agent.amazon-ssm-agent
 systemctl daemon-reload
 systemctl start snap.amazon-ssm-agent.amazon-ssm-agent
