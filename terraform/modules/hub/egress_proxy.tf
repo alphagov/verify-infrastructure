@@ -1,7 +1,7 @@
 module "egress_proxy_ecs_asg" {
   source = "modules/ecs_asg"
 
-  ami_id              = "${data.aws_ami.awslinux2.id}"
+  ami_id              = "${data.aws_ami.ubuntu_bionic.id}"
   deployment          = "${var.deployment}"
   cluster             = "egress-proxy"
   vpc_id              = "${aws_vpc.hub.id}"
@@ -35,20 +35,27 @@ resource "aws_security_group_rule" "egress_proxy_instance_egress_to_internet_ove
 
 locals {
   egress_proxy_whitelist_list = [
+    "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com ",                               # Apt
+    "security\\.ubuntu\\.com",                                                 # Apt
+
     "amazonlinux\\.eu-west-2\\.amazonaws\\.com",                               # Yum
     "repo\\.eu-west-2\\.amazonaws\\.com",                                      # Yum
     "packages\\.eu-west-2\\.amazonaws\\.com",                                  # Yum
     "amazon-ssm-eu-west-2\\.s3\\.amazonaws\\.com",                             # Where the package is from
+
     "ec2messages\\.eu-west-2\\.amazonaws\\.com",                               # SSM agent
     "ssmmessages\\.eu-west-2\\.amazonaws\\.com",                               # SSM agent
     "ssm\\.eu-west-2\\.amazonaws\\.com",                                       # SSM agent
+
     "ecs[^.]*\\.eu-west-2\\.amazonaws\\.com",                                  # ECS agent
     "ecr\\.eu-west-2\\.amazonaws\\.com",                                       # ECR
     "prod-eu-west-2-starport-layer-bucket\\.s3\\.eu-west-2\\.amazonaws\\.com", # ECR s3 bucket
     "${var.tools_account_id}\\.dkr\\.ecr\\.eu-west-2\\.amazonaws\\.com",       # Tools ECR auth
+
     "registry-1\\.docker\\.io",                                                # Docker Hub
     "auth\\.docker\\.io",                                                      # Docker Hub
     "production\\.cloudflare\\.docker\\.com",                                  # Docker Hub
+
     "www\\.${var.deployment}\\.signin\\.service\\.gov\\.uk",                   # Metadata
     "test-rp-msa-stub-${var.deployment}.ida.digital.cabinet-office.gov.uk",    # Test RP
   ]

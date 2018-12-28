@@ -10,7 +10,7 @@ locals {
   ecs_egress_proxy_setting = "${
     var.use_egress_proxy
     ? "HTTP_PROXY=${local.egress_proxy_url}"
-    : "# NO PROXY USED"
+    : "NOT_USING_HTTP_PROXY=yes"
   }"
 }
 

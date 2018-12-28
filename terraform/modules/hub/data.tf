@@ -1,12 +1,13 @@
-data "aws_ami" "awslinux2" {
+data "aws_ami" "ubuntu_bionic" {
   most_recent = true
+
+  # canonical
+  owners = ["099720109477"]
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-ecs-hvm-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
   }
-
-  owners = ["amazon"]
 }
 
 data "aws_caller_identity" "account" {}
