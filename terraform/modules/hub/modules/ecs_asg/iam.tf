@@ -76,6 +76,7 @@ resource "aws_iam_policy" "instance" {
       {
         "Effect": "Allow",
         "Action": [
+          "ssm:ListAssociations",
           "ssm:UpdateInstanceInformation",
           "ssmmessages:CreateControlChannel",
           "ssmmessages:CreateDataChannel",

@@ -18,9 +18,11 @@ data "template_file" "frontend_task_def" {
   template = "${file("${path.module}/files/tasks/frontend.json")}"
 
   vars {
-    app           = "frontend"
+    account_id    = "${data.aws_caller_identity.account.account_id}"
+    deployment    = "${var.deployment}"
     image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-frontend:latest"
     domain        = "${local.root_domain}"
+    region        = "${data.aws_region.region.id}"
   }
 }
 
@@ -77,4 +79,42 @@ module "frontend_can_connect_to_saml_proxy" {
 
   source_sg_id      = "${aws_security_group.frontend_task.id}"
   destination_sg_id = "${module.saml_proxy.lb_sg_id}"
+}
+
+resource "random_string" "frontend_secret_key_base" {
+  length  = 64
+  special = false
+}
+
+resource "aws_ssm_parameter" "frontend_secret_key_base" {
+  name   = "/${var.deployment}/frontend/secret-key-base"
+  type   = "SecureString"
+  key_id = "${aws_kms_key.frontend.key_id}"
+  value  = "${random_string.frontend_secret_key_base.result}"
+}
+
+resource "aws_iam_policy" "frontend_parameter_execution" {
+  name = "${var.deployment}-frontend-parameter-execution"
+
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [{
+      "Effect": "Allow",
+      "Action": [
+        "ssm:GetParameters",
+        "kms:Decrypt"
+      ],
+      "Resource": [
+        "arn:aws:ssm:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/frontend/*",
+        "arn:aws:kms:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:alias/${var.deployment}-frontend"
+      ]
+    }]
+  }
+  EOF
+}
+
+resource "aws_iam_role_policy_attachment" "frontend_parameter_execution" {
+  role       = "${var.deployment}-frontend-execution"
+  policy_arn = "${aws_iam_policy.frontend_parameter_execution.arn}"
 }

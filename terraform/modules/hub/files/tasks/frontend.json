@@ -19,6 +19,12 @@
       "-b",
       "0.0.0.0"
     ],
+    "secrets": [
+      {
+        "name": "SECRET_KEY_BASE",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/frontend/secret-key-base"
+      }
+    ],
     "environment": [{
       "Name": "SESSION_COOKIE_DURATION_IN_HOURS",
       "Value": "2"
@@ -30,28 +36,28 @@
       "Value": "https://policy.${domain}:443"
     }, {
       "Name": "CYCLE_3_DISPLAY_LOCALES",
-      "Value": "/app/federation/configuration/display-locales/cycle_3"
+      "Value": "/verify-frontend/federation/configuration/display-locales/cycle_3"
     }, {
       "Name": "IDP_DISPLAY_LOCALES",
-      "Value": "/app/federation/configuration/display-locales/idps"
+      "Value": "/verify-frontend/federation/configuration/display-locales/idps"
     }, {
       "Name": "COUNTRY_DISPLAY_LOCALES",
-      "Value": "/app/federation/configuration/display-locales/countries"
+      "Value": "/verify-frontend/federation/configuration/display-locales/countries"
     }, {
       "Name": "COUNTRY_FLAGS_DIRECTORY",
-      "Value": "/app/federation/configuration/eidas/country-flags"
+      "Value": "/verify-frontend/federation/configuration/eidas/country-flags"
     }, {
       "Name": "EIDAS_SCHEMES_DIRECTORY",
-      "Value": "/app/federation/configuration/eidas/schemes"
+      "Value": "/verify-frontend/federation/configuration/eidas/schemes"
     }, {
       "Name": "EIDAS_SCHEME_LOGOS_DIRECTORY",
-      "Value": "/app/federation/configuration/eidas/scheme-logos"
+      "Value": "/verify-frontend/federation/configuration/eidas/scheme-logos"
     }, {
       "Name": "LOGO_DIRECTORY",
-      "Value": "/app/federation/configuration/idp-logos"
+      "Value": "/verify-frontend/federation/configuration/idp-logos"
     }, {
       "Name": "WHITE_LOGO_DIRECTORY",
-      "Value": "/app/federation/configuration/idp-logos/white"
+      "Value": "/verify-frontend/federation/configuration/idp-logos/white"
     }, {
       "Name": "ZDD_LATCH",
       "Value": ".service_unavailable"
@@ -63,25 +69,25 @@
       "Value": "false"
     }, {
       "Name": "LOG_LEVEL",
-      "Value": "debug"
+      "Value": "warn"
     }, {
       "Name": "RULES_DIRECTORY",
-      "Value": "/app/federation/configuration/idp-rules"
+      "Value": "/verify-frontend/federation/configuration/idp-rules"
     }, {
       "Name": "RP_CONFIG",
-      "Value": "/app/federation/configuration/relying_parties.yml"
+      "Value": "/verify-frontend/federation/configuration/relying_parties.yml"
     }, {
       "Name": "IDP_CONFIG",
-      "Value": "/app/federation/configuration/identity_providers.yml"
+      "Value": "/verify-frontend/federation/configuration/identity_providers.yml"
     }, {
       "Name": "CYCLE_THREE_ATTRIBUTES_DIRECTORY",
-      "Value": "/app/federation/configuration/cycle-three-attributes"
+      "Value": "/verify-frontend/federation/configuration/cycle-three-attributes"
     }, {
       "Name": "AB_TEST_FILE",
-      "Value": "/app/federation/configuration/ab_test/ab_test.yml"
+      "Value": "/verify-frontend/federation/configuration/ab_test/ab_test.yml"
     }, {
       "Name": "SEGMENT_DEFINITIONS",
-      "Value": "/app/federation/configuration/segment_definitions.yml"
+      "Value": "/verify-frontend/federation/configuration/segment_definitions.yml"
     }, {
       "Name": "PUBLIC_PIWIK_HOST",
       "Value": "https://www.${domain}:443/analytics"
@@ -109,6 +115,9 @@
     }, {
       "Name": "RAILS_ENV",
       "Value": "production"
+    }, {
+      "Name": "RAILS_LOG_TO_STDOUT",
+      "Value": "true"
     }]
   }
 ]
