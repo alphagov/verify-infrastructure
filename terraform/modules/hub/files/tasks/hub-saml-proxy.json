@@ -1,5 +1,25 @@
 [
   {
+    "name": "nginx",
+    "image": "${nginx_image_and_tag}",
+    "cpu": 0,
+    "memory": 250,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8443,
+        "hostPort": 8443
+      }
+    ],
+    "links": ["saml-proxy"],
+    "environment": [
+      {
+        "Name": "LOCATION_BLOCKS",
+        "Value": "${location_blocks_base64}"
+      }
+    ]
+  },
+  {
     "name": "saml-proxy",
     "image": "${image_and_tag}",
     "cpu": 0,
