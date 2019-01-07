@@ -14,15 +14,28 @@ resource "aws_security_group" "frontend_task" {
   vpc_id = "${aws_vpc.hub.id}"
 }
 
+locals {
+  location_blocks = <<-LOCATIONS
+  location / {
+    proxy_pass http://localhost:8080;
+    proxy_set_header Host ${var.signin_domain};
+  }
+  LOCATIONS
+
+  location_blocks_base64 = "${base64encode(local.location_blocks)}"
+}
+
 data "template_file" "frontend_task_def" {
   template = "${file("${path.module}/files/tasks/frontend.json")}"
 
   vars {
-    account_id    = "${data.aws_caller_identity.account.account_id}"
-    deployment    = "${var.deployment}"
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-frontend:latest"
-    domain        = "${local.root_domain}"
-    region        = "${data.aws_region.region.id}"
+    account_id             = "${data.aws_caller_identity.account.account_id}"
+    deployment             = "${var.deployment}"
+    image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-frontend:latest"
+    nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    domain                 = "${local.root_domain}"
+    region                 = "${data.aws_region.region.id}"
+    location_blocks_base64 = "${local.location_blocks_base64}"
   }
 }
 
@@ -50,8 +63,8 @@ resource "aws_ecs_service" "frontend" {
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.ingress_frontend.arn}"
-    container_name   = "frontend"
-    container_port   = "8080"
+    container_name   = "nginx"
+    container_port   = "8443"
   }
 
   network_configuration {

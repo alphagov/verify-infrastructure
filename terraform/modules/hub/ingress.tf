@@ -11,7 +11,7 @@ module "ingress_can_connect_to_frontend_task" {
   source_sg_id      = "${aws_security_group.ingress.id}"
   destination_sg_id = "${aws_security_group.frontend_task.id}"
 
-  port = 8080
+  port = 8443
 }
 
 module "ingress_can_connect_to_metadata_task" {
@@ -30,10 +30,11 @@ resource "aws_security_group_rule" "ingress_ingress_from_internet_over_http" {
   to_port   = 80
 
   security_group_id = "${aws_security_group.ingress.id}"
-  cidr_blocks       = ["${
+
+  cidr_blocks = ["${
     concat(
       var.publically_accessible_from_cidrs,
-      formatlist("%s/32", aws_eip.egress.*.public_ip),
+      formatlist("%s/32", aws_eip.egress.*.public_ip)
     )
   }"] # adding the egress IPs is a hack to let us access metadata through egress proxy
 }
@@ -45,10 +46,11 @@ resource "aws_security_group_rule" "ingress_ingress_from_internet_over_https" {
   to_port   = 443
 
   security_group_id = "${aws_security_group.ingress.id}"
-  cidr_blocks       = ["${
+
+  cidr_blocks = ["${
     concat(
       var.publically_accessible_from_cidrs,
-      formatlist("%s/32", aws_eip.egress.*.public_ip),
+      formatlist("%s/32", aws_eip.egress.*.public_ip)
     )
   }"] # adding the egress IPs is a hack to let us access metadata through egress proxy
 }
@@ -71,15 +73,15 @@ resource "aws_lb_target_group" "ingress_metadata" {
 
 resource "aws_lb_target_group" "ingress_frontend" {
   name                 = "${var.deployment}-ingress-frontend"
-  port                 = 8080
-  protocol             = "HTTP"
+  port                 = 8443
+  protocol             = "HTTPS"
   vpc_id               = "${aws_vpc.hub.id}"
   target_type          = "ip"
   deregistration_delay = 60
 
   health_check {
     path     = "/"
-    protocol = "HTTP"
+    protocol = "HTTPS"
     interval = 10
     timeout  = 5
     matcher  = "200,301"
@@ -122,7 +124,7 @@ resource "aws_lb_listener" "ingress_https" {
   certificate_arn   = "${local.wildcard_cert_arn}"
 
   default_action {
-    type = "forward"
+    type             = "forward"
     target_group_arn = "${aws_lb_target_group.ingress_frontend.arn}"
   }
 }
