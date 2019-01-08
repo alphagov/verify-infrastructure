@@ -1,8 +1,3 @@
-resource "aws_eip" "static_ingress" {
-  count = "${var.number_of_availability_zones}"
-  vpc   = false
-}
-
 resource "aws_lb" "static_ingress" {
   name                             = "static_ingress"
   load_balancer_type               = "network"
@@ -10,9 +5,18 @@ resource "aws_lb" "static_ingress" {
   enable_cross_zone_load_balancing = true
 
   subnet_mapping {
-    count         = "${var.number_of_availability_zones}"
-    subnet_id     = "${element(aws_subnet.ingress.*id, count.index)}"
-    allocation_id = "${element(aws_eip.static_ingress.*.id, count.index)}"
+    subnet_id     = "${element(aws_subnet.ingress.*id, 0)}"
+    allocation_id = "${element(aws_eip.ingress.*.id, 0)}"
+  }
+
+  subnet_mapping {
+    subnet_id     = "${element(aws_subnet.ingress.*id, 1)}"
+    allocation_id = "${element(aws_eip.ingress.*.id, 1)}"
+  }
+
+  subnet_mapping {
+    subnet_id     = "${element(aws_subnet.ingress.*id, 2)}"
+    allocation_id = "${element(aws_eip.ingress.*.id, 2)}"
   }
 }
 

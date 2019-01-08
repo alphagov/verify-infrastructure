@@ -1,5 +1,5 @@
 resource "aws_eip" "ingress" {
-  count = "${var.number_of_availability_zones}"
+  count = 3
   vpc   = true
 }
 
