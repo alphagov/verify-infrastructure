@@ -150,3 +150,7 @@ docker run \
   --env='ECS_AVAILABLE_LOGGING_DRIVERS=["journald"]' \
   --env="ECS_LOGLEVEL=warn" \
   amazon/amazon-ecs-agent:v1.23.0
+
+apt-get install --yes prometheus-node-exporter
+systemctl enable prometheus-node-exporter
+systemctl start prometheus-node-exporter
