@@ -18,6 +18,5 @@ frontend nlb
 
 backend alb
     balance roundrobin
-    default-server check maxconn 20
-    server firstserver host.docker.internal:1234
-    server secondserver host.docker.internal:1233
+    default-server check maxconn 200
+$BACKENDS
