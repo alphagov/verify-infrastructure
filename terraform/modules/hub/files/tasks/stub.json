@@ -1,20 +1,21 @@
 [
   {
-    "name": "stub",
-    "image": "ruby:2.5.3",
+    "name": "nginx",
+    "image": "${nginx_image_and_tag}",
     "cpu": 0,
-    "memory": 3500,
+    "memory": 250,
     "essential": true,
     "portMappings": [
       {
-        "containerPort": 8080,
-        "hostPort": 8080
+        "containerPort": 8443,
+        "hostPort": 8443
       }
     ],
-    "entryPoint": [
-      "ruby",
-      "-e",
-      "require 'webrick'; class S < WEBrick::HTTPServlet::AbstractServlet; def do_GET(req,res); res.status = 200; res.content_type = 'text/plain'; app = ENV['APP_NAME']; res.body = ''; end; def do_POST(req,res); res.status = 200; res.content_type = 'text/plain'; app = ENV['APP_NAME']; res.body = ''; end; end; server = WEBrick::HTTPServer.new(Port: 8080); server.mount('/', S); server.start"
+    "environment": [
+      {
+        "Name": "LOCATION_BLOCKS",
+        "Value": "${location_blocks_base64}"
+      }
     ]
   }
 ]
