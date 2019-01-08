@@ -1,5 +1,5 @@
 resource "aws_lb" "static_ingress" {
-  name                             = "static_ingress"
+  name                             = "${var.deployment}-static-ingress"
   load_balancer_type               = "network"
   internal                         = false
   enable_cross_zone_load_balancing = true
@@ -21,7 +21,7 @@ resource "aws_lb" "static_ingress" {
 }
 
 resource "aws_lb_target_group" "static_ingress" {
-  name     = "static_ingress"
+  name     = "${var.deployment}-static-ingress"
   port     = 4500
   protocol = "TCP"
   vpc_id   = "${aws_vpc.hub.vpc_id}"
