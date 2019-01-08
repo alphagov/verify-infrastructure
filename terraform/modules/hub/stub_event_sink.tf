@@ -17,8 +17,23 @@ module "event_sink_ecs_asg" {
   logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
 }
 
+locals {
+  event_sink_location_blocks = <<-LOCATIONS
+  location / {
+    return 200;
+  }
+  LOCATIONS
+
+  nginx_event_sink_location_blocks_base64 = "${base64encode(local.event_sink_location_blocks)}"
+}
+
 data "template_file" "event_sink_task_def" {
   template = "${file("${path.module}/files/tasks/stub.json")}"
+
+  vars {
+    nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    location_blocks_base64 = "${local.nginx_event_sink_location_blocks_base64}"
+  }
 }
 
 module "event_sink" {
@@ -30,10 +45,9 @@ module "event_sink" {
   vpc_id                     = "${aws_vpc.hub.id}"
   lb_subnets                 = ["${aws_subnet.internal.*.id}"]
   task_definition            = "${data.template_file.event_sink_task_def.rendered}"
-  container_name             = "stub"
-  container_port             = "8080"
+  container_name             = "nginx"
+  container_port             = "8443"
   number_of_tasks            = 1
-  health_check_protocol      = "HTTP"
   tools_account_id           = "${var.tools_account_id}"
   instance_security_group_id = "${module.event_sink_ecs_asg.instance_sg_id}"
   certificate_arn            = "${local.wildcard_cert_arn}"

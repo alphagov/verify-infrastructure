@@ -18,15 +18,28 @@ module "saml_engine_ecs_asg" {
   logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
 }
 
+locals {
+  saml_engine_location_blocks = <<-LOCATIONS
+  location / {
+    proxy_pass http://saml-engine:8080;
+    proxy_set_header Host saml-engine.${local.root_domain};
+  }
+  LOCATIONS
+
+  nginx_saml_engine_location_blocks_base64 = "${base64encode(local.saml_engine_location_blocks)}"
+}
+
 data "template_file" "saml_engine_task_def" {
   template = "${file("${path.module}/files/tasks/hub-saml-engine.json")}"
 
   vars {
-    account_id    = "${data.aws_caller_identity.account.account_id}"
-    deployment    = "${var.deployment}"
-    domain        = "${local.root_domain}"
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-saml-engine:latest"
-    region        = "${data.aws_region.region.id}"
+    account_id             = "${data.aws_caller_identity.account.account_id}"
+    deployment             = "${var.deployment}"
+    domain                 = "${local.root_domain}"
+    image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-saml-engine:latest"
+    nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    region                 = "${data.aws_region.region.id}"
+    location_blocks_base64 = "${local.nginx_saml_engine_location_blocks_base64}"
   }
 }
 
@@ -39,10 +52,9 @@ module "saml_engine" {
   vpc_id                     = "${aws_vpc.hub.id}"
   lb_subnets                 = ["${aws_subnet.internal.*.id}"]
   task_definition            = "${data.template_file.saml_engine_task_def.rendered}"
-  container_name             = "saml-engine"
-  container_port             = "8080"
+  container_name             = "nginx"
+  container_port             = "8443"
   number_of_tasks            = 1
-  health_check_protocol      = "HTTP"
   health_check_path          = "/service-status"
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-saml-engine"

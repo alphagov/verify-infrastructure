@@ -42,7 +42,10 @@ resource "aws_iam_policy" "execution" {
         "ecr:DescribeImages",
         "ecr:BatchGetImage"
       ],
-      "Resource": "arn:aws:ecr:eu-west-2:${var.tools_account_id}:repository/platform-deployer-${local.image_name}"
+      "Resource": [
+        "arn:aws:ecr:eu-west-2:${var.tools_account_id}:repository/platform-deployer-${local.image_name}",
+        "arn:aws:ecr:eu-west-2:${var.tools_account_id}:repository/platform-deployer-verify-nginx-tls"
+      ]
     }, {
       "Effect": "Allow",
       "Action": [

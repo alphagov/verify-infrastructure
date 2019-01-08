@@ -1,5 +1,25 @@
 [
   {
+    "name": "nginx",
+    "image": "${nginx_image_and_tag}",
+    "cpu": 0,
+    "memory": 250,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8443,
+        "hostPort": 8443
+      }
+    ],
+    "links": ["saml-soap-proxy"],
+    "environment": [
+      {
+        "Name": "LOCATION_BLOCKS",
+        "Value": "${location_blocks_base64}"
+      }
+    ]
+  },
+  {
     "name": "saml-soap-proxy",
     "image": "${image_and_tag}",
     "cpu": 0,
@@ -21,6 +41,6 @@
       "Value": "${deployment}"
     }, {
       "Name": "JAVA_OPTS",
-      "Value": "-Dservice.name=saml-soap-proxy -Xms3000m -Xmx3200m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.proxyHost=\"egress-proxy.${domain}\" -Dhttp.proxyPort=\"8080\" -Dhttps.proxyHost=\"egress-proxy.${domain}\" -Dhttps.proxyPort=\"8080\" -Dhttp.nonProxyHosts=\"config.${domain}|policy.${domain}|saml-engine.${domain}\" -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5" }]
+      "Value": "-Dservice.name=saml-soap-proxy -Xms3000m -Xmx3200m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.proxyHost=\"egress-proxy.${domain}\" -Dhttp.proxyPort=\"8080\" -Dhttps.proxyHost=\"egress-proxy.${domain}\" -Dhttps.proxyPort=\"8080\" -Dhttp.nonProxyHosts=\"config.${domain}|policy.${domain}|saml-engine.${domain}|event-sink.${domain}\" -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5" }]
   }
 ]

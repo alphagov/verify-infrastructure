@@ -18,13 +18,26 @@ module "policy_ecs_asg" {
   logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
 }
 
+locals {
+  policy_location_blocks = <<-LOCATIONS
+  location / {
+    proxy_pass http://policy:8080;
+    proxy_set_header Host policy.${local.root_domain};
+  }
+  LOCATIONS
+
+  nginx_policy_location_blocks_base64 = "${base64encode(local.policy_location_blocks)}"
+}
+
 data "template_file" "policy_task_def" {
   template = "${file("${path.module}/files/tasks/hub-policy.json")}"
 
   vars {
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-policy:latest"
-    domain        = "${local.root_domain}"
-    deployment    = "${var.deployment}"
+    image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-policy:latest"
+    nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    domain                 = "${local.root_domain}"
+    deployment             = "${var.deployment}"
+    location_blocks_base64 = "${local.nginx_policy_location_blocks_base64}"
   }
 }
 
@@ -37,17 +50,15 @@ module "policy" {
   vpc_id                     = "${aws_vpc.hub.id}"
   lb_subnets                 = ["${aws_subnet.internal.*.id}"]
   task_definition            = "${data.template_file.policy_task_def.rendered}"
-  container_name             = "policy"
-  container_port             = "8080"
+  container_name             = "nginx"
+  container_port             = "8443"
   number_of_tasks            = 1
-  health_check_protocol      = "HTTP"
   health_check_path          = "/service-status"
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-policy"
   instance_security_group_id = "${module.policy_ecs_asg.instance_sg_id}"
   certificate_arn            = "${local.wildcard_cert_arn}"
 }
-
 
 module "policy_can_connect_to_config" {
   source = "modules/microservice_connection"
