@@ -55,8 +55,6 @@ module "saml_engine" {
   container_name             = "nginx"
   container_port             = "8443"
   number_of_tasks            = 1
-  aws_lb_target_group_port     = 8443
-  aws_lb_target_group_protocol = "HTTPS"
   health_check_path          = "/service-status"
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-saml-engine"

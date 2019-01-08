@@ -52,11 +52,3 @@ variable "health_check_timeout" {
 variable "health_check_http_codes" {
   default = "200"
 }
-
-variable "aws_lb_target_group_port" {
-  default = 80
-}
-
-variable "aws_lb_target_group_protocol" {
-  default = "HTTP"
-}

@@ -39,18 +39,16 @@ data "template_file" "event_sink_task_def" {
 module "event_sink" {
   source = "modules/ecs_app"
 
-  deployment                   = "${var.deployment}"
-  cluster                      = "event-sink"
-  domain                       = "${local.root_domain}"
-  vpc_id                       = "${aws_vpc.hub.id}"
-  lb_subnets                   = ["${aws_subnet.internal.*.id}"]
-  task_definition              = "${data.template_file.event_sink_task_def.rendered}"
-  container_name               = "nginx"
-  container_port               = "8443"
-  number_of_tasks              = 1
-  aws_lb_target_group_port     = 8443
-  aws_lb_target_group_protocol = "HTTPS"
-  tools_account_id             = "${var.tools_account_id}"
-  instance_security_group_id   = "${module.event_sink_ecs_asg.instance_sg_id}"
-  certificate_arn              = "${local.wildcard_cert_arn}"
+  deployment                 = "${var.deployment}"
+  cluster                    = "event-sink"
+  domain                     = "${local.root_domain}"
+  vpc_id                     = "${aws_vpc.hub.id}"
+  lb_subnets                 = ["${aws_subnet.internal.*.id}"]
+  task_definition            = "${data.template_file.event_sink_task_def.rendered}"
+  container_name             = "nginx"
+  container_port             = "8443"
+  number_of_tasks            = 1
+  tools_account_id           = "${var.tools_account_id}"
+  instance_security_group_id = "${module.event_sink_ecs_asg.instance_sg_id}"
+  certificate_arn            = "${local.wildcard_cert_arn}"
 }

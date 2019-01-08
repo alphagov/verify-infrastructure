@@ -13,8 +13,8 @@ resource "aws_lb" "cluster" {
 
 resource "aws_lb_target_group" "task" {
   name                 = "${local.identifier}-task"
-  port                 = "${var.aws_lb_target_group_port}"
-  protocol             = "${var.aws_lb_target_group_protocol}"
+  port                 = "8443"
+  protocol             = "HTTPS"
   target_type          = "instance"
   vpc_id               = "${var.vpc_id}"
   deregistration_delay = 60

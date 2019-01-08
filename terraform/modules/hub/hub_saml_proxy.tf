@@ -43,22 +43,20 @@ data "template_file" "saml_proxy_task_def" {
 module "saml_proxy" {
   source = "modules/ecs_app"
 
-  deployment                   = "${var.deployment}"
-  cluster                      = "saml-proxy"
-  domain                       = "${local.root_domain}"
-  vpc_id                       = "${aws_vpc.hub.id}"
-  lb_subnets                   = ["${aws_subnet.internal.*.id}"]
-  task_definition              = "${data.template_file.saml_proxy_task_def.rendered}"
-  container_name               = "nginx"
-  container_port               = "8443"
-  number_of_tasks              = 1
-  aws_lb_target_group_port     = 8443
-  aws_lb_target_group_protocol = "HTTPS"
-  health_check_path            = "/service-status"
-  tools_account_id             = "${var.tools_account_id}"
-  instance_security_group_id   = "${module.saml_proxy_ecs_asg.instance_sg_id}"
-  certificate_arn              = "${local.wildcard_cert_arn}"
-  image_name                   = "verify-saml-proxy"
+  deployment                 = "${var.deployment}"
+  cluster                    = "saml-proxy"
+  domain                     = "${local.root_domain}"
+  vpc_id                     = "${aws_vpc.hub.id}"
+  lb_subnets                 = ["${aws_subnet.internal.*.id}"]
+  task_definition            = "${data.template_file.saml_proxy_task_def.rendered}"
+  container_name             = "nginx"
+  container_port             = "8443"
+  number_of_tasks            = 1
+  health_check_path          = "/service-status"
+  tools_account_id           = "${var.tools_account_id}"
+  instance_security_group_id = "${module.saml_proxy_ecs_asg.instance_sg_id}"
+  certificate_arn            = "${local.wildcard_cert_arn}"
+  image_name                 = "verify-saml-proxy"
 }
 
 module "saml_proxy_can_connect_to_config" {

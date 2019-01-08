@@ -45,20 +45,18 @@ data "template_file" "config_task_def" {
 module "config" {
   source = "modules/ecs_app"
 
-  deployment                   = "${var.deployment}"
-  cluster                      = "config"
-  domain                       = "${local.root_domain}"
-  vpc_id                       = "${aws_vpc.hub.id}"
-  lb_subnets                   = ["${aws_subnet.internal.*.id}"]
-  task_definition              = "${data.template_file.config_task_def.rendered}"
-  container_name               = "nginx"
-  container_port               = "8443"
-  number_of_tasks              = 1
-  aws_lb_target_group_port     = 8443
-  aws_lb_target_group_protocol = "HTTPS"
-  health_check_path            = "/service-status"
-  tools_account_id             = "${var.tools_account_id}"
-  image_name                   = "verify-config"
-  instance_security_group_id   = "${module.config_ecs_asg.instance_sg_id}"
-  certificate_arn              = "${local.wildcard_cert_arn}"
+  deployment                 = "${var.deployment}"
+  cluster                    = "config"
+  domain                     = "${local.root_domain}"
+  vpc_id                     = "${aws_vpc.hub.id}"
+  lb_subnets                 = ["${aws_subnet.internal.*.id}"]
+  task_definition            = "${data.template_file.config_task_def.rendered}"
+  container_name             = "nginx"
+  container_port             = "8443"
+  number_of_tasks            = 1
+  health_check_path          = "/service-status"
+  tools_account_id           = "${var.tools_account_id}"
+  image_name                 = "verify-config"
+  instance_security_group_id = "${module.config_ecs_asg.instance_sg_id}"
+  certificate_arn            = "${local.wildcard_cert_arn}"
 }
