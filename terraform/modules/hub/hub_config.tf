@@ -18,33 +18,47 @@ module "config_ecs_asg" {
   logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
 }
 
+locals {
+  config_location_blocks = <<-LOCATIONS
+  location / {
+    proxy_pass http://config:8080;
+    proxy_set_header Host config.${local.root_domain};
+  }
+  LOCATIONS
+
+  nginx_config_location_blocks_base64 = "${base64encode(local.config_location_blocks)}"
+}
+
 data "template_file" "config_task_def" {
   template = "${file("${path.module}/files/tasks/hub-config.json")}"
 
   vars {
-    image_and_tag       = "${local.tools_account_ecr_url_prefix}-verify-config:latest"
-    domain              = "${local.root_domain}"
-    deployment          = "${var.deployment}"
-    truststore_password = "${var.truststore_password}"
+    image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-config:latest"
+    nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    domain                 = "${local.root_domain}"
+    deployment             = "${var.deployment}"
+    truststore_password    = "${var.truststore_password}"
+    location_blocks_base64 = "${local.nginx_config_location_blocks_base64}"
   }
 }
 
 module "config" {
   source = "modules/ecs_app"
 
-  deployment                 = "${var.deployment}"
-  cluster                    = "config"
-  domain                     = "${local.root_domain}"
-  vpc_id                     = "${aws_vpc.hub.id}"
-  lb_subnets                 = ["${aws_subnet.internal.*.id}"]
-  task_definition            = "${data.template_file.config_task_def.rendered}"
-  container_name             = "config"
-  container_port             = "8080"
-  number_of_tasks            = 1
-  health_check_protocol      = "HTTP"
-  health_check_path          = "/service-status"
-  tools_account_id           = "${var.tools_account_id}"
-  image_name                 = "verify-config"
-  instance_security_group_id = "${module.config_ecs_asg.instance_sg_id}"
-  certificate_arn            = "${local.wildcard_cert_arn}"
+  deployment                   = "${var.deployment}"
+  cluster                      = "config"
+  domain                       = "${local.root_domain}"
+  vpc_id                       = "${aws_vpc.hub.id}"
+  lb_subnets                   = ["${aws_subnet.internal.*.id}"]
+  task_definition              = "${data.template_file.config_task_def.rendered}"
+  container_name               = "nginx"
+  container_port               = "8443"
+  number_of_tasks              = 1
+  aws_lb_target_group_port     = 8443
+  aws_lb_target_group_protocol = "HTTPS"
+  health_check_path            = "/service-status"
+  tools_account_id             = "${var.tools_account_id}"
+  image_name                   = "verify-config"
+  instance_security_group_id   = "${module.config_ecs_asg.instance_sg_id}"
+  certificate_arn              = "${local.wildcard_cert_arn}"
 }
