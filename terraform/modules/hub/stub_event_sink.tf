@@ -6,7 +6,7 @@ module "event_sink_ecs_asg" {
   cluster             = "event-sink"
   vpc_id              = "${aws_vpc.hub.id}"
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
-  number_of_instances = "${var.number_of_availability_zones}"
+  number_of_instances = 0
   domain              = "${local.root_domain}"
 
   additional_instance_security_group_ids = [
