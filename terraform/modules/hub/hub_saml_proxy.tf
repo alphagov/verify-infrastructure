@@ -72,10 +72,3 @@ module "saml_proxy_can_connect_to_policy" {
   source_sg_id      = "${module.saml_proxy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.policy.lb_sg_id}"
 }
-
-module "saml_proxy_can_connect_to_event_sink" {
-  source = "modules/microservice_connection"
-
-  source_sg_id      = "${module.saml_proxy_ecs_asg.instance_sg_id}"
-  destination_sg_id = "${module.event_sink.lb_sg_id}"
-}
