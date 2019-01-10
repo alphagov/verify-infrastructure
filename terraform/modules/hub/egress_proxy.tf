@@ -38,7 +38,8 @@ resource "aws_security_group_rule" "egress_proxy_instance_egress_to_internet_ove
 
 locals {
   egress_proxy_whitelist_list = [
-    "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com ",                                    # Apt
+    "ec2\\.eu-west-2\\.amazonaws\\.com",                                            # Prometheus describe instances
+    "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com",                                     # Apt
     "security\\.ubuntu\\.com",                                                      # Apt
     "amazonlinux\\.eu-west-2\\.amazonaws\\.com",                                    # Yum
     "repo\\.eu-west-2\\.amazonaws\\.com",                                           # Yum

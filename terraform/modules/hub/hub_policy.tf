@@ -12,6 +12,7 @@ module "policy_ecs_asg" {
 
   additional_instance_security_group_ids = [
     "${aws_security_group.egress_via_proxy.id}",
+    "${aws_security_group.scraped_by_prometheus.id}",
   ]
 
   logit_api_key           = "${var.logit_api_key}"
