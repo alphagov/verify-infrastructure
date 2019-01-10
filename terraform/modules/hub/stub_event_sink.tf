@@ -47,7 +47,7 @@ module "event_sink" {
   task_definition            = "${data.template_file.event_sink_task_def.rendered}"
   container_name             = "nginx"
   container_port             = "8443"
-  number_of_tasks            = 1
+  number_of_tasks            = 0
   tools_account_id           = "${var.tools_account_id}"
   instance_security_group_id = "${module.event_sink_ecs_asg.instance_sg_id}"
   certificate_arn            = "${local.wildcard_cert_arn}"
