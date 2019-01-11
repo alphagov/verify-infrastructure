@@ -142,7 +142,7 @@ data "template_file" "prometheus_cloud_init" {
 }
 
 resource "aws_instance" "prometheus" {
-  count = 2
+  count = 1
 
   ami                  = "${data.aws_ami.ubuntu_bionic.id}"
   instance_type        = "t3.small"
@@ -167,7 +167,7 @@ resource "aws_instance" "prometheus" {
 }
 
 resource "aws_ebs_volume" "prometheus" {
-  count = 2
+  count = 1
 
   size      = 100
   encrypted = true
@@ -183,7 +183,7 @@ resource "aws_ebs_volume" "prometheus" {
 }
 
 resource "aws_volume_attachment" "prometheus_prometheus" {
-  count = 2
+  count = 1
 
   device_name = "/dev/xvdp"
   volume_id   = "${element(aws_ebs_volume.prometheus.*.id, count.index)}"
@@ -205,7 +205,7 @@ resource "aws_lb_target_group" "prometheus" {
 }
 
 resource "aws_lb_target_group_attachment" "prometheus" {
-  count = 2
+  count = 1
 
   target_group_arn = "${aws_lb_target_group.prometheus.arn}"
   target_id        = "${element(aws_instance.prometheus.*.id, count.index)}"

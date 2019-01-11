@@ -165,6 +165,25 @@ scrape_configs:
         action: keep
       - source_labels: [__meta_ec2_tag_Team]
         target_label: team
+      - source_labels: [__meta_ec2_tag_Cluster]
+        target_label: job
+  - job_name: apps
+    ec2_sd_configs:
+      - region: eu-west-2
+        refresh_interval: 30s
+        port: 8443
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: instance
+      - source_labels: [__meta_ec2_tag_Role]
+        target_label: role
+      - source_labels: [__meta_ec2_tag_Deployment]
+        regex: '^${deployment}$'
+        action: keep
+      - source_labels: [__meta_ec2_tag_Team]
+        target_label: team
+      - source_labels: [__meta_ec2_tag_Cluster]
+        target_label: job
 EOF
 
 systemctl daemon-reload
