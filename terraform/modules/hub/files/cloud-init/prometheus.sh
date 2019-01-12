@@ -168,6 +168,10 @@ scrape_configs:
       - source_labels: [__meta_ec2_tag_Cluster]
         target_label: job
   - job_name: apps
+    scheme: 'https'
+    metrics_path: '/prometheus/metrics'
+    tls_config:
+      insecure_skip_verify: true
     ec2_sd_configs:
       - region: eu-west-2
         refresh_interval: 30s

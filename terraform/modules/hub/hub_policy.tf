@@ -21,6 +21,10 @@ module "policy_ecs_asg" {
 
 locals {
   policy_location_blocks = <<-LOCATIONS
+  location = /prometheus/metrics {
+    proxy_pass http://policy:8081;
+    proxy_set_header Host policy.${local.root_domain};
+  }
   location / {
     proxy_pass http://policy:8080;
     proxy_set_header Host policy.${local.root_domain};

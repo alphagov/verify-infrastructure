@@ -32,6 +32,15 @@ module "prometheus_can_talk_to_egress_proxy_node_exporter" {
   port = 9100
 }
 
+module "prometheus_can_talk_to_policy" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.prometheus.id}"
+  destination_sg_id = "${module.policy_ecs_asg.instance_sg_id}"
+
+  port = 8443
+}
+
 resource "aws_iam_role" "prometheus" {
   name = "${var.deployment}-prometheus"
 
