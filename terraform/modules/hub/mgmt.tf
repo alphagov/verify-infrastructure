@@ -85,6 +85,18 @@ resource "aws_route53_record" "mgmt_subdomain" {
   }
 }
 
+resource "aws_route53_record" "mgmt_wildcard_subdomain" {
+  zone_id = "${aws_route53_zone.mgmt_domain.zone_id}"
+  name    = "*.${local.mgmt_domain}"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_lb.mgmt.dns_name}"
+    zone_id                = "${aws_lb.mgmt.zone_id}"
+    evaluate_target_health = true
+  }
+}
+
 resource "aws_lb" "mgmt" {
   name               = "${var.deployment}-mgmt"
   internal           = false
