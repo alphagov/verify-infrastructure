@@ -24,6 +24,45 @@ resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_http" {
   cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
 }
 
+locals {
+  mgmt_domain = "mgmt.${local.root_domain}"
+}
+
+resource "aws_route53_zone" "mgmt_domain" {
+  name = "${local.mgmt_domain}"
+
+  tags {
+    Deployment = "${var.deployment}"
+  }
+}
+
+resource "aws_acm_certificate" "mgmt_wildcard" {
+  domain_name       = "${local.mgmt_domain}"
+  subject_alternative_names = ["*.${local.mgmt_domain}"]
+  validation_method = "DNS"
+
+  tags {
+    Deployment = "${var.deployment}"
+  }
+}
+
+resource "aws_route53_record" "mgmt_wildcard_cert_validation" {
+  name    = "${aws_acm_certificate.mgmt_wildcard.domain_validation_options.0.resource_record_name}"
+  type    = "${aws_acm_certificate.mgmt_wildcard.domain_validation_options.0.resource_record_type}"
+  zone_id = "${aws_route53_zone.mgmt_domain.zone_id}"
+
+  records = [
+    "${aws_acm_certificate.mgmt_wildcard.domain_validation_options.0.resource_record_value}",
+  ]
+
+  ttl = 60
+}
+
+resource "aws_acm_certificate_validation" "mgmt_wildcard" {
+  certificate_arn         = "${aws_acm_certificate.mgmt_wildcard.arn}"
+  validation_record_fqdns = ["${aws_route53_record.mgmt_wildcard_cert_validation.fqdn}"]
+}
+
 resource "aws_lb" "mgmt" {
   name               = "${var.deployment}-mgmt"
   internal           = false
@@ -68,43 +107,4 @@ resource "aws_lb_listener" "mgmt_https" {
       status_code  = "200"
     }
   }
-}
-
-locals {
-  mgmt_domain = "mgmt.${local.root_domain}"
-}
-
-resource "aws_route53_zone" "mgmt_domain" {
-  name = "${local.mgmt_domain}"
-
-  tags {
-    Deployment = "${var.deployment}"
-  }
-}
-
-resource "aws_acm_certificate" "mgmt_wildcard" {
-  domain_name       = "${local.mgmt_domain}"
-  subject_alternative_names = ["*.${local.mgmt_domain}"]
-  validation_method = "DNS"
-
-  tags {
-    Deployment = "${var.deployment}"
-  }
-}
-
-resource "aws_route53_record" "mgmt_wildcard_cert_validation" {
-  name    = "${aws_acm_certificate.mgmt_wildcard.domain_validation_options.0.resource_record_name}"
-  type    = "${aws_acm_certificate.mgmt_wildcard.domain_validation_options.0.resource_record_type}"
-  zone_id = "${aws_route53_zone.mgmt_domain.zone_id}"
-
-  records = [
-    "${aws_acm_certificate.mgmt_wildcard.domain_validation_options.0.resource_record_value}",
-  ]
-
-  ttl = 60
-}
-
-resource "aws_acm_certificate_validation" "mgmt_wildcard" {
-  certificate_arn         = "${aws_acm_certificate.mgmt_wildcard.arn}"
-  validation_record_fqdns = ["${aws_route53_record.mgmt_wildcard_cert_validation.fqdn}"]
 }
