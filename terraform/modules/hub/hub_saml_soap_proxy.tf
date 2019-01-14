@@ -11,6 +11,7 @@ module "saml_soap_proxy_ecs_asg" {
 
   additional_instance_security_group_ids = [
     "${aws_security_group.egress_via_proxy.id}",
+    "${aws_security_group.scraped_by_prometheus.id}",
   ]
 
   logit_api_key           = "${var.logit_api_key}"
@@ -78,11 +79,4 @@ module "saml_soap_proxy_can_connect_to_saml_engine" {
 
   source_sg_id      = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.saml_engine.lb_sg_id}"
-}
-
-module "saml_soap_proxy_can_connect_to_event_sink" {
-  source = "modules/microservice_connection"
-
-  source_sg_id      = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
-  destination_sg_id = "${module.event_sink.lb_sg_id}"
 }

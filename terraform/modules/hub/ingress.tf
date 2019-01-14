@@ -62,6 +62,7 @@ resource "aws_lb_target_group" "ingress_metadata" {
   vpc_id               = "${aws_vpc.hub.id}"
   target_type          = "ip"
   deregistration_delay = 60
+  slow_start           = 30
 
   health_check {
     path     = "/healthcheck"
@@ -78,6 +79,7 @@ resource "aws_lb_target_group" "ingress_frontend" {
   vpc_id               = "${aws_vpc.hub.id}"
   target_type          = "ip"
   deregistration_delay = 60
+  slow_start           = 30
 
   health_check {
     path     = "/"

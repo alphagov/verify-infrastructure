@@ -12,6 +12,7 @@ module "policy_ecs_asg" {
 
   additional_instance_security_group_ids = [
     "${aws_security_group.egress_via_proxy.id}",
+    "${aws_security_group.scraped_by_prometheus.id}",
   ]
 
   logit_api_key           = "${var.logit_api_key}"
@@ -20,6 +21,10 @@ module "policy_ecs_asg" {
 
 locals {
   policy_location_blocks = <<-LOCATIONS
+  location = /prometheus/metrics {
+    proxy_pass http://policy:8081;
+    proxy_set_header Host policy.${local.root_domain};
+  }
   location / {
     proxy_pass http://policy:8080;
     proxy_set_header Host policy.${local.root_domain};
@@ -86,11 +91,4 @@ module "policy_can_connect_to_saml_soap_proxy" {
 
   source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.saml_soap_proxy.lb_sg_id}"
-}
-
-module "policy_can_connect_to_event_sink" {
-  source = "modules/microservice_connection"
-
-  source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
-  destination_sg_id = "${module.event_sink.lb_sg_id}"
 }
