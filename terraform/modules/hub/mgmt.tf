@@ -24,6 +24,79 @@ resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_http" {
   cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
 }
 
+resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_https" {
+  type      = "ingress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = "${aws_security_group.mgmt_lb.id}"
+  cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
+}
+
+locals {
+  mgmt_domain = "mgmt.${local.root_domain}"
+}
+
+resource "aws_route53_zone" "mgmt_domain" {
+  name = "${local.mgmt_domain}"
+
+  tags {
+    Deployment = "${var.deployment}"
+  }
+}
+
+resource "aws_acm_certificate" "mgmt_wildcard" {
+  domain_name               = "${local.mgmt_domain}"
+  subject_alternative_names = ["*.${local.mgmt_domain}"]
+  validation_method         = "DNS"
+
+  tags {
+    Deployment = "${var.deployment}"
+  }
+}
+
+resource "aws_route53_record" "mgmt_wildcard_cert_validation" {
+  name    = "${aws_acm_certificate.mgmt_wildcard.domain_validation_options.0.resource_record_name}"
+  type    = "${aws_acm_certificate.mgmt_wildcard.domain_validation_options.0.resource_record_type}"
+  zone_id = "${aws_route53_zone.mgmt_domain.zone_id}"
+
+  records = [
+    "${aws_acm_certificate.mgmt_wildcard.domain_validation_options.0.resource_record_value}",
+  ]
+
+  ttl = 60
+}
+
+resource "aws_acm_certificate_validation" "mgmt_wildcard" {
+  certificate_arn         = "${aws_acm_certificate.mgmt_wildcard.arn}"
+  validation_record_fqdns = ["${aws_route53_record.mgmt_wildcard_cert_validation.fqdn}"]
+}
+
+resource "aws_route53_record" "mgmt_subdomain" {
+  zone_id = "${aws_route53_zone.mgmt_domain.zone_id}"
+  name    = "${local.mgmt_domain}"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_lb.mgmt.dns_name}"
+    zone_id                = "${aws_lb.mgmt.zone_id}"
+    evaluate_target_health = true
+  }
+}
+
+resource "aws_route53_record" "mgmt_wildcard_subdomain" {
+  zone_id = "${aws_route53_zone.mgmt_domain.zone_id}"
+  name    = "*.${local.mgmt_domain}"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_lb.mgmt.dns_name}"
+    zone_id                = "${aws_lb.mgmt.zone_id}"
+    evaluate_target_health = true
+  }
+}
+
 resource "aws_lb" "mgmt" {
   name               = "${var.deployment}-mgmt"
   internal           = false
@@ -42,15 +115,23 @@ resource "aws_lb_listener" "mgmt_http" {
   port              = "80"
   protocol          = "HTTP"
 
-  # default_action {
-  #   type = "redirect"
+  default_action {
+    type = "redirect"
 
-  #   redirect {
-  #     port        = "443"
-  #     protocol    = "HTTPS"
-  #     status_code = "HTTP_301"
-  #   }
-  # }
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_lb_listener" "mgmt_https" {
+  load_balancer_arn = "${aws_lb.mgmt.arn}"
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = "${aws_acm_certificate.mgmt_wildcard.arn}"
+
   default_action {
     type = "fixed-response"
 
@@ -61,16 +142,3 @@ resource "aws_lb_listener" "mgmt_http" {
     }
   }
 }
-
-# resource "aws_lb_listener" "mgmt_https" {
-#   load_balancer_arn = "${aws_lb.mgmt.arn}"
-#   port              = "443"
-#   protocol          = "HTTPS"
-#   certificate_arn   = "${local.wildcard_cert_arn}"
-# 
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = "${aws_lb_target_group.mgmt_frontend.arn}"
-#   }
-# }
-
