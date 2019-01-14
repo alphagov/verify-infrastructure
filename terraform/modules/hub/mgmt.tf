@@ -74,3 +74,10 @@ resource "aws_lb_listener" "mgmt_http" {
 #   }
 # }
 
+resource "aws_route53_zone" "mgmt_domain" {
+  name = "mgmt.${local.root_domain}"
+
+  tags {
+    Deployment = "${var.deployment}"
+  }
+}
