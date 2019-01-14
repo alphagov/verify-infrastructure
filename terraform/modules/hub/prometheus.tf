@@ -214,7 +214,7 @@ resource "aws_lb_target_group" "prometheus" {
 }
 
 resource "aws_lb_target_group_attachment" "prometheus" {
-  count = 1
+  count = "${var.number_of_availability_zones}"
 
   target_group_arn = "${aws_lb_target_group.prometheus.arn}"
   target_id        = "${element(aws_instance.prometheus.*.id, count.index)}"
