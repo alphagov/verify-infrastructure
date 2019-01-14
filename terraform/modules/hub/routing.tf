@@ -2,7 +2,7 @@ resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.hub.id}"
 
   tags {
-    Name        = "public-${var.deployment}"
+    Name       = "public-${var.deployment}"
     Deployment = "${var.deployment}"
   }
 }
@@ -31,7 +31,7 @@ resource "aws_route_table" "private" {
   vpc_id = "${aws_vpc.hub.id}"
 
   tags {
-    Name        = "private-${var.deployment}"
+    Name       = "private-${var.deployment}"
     Deployment = "${var.deployment}"
   }
 }
@@ -41,7 +41,7 @@ resource "aws_route" "private_egress" {
 
   destination_cidr_block = "0.0.0.0/0"
 
-  route_table_id         = "${element(
+  route_table_id = "${element(
     aws_route_table.private.*.id,
     count.index
   )}"

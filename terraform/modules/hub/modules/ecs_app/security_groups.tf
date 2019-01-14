@@ -29,5 +29,5 @@ resource "aws_security_group_rule" "lb_egress_to_task" {
 
   # source is destination for egress
   source_security_group_id = "${var.instance_security_group_id}"
-  security_group_id = "${aws_security_group.lb.id}"
+  security_group_id        = "${aws_security_group.lb.id}"
 }

@@ -142,11 +142,11 @@ data "template_file" "prometheus_cloud_init" {
   template = "${file("${path.module}/files/cloud-init/prometheus.sh")}"
 
   vars {
-    deployment                       = "${var.deployment}"
-    domain                           = "${local.root_domain}"
-    egress_proxy_url_with_protocol   = "${local.egress_proxy_url_with_protocol}"
-    logit_elasticsearch_url          = "${var.logit_elasticsearch_url}"
-    logit_api_key                    = "${var.logit_api_key}"
+    deployment                     = "${var.deployment}"
+    domain                         = "${local.root_domain}"
+    egress_proxy_url_with_protocol = "${local.egress_proxy_url_with_protocol}"
+    logit_elasticsearch_url        = "${var.logit_elasticsearch_url}"
+    logit_api_key                  = "${var.logit_api_key}"
   }
 }
 
@@ -200,10 +200,10 @@ resource "aws_volume_attachment" "prometheus_prometheus" {
 }
 
 resource "aws_lb_target_group" "prometheus" {
-  name                 = "${var.deployment}-prometheus"
-  port                 = 9090
-  protocol             = "HTTP"
-  vpc_id               = "${aws_vpc.hub.id}"
+  name     = "${var.deployment}-prometheus"
+  port     = 9090
+  protocol = "HTTP"
+  vpc_id   = "${aws_vpc.hub.id}"
 
   health_check {
     path     = "/metrics"
