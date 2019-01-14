@@ -151,7 +151,7 @@ data "template_file" "prometheus_cloud_init" {
 }
 
 resource "aws_instance" "prometheus" {
-  count = 1
+  count = "${var.number_of_availability_zones}"
 
   ami                  = "${data.aws_ami.ubuntu_bionic.id}"
   instance_type        = "t3.medium"
@@ -176,7 +176,7 @@ resource "aws_instance" "prometheus" {
 }
 
 resource "aws_ebs_volume" "prometheus" {
-  count = 1
+  count = "${var.number_of_availability_zones}"
 
   size      = 100
   encrypted = true
@@ -192,7 +192,7 @@ resource "aws_ebs_volume" "prometheus" {
 }
 
 resource "aws_volume_attachment" "prometheus_prometheus" {
-  count = 1
+  count = "${var.number_of_availability_zones}"
 
   device_name = "/dev/xvdp"
   volume_id   = "${element(aws_ebs_volume.prometheus.*.id, count.index)}"
