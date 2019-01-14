@@ -13,7 +13,7 @@ resource "aws_vpc_endpoint" "s3" {
   service_name = "com.amazonaws.eu-west-2.s3"
 
   route_table_ids = [
-    "${aws_route_table.private.*.id}"
+    "${aws_route_table.private.*.id}",
   ]
 
   policy = <<-EOF

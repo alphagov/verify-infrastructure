@@ -44,6 +44,6 @@ resource "aws_iam_policy" "deployer_update_ecs" {
 }
 
 resource "aws_iam_role_policy_attachment" "deployer_deployer_update_ecs" {
-  role = "${aws_iam_role.deployer.name}"
+  role       = "${aws_iam_role.deployer.name}"
   policy_arn = "${aws_iam_policy.deployer_update_ecs.arn}"
 }
