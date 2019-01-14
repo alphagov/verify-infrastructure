@@ -24,6 +24,16 @@ resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_http" {
   cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
 }
 
+resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_https" {
+  type      = "ingress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = "${aws_security_group.mgmt_lb.id}"
+  cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
+}
+
 locals {
   mgmt_domain = "mgmt.${local.root_domain}"
 }
@@ -37,9 +47,9 @@ resource "aws_route53_zone" "mgmt_domain" {
 }
 
 resource "aws_acm_certificate" "mgmt_wildcard" {
-  domain_name       = "${local.mgmt_domain}"
+  domain_name               = "${local.mgmt_domain}"
   subject_alternative_names = ["*.${local.mgmt_domain}"]
-  validation_method = "DNS"
+  validation_method         = "DNS"
 
   tags {
     Deployment = "${var.deployment}"
@@ -61,6 +71,18 @@ resource "aws_route53_record" "mgmt_wildcard_cert_validation" {
 resource "aws_acm_certificate_validation" "mgmt_wildcard" {
   certificate_arn         = "${aws_acm_certificate.mgmt_wildcard.arn}"
   validation_record_fqdns = ["${aws_route53_record.mgmt_wildcard_cert_validation.fqdn}"]
+}
+
+resource "aws_route53_record" "mgmt_subdomain" {
+  zone_id = "${aws_route53_zone.mgmt_domain.zone_id}"
+  name    = "${local.mgmt_domain}"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_lb.mgmt.dns_name}"
+    zone_id                = "${aws_lb.mgmt.zone_id}"
+    evaluate_target_health = true
+  }
 }
 
 resource "aws_lb" "mgmt" {
