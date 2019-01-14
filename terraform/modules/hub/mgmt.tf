@@ -52,8 +52,13 @@ resource "aws_lb_listener" "mgmt_http" {
   #   }
   # }
   default_action {
-    type             = "forward"
-    target_group_arn = "${aws_lb_target_group.prometheus.arn}"
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "🛠️"
+      status_code  = "200"
+    }
   }
 }
 

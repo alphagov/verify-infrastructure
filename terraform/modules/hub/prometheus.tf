@@ -214,9 +214,25 @@ resource "aws_lb_target_group" "prometheus" {
 }
 
 resource "aws_lb_target_group_attachment" "prometheus" {
-  count = 1
+  count = "${var.number_of_availability_zones}"
 
   target_group_arn = "${aws_lb_target_group.prometheus.arn}"
   target_id        = "${element(aws_instance.prometheus.*.id, count.index)}"
   port             = 9090
+}
+
+resource "aws_lb_listener_rule" "prometheus_https" {
+  count = "${var.number_of_availability_zones}"
+  listener_arn = "${aws_lb_listener.mgmt_http.arn}"
+  priority     = "${100 + count.index}"
+
+  action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.prometheus.arn}"
+  }
+
+  condition {
+    field  = "host-header"
+    values = ["prom-${count.index + 1}.*"]
+  }
 }
