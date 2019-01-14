@@ -15,7 +15,7 @@ locals {
 }
 
 # terraform state mv wildcard_new to wildcard after we change the environment domain
-resource "aws_acm_certificate" "wildcard_new" {
+resource "aws_acm_certificate" "wildcard" {
   domain_name               = "${var.signin_domain}"
   subject_alternative_names = ["*.${local.domain_root}"]
   validation_method         = "DNS"
