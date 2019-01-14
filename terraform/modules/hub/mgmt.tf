@@ -42,15 +42,23 @@ resource "aws_lb_listener" "mgmt_http" {
   port              = "80"
   protocol          = "HTTP"
 
-  # default_action {
-  #   type = "redirect"
+  default_action {
+    type = "redirect"
 
-  #   redirect {
-  #     port        = "443"
-  #     protocol    = "HTTPS"
-  #     status_code = "HTTP_301"
-  #   }
-  # }
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_lb_listener" "mgmt_https" {
+  load_balancer_arn = "${aws_lb.mgmt.arn}"
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = "${aws_acm_certificate.mgmt_wildcard.arn}"
+
   default_action {
     type = "fixed-response"
 
@@ -61,18 +69,6 @@ resource "aws_lb_listener" "mgmt_http" {
     }
   }
 }
-
-# resource "aws_lb_listener" "mgmt_https" {
-#   load_balancer_arn = "${aws_lb.mgmt.arn}"
-#   port              = "443"
-#   protocol          = "HTTPS"
-#   certificate_arn   = "${local.wildcard_cert_arn}"
-# 
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = "${aws_lb_target_group.mgmt_frontend.arn}"
-#   }
-# }
 
 locals {
   mgmt_domain = "mgmt.${local.root_domain}"
