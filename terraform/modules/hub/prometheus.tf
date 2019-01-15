@@ -276,3 +276,9 @@ resource "aws_lb_listener_rule" "prometheus_https" {
     values = ["prom-${count.index + 1}.*"]
   }
 }
+
+resource "aws_s3_bucket_object" "prometheus_config_file" {
+  bucket = "${aws_s3_bucket.deployment_config.id}"
+  key    = "prometheus/prometheus.yml"
+  source = "${path.module}/files/prometheus/prometheus.yml"
+}
