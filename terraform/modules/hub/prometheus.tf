@@ -200,7 +200,9 @@ resource "aws_volume_attachment" "prometheus_prometheus" {
 }
 
 resource "aws_lb_target_group" "prometheus" {
-  name     = "${var.deployment}-prometheus"
+  count = "${var.number_of_availability_zones}"
+
+  name     = "${var.deployment}-prometheus-${count.index}"
   port     = 9090
   protocol = "HTTP"
   vpc_id   = "${aws_vpc.hub.id}"
@@ -216,7 +218,7 @@ resource "aws_lb_target_group" "prometheus" {
 resource "aws_lb_target_group_attachment" "prometheus" {
   count = "${var.number_of_availability_zones}"
 
-  target_group_arn = "${aws_lb_target_group.prometheus.arn}"
+  target_group_arn = "${element(aws_lb_target_group.prometheus.*.arn, count.index)}"
   target_id        = "${element(aws_instance.prometheus.*.id, count.index)}"
   port             = 9090
 }
