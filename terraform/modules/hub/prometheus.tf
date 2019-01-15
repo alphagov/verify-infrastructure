@@ -290,21 +290,21 @@ resource "aws_s3_bucket_policy" "access_prometheus_config" {
   bucket = "${aws_s3_bucket.deployment_config.id}"
 
   policy = <<-POLICY
-    {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Action": [
-            "s3:GetObject"
-          ],
-          "Effect": "Allow",
-          "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml",
-          "Principal": {
-            "AWS": "${data.aws_caller_identity.account.account_id}"
-          }
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "s3:GetObject"
+        ],
+        "Effect": "Allow",
+        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml",
+        "Principal": {
+          "AWS": "${data.aws_caller_identity.account.account_id}"
         }
-      ]
-    }
+      }
+    ]
+  }
   POLICY
 }
 
