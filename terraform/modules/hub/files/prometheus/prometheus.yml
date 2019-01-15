@@ -1,3 +1,57 @@
 global:
-  scrape_interval: 30s
-  evaluation_interval: 30s
+  scrape_interval:     15s
+  evaluation_interval: 15s
+scrape_configs:
+  - job_name: prometheus
+    ec2_sd_configs:
+      - region: eu-west-2
+        refresh_interval: 30s
+        port: 9090
+    relabel_configs:
+      - source_labels: [__meta_ec2_tag_Name]
+        regex: '^${deployment}-prometheus$'
+        action: keep
+      - source_labels: [__meta_ec2_tag_Deployment]
+        regex: '^${deployment}$'
+        action: keep
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: instance
+  - job_name: node_exporter
+    ec2_sd_configs:
+      - region: eu-west-2
+        refresh_interval: 30s
+        port: 9100
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: instance
+      - source_labels: [__meta_ec2_tag_Role]
+        target_label: role
+      - source_labels: [__meta_ec2_tag_Deployment]
+        regex: '^${deployment}$'
+        action: keep
+      - source_labels: [__meta_ec2_tag_Team]
+        target_label: team
+      - source_labels: [__meta_ec2_tag_Cluster]
+        target_label: job
+  - job_name: apps
+    scheme: 'https'
+    metrics_path: '/prometheus/metrics'
+    tls_config:
+      insecure_skip_verify: true
+    ec2_sd_configs:
+      - region: eu-west-2
+        refresh_interval: 30s
+        port: 8443
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: instance
+      - source_labels: [__meta_ec2_tag_Role]
+        target_label: role
+      - source_labels: [__meta_ec2_tag_Deployment]
+        regex: '^${deployment}$'
+        action: keep
+      - source_labels: [__meta_ec2_tag_Team]
+        target_label: team
+      - source_labels: [__meta_ec2_tag_Cluster]
+        target_label: job
+
