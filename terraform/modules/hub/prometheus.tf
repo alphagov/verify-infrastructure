@@ -260,12 +260,13 @@ resource "aws_lb_target_group_attachment" "prometheus" {
 }
 
 resource "aws_lb_listener_rule" "prometheus_https" {
-  count = "${var.number_of_availability_zones}"
+  count        = "${var.number_of_availability_zones}"
   listener_arn = "${aws_lb_listener.mgmt_https.arn}"
   priority     = "${100 + count.index}"
 
   action {
-    type             = "forward"
+    type = "forward"
+
     target_group_arn = "${
       element(aws_lb_target_group.prometheus.*.arn, count.index)
     }"
