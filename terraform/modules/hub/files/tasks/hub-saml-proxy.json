@@ -36,11 +36,19 @@
       "server",
       "/tmp/saml-proxy.yml"
     ],
-    "environment": [{
-      "Name": "DEPLOYMENT",
-      "Value": "${deployment}"
-    }, {
-      "Name": "JAVA_OPTS",
-      "Value": "-Dservice.name=saml-proxy -Xms3000m -Xmx3200m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.proxyHost=\"egress-proxy.${domain}\" -Dhttp.proxyPort=\"8080\" -Dhttps.proxyHost=\"egress-proxy.${domain}\" -Dhttps.proxyPort=\"8080\" -Dhttp.nonProxyHosts=\"config.${domain}|policy.${domain}\" -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5" }]
+    "environment": [
+      {
+        "Name": "DEPLOYMENT",
+        "Value": "${deployment}"
+      },
+      {
+        "Name": "JAVA_OPTS",
+        "Value": "-Dservice.name=saml-proxy -Xms3000m -Xmx3200m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.proxyHost=\"egress-proxy.${domain}\" -Dhttp.proxyPort=\"8080\" -Dhttps.proxyHost=\"egress-proxy.${domain}\" -Dhttps.proxyPort=\"8080\" -Dhttp.nonProxyHosts=\"config.${domain}|policy.${domain}\" -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5",
+      },
+      {
+        "Name": "PROMETHEUS_METRICS_PATH",
+        "Value": "/prometheus/metrics"
+      }
+    ]
   }
 ]
