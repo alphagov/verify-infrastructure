@@ -131,6 +131,14 @@ resource "aws_iam_policy" "prometheus" {
       {
         "Effect": "Allow",
         "Action": [
+          "s3:ListBucket",
+          "s3:GetObject"
+        ],
+        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml}"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
           "ssm:ListAssociations",
           "ssm:UpdateInstanceInformation",
           "ssmmessages:CreateControlChannel",
