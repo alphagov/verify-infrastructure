@@ -21,6 +21,10 @@ module "saml_engine_ecs_asg" {
 
 locals {
   saml_engine_location_blocks = <<-LOCATIONS
+  location = /prometheus/metrics {
+    proxy_pass http://saml-engine:8081;
+    proxy_set_header Host saml-engine.${local.root_domain};
+  }
   location / {
     proxy_pass http://saml-engine:8080;
     proxy_set_header Host saml-engine.${local.root_domain};

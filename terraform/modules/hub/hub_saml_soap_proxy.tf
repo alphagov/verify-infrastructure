@@ -20,6 +20,10 @@ module "saml_soap_proxy_ecs_asg" {
 
 locals {
   saml_soap_proxy_location_blocks = <<-LOCATIONS
+  location = /prometheus/metrics {
+    proxy_pass http://saml-soap-proxy:8081;
+    proxy_set_header Host saml-soap-proxy.${local.root_domain};
+  }
   location / {
     proxy_pass http://saml-soap-proxy:8080;
     proxy_set_header Host saml-soap-proxy.${local.root_domain};

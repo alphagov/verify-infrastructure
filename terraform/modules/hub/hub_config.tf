@@ -21,6 +21,10 @@ module "config_ecs_asg" {
 
 locals {
   config_location_blocks = <<-LOCATIONS
+  location = /prometheus/metrics {
+    proxy_pass http://config:8081;
+    proxy_set_header Host config.${local.root_domain};
+  }
   location / {
     proxy_pass http://config:8080;
     proxy_set_header Host config.${local.root_domain};

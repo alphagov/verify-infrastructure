@@ -41,6 +41,42 @@ module "prometheus_can_talk_to_policy" {
   port = 8443
 }
 
+module "prometheus_can_talk_to_config" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.prometheus.id}"
+  destination_sg_id = "${module.config_ecs_asg.instance_sg_id}"
+
+  port = 8443
+}
+
+module "prometheus_can_talk_to_saml_engine" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.prometheus.id}"
+  destination_sg_id = "${module.saml_engine_ecs_asg.instance_sg_id}"
+
+  port = 8443
+}
+
+module "prometheus_can_talk_to_saml_proxy" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.prometheus.id}"
+  destination_sg_id = "${module.saml_proxy_ecs_asg.instance_sg_id}"
+
+  port = 8443
+}
+
+module "prometheus_can_talk_to_saml_soap_proxy" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.prometheus.id}"
+  destination_sg_id = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
+
+  port = 8443
+}
+
 resource "aws_iam_role" "prometheus" {
   name = "${var.deployment}-prometheus"
 
