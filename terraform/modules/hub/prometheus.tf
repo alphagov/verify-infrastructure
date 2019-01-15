@@ -230,7 +230,9 @@ resource "aws_lb_listener_rule" "prometheus_https" {
 
   action {
     type             = "forward"
-    target_group_arn = "${aws_lb_target_group.prometheus.arn}"
+    target_group_arn = "${
+      element(aws_lb_target_group.prometheus.*.arn, count.index)
+    }"
   }
 
   condition {
