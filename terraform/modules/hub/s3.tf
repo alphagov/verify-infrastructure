@@ -1,6 +1,14 @@
+resource "random_string" "deployment_config_bucket_name_suffix" {
+  length  = 6
+  special = false
+  upper   = false
+  number  = false
+}
+
 resource "aws_s3_bucket" "deployment_config" {
-  bucket = "gds-${var.deployment}-config"
-  acl    = "private"
+  bucket = "gds-${var.deployment}-config-${random_string.deployment_config_bucket_name_suffix.result}"
+
+  acl = "private"
 
   versioning {
     enabled = true
