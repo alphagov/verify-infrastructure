@@ -131,6 +131,14 @@ resource "aws_iam_policy" "prometheus" {
       {
         "Effect": "Allow",
         "Action": [
+          "s3:ListBucket",
+          "s3:GetObject"
+        ],
+        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml}"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
           "ssm:ListAssociations",
           "ssm:UpdateInstanceInformation",
           "ssmmessages:CreateControlChannel",
@@ -260,12 +268,13 @@ resource "aws_lb_target_group_attachment" "prometheus" {
 }
 
 resource "aws_lb_listener_rule" "prometheus_https" {
-  count = "${var.number_of_availability_zones}"
+  count        = "${var.number_of_availability_zones}"
   listener_arn = "${aws_lb_listener.mgmt_https.arn}"
   priority     = "${100 + count.index}"
 
   action {
-    type             = "forward"
+    type = "forward"
+
     target_group_arn = "${
       element(aws_lb_target_group.prometheus.*.arn, count.index)
     }"
@@ -275,4 +284,32 @@ resource "aws_lb_listener_rule" "prometheus_https" {
     field  = "host-header"
     values = ["prom-${count.index + 1}.*"]
   }
+}
+
+resource "aws_s3_bucket_policy" "access_prometheus_config" {
+  bucket = "${aws_s3_bucket.deployment_config.id}"
+
+  policy = <<-POLICY
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "s3:GetObject"
+        ],
+        "Effect": "Allow",
+        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml",
+        "Principal": {
+          "AWS": "${data.aws_caller_identity.account.account_id}"
+        }
+      }
+    ]
+  }
+  POLICY
+}
+
+resource "aws_s3_bucket_object" "prometheus_config_file" {
+  bucket = "${aws_s3_bucket.deployment_config.id}"
+  key    = "prometheus/prometheus.yml"
+  source = "${path.module}/files/prometheus/prometheus.yml"
 }
