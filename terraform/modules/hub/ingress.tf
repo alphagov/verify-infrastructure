@@ -92,11 +92,11 @@ resource "aws_lb_target_group" "ingress_frontend" {
 
 resource "aws_lb" "ingress" {
   name               = "${var.deployment}-ingress"
-  internal           = false
+  internal           = true
   load_balancer_type = "application"
 
   security_groups = ["${aws_security_group.ingress.id}"]
-  subnets         = ["${aws_subnet.ingress.*.id}"]
+  subnets         = ["${aws_subnet.internal.*.id}"]
 
   tags {
     Deployment = "${var.deployment}"
