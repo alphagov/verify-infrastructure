@@ -1,0 +1,22 @@
+[
+  {
+    "name": "static-ingress",
+    "image": "${image_and_tag}",
+    "cpu": 0,
+    "memory": 3500,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 4500,
+        "hostPort": 4500
+      }
+    ],
+    "entryPoint": [
+        "TODO"
+    ],
+    "environment": [{
+      "Name": "BACKENDS",
+      "Value": "${backends}"
+    }]
+  }
+]
