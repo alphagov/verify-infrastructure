@@ -182,10 +182,47 @@ resource "aws_iam_role_policy_attachment" "prometheus" {
   policy_arn = "${aws_iam_policy.prometheus.arn}"
 }
 
+resource "aws_s3_bucket_policy" "access_prometheus_config" {
+  bucket = "${aws_s3_bucket.deployment_config.id}"
+
+  policy = <<-POLICY
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "s3:GetObject"
+        ],
+        "Effect": "Allow",
+        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml",
+        "Principal": {
+          "AWS": "${data.aws_caller_identity.account.account_id}"
+        }
+      }
+    ]
+  }
+  POLICY
+}
+
+data "template_file" "prometheus_config" {
+  template = "${file("${path.module}/files/prometheus/prometheus.yml")}"
+
+  vars {
+    deployment = "${var.deployment}"
+  }
+}
+
+resource "aws_s3_bucket_object" "prometheus_config_file" {
+  bucket = "${aws_s3_bucket.deployment_config.id}"
+  key    = "prometheus/prometheus.yml"
+  content = "${data.template_file.prometheus_config.rendered}"
+}
+
 data "template_file" "prometheus_cloud_init" {
   template = "${file("${path.module}/files/cloud-init/prometheus.sh")}"
 
   vars {
+    prometheus_config              = "${data.template_file.prometheus_config.rendered}"
     deployment                     = "${var.deployment}"
     domain                         = "${local.root_domain}"
     egress_proxy_url_with_protocol = "${local.egress_proxy_url_with_protocol}"
@@ -284,32 +321,4 @@ resource "aws_lb_listener_rule" "prometheus_https" {
     field  = "host-header"
     values = ["prom-${count.index + 1}.*"]
   }
-}
-
-resource "aws_s3_bucket_policy" "access_prometheus_config" {
-  bucket = "${aws_s3_bucket.deployment_config.id}"
-
-  policy = <<-POLICY
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Action": [
-          "s3:GetObject"
-        ],
-        "Effect": "Allow",
-        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml",
-        "Principal": {
-          "AWS": "${data.aws_caller_identity.account.account_id}"
-        }
-      }
-    ]
-  }
-  POLICY
-}
-
-resource "aws_s3_bucket_object" "prometheus_config_file" {
-  bucket = "${aws_s3_bucket.deployment_config.id}"
-  key    = "prometheus/prometheus.yml"
-  source = "${path.module}/files/prometheus/prometheus.yml"
 }
