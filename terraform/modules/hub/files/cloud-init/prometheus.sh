@@ -131,10 +131,20 @@ Environment=HTTP_PROXY=${egress_proxy_url_with_protocol}
 Environment=HTTPS_PROXY=${egress_proxy_url_with_protocol}
 EOF
 
-cat <<EOF > /etc/prometheus/prometheus.yml
-${prometheus_config}
-EOF
-
 systemctl daemon-reload
 systemctl enable  prometheus
 systemctl restart prometheus
+
+(crontab -l ;\
+cat <<EOF
+* * * * * \
+  aws s3 cp \
+    ${config_bucket}/prometheus/prometheus.yml \
+    /tmp/prometheus.yml \
+  && \
+  if !cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml; then \
+    mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml \
+    && systemctl reload prometheus; \
+  fi
+EOF
+) | crontab -
