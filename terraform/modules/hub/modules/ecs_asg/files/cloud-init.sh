@@ -152,5 +152,6 @@ docker run \
   amazon/amazon-ecs-agent:v1.23.0
 
 apt-get install --yes prometheus-node-exporter
+sed -i 's/sys|proc|dev|run/sys|proc|dev|run|var\/lib\/docker/' /etc/default/prometheus-node-exporter
 systemctl enable prometheus-node-exporter
-systemctl start prometheus-node-exporter
+systemctl restart prometheus-node-exporter
