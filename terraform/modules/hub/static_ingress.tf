@@ -163,12 +163,8 @@ resource "aws_lb" "static_ingress" {
     subnet_id     = "${element(aws_subnet.ingress.*.id, 1)}"
     allocation_id = "${element(aws_eip.ingress.*.id, 1)}"
   }
-
-  subnet_mapping {
-    subnet_id     = "${element(aws_subnet.ingress.*.id, 2)}"
-    allocation_id = "${element(aws_eip.ingress.*.id, 2)}"
-  }
 }
+
 resource "aws_lb_target_group" "static_ingress_http" {
   name                 = "${var.deployment}-static-ingress-http"
   port                 = 80
