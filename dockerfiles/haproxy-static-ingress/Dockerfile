@@ -1,6 +1,10 @@
 FROM haproxy:1.9.0-alpine
 
-RUN addgroup -S haproxy && adduser -S -G haproxy haproxy
+EXPOSE 4500
+
+RUN addgroup -S haproxy && \
+    adduser  -S -G haproxy haproxy && \
+    apk add --no-cache gettext
 
 WORKDIR /tmp
 
