@@ -213,8 +213,8 @@ data "template_file" "prometheus_config" {
 }
 
 resource "aws_s3_bucket_object" "prometheus_config_file" {
-  bucket = "${aws_s3_bucket.deployment_config.id}"
-  key    = "prometheus/prometheus.yml"
+  bucket  = "${aws_s3_bucket.deployment_config.id}"
+  key     = "prometheus/prometheus.yml"
   content = "${data.template_file.prometheus_config.rendered}"
 }
 
