@@ -11,9 +11,6 @@
         "hostPort": 4500
       }
     ],
-    "entryPoint": [
-        "TODO"
-    ],
     "environment": [{
       "Name": "BACKENDS",
       "Value": "${backends}"
