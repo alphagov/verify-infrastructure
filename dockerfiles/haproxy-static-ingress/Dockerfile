@@ -9,5 +9,3 @@ USER haproxy
 COPY . /tmp
 
 ENTRYPOINT ["/tmp/docker-entrypoint.sh"]
-
-COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
