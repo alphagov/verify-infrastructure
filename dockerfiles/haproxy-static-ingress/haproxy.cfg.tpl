@@ -19,4 +19,4 @@ frontend nlb
 backend alb
     balance roundrobin
     default-server check maxconn 200
-$BACKENDS
+    $BACKENDS

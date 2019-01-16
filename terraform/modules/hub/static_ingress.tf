@@ -19,7 +19,7 @@ data "template_file" "static_ingress_task_def" {
 
   vars {
     image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
-    deployment    = "${var.deployment}"
+    backends      = "${aws_lb.ingress.dns_name}"
   }
 }
 
