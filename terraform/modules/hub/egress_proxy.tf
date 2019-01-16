@@ -56,7 +56,6 @@ locals {
     "registry-1\\.docker\\.io",                                                     # Docker Hub
     "auth\\.docker\\.io",                                                           # Docker Hub
     "production\\.cloudflare\\.docker\\.com",                                       # Docker Hub
-    "www\\.${var.deployment}\\.signin\\.service\\.gov\\.uk",                        # Metadata
     "test-rp-msa-stub-${var.deployment}\\.ida.digital\\.cabinet-office\\.gov\\.uk", # Test RP
     "${replace(var.logit_elasticsearch_url, ".", "\\.")}",
   ] # Logit

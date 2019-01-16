@@ -77,3 +77,10 @@ module "saml_proxy_can_connect_to_policy" {
   source_sg_id      = "${module.saml_proxy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.policy.lb_sg_id}"
 }
+
+module "saml_proxy_can_connect_to_ingress_for_metadata" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.saml_proxy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${aws_security_group.ingress.id}"
+}
