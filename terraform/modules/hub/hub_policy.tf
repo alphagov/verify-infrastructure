@@ -92,3 +92,11 @@ module "policy_can_connect_to_saml_soap_proxy" {
   source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.saml_soap_proxy.lb_sg_id}"
 }
+
+module "policy_can_connect_to_policy_redis" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${aws_security_group.policy_redis.id}"
+  port              = 6379
+}

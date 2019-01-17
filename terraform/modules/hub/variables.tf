@@ -18,6 +18,10 @@ variable "publically_accessible_from_cidrs" {
   default = ["0.0.0.0/0"]
 }
 
+variable "redis_cache_size" {
+  default = "cache.t2.small"
+}
+
 variable "truststore_password" {}
 
 locals {
