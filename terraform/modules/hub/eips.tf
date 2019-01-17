@@ -1,5 +1,5 @@
 resource "aws_eip" "ingress" {
-  count = 3
+  count = 2
   vpc   = true
 }
 

@@ -115,3 +115,10 @@ resource "aws_iam_role_policy_attachment" "saml_engine_parameter_execution" {
   role       = "${var.deployment}-saml-engine-execution"
   policy_arn = "${aws_iam_policy.saml_engine_parameter_execution.arn}"
 }
+
+module "saml_engine_can_connect_to_ingress_for_metadata" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.saml_engine_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${aws_security_group.ingress.id}"
+}

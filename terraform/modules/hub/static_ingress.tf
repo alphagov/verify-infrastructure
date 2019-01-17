@@ -19,12 +19,81 @@ module "static_ingress_ecs_asg" {
   logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
 }
 
-data "template_file" "static_ingress_task_def" {
+resource "aws_security_group_rule" "static_ingress_ingress_from_internet_over_http" {
+  type      = "ingress"
+  protocol  = "tcp"
+  from_port = 80
+  to_port   = 80
+
+  security_group_id = "${module.static_ingress_ecs_asg.instance_sg_id}"
+
+  cidr_blocks = ["${
+    concat(
+      var.publically_accessible_from_cidrs,
+      formatlist("%s/32", aws_eip.egress.*.public_ip),
+      aws_subnet.ingress.*.cidr_block,
+    )
+  }"]
+
+  # adding the egress IPs is a hack to let us access metadata through egress proxy
+  # adding the ingress cidrs is so the network load balancer can healthcheck the boxes
+}
+
+resource "aws_security_group_rule" "static_ingress_ingress_from_internet_over_https" {
+  type      = "ingress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = "${module.static_ingress_ecs_asg.instance_sg_id}"
+
+  cidr_blocks = ["${
+    concat(
+      var.publically_accessible_from_cidrs,
+      formatlist("%s/32", aws_eip.egress.*.public_ip),
+      aws_subnet.ingress.*.cidr_block,
+    )
+  }"]
+
+  # adding the egress IPs is a hack to let us access metadata through egress proxy
+  # adding the ingress cidrs is so the network load balancer can healthcheck the boxes
+}
+
+module "static_ingress_can_connect_to_ingress_http" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.static_ingress_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${aws_security_group.ingress.id}"
+
+  port = 80
+}
+
+module "static_ingress_can_connect_to_ingress_https" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.static_ingress_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${aws_security_group.ingress.id}"
+
+  port = 443
+}
+
+data "template_file" "static_ingress_http_task_def" {
   template = "${file("${path.module}/files/tasks/static-ingress.json")}"
 
   vars {
     image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
-    backends      = "${aws_lb.ingress.dns_name}"
+    backend       = "${var.signin_domain}"
+    port          = 80
+  }
+}
+
+data "template_file" "static_ingress_https_task_def" {
+  template = "${file("${path.module}/files/tasks/static-ingress.json")}"
+
+  vars {
+    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
+    backend       = "${var.signin_domain}"
+    port          = 443
   }
 }
 
@@ -37,9 +106,15 @@ module "static_ingress_ecs_roles" {
   image_name       = "verify-static-ingress"
 }
 
-resource "aws_ecs_task_definition" "static_ingress" {
-  family                = "${var.deployment}-static-ingress"
-  container_definitions = "${data.template_file.static_ingress_task_def.rendered}"
+resource "aws_ecs_task_definition" "static_ingress_http" {
+  family                = "${var.deployment}-static-ingress-http"
+  container_definitions = "${data.template_file.static_ingress_http_task_def.rendered}"
+  execution_role_arn    = "${module.static_ingress_ecs_roles.execution_role_arn}"
+}
+
+resource "aws_ecs_task_definition" "static_ingress_https" {
+  family                = "${var.deployment}-static-ingress-https"
+  container_definitions = "${data.template_file.static_ingress_https_task_def.rendered}"
   execution_role_arn    = "${module.static_ingress_ecs_roles.execution_role_arn}"
 }
 
@@ -47,23 +122,29 @@ resource "aws_ecs_cluster" "static-ingress" {
   name = "${var.deployment}-static-ingress"
 }
 
-resource "aws_security_group" "static_ingress" {
-  name        = "${var.deployment}-static-ingress"
-  description = "${var.deployment}-static-ingress"
-
-  vpc_id = "${aws_vpc.hub.id}"
-}
-
-resource "aws_ecs_service" "static_ingress" {
-  name            = "${var.deployment}-static-ingress"
+resource "aws_ecs_service" "static_ingress_http" {
+  name            = "${var.deployment}-static-ingress-http"
   cluster         = "${aws_ecs_cluster.static-ingress.id}"
-  task_definition = "${aws_ecs_task_definition.static_ingress.arn}"
+  task_definition = "${aws_ecs_task_definition.static_ingress_http.arn}"
   desired_count   = 1
 
   load_balancer {
-    target_group_arn = "${aws_lb_target_group.static_ingress.arn}"
+    target_group_arn = "${aws_lb_target_group.static_ingress_http.arn}"
     container_name   = "static-ingress"
-    container_port   = "4500"
+    container_port   = "80"
+  }
+}
+
+resource "aws_ecs_service" "static_ingress_https" {
+  name            = "${var.deployment}-static-ingress-https"
+  cluster         = "${aws_ecs_cluster.static-ingress.id}"
+  task_definition = "${aws_ecs_task_definition.static_ingress_https.arn}"
+  desired_count   = 1
+
+  load_balancer {
+    target_group_arn = "${aws_lb_target_group.static_ingress_https.arn}"
+    container_name   = "static-ingress"
+    container_port   = "443"
   }
 }
 
@@ -82,27 +163,42 @@ resource "aws_lb" "static_ingress" {
     subnet_id     = "${element(aws_subnet.ingress.*.id, 1)}"
     allocation_id = "${element(aws_eip.ingress.*.id, 1)}"
   }
+}
 
-  subnet_mapping {
-    subnet_id     = "${element(aws_subnet.ingress.*.id, 2)}"
-    allocation_id = "${element(aws_eip.ingress.*.id, 2)}"
+resource "aws_lb_target_group" "static_ingress_http" {
+  name                 = "${var.deployment}-static-ingress-http"
+  port                 = 80
+  protocol             = "TCP"
+  vpc_id               = "${aws_vpc.hub.id}"
+  deregistration_delay = 30
+}
+
+resource "aws_lb_target_group" "static_ingress_https" {
+  name                 = "${var.deployment}-static-ingress-https"
+  port                 = 443
+  protocol             = "TCP"
+  vpc_id               = "${aws_vpc.hub.id}"
+  deregistration_delay = 30
+}
+
+resource "aws_lb_listener" "static_ingress_http" {
+  load_balancer_arn = "${aws_lb.static_ingress.arn}"
+  protocol          = "TCP"
+  port              = 80
+
+  default_action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.static_ingress_http.arn}"
   }
 }
 
-resource "aws_lb_target_group" "static_ingress" {
-  name     = "${var.deployment}-static-ingress"
-  port     = 4500
-  protocol = "TCP"
-  vpc_id   = "${aws_vpc.hub.id}"
-}
-
-resource "aws_lb_listener" "static_ingress" {
+resource "aws_lb_listener" "static_ingress_https" {
   load_balancer_arn = "${aws_lb.static_ingress.arn}"
   protocol          = "TCP"
   port              = 443
 
   default_action {
     type             = "forward"
-    target_group_arn = "${aws_lb_target_group.static_ingress.arn}"
+    target_group_arn = "${aws_lb_target_group.static_ingress_https.arn}"
   }
 }

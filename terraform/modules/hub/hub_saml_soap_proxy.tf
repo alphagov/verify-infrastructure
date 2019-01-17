@@ -84,3 +84,10 @@ module "saml_soap_proxy_can_connect_to_saml_engine" {
   source_sg_id      = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.saml_engine.lb_sg_id}"
 }
+
+module "saml_soap_proxy_can_connect_to_ingress_for_metadata" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${aws_security_group.ingress.id}"
+}
