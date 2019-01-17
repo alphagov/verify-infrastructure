@@ -32,6 +32,7 @@ scrape_configs:
       - source_labels: [__meta_ec2_tag_Team]
         target_label: team
       - source_labels: [__meta_ec2_tag_Cluster]
+        replacement: $1_node
         target_label: job
   - job_name: apps
     scheme: 'https'
@@ -57,5 +58,7 @@ scrape_configs:
         target_label: team
       - source_labels: [__meta_ec2_tag_Cluster]
         regex: '(config|policy|saml-engine|saml-proxy|saml-soap-proxy)'
+        action: keep
+      - source_labels: [__meta_ec2_tag_Cluster]
         target_label: job
 
