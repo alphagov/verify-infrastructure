@@ -18,11 +18,11 @@ resolvers vpcdns
     timeout resolve 1s
     timeout retry   1s
     hold valid 1s
-    hold timeout 1s
-    hold nx 1s
-    hold other 1s
-    hold refused 1s
-    hold obsolete 1s
+    hold timeout 0s
+    hold nx 0s
+    hold other 0s
+    hold refused 0s
+    hold obsolete 0s
 
 frontend nlb
     mode tcp
