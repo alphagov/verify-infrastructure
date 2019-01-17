@@ -152,6 +152,16 @@ docker run \
   amazon/amazon-ecs-agent:v1.23.0
 
 apt-get install --yes prometheus-node-exporter
-sed -i 's/sys|proc|dev|run/sys|proc|dev|run|var\/lib\/docker/' /etc/default/prometheus-node-exporter
+mkdir /etc/systemd/system/prometheus-node-exporter.service.d
+# Create an environment file for prometheus node exporter
+cat >  /etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env <<EOF
+ARGS="--collector.diskstats.ignored-devices=^(ram|loop|fd|(h|s|v|xv)d[a-z]|nvme\\d+n\\d+p)\\d+$ --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|run|var/lib/docker)($|/) --collector.netdev.ignored-devices=^lo$ --collector.textfile.directory=/var/lib/prometheus/node-exporter"
+EOF
+# Create an override file which will override prometheus node exporter service file
+cat > /etc/systemd/system/prometheus-node-exporter.service.d/10-override-args.conf <<EOF
+[Service]
+EnvironmentFile=/etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env
+EOF
+systemctl daemon-reload
 systemctl enable prometheus-node-exporter
 systemctl restart prometheus-node-exporter
