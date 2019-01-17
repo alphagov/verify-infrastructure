@@ -139,7 +139,7 @@ cat <<EOF > /usr/bin/cronitor-prometheus-config-update.sh
 #!/usr/bin/env bash
 set -ueo pipefail
 
-: "${CRONITOR_URL:?CRONITOR_URL not set}"
+: "$${CRONITOR_URL:?CRONITOR_URL not set}"
 
 function cleanup {
   curl -sf -m 10 $CRONITOR_URL/fail
