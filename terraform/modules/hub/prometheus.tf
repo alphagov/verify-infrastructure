@@ -77,6 +77,16 @@ module "prometheus_can_talk_to_saml_soap_proxy" {
   port = 8443
 }
 
+resource "aws_security_group_rule" "prometheus_can_pull_config_from_s3" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = "${aws_security_group.prometheus.id}"
+  prefix_list_ids   = ["${aws_vpc_endpoint.s3.prefix_list_id}"]
+}
+
 resource "aws_iam_role" "prometheus" {
   name = "${var.deployment}-prometheus"
 
@@ -134,7 +144,7 @@ resource "aws_iam_policy" "prometheus" {
           "s3:ListBucket",
           "s3:GetObject"
         ],
-        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml}"
+        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml"
       },
       {
         "Effect": "Allow",
@@ -229,7 +239,6 @@ data "template_file" "prometheus_cloud_init" {
     logit_elasticsearch_url        = "${var.logit_elasticsearch_url}"
     logit_api_key                  = "${var.logit_api_key}"
     config_bucket                  = "${aws_s3_bucket.deployment_config.id}"
-    cronitor_prometheus_config_url = "${var.cronitor_prometheus_config_url}"
   }
 }
 

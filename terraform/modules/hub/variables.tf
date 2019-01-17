@@ -39,7 +39,3 @@ variable "logit_api_key" {
 variable "logit_elasticsearch_url" {
   description = "URL for logit.io elasticsearch, format: $guid-es.logit.io"
 }
-
-variable "cronitor_prometheus_config_url" {
-  description = "URL for the Cronitor check for the Prometheus config updater script"
-}

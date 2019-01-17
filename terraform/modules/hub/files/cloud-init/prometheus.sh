@@ -135,38 +135,27 @@ systemctl daemon-reload
 systemctl enable  prometheus
 systemctl restart prometheus
 
-export CONFIG_BUCKET=${config_bucket}
-export CRONITOR_URL=${cronitor_prometheus_config_url}
-cat <<EOF > /usr/bin/cronitor-prometheus-config-update.sh
+echo 'Installing awscli'
+apt-get install --yes awscli
+
+echo 'Installing prometheus-update-config'
+cat <<EOF > /usr/bin/prometheus-update-config
 #!/usr/bin/env bash
 set -ueo pipefail
 
-: "$${CRONITOR_URL:?CRONITOR_URL not set}"
+aws s3 cp \
+       --region eu-west-2 \
+       s3://${config_bucket}/prometheus/prometheus.yml \
+       /tmp/prometheus.yml
 
-function cleanup {
-  curl -sf -m 10 $CRONITOR_URL/fail
-}
-
-trap cleanup ERR
-
-curl -sf -m 10 $CRONITOR_URL/run
-
-aws s3 cp $CONFIG_BUCKET/prometheus/prometheus.yml /tmp/prometheus.yml
-
-if [ ! $(cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml) ]; then
+if ! cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml ; then
   mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml
   systemctl reload prometheus
 fi
-
-curl -sf -m 10 $CRONITOR_URL/complete
 EOF
-chmod +x /usr/bin/cronitor-prometheus-config-update.sh
+chmod +x /usr/bin/prometheus-update-config
 
-(crontab -l ;\
-cat <<EOF
-* * * * * \
-  CRONITOR_URL=${cronitor_prometheus_config_url} \
-  CONFIG_BUCKET=${config_bucket} \
-  /usr/bin/cronitor-prometheus-config-update.sh
+cat <<EOF | crontab -
+$(crontab -l | grep -v 'no crontab')
+* * * * * /usr/bin/prometheus-update-config
 EOF
-) | crontab -
