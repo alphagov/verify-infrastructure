@@ -138,6 +138,8 @@ systemctl restart prometheus
 (crontab -l ;\
 cat <<EOF
 * * * * * \
+  curl ${cronitor_prometheus_config_url}/run -m 10 \
+  && \
   aws s3 cp \
     ${config_bucket}/prometheus/prometheus.yml \
     /tmp/prometheus.yml \
@@ -145,6 +147,8 @@ cat <<EOF
   if !cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml; then \
     mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml \
     && systemctl reload prometheus; \
-  fi
+  fi \
+  && \
+  curl ${cronitor_prometheus_config_url}/complete -m 10 \
 EOF
 ) | crontab -
