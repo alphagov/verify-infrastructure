@@ -27,5 +27,5 @@ resource "aws_elasticache_parameter_group" "policy_session_store" {
 resource "aws_security_group" "policy_redis" {
   name        = "${var.deployment}-policy-redis"
   description = "${var.deployment}-policy-redis"
-  vpc_id      = "${var.vpc_id}"
+  vpc_id      = "${aws_vpc.hub.id}"
 }
