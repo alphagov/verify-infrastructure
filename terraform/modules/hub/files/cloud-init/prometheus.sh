@@ -135,30 +135,27 @@ systemctl daemon-reload
 systemctl enable  prometheus
 systemctl restart prometheus
 
-cat <<EOF > /usr/bin/cronitor-prometheus-config-update.sh
+echo 'Installing awscli'
+apt-get install --yes awscli
+
+echo 'Installing prometheus-update-config'
+cat <<EOF > /usr/bin/prometheus-update-config
 #!/usr/bin/env bash
 set -ueo pipefail
 
-function cleanup {
-  curl -sf -m 10 ${cronitor_prometheus_config_url}/fail
-}
+aws s3 cp \
+       --region eu-west-2 \
+       s3://${config_bucket}/prometheus/prometheus.yml \
+       /tmp/prometheus.yml
 
-trap cleanup ERR
-
-curl -sf -m 10 ${cronitor_prometheus_config_url}/run
-
-aws s3 cp s3://${config_bucket}/prometheus/prometheus.yml /tmp/prometheus.yml
-
-if [ ! $(cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml) ]; then
+if ! cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml ; then
   mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml
   systemctl reload prometheus
 fi
-
-curl -sf -m 10 ${cronitor_prometheus_config_url}/complete
 EOF
-chmod +x /usr/bin/cronitor-prometheus-config-update.sh
+chmod +x /usr/bin/prometheus-update-config
 
 cat <<EOF | crontab -
 $(crontab -l | grep -v 'no crontab')
-* * * * * /usr/bin/cronitor-prometheus-config-update.sh
+* * * * * /usr/bin/prometheus-update-config
 EOF

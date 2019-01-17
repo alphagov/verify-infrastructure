@@ -144,7 +144,7 @@ resource "aws_iam_policy" "prometheus" {
           "s3:ListBucket",
           "s3:GetObject"
         ],
-        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml}"
+        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml"
       },
       {
         "Effect": "Allow",
@@ -239,7 +239,6 @@ data "template_file" "prometheus_cloud_init" {
     logit_elasticsearch_url        = "${var.logit_elasticsearch_url}"
     logit_api_key                  = "${var.logit_api_key}"
     config_bucket                  = "${aws_s3_bucket.deployment_config.id}"
-    cronitor_prometheus_config_url = "${var.cronitor_prometheus_config_url}"
   }
 }
 
