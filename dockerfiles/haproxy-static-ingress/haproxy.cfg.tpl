@@ -32,5 +32,4 @@ frontend nlb
 backend alb
     mode tcp
     balance roundrobin
-    default-server check maxconn 200
     server alb $BACKEND:$PORT resolvers vpcdns check inter 100 fastinter 100
