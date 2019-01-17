@@ -135,6 +135,8 @@ systemctl daemon-reload
 systemctl enable  prometheus
 systemctl restart prometheus
 
+export CONFIG_BUCKET=${config_bucket}
+export CRONITOR_URL=${cronitor_prometheus_config_url}
 cat <<EOF > /usr/bin/cronitor-prometheus-config-update.sh
 #!/usr/bin/env bash
 set -ueo pipefail
