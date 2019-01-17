@@ -77,6 +77,16 @@ module "prometheus_can_talk_to_saml_soap_proxy" {
   port = 8443
 }
 
+resource "aws_security_group_rule" "prometheus_can_pull_config_from_s3" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = "${aws_security_group.prometheus.id}"
+  prefix_list_ids   = ["${aws_vpc_endpoint.s3.prefix_list_id}"]
+}
+
 resource "aws_iam_role" "prometheus" {
   name = "${var.deployment}-prometheus"
 
