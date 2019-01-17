@@ -1,0 +1,15 @@
+---
+applications:
+  - name: ((env))-test-rp-nginx
+    routes:
+      - route: ((env))-test-rp.cloudapps.digital
+    memory: 64M
+    instances: 2
+    buildpacks:
+      - https://github.com/cloudfoundry/nginx-buildpack.git#v1.0.3
+    env:
+      TEST_RP_ROUTE: ((env))-test-rp.apps.internal:8080
+      TEST_RP_MSA_ROUTE: ((env))-test-rp-msa.apps.internal:8080
+      MSA_ALLOW_LIST: ((allow-msa-ips))
+      TEST_RP_ALLOW_LIST: ((allow-test-rp-ips))
+      TEST_RP_PRIVATE_ALLOW_LIST: ((allow-test-rp-private-ips))
