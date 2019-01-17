@@ -229,6 +229,7 @@ data "template_file" "prometheus_cloud_init" {
     logit_elasticsearch_url        = "${var.logit_elasticsearch_url}"
     logit_api_key                  = "${var.logit_api_key}"
     config_bucket                  = "${aws_s3_bucket.deployment_config.id}"
+    cronitor_prometheus_config_url = "${var.cronitor_prometheus_config_url}"
   }
 }
 
