@@ -135,7 +135,7 @@ systemctl daemon-reload
 systemctl enable  prometheus
 systemctl restart prometheus
 
-cat <<EOF >/usr/bin/cronitor-prometheus-config-update.sh
+cat <<EOF > /usr/bin/cronitor-prometheus-config-update.sh
 #!/usr/bin/env bash
 set -ueo pipefail
 
@@ -149,14 +149,12 @@ trap cleanup ERR
 
 curl -sf -m 10 $CRONITOR_URL/run
 
-aws s3 cp \
-  $CONFIG_BUCKET/prometheus/prometheus.yml \
-  /tmp/prometheus.yml \
-&& \
-if !cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml; then \
-  mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml \
-  && systemctl reload prometheus; \
-fi \
+aws s3 cp $CONFIG_BUCKET/prometheus/prometheus.yml /tmp/prometheus.yml
+
+if [ ! $(cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml) ]; then
+  mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml
+  systemctl reload prometheus
+fi
 
 curl -sf -m 10 $CRONITOR_URL/complete
 EOF
