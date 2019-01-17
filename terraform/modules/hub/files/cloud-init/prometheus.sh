@@ -131,10 +131,40 @@ Environment=HTTP_PROXY=${egress_proxy_url_with_protocol}
 Environment=HTTPS_PROXY=${egress_proxy_url_with_protocol}
 EOF
 
-cat <<EOF > /etc/prometheus/prometheus.yml
-${prometheus_config}
-EOF
-
 systemctl daemon-reload
 systemctl enable  prometheus
 systemctl restart prometheus
+
+cat <<EOF > /usr/bin/cronitor-prometheus-config-update.sh
+#!/usr/bin/env bash
+set -ueo pipefail
+
+: "$${CRONITOR_URL:?CRONITOR_URL not set}"
+
+function cleanup {
+  curl -sf -m 10 $CRONITOR_URL/fail
+}
+
+trap cleanup ERR
+
+curl -sf -m 10 $CRONITOR_URL/run
+
+aws s3 cp $CONFIG_BUCKET/prometheus/prometheus.yml /tmp/prometheus.yml
+
+if [ ! $(cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml) ]; then
+  mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml
+  systemctl reload prometheus
+fi
+
+curl -sf -m 10 $CRONITOR_URL/complete
+EOF
+chmod +x /usr/bin/cronitor-prometheus-config-update.sh
+
+(crontab -l ;\
+cat <<EOF
+* * * * * \
+  CRONITOR_URL=${cronitor_prometheus_config_url} \
+  CONFIG_BUCKET=${config_bucket} \
+  /usr/bin/cronitor-prometheus-config-update.sh
+EOF
+) | crontab -
