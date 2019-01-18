@@ -280,6 +280,7 @@ resource "aws_instance" "prometheus" {
   tags {
     Name       = "${var.deployment}-prometheus"
     Deployment = "${var.deployment}"
+    Cluster    = "prometheus"
   }
 }
 
