@@ -42,3 +42,13 @@ resource "aws_vpc_endpoint" "s3" {
   }
   EOF
 }
+
+resource "aws_vpc_endpoint" "cloudwatch" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.monitoring"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+    "${aws_security_group.prometheus.id}",
+  ]
+}
