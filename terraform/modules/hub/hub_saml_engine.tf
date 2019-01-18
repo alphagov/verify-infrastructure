@@ -59,7 +59,7 @@ module "saml_engine" {
   task_definition            = "${data.template_file.saml_engine_task_def.rendered}"
   container_name             = "nginx"
   container_port             = "8443"
-  number_of_tasks            = 1
+  number_of_tasks            = "${var.number_of_availability_zones}"
   health_check_path          = "/service-status"
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-saml-engine"
