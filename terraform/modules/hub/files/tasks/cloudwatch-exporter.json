@@ -1,0 +1,22 @@
+[
+  {
+    "name": "cloudwatch-exporter",
+    "image": "${image_and_tag}",
+    "cpu": 0,
+    "memory": 3500,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 9106,
+        "hostPort": 9106
+      }
+    ],
+    "environment": [
+      {
+        "Name": "CONFIG_BASE64",
+        "Value": "${config_base64}"
+      }
+    ],
+    "entryPoint": ["bash", "-c", "echo $CONFIG_BASE64 | base64 -d > /config/config.yml; java -jar /cloudwatch_exporter.jar 9106 /config/config.yml"]
+  }
+]

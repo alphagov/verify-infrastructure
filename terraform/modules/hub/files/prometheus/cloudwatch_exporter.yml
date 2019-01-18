@@ -1,0 +1,15 @@
+---
+region: eu-west-2
+metrics:
+ - aws_namespace: AWS/ApplicationELB
+   aws_metric_name: HTTPCode_Target2XX_Count
+ - aws_namespace: AWS/ApplicationELB
+   aws_metric_name: HTTPCode_Target3XX_Count
+ - aws_namespace: AWS/ApplicationELB
+   aws_metric_name: HTTPCode_Target4XX_Count
+ - aws_namespace: AWS/ApplicationELB
+   aws_metric_name: HTTPCode_Target5XX_Count
+ - aws_namespace: AWS/ApplicationELB
+   aws_metric_name: RequestCount
+ - aws_namespace: AWS/ApplicationELB
+   aws_metric_name: TargetResponseTime
