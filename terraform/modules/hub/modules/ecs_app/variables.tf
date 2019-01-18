@@ -25,6 +25,14 @@ variable "number_of_tasks" {
   default = 2
 }
 
+variable "deployment_min_healthy_percent" {
+  default = 50
+}
+
+variable "deployment_max_percent" {
+  default = 200
+}
+
 variable "additional_task_role_policy_arns" {
   default = []
 }

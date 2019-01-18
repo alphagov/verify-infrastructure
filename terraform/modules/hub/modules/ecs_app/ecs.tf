@@ -22,7 +22,10 @@ resource "aws_ecs_service" "cluster" {
   name            = "${local.identifier}"
   cluster         = "${aws_ecs_cluster.cluster.id}"
   task_definition = "${aws_ecs_task_definition.cluster.arn}"
-  desired_count   = "${var.number_of_tasks}"
+
+  desired_count                      = "${var.number_of_tasks}"
+  deployment_minimum_healthy_percent = "${var.deployment_min_healthy_percent}"
+  deployment_maximum_percent         = "${var.deployment_max_percent}"
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.task.arn}"
