@@ -29,13 +29,14 @@ data "template_file" "frontend_task_def" {
   template = "${file("${path.module}/files/tasks/frontend.json")}"
 
   vars {
-    account_id             = "${data.aws_caller_identity.account.account_id}"
-    deployment             = "${var.deployment}"
-    image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-frontend:latest"
-    nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
-    domain                 = "${local.root_domain}"
-    region                 = "${data.aws_region.region.id}"
-    location_blocks_base64 = "${local.location_blocks_base64}"
+    account_id                 = "${data.aws_caller_identity.account.account_id}"
+    deployment                 = "${var.deployment}"
+    image_and_tag              = "${local.tools_account_ecr_url_prefix}-verify-frontend:latest"
+    nginx_image_and_tag        = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    domain                     = "${local.root_domain}"
+    region                     = "${data.aws_region.region.id}"
+    location_blocks_base64     = "${local.location_blocks_base64}"
+    egress_proxy_url_with_port = "${local.egress_proxy_url_with_protocol}"
   }
 }
 
@@ -69,7 +70,10 @@ resource "aws_ecs_service" "frontend" {
 
   network_configuration {
     subnets         = ["${aws_subnet.internal.*.id}"]
-    security_groups = ["${aws_security_group.frontend_task.id}"]
+    security_groups = [
+      "${aws_security_group.frontend_task.id}",
+      "${aws_security_group.egress_via_proxy.id}",
+    ]
   }
 }
 
