@@ -1,3 +1,8 @@
+# This is for colocating exporters as ECS DAEMON tasks with Prometheus
+resource "aws_ecs_cluster" "prometheus" {
+  name = "${var.deployment}-prometheus"
+}
+
 resource "aws_security_group" "prometheus" {
   name        = "${var.deployment}-prometheus"
   description = "${var.deployment}-prometheus"
@@ -178,6 +183,16 @@ resource "aws_iam_policy" "prometheus" {
       {
         "Effect": "Allow",
         "Action": [
+          "ecs:RegisterContainerInstance",
+          "ecs:DeregisterContainerInstance"
+        ],
+        "Resource": [
+          "arn:aws:ecs:eu-west-2:${data.aws_caller_identity.account.account_id}:cluster/${aws_ecs_cluster.prometheus.name}"
+        ]
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
           "ec2:DescribeInstances"
         ],
         "Resource": "*"
@@ -239,6 +254,7 @@ data "template_file" "prometheus_cloud_init" {
     logit_elasticsearch_url        = "${var.logit_elasticsearch_url}"
     logit_api_key                  = "${var.logit_api_key}"
     config_bucket                  = "${aws_s3_bucket.deployment_config.id}"
+    cluster                        = "${aws_ecs_cluster.prometheus.name}"
   }
 }
 
