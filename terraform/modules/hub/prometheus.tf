@@ -82,6 +82,13 @@ module "prometheus_can_talk_to_saml_soap_proxy" {
   port = 8443
 }
 
+module "prometheus_can_talk_to_cloudwatch_vpc_endpoint" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.prometheus.id}"
+  destination_sg_id = "${aws_security_group.cloudwatch_vpc_endpoint.id}"
+}
+
 resource "aws_security_group_rule" "prometheus_can_pull_config_from_s3" {
   type      = "egress"
   protocol  = "tcp"
