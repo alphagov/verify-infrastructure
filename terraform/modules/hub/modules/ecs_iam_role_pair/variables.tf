@@ -21,3 +21,9 @@ variable "additional_execution_role_policy_arns" {
 variable "additional_task_role_policy_arns" {
   default = []
 }
+
+data "aws_caller_identity" "account" {}
+
+locals {
+  account_id = "${data.aws_caller_identity.account.account_id}"
+}

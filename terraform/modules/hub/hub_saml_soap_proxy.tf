@@ -42,6 +42,8 @@ data "template_file" "saml_soap_proxy_task_def" {
     domain                 = "${local.root_domain}"
     deployment             = "${var.deployment}"
     location_blocks_base64 = "${local.nginx_saml_soap_proxy_location_blocks_base64}"
+    region                 = "${data.aws_region.region.id}"
+    account_id             = "${data.aws_caller_identity.account.account_id}"
   }
 }
 

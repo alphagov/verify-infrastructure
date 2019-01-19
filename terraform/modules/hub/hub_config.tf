@@ -44,6 +44,8 @@ data "template_file" "config_task_def" {
     deployment             = "${var.deployment}"
     truststore_password    = "${var.truststore_password}"
     location_blocks_base64 = "${local.nginx_config_location_blocks_base64}"
+    region                 = "${data.aws_region.region.id}"
+    account_id             = "${data.aws_caller_identity.account.account_id}"
   }
 }
 

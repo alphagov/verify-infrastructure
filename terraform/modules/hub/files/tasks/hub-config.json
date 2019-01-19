@@ -36,6 +36,12 @@
       "server",
       "/tmp/config.yml"
     ],
+    "secrets": [
+      {
+        "name": "SENTRY_DSN",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/ecs-app-shared/sentry-dsn"
+      }
+    ],
     "environment": [
       {
         "Name": "CONFIG_DATA_PATH",
