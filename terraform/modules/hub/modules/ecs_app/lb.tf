@@ -17,7 +17,7 @@ resource "aws_lb_target_group" "task" {
   protocol             = "HTTPS"
   target_type          = "instance"
   vpc_id               = "${var.vpc_id}"
-  deregistration_delay = 60
+  deregistration_delay = 15
   slow_start           = 30
 
   health_check {
