@@ -13,7 +13,7 @@ resource "aws_ecs_task_definition" "cloudwatch_exporter" {
 }
 
 resource "aws_ecs_service" "cloudwatch_exporter" {
-  name                = "cloudwatch_exporter"
+  name                = "${var.deployment}-cloudwatch-exporter"
   cluster             = "${aws_ecs_cluster.prometheus.id}"
   task_definition     = "${aws_ecs_task_definition.cloudwatch_exporter.arn}"
   scheduling_strategy = "DAEMON"
