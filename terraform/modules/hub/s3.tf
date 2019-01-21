@@ -43,3 +43,23 @@ resource "aws_s3_bucket" "verify_frontend_assets" {
     }
   }
 }
+
+resource "aws_s3_bucket_policy" "verify_frontend_assets" {
+  bucket = "${aws_s3_bucket.verify_frontend_assets.id}"
+
+  policy = <<-POLICY
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "s3:GetObject"
+        ]
+        "Effect": "Allow",
+        "Principal": "*",
+        "Resource": "${aws_s3_bucket.verify_frontend_assets.arn}/*"
+      }
+    ]
+  }
+  POLICY
+}
