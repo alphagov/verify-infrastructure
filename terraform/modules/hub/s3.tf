@@ -33,4 +33,13 @@ resource "aws_s3_bucket" "deployment_config" {
 resource "aws_s3_bucket" "verify_frontend_assets" {
   bucket = "gds-${var.deployment}-verify-frontend-app-assets-${random_string.verify_frontend_assets_bucket_name_suffix.result}"
   acl    = "private"
+
+  lifecycle_rule {
+    id      = "verify-frontend-assets"
+    enabled = true
+
+    expiration {
+      days = 365
+    }
+  }
 }
