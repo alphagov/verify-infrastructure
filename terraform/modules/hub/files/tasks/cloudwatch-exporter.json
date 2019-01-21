@@ -17,6 +17,6 @@
         "Value": "${config_base64}"
       }
     ],
-    "entryPoint": ["bash", "-c", "echo $CONFIG_BASE64 | base64 -d > /config/config.yml; java -jar /cloudwatch_exporter.jar 9106 /config/config.yml"]
+    "entryPoint": ["bash", "-c", "unset AWS_CONTAINER_CREDENTIALS_RELATIVE_URI; unset AWS_EXECUTION_ENV; echo $CONFIG_BASE64 | base64 -d > /config/config.yml; java -jar /cloudwatch_exporter.jar 9106 /config/config.yml"]
   }
 ]

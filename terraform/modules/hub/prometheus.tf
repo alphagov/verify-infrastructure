@@ -190,6 +190,15 @@ resource "aws_iam_policy" "prometheus" {
       {
         "Effect": "Allow",
         "Action": [
+          "cloudwatch:Describe*",
+          "cloudwatch:Get*",
+          "cloudwatch:List*"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
           "ecs:RegisterContainerInstance",
           "ecs:DeregisterContainerInstance"
         ],
