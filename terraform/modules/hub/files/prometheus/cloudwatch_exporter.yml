@@ -1,15 +1,23 @@
 ---
 region: eu-west-2
 metrics:
- - aws_namespace: AWS/ApplicationELB
-   aws_metric_name: HTTPCode_Target2XX_Count
- - aws_namespace: AWS/ApplicationELB
-   aws_metric_name: HTTPCode_Target3XX_Count
- - aws_namespace: AWS/ApplicationELB
-   aws_metric_name: HTTPCode_Target4XX_Count
- - aws_namespace: AWS/ApplicationELB
-   aws_metric_name: HTTPCode_Target5XX_Count
- - aws_namespace: AWS/ApplicationELB
-   aws_metric_name: RequestCount
- - aws_namespace: AWS/ApplicationELB
-   aws_metric_name: TargetResponseTime
+- aws_namespace: AWS/ApplicationELB
+  aws_metric_name: RequestCountPerTarget
+  aws_dimensions: [TargetGroup, LoadBalancer]
+  aws_statistics: [Sum]
+- aws_namespace: AWS/ApplicationELB
+  aws_metric_name: HTTPCode_Target_2XX_Count
+  aws_dimensions: [TargetGroup, LoadBalancer, AvailabilityZone, LoadBalancer]
+  aws_statistics: [Sum]
+- aws_namespace: AWS/ApplicationELB
+  aws_metric_name: HTTPCode_Target_3XX_Count
+  aws_dimensions: [TargetGroup, LoadBalancer, AvailabilityZone, LoadBalancer]
+  aws_statistics: [Sum]
+- aws_namespace: AWS/ApplicationELB
+  aws_metric_name: HTTPCode_Target_4XX_Count
+  aws_dimensions: [TargetGroup, LoadBalancer, AvailabilityZone, LoadBalancer]
+  aws_statistics: [Sum]
+- aws_namespace: AWS/ApplicationELB
+  aws_metric_name: HTTPCode_Target_5XX_Count
+  aws_dimensions: [TargetGroup, LoadBalancer, AvailabilityZone, LoadBalancer]
+  aws_statistics: [Sum]
