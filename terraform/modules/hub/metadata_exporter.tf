@@ -4,6 +4,7 @@ data "template_file" "metadata_exporter_task_def" {
   vars {
     image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-metadata-exporter:latest"
     signin_domain = "${var.signin_domain}"
+    deployment    = "${var.deployment}"
   }
 }
 

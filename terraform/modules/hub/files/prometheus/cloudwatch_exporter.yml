@@ -19,6 +19,10 @@ metrics:
   aws_dimensions: [TargetGroup, AvailabilityZone, LoadBalancer]
   aws_statistics: [Sum]
 - aws_namespace: AWS/ApplicationELB
+  aws_metric_name: RequestCount
+  aws_dimensions: [TargetGroup, AvailabilityZone, LoadBalancer]
+  aws_statistics: [Sum]
+- aws_namespace: AWS/ApplicationELB
   aws_metric_name: RequestCountPerTarget
   aws_dimensions: [TargetGroup, LoadBalancer]
   aws_statistics: [Sum]

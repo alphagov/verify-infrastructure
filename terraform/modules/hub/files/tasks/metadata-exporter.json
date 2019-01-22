@@ -11,6 +11,10 @@
         "hostPort": 9199
       }
     ],
-    "command": ["-h", "https://${signin_domain}/SAML2/metadata/federation"]
+    "entryPoint": [
+      "bash",
+      "-c",
+      "bundle exec bin/prometheus-metadata-exporter -h https://${signin_domain}/SAML2/metadata/federation -p 9199 --cas $(find /tmp/cas/${deployment} -name '*.crt' | tr '\n' ',')"
+    ]
   }
 ]
