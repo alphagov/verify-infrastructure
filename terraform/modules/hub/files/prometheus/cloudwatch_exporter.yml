@@ -1,5 +1,6 @@
 ---
 region: eu-west-2
+delay_seconds: 120
 metrics:
 - aws_namespace: AWS/ApplicationELB
   aws_metric_name: HTTPCode_Target_2XX_Count
