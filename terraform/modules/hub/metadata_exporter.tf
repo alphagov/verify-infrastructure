@@ -2,10 +2,10 @@ data "template_file" "metadata_exporter_task_def" {
   template = "${file("${path.module}/files/tasks/metadata-exporter.json")}"
 
   vars {
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-metadata-exporter:latest"
-    signin_domain = "${var.signin_domain}"
-    deployment    = "${var.deployment}"
-    domain        = "${local.root_domain}"
+    image_and_tag              = "${local.tools_account_ecr_url_prefix}-verify-metadata-exporter:latest"
+    signin_domain              = "${var.signin_domain}"
+    deployment                 = "${var.deployment}"
+    egress_proxy_url_with_port = "${local.egress_proxy_url_with_protocol}"
   }
 }
 
