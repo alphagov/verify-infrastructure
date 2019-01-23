@@ -19,7 +19,7 @@
     "environment": [
       {
         "Name": "http_proxy",
-        "Value": "egress-proxy.${domain}"
+        "Value": "${egress_proxy_url_with_port}"
       }
     ]
   }
