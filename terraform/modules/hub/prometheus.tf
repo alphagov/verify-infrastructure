@@ -82,6 +82,20 @@ module "prometheus_can_talk_to_saml_soap_proxy" {
   port = 8443
 }
 
+module "prometheus_can_talk_to_ingress_for_scraping_metadata" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.prometheus.id}"
+  destination_sg_id = "${aws_security_group.ingress.id}"
+}
+
+module "prometheus_can_talk_to_cloudwatch_vpc_endpoint" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.prometheus.id}"
+  destination_sg_id = "${aws_security_group.cloudwatch_vpc_endpoint.id}"
+}
+
 resource "aws_security_group_rule" "prometheus_can_pull_config_from_s3" {
   type      = "egress"
   protocol  = "tcp"
@@ -183,6 +197,15 @@ resource "aws_iam_policy" "prometheus" {
       {
         "Effect": "Allow",
         "Action": [
+          "cloudwatch:Describe*",
+          "cloudwatch:Get*",
+          "cloudwatch:List*"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
           "ecs:RegisterContainerInstance",
           "ecs:DeregisterContainerInstance"
         ],
@@ -191,8 +214,24 @@ resource "aws_iam_policy" "prometheus" {
         ]
       },
       {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:GetRepositoryPolicy",
+        "ecr:DescribeRepositories",
+        "ecr:ListImages",
+        "ecr:DescribeImages",
+        "ecr:BatchGetImage"
+      ],
+      "Resource": [
+          "arn:aws:ecr:eu-west-2:${var.tools_account_id}:repository/platform-deployer-verify-metadata-exporter"
+        ]
+      },
+      {
         "Effect": "Allow",
         "Action": [
+          "ecr:GetAuthorizationToken",
           "ec2:DescribeInstances"
         ],
         "Resource": "*"

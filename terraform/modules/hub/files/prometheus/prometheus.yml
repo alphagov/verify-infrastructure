@@ -61,4 +61,13 @@ scrape_configs:
         action: keep
       - source_labels: [__meta_ec2_tag_Cluster]
         target_label: job
-
+  - job_name: cloudwatch_exporter
+    metrics_path: '/metrics'
+    scheme: 'http'
+    static_configs:
+      - targets: ['localhost:9106']
+  - job_name: metadata_exporter
+    metrics_path: '/metrics'
+    scheme: 'http'
+    static_configs:
+      - targets: ['localhost:9199']

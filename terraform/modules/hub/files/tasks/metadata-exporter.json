@@ -1,0 +1,20 @@
+[
+  {
+    "name": "metadata-exporter",
+    "image": "${image_and_tag}",
+    "cpu": 0,
+    "memory": 256,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 9199,
+        "hostPort": 9199
+      }
+    ],
+    "entryPoint": [
+      "bash",
+      "-c",
+      "bundle exec bin/prometheus-metadata-exporter -h https://${signin_domain}/SAML2/metadata/federation -p 9199 --cas $(find /tmp/cas/${deployment} -name '*.crt' | tr '\n' ',')"
+    ]
+  }
+]

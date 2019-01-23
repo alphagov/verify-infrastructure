@@ -42,3 +42,22 @@ resource "aws_vpc_endpoint" "s3" {
   }
   EOF
 }
+
+resource "aws_security_group" "cloudwatch_vpc_endpoint" {
+  name        = "${var.deployment}-cloudwatch-vpc-endpoint"
+  description = "${var.deployment}-cloudwatch-vpc-endpoint"
+
+  vpc_id = "${aws_vpc.hub.id}"
+}
+
+resource "aws_vpc_endpoint" "cloudwatch" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.monitoring"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+
+  security_group_ids = ["${aws_security_group.cloudwatch_vpc_endpoint.id}"]
+
+  private_dns_enabled = true
+}
