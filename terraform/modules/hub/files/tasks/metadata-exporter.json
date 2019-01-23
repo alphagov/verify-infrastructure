@@ -20,6 +20,10 @@
       {
         "Name": "http_proxy",
         "Value": "${egress_proxy_url_with_port}"
+      },
+      {
+        "Name": "no_proxy",
+        "Value": "${signin_domain}"
       }
     ]
   }
