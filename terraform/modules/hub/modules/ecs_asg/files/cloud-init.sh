@@ -54,7 +54,9 @@ echo 'Installing and configuring chrony'
 apt-get install --yes chrony
 sed '/pool/d' /etc/chrony/chrony.conf \
 | cat <(echo "server 169.254.169.123 prefer iburst") - > /tmp/chrony.conf
+echo "allow 127/8" >> /tmp/chrony.conf
 mv /tmp/chrony.conf /etc/chrony/chrony.conf
+systemctl restart chrony
 
 # Docker
 echo 'Installing and configuring docker'
@@ -155,7 +157,7 @@ apt-get install --yes prometheus-node-exporter
 mkdir /etc/systemd/system/prometheus-node-exporter.service.d
 # Create an environment file for prometheus node exporter
 cat >  /etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env <<EOF
-ARGS="--collector.diskstats.ignored-devices=^(ram|loop|fd|(h|s|v|xv)d[a-z]|nvme\\d+n\\d+p)\\d+$ --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|run|var/lib/docker)($|/) --collector.netdev.ignored-devices=^lo$ --collector.textfile.directory=/var/lib/prometheus/node-exporter"
+ARGS="--collector.ntp --collector.diskstats.ignored-devices=^(ram|loop|fd|(h|s|v|xv)d[a-z]|nvme\\d+n\\d+p)\\d+$ --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|run|var/lib/docker)($|/) --collector.netdev.ignored-devices=^lo$ --collector.textfile.directory=/var/lib/prometheus/node-exporter"
 EOF
 # Create an override file which will override prometheus node exporter service file
 cat > /etc/systemd/system/prometheus-node-exporter.service.d/10-override-args.conf <<EOF
