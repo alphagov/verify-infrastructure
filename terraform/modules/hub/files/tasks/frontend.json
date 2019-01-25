@@ -66,6 +66,9 @@
       "Name": "COUNTRY_DISPLAY_LOCALES",
       "Value": "/verify-frontend/federation/configuration/display-locales/countries"
     }, {
+      "Name": "EIDAS_SCHEMES_DIRECTORY",
+      "Value": "/verify-frontend/federation/configuration/eidas/schemes"
+    }, {
       "Name": "ZDD_LATCH",
       "Value": ".service_unavailable"
     }, {
