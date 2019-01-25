@@ -66,20 +66,8 @@
       "Name": "COUNTRY_DISPLAY_LOCALES",
       "Value": "/verify-frontend/federation/configuration/display-locales/countries"
     }, {
-      "Name": "COUNTRY_FLAGS_DIRECTORY",
-      "Value": "/verify-frontend/federation/configuration/eidas/country-flags"
-    }, {
       "Name": "EIDAS_SCHEMES_DIRECTORY",
       "Value": "/verify-frontend/federation/configuration/eidas/schemes"
-    }, {
-      "Name": "EIDAS_SCHEME_LOGOS_DIRECTORY",
-      "Value": "/verify-frontend/federation/configuration/eidas/scheme-logos"
-    }, {
-      "Name": "LOGO_DIRECTORY",
-      "Value": "/verify-frontend/federation/configuration/idp-logos"
-    }, {
-      "Name": "WHITE_LOGO_DIRECTORY",
-      "Value": "/verify-frontend/federation/configuration/idp-logos/white"
     }, {
       "Name": "ZDD_LATCH",
       "Value": ".service_unavailable"
