@@ -29,3 +29,26 @@ resource "aws_security_group" "policy_redis" {
   description = "${var.deployment}-policy-redis"
   vpc_id      = "${aws_vpc.hub.id}"
 }
+
+resource "aws_route53_zone" "redis" {
+  name = "redis.${local.root_domain}."
+
+  vpc {
+    vpc_id = "${aws_vpc.hub.id}"
+  }
+
+  tags {
+    Deployment = "${var.deployment}"
+  }
+}
+
+resource "aws_route53_record" "policy_redis" {
+  name    = "policy.redis.${local.root_domain}"
+  type    = "CNAME"
+  zone_id = "${aws_route53_zone.redis.id}"
+  ttl     = 1
+
+  records = [
+    "${aws_elasticache_replication_group.policy_session_store.primary_endpoint_address}",
+  ]
+}
