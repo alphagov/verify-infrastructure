@@ -21,15 +21,6 @@ apt-get upgrade --yes
 # AWS SSM Agent
 # Installed by default on Ubuntu Bionic AMIs via Snap
 echo 'Configuring AWS SSM'
-mkdir -p /etc/systemd/system/snap.amazon-ssm-agent.amazon-ssm-agent.service.d
-if [ -n "${egress_proxy_url_with_protocol}" ]; then
-cat <<EOF > /etc/systemd/system/snap.amazon-ssm-agent.amazon-ssm-agent.service.d/override.conf
-[Service]
-Environment="http_proxy=${egress_proxy_url_with_protocol}"
-Environment="https_proxy=${egress_proxy_url_with_protocol}"
-Environment="no_proxy=169.254.169.254"
-EOF
-fi
 mkdir -p /etc/amazon/ssm
 cat <<EOF > /etc/amazon/ssm/seelog.xml
 <seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="warn">

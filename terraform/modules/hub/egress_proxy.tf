@@ -45,13 +45,9 @@ resource "aws_security_group_rule" "egress_proxy_instance_egress_to_internet_ove
 
 locals {
   egress_proxy_whitelist_list = [
-    "ec2\\.eu-west-2\\.amazonaws\\.com",                                            # Prometheus describe instances
     "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com",                                     # Apt
     "security\\.ubuntu\\.com",                                                      # Apt
     "artifacts\\.elastic\\.co",                                                     # Journalbeat
-    "ec2messages\\.eu-west-2\\.amazonaws\\.com",                                    # SSM agent
-    "ssmmessages\\.eu-west-2\\.amazonaws\\.com",                                    # SSM agent
-    "ssm\\.eu-west-2\\.amazonaws\\.com",                                            # SSM agent
     "test-rp-msa-stub-${var.deployment}\\.ida.digital\\.cabinet-office\\.gov\\.uk", # Test RP
     "${replace(var.logit_elasticsearch_url, ".", "\\.")}",                          # Logit
     "sentry\\.tools\\.signin\\.service\\.gov\\.uk",                                 # Tools Sentry

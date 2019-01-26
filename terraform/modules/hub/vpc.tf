@@ -153,3 +153,51 @@ resource "aws_vpc_endpoint" "ecs" {
 
   private_dns_enabled = true
 }
+
+resource "aws_vpc_endpoint" "ssm" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.ssm"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+
+  security_group_ids = ["${aws_security_group.container_vpc_endpoint.id}"]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ssm_messages" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.ssmmessages"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+
+  security_group_ids = ["${aws_security_group.container_vpc_endpoint.id}"]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ec2" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.ec2"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+
+  security_group_ids = ["${aws_security_group.container_vpc_endpoint.id}"]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ec2_messages" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.ec2messages"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+
+  security_group_ids = ["${aws_security_group.container_vpc_endpoint.id}"]
+
+  private_dns_enabled = true
+}

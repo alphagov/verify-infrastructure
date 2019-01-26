@@ -16,14 +16,6 @@ apt-get upgrade --yes
 # AWS SSM Agent
 # Installed by default on Ubuntu Bionic AMIs via Snap
 echo 'Configuring AWS SSM'
-mkdir -p /etc/systemd/system/snap.amazon-ssm-agent.amazon-ssm-agent.service.d
-cat <<EOF > /etc/systemd/system/snap.amazon-ssm-agent.amazon-ssm-agent.service.d/override.conf
-[Service]
-Environment="http_proxy=${egress_proxy_url_with_protocol}"
-Environment="https_proxy=${egress_proxy_url_with_protocol}"
-Environment="no_proxy=169.254.169.254"
-EOF
-
 mkdir -p /etc/amazon/ssm
 cat <<EOF > /etc/amazon/ssm/seelog.xml
 <seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="warn">
@@ -138,17 +130,8 @@ fi
 
 echo 'Installing prometheus'
 apt-get install --yes prometheus
-mkdir -p /etc/systemd/system/prometheus.service.d
-cat <<EOF > /etc/systemd/system/prometheus.service.d/override.conf
-[Service]
-Environment=NO_PROXY=169.254.169.254,localhost,*.${domain},10.0.0.0/16
-Environment=HTTP_PROXY=${egress_proxy_url_with_protocol}
-Environment=HTTPS_PROXY=${egress_proxy_url_with_protocol}
-EOF
-
-systemctl daemon-reload
-systemctl enable  prometheus
-systemctl restart prometheus
+systemctl enable prometheus
+systemctl start  prometheus
 
 echo 'Installing awscli'
 apt-get install --yes awscli
