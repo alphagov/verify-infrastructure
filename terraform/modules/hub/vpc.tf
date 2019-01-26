@@ -63,9 +63,9 @@ resource "aws_vpc_endpoint" "cloudwatch" {
   private_dns_enabled = true
 }
 
-resource "aws_security_group" "ecr_vpc_endpoint" {
-  name        = "${var.deployment}-ecr-vpc-endpoint"
-  description = "${var.deployment}-ecr-vpc-endpoint"
+resource "aws_security_group" "container_vpc_endpoint" {
+  name        = "${var.deployment}-container-vpc-endpoint"
+  description = "${var.deployment}-container-vpc-endpoint"
 
   vpc_id = "${aws_vpc.hub.id}"
 }
@@ -77,7 +77,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
 
   subnet_ids = ["${aws_subnet.internal.*.id}"]
 
-  security_group_ids = ["${aws_security_group.ecr_vpc_endpoint.id}"]
+  security_group_ids = ["${aws_security_group.container_vpc_endpoint.id}"]
 
   private_dns_enabled = true
 }
@@ -89,7 +89,43 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
 
   subnet_ids = ["${aws_subnet.internal.*.id}"]
 
-  security_group_ids = ["${aws_security_group.ecr_vpc_endpoint.id}"]
+  security_group_ids = ["${aws_security_group.container_vpc_endpoint.id}"]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ecs_agent" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.ecs-agent"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+
+  security_group_ids = ["${aws_security_group.container_vpc_endpoint.id}"]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ecs_telemetry" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.ecs-telemetry"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+
+  security_group_ids = ["${aws_security_group.container_vpc_endpoint.id}"]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ecs" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.ecs"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+
+  security_group_ids = ["${aws_security_group.container_vpc_endpoint.id}"]
 
   private_dns_enabled = true
 }
