@@ -225,7 +225,9 @@ resource "aws_iam_policy" "prometheus" {
         "ecr:BatchGetImage"
       ],
       "Resource": [
-          "arn:aws:ecr:eu-west-2:${var.tools_account_id}:repository/platform-deployer-verify-metadata-exporter"
+          "arn:aws:ecr:eu-west-2:${var.tools_account_id}:repository/platform-deployer-verify-metadata-exporter",
+          "arn:aws:ecr:eu-west-2:${var.tools_account_id}:repository/platform-deployer-verify-cloudwatch-exporter",
+          "arn:aws:ecr:eu-west-2:${var.tools_account_id}:repository/platform-deployer-verify-ecs-agent"
         ]
       },
       {
