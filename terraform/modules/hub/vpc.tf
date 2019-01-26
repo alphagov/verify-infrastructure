@@ -34,6 +34,8 @@ resource "aws_vpc_endpoint" "s3" {
             "Resource": [
                 "arn:aws:s3:::govukverify-eidas-metadata-aggregator-${var.deployment}-a/*",
                 "arn:aws:s3:::govukverify-eidas-metadata-aggregator-${var.deployment}-a",
+                "arn:aws:s3:::prod-eu-west-2-starport-layer-bucket",
+                "arn:aws:s3:::prod-eu-west-2-starport-layer-bucket/*",
                 "${aws_s3_bucket.deployment_config.arn}",
                 "*"
             ]
@@ -58,6 +60,37 @@ resource "aws_vpc_endpoint" "cloudwatch" {
   subnet_ids = ["${aws_subnet.internal.*.id}"]
 
   security_group_ids = ["${aws_security_group.cloudwatch_vpc_endpoint.id}"]
+
+  private_dns_enabled = true
+}
+
+resource "aws_security_group" "ecr_vpc_endpoint" {
+  name        = "${var.deployment}-ecr-vpc-endpoint"
+  description = "${var.deployment}-ecr-vpc-endpoint"
+
+  vpc_id = "${aws_vpc.hub.id}"
+}
+
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.ecr.api"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+
+  security_group_ids = ["${aws_security_group.ecr_vpc_endpoint.id}"]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id            = "${aws_vpc.hub.id}"
+  service_name      = "com.amazonaws.eu-west-2.ecr.dkr"
+  vpc_endpoint_type = "Interface"
+
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+
+  security_group_ids = ["${aws_security_group.ecr_vpc_endpoint.id}"]
 
   private_dns_enabled = true
 }
