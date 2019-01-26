@@ -9,16 +9,6 @@ resource "aws_security_group" "metadata_task" {
   vpc_id = "${aws_vpc.hub.id}"
 }
 
-resource "aws_security_group_rule" "metadata_egress_to_s3_endpoint" {
-  type      = "egress"
-  protocol  = "tcp"
-  from_port = 443
-  to_port   = 443
-
-  security_group_id = "${aws_security_group.metadata_task.id}"
-  prefix_list_ids   = ["${aws_vpc_endpoint.s3.prefix_list_id}"]
-}
-
 data "template_file" "metadata_task_def" {
   template = "${file("${path.module}/files/tasks/metadata.json")}"
 

@@ -32,8 +32,6 @@ resource "aws_vpc_endpoint" "s3" {
                 "s3:Delete*"
             ],
             "Resource": [
-                "arn:aws:s3:::govukverify-eidas-metadata-aggregator-${var.deployment}-a/*",
-                "arn:aws:s3:::govukverify-eidas-metadata-aggregator-${var.deployment}-a",
                 "arn:aws:s3:::prod-eu-west-2-starport-layer-bucket",
                 "arn:aws:s3:::prod-eu-west-2-starport-layer-bucket/*",
                 "${aws_s3_bucket.deployment_config.arn}",
