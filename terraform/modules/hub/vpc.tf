@@ -70,6 +70,30 @@ resource "aws_security_group" "container_vpc_endpoint" {
   vpc_id = "${aws_vpc.hub.id}"
 }
 
+resource "aws_security_group" "can_connect_to_container_vpc_endpoint" {
+  name        = "${var.deployment}-can-connect-to-container-vpc-endpoint"
+  description = "${var.deployment}-can-connect-to-container-vpc-endpoint"
+
+  vpc_id = "${aws_vpc.hub.id}"
+}
+
+module "container_vpc_endpoint_sg_connection" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.can_connect_to_container_vpc_endpoint.id}"
+  destination_sg_id = "${aws_security_group.container_vpc_endpoint.id}"
+}
+
+resource "aws_security_group_rule" "container_vpc_endpoint_sg_s3_endpoint" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = "${aws_security_group.can_connect_to_container_vpc_endpoint.id}"
+  prefix_list_ids   = ["${aws_vpc_endpoint.s3.prefix_list_id}"]
+}
+
 resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id            = "${aws_vpc.hub.id}"
   service_name      = "com.amazonaws.eu-west-2.ecr.api"
