@@ -65,12 +65,6 @@ cat <<EOF > /etc/systemd/system/docker.service.d/override.conf
 ExecStart=
 ExecStart=/usr/bin/dockerd --log-driver journald --dns 10.0.0.2
 EOF
-if [ -n "${egress_proxy_url_with_protocol}" ]; then
-cat <<EOF >> /etc/systemd/system/docker.service.d/override.conf
-Environment="HTTP_PROXY=${egress_proxy_url_with_protocol}"
-Environment="HTTPS_PROXY=${egress_proxy_url_with_protocol}"
-EOF
-fi
 
 # Reload systemctl daemon to pick up new override files
 systemctl stop docker
@@ -140,9 +134,7 @@ docker run \
   --volume=/var/run:/var/run \
   --net=host \
   --env="ECS_CLUSTER=${cluster}" \
-  --env="${ecs_egress_proxy_setting}" \
   --env=AWS_DEFAULT_REGION=eu-west-2 \
-  --env="NO_PROXY=169.254.169.254,169.254.170.2,/var/run/docker.sock" \
   --env=ECS_DATADIR=/data \
   --env=ECS_ENABLE_TASK_ENI=true \
   --env=ECS_ENABLE_TASK_IAM_ROLE=true \
