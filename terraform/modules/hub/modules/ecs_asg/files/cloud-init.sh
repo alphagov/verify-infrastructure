@@ -112,9 +112,17 @@ EOF
 systemctl restart journalbeat
 
 # ECS
-echo 'Running ECS using Docker'
+echo 'Installing awscli and running ECS using Docker'
+apt-get install --yes awscli
 mkdir -p /etc/ecs
 mkdir -p /var/lib/ecs/data
+
+eval $(aws ecr get-login                                          \
+           --no-include-email                                     \
+           --region eu-west-2                                     \
+           --endpoint-url https://api.ecr.eu-west-2.amazonaws.com \
+           --registry-ids ${tools_account_id}\
+      )
 
 docker run \
   --init \
@@ -141,7 +149,7 @@ docker run \
   --env=ECS_ENABLE_TASK_IAM_ROLE_NETWORK_HOST=true \
   --env='ECS_AVAILABLE_LOGGING_DRIVERS=["journald"]' \
   --env="ECS_LOGLEVEL=warn" \
-  amazon/amazon-ecs-agent:v1.23.0
+  ${ecs_agent_image_and_tag}
 
 apt-get install --yes prometheus-node-exporter
 mkdir /etc/systemd/system/prometheus-node-exporter.service.d

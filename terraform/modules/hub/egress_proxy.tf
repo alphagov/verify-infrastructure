@@ -10,8 +10,15 @@ module "egress_proxy_ecs_asg" {
   use_egress_proxy    = false
   domain              = "${local.root_domain}"
 
+  ecs_agent_image_and_tag = "${local.ecs_agent_image_and_tag}"
+  tools_account_id        = "${var.tools_account_id}"
+
   logit_api_key           = "${var.logit_api_key}"
   logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
+
+  additional_instance_security_group_ids = [
+    "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
+  ]
 }
 
 # Egress proxy instance has to be able to access the internet directly (HTTP)

@@ -73,6 +73,7 @@ resource "aws_ecs_service" "frontend" {
     security_groups = [
       "${aws_security_group.frontend_task.id}",
       "${aws_security_group.egress_via_proxy.id}",
+      "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
     ]
   }
 }

@@ -48,6 +48,9 @@ resource "aws_ecs_service" "metadata" {
 
   network_configuration {
     subnets         = ["${aws_subnet.internal.*.id}"]
-    security_groups = ["${aws_security_group.metadata_task.id}"]
+    security_groups = [
+      "${aws_security_group.metadata_task.id}",
+      "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
+    ]
   }
 }

@@ -23,6 +23,8 @@ data "template_file" "cloud_init" {
     journalbeat_egress_proxy_setting = "${local.journalbeat_egress_proxy_setting}"
     logit_elasticsearch_url          = "${var.logit_elasticsearch_url}"
     logit_api_key                    = "${var.logit_api_key}"
+    ecs_agent_image_and_tag          = "${var.ecs_agent_image_and_tag}"
+    tools_account_id                 = "${var.tools_account_id}"
   }
 }
 

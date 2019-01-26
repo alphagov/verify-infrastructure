@@ -296,6 +296,8 @@ data "template_file" "prometheus_cloud_init" {
     logit_api_key                  = "${var.logit_api_key}"
     config_bucket                  = "${aws_s3_bucket.deployment_config.id}"
     cluster                        = "${aws_ecs_cluster.prometheus.name}"
+    ecs_agent_image_and_tag        = "${local.ecs_agent_image_and_tag}"
+    tools_account_id               = "${var.tools_account_id}"
   }
 }
 
@@ -312,6 +314,7 @@ resource "aws_instance" "prometheus" {
     "${aws_security_group.prometheus.id}",
     "${aws_security_group.scraped_by_prometheus.id}",
     "${aws_security_group.egress_via_proxy.id}",
+    "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
   ]
 
   root_block_device {
