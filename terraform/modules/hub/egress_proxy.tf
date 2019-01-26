@@ -48,10 +48,6 @@ locals {
     "ec2\\.eu-west-2\\.amazonaws\\.com",                                            # Prometheus describe instances
     "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com",                                     # Apt
     "security\\.ubuntu\\.com",                                                      # Apt
-    "amazonlinux\\.eu-west-2\\.amazonaws\\.com",                                    # Yum
-    "repo\\.eu-west-2\\.amazonaws\\.com",                                           # Yum
-    "packages\\.eu-west-2\\.amazonaws\\.com",                                       # Yum
-    "amazon-ssm-eu-west-2\\.s3\\.amazonaws\\.com",                                  # Where the package is from
     "artifacts\\.elastic\\.co",                                                     # Journalbeat
     "ec2messages\\.eu-west-2\\.amazonaws\\.com",                                    # SSM agent
     "ssmmessages\\.eu-west-2\\.amazonaws\\.com",                                    # SSM agent
