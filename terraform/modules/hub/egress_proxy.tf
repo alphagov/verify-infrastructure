@@ -52,10 +52,6 @@ locals {
     "ec2messages\\.eu-west-2\\.amazonaws\\.com",                                    # SSM agent
     "ssmmessages\\.eu-west-2\\.amazonaws\\.com",                                    # SSM agent
     "ssm\\.eu-west-2\\.amazonaws\\.com",                                            # SSM agent
-    "ecs[^.]*\\.eu-west-2\\.amazonaws\\.com",                                       # ECS agent
-    "ecr\\.eu-west-2\\.amazonaws\\.com",                                            # ECR
-    "prod-eu-west-2-starport-layer-bucket\\.s3\\.eu-west-2\\.amazonaws\\.com",      # ECR s3 bucket
-    "${var.tools_account_id}\\.dkr\\.ecr\\.eu-west-2\\.amazonaws\\.com",            # Tools ECR auth
     "test-rp-msa-stub-${var.deployment}\\.ida.digital\\.cabinet-office\\.gov\\.uk", # Test RP
     "${replace(var.logit_elasticsearch_url, ".", "\\.")}",                          # Logit
     "sentry\\.tools\\.signin\\.service\\.gov\\.uk",                                 # Tools Sentry
