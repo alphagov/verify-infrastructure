@@ -56,9 +56,6 @@ locals {
     "ecr\\.eu-west-2\\.amazonaws\\.com",                                            # ECR
     "prod-eu-west-2-starport-layer-bucket\\.s3\\.eu-west-2\\.amazonaws\\.com",      # ECR s3 bucket
     "${var.tools_account_id}\\.dkr\\.ecr\\.eu-west-2\\.amazonaws\\.com",            # Tools ECR auth
-    "registry-1\\.docker\\.io",                                                     # Docker Hub
-    "auth\\.docker\\.io",                                                           # Docker Hub
-    "production\\.cloudflare\\.docker\\.com",                                       # Docker Hub
     "test-rp-msa-stub-${var.deployment}\\.ida.digital\\.cabinet-office\\.gov\\.uk", # Test RP
     "${replace(var.logit_elasticsearch_url, ".", "\\.")}",                          # Logit
     "sentry\\.tools\\.signin\\.service\\.gov\\.uk",                                 # Tools Sentry
