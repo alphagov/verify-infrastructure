@@ -49,6 +49,10 @@ data "template_file" "policy_task_def" {
     location_blocks_base64 = "${local.nginx_policy_location_blocks_base64}"
     region                 = "${data.aws_region.region.id}"
     account_id             = "${data.aws_caller_identity.account.account_id}"
+
+    redis_host = "rediss://${
+      aws_elasticache_replication_group.policy_session_store.primary_endpoint_address
+    }:6379"
   }
 }
 
