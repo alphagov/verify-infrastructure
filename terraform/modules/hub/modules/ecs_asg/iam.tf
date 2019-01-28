@@ -111,6 +111,28 @@ resource "aws_iam_policy" "instance" {
         "Resource": [
           "arn:aws:ecs:eu-west-2:${local.account_id}:cluster/${local.identifier}"
         ]
+      },
+      {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:GetRepositoryPolicy",
+        "ecr:DescribeRepositories",
+        "ecr:ListImages",
+        "ecr:DescribeImages",
+        "ecr:BatchGetImage"
+      ],
+      "Resource": [
+          "arn:aws:ecr:eu-west-2:${var.tools_account_id}:repository/platform-deployer-verify-ecs-agent"
+        ]
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "ecr:GetAuthorizationToken"
+        ],
+        "Resource": "*"
       }
     ]
   }

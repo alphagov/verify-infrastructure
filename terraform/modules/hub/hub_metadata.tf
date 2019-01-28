@@ -9,16 +9,6 @@ resource "aws_security_group" "metadata_task" {
   vpc_id = "${aws_vpc.hub.id}"
 }
 
-resource "aws_security_group_rule" "metadata_egress_to_s3_endpoint" {
-  type      = "egress"
-  protocol  = "tcp"
-  from_port = 443
-  to_port   = 443
-
-  security_group_id = "${aws_security_group.metadata_task.id}"
-  prefix_list_ids   = ["${aws_vpc_endpoint.s3.prefix_list_id}"]
-}
-
 data "template_file" "metadata_task_def" {
   template = "${file("${path.module}/files/tasks/metadata.json")}"
 
@@ -58,6 +48,9 @@ resource "aws_ecs_service" "metadata" {
 
   network_configuration {
     subnets         = ["${aws_subnet.internal.*.id}"]
-    security_groups = ["${aws_security_group.metadata_task.id}"]
+    security_groups = [
+      "${aws_security_group.metadata_task.id}",
+      "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
+    ]
   }
 }

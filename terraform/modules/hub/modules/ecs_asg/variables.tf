@@ -34,3 +34,5 @@ variable "use_egress_proxy" {
 
 variable "logit_api_key" {}
 variable "logit_elasticsearch_url" {}
+variable "ecs_agent_image_and_tag" {}
+variable "tools_account_id" {}
