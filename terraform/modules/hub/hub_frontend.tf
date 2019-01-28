@@ -54,6 +54,10 @@ resource "aws_ecs_task_definition" "frontend" {
   container_definitions = "${data.template_file.frontend_task_def.rendered}"
   network_mode          = "awsvpc"
   execution_role_arn    = "${module.frontend_ecs_roles.execution_role_arn}"
+
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 2048
+  memory                   = 4096
 }
 
 resource "aws_ecs_service" "frontend" {
@@ -61,6 +65,7 @@ resource "aws_ecs_service" "frontend" {
   cluster         = "${aws_ecs_cluster.ingress.id}"
   task_definition = "${aws_ecs_task_definition.frontend.arn}"
   desired_count   = 1
+  launch_type     = "FARGATE"
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.ingress_frontend.arn}"
@@ -69,7 +74,8 @@ resource "aws_ecs_service" "frontend" {
   }
 
   network_configuration {
-    subnets         = ["${aws_subnet.internal.*.id}"]
+    subnets = ["${aws_subnet.internal.*.id}"]
+
     security_groups = [
       "${aws_security_group.frontend_task.id}",
       "${aws_security_group.egress_via_proxy.id}",
