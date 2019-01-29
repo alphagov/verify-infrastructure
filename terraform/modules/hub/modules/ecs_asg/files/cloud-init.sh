@@ -158,3 +158,22 @@ EOF
 systemctl daemon-reload
 systemctl enable prometheus-node-exporter
 systemctl restart prometheus-node-exporter
+
+cat <<EOF > /usr/bin/instance-reboot-required-metric.sh
+#!/usr/bin/env bash
+
+echo '# HELP node_reboot_required Node reboot is required for software updates.'
+echo '# TYPE node_reboot_required gauge'
+if [[ -f '/run/reboot-required' ]] ; then
+  echo 'node_reboot_required 1'
+else
+  echo 'node_reboot_required 0'
+fi
+EOF
+
+chmod +x /usr/bin/instance-reboot-required-metric.sh
+
+cat <<EOF | crontab -
+$(crontab -l | grep -v 'no crontab')
+* * * * * /usr/bin/instance-reboot-required-metric.sh | sponge /var/lib/prometheus/node-exporter/reboot-required.prom
+EOF
