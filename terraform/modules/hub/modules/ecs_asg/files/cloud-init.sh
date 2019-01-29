@@ -177,5 +177,5 @@ apt-get install --yes moreutils
 
 cat <<EOF | crontab -
 $(crontab -l | grep -v 'no crontab')
-* * * * * /usr/bin/instance-reboot-required-metric.sh | sponge /var/lib/prometheus/node-exporter/reboot-required.prom
+*/5 * * * * /usr/bin/instance-reboot-required-metric.sh | sponge /var/lib/prometheus/node-exporter/reboot-required.prom
 EOF
