@@ -159,6 +159,9 @@ systemctl daemon-reload
 systemctl enable prometheus-node-exporter
 systemctl restart prometheus-node-exporter
 
+#Initialise a node_creation_time metric to enable the predict_linear function to handle new nodes
+echo "node_creation_time `date +%s`" > /var/lib/prometheus/node-exporter/node-creation-time.prom
+
 cat <<EOF > /usr/bin/instance-reboot-required-metric.sh
 #!/usr/bin/env bash
 
