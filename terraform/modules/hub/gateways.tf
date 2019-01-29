@@ -7,7 +7,7 @@ resource "aws_internet_gateway" "hub" {
 }
 
 resource "aws_nat_gateway" "static_egress" {
-  count = "${var.number_of_availability_zones}"
+  count = "${local.number_of_availability_zones}"
 
   allocation_id = "${element(aws_eip.egress.*.id,    count.index)}"
   subnet_id     = "${element(aws_subnet.egress.*.id, count.index)}"

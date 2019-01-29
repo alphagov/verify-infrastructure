@@ -1,10 +1,10 @@
 resource "aws_eip" "ingress" {
-  count = 2
+  count = "${local.number_of_availability_zones}"
   vpc   = true
 }
 
 resource "aws_eip" "egress" {
-  count = "${var.number_of_availability_zones}"
+  count = "${local.number_of_availability_zones}"
   vpc   = true
 }
 

@@ -6,7 +6,7 @@ module "saml_soap_proxy_ecs_asg" {
   cluster             = "saml-soap-proxy"
   vpc_id              = "${aws_vpc.hub.id}"
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
-  number_of_instances = "${var.number_of_availability_zones}"
+  number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
 
   ecs_agent_image_and_tag = "${local.ecs_agent_image_and_tag}"
@@ -62,7 +62,7 @@ module "saml_soap_proxy" {
   task_definition            = "${data.template_file.saml_soap_proxy_task_def.rendered}"
   container_name             = "nginx"
   container_port             = "8443"
-  number_of_tasks            = "${var.number_of_availability_zones}"
+  number_of_tasks            = "${var.number_of_apps}"
   health_check_path          = "/service-status"
   tools_account_id           = "${var.tools_account_id}"
   instance_security_group_id = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"

@@ -14,19 +14,19 @@ resource "aws_route" "public" {
 }
 
 resource "aws_route_table_association" "public_ingress" {
-  count          = "${var.number_of_availability_zones}"
+  count          = "${local.number_of_availability_zones}"
   subnet_id      = "${element(aws_subnet.ingress.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.public.*.id, count.index)}"
 }
 
 resource "aws_route_table_association" "public_egress" {
-  count          = "${var.number_of_availability_zones}"
+  count          = "${local.number_of_availability_zones}"
   subnet_id      = "${element(aws_subnet.egress.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.public.*.id, count.index)}"
 }
 
 resource "aws_route_table" "private" {
-  count = "${var.number_of_availability_zones}"
+  count = "${local.number_of_availability_zones}"
 
   vpc_id = "${aws_vpc.hub.id}"
 
@@ -37,7 +37,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route" "private_egress" {
-  count = "${var.number_of_availability_zones}"
+  count = "${local.number_of_availability_zones}"
 
   destination_cidr_block = "0.0.0.0/0"
 
@@ -53,7 +53,7 @@ resource "aws_route" "private_egress" {
 }
 
 resource "aws_route_table_association" "internal_private" {
-  count          = "${var.number_of_availability_zones}"
+  count          = "${local.number_of_availability_zones}"
   subnet_id      = "${element(aws_subnet.internal.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 }

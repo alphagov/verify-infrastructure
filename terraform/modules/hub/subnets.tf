@@ -9,7 +9,7 @@ locals {
 }
 
 resource "aws_subnet" "ingress" {
-  count             = "${var.number_of_availability_zones}"
+  count             = "${local.number_of_availability_zones}"
   vpc_id            = "${aws_vpc.hub.id}"
   availability_zone = "${element(local.azs, count.index)}"
 
@@ -26,7 +26,7 @@ resource "aws_subnet" "ingress" {
 }
 
 resource "aws_subnet" "internal" {
-  count             = "${var.number_of_availability_zones}"
+  count             = "${local.number_of_availability_zones}"
   vpc_id            = "${aws_vpc.hub.id}"
   availability_zone = "${element(local.azs, count.index)}"
 
@@ -43,7 +43,7 @@ resource "aws_subnet" "internal" {
 }
 
 resource "aws_subnet" "egress" {
-  count             = "${var.number_of_availability_zones}"
+  count             = "${local.number_of_availability_zones}"
   vpc_id            = "${aws_vpc.hub.id}"
   availability_zone = "${element(local.azs, count.index)}"
 

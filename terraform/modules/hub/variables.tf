@@ -10,7 +10,7 @@ variable "tools_account_id" {
   description = "AWS account id of the tools account, where docker images will be pulled from"
 }
 
-variable "number_of_availability_zones" {
+variable "number_of_apps" {
   default = 2
 }
 
@@ -25,7 +25,8 @@ variable "redis_cache_size" {
 variable "truststore_password" {}
 
 locals {
-  root_domain = "${replace(var.signin_domain, "/www[.]/", "")}"
+  root_domain                  = "${replace(var.signin_domain, "/www[.]/", "")}"
+  number_of_availability_zones = 3
 }
 
 variable "wildcard_cert_arn" {
