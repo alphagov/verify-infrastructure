@@ -6,7 +6,7 @@ module "static_ingress_ecs_asg" {
   cluster             = "static-ingress"
   vpc_id              = "${aws_vpc.hub.id}"
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
-  number_of_instances = "${var.number_of_availability_zones}"
+  number_of_instances = "${var.number_of_apps}"
   use_egress_proxy    = true
   domain              = "${local.root_domain}"
 
@@ -166,6 +166,11 @@ resource "aws_lb" "static_ingress" {
   subnet_mapping {
     subnet_id     = "${element(aws_subnet.ingress.*.id, 1)}"
     allocation_id = "${element(aws_eip.ingress.*.id, 1)}"
+  }
+
+  subnet_mapping {
+    subnet_id     = "${element(aws_subnet.ingress.*.id, 2)}"
+    allocation_id = "${element(aws_eip.ingress.*.id, 2)}"
   }
 }
 

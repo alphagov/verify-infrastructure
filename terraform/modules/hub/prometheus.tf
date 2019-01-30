@@ -302,7 +302,7 @@ data "template_file" "prometheus_cloud_init" {
 }
 
 resource "aws_instance" "prometheus" {
-  count = "${var.number_of_availability_zones}"
+  count = "${var.number_of_apps}"
 
   ami                  = "${data.aws_ami.ubuntu_bionic.id}"
   instance_type        = "t3.medium"
@@ -329,7 +329,7 @@ resource "aws_instance" "prometheus" {
 }
 
 resource "aws_ebs_volume" "prometheus" {
-  count = "${var.number_of_availability_zones}"
+  count = "${var.number_of_apps}"
 
   size      = 100
   encrypted = true
@@ -345,7 +345,7 @@ resource "aws_ebs_volume" "prometheus" {
 }
 
 resource "aws_volume_attachment" "prometheus_prometheus" {
-  count = "${var.number_of_availability_zones}"
+  count = "${var.number_of_apps}"
 
   device_name = "/dev/xvdp"
   volume_id   = "${element(aws_ebs_volume.prometheus.*.id, count.index)}"
@@ -353,7 +353,7 @@ resource "aws_volume_attachment" "prometheus_prometheus" {
 }
 
 resource "aws_lb_target_group" "prometheus" {
-  count = "${var.number_of_availability_zones}"
+  count = "${var.number_of_apps}"
 
   name     = "${var.deployment}-prometheus-${count.index}"
   port     = 9090
@@ -369,7 +369,7 @@ resource "aws_lb_target_group" "prometheus" {
 }
 
 resource "aws_lb_target_group_attachment" "prometheus" {
-  count = "${var.number_of_availability_zones}"
+  count = "${var.number_of_apps}"
 
   target_group_arn = "${element(aws_lb_target_group.prometheus.*.arn, count.index)}"
   target_id        = "${element(aws_instance.prometheus.*.id, count.index)}"
@@ -377,7 +377,7 @@ resource "aws_lb_target_group_attachment" "prometheus" {
 }
 
 resource "aws_lb_listener_rule" "prometheus_https" {
-  count        = "${var.number_of_availability_zones}"
+  count        = "${var.number_of_apps}"
   listener_arn = "${aws_lb_listener.mgmt_https.arn}"
   priority     = "${100 + count.index}"
 

@@ -5,7 +5,7 @@ resource "aws_elasticache_replication_group" "policy_session_store" {
   replication_group_description = "Replication group for the ${var.deployment} Policy session store"
   maintenance_window            = "tue:02:00-tue:04:00"
   node_type                     = "${var.redis_cache_size}"
-  number_cache_clusters         = "${var.number_of_availability_zones}"
+  number_cache_clusters         = "${local.number_of_availability_zones}"
   parameter_group_name          = "${aws_elasticache_parameter_group.policy_session_store.name}"
   security_group_ids            = ["${aws_security_group.policy_redis.id}"]
   subnet_group_name             = "${aws_elasticache_subnet_group.policy_session_store.name}"

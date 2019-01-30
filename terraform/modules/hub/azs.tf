@@ -5,7 +5,7 @@ locals {
     slice(
       data.aws_availability_zones.available.names,
       0,
-      var.number_of_availability_zones
+      local.number_of_availability_zones
     )
   }"
 }

@@ -6,7 +6,7 @@ module "egress_proxy_ecs_asg" {
   cluster             = "egress-proxy"
   vpc_id              = "${aws_vpc.hub.id}"
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
-  number_of_instances = "${var.number_of_availability_zones}"
+  number_of_instances = "${var.number_of_apps}"
   use_egress_proxy    = false
   domain              = "${local.root_domain}"
 
