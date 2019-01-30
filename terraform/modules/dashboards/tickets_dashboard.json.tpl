@@ -220,7 +220,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(verify_federation_certificate_expiry or verify_config_certificate_expiry) / 1000 - time()",
+          "expr": "(verify_metadata_certificate_expiry or verify_config_certificate_expiry) / 1000 - time()",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -482,7 +482,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(verify_federation_metadata_expiry/1000) - time()",
+          "expr": "(verify_metadata_expiry/1000) - time()",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -735,7 +735,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(verify_federation_certificate_ocsp_success or verify_config_certificate_ocsp_success) ",
+          "expr": "(verify_metadata_certificate_ocsp_success or verify_config_certificate_ocsp_success) ",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
