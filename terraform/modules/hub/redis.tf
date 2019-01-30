@@ -29,3 +29,35 @@ resource "aws_security_group" "policy_redis" {
   description = "${var.deployment}-policy-redis"
   vpc_id      = "${aws_vpc.hub.id}"
 }
+
+resource "aws_elasticache_replication_group" "saml_engine_replay_cache" {
+  automatic_failover_enabled    = true
+  availability_zones            = ["${local.azs}"]
+  replication_group_id          = "${var.deployment}-saml-engine"
+  replication_group_description = "Replication group for the ${var.deployment} SAML Engine replay cache"
+  maintenance_window            = "tue:02:00-tue:04:00"
+  node_type                     = "cache.t2.small"
+  number_cache_clusters         = "${var.number_of_availability_zones}"
+  parameter_group_name          = "${aws_elasticache_parameter_group.saml_engine_replay_cache.name}"
+  security_group_ids            = ["${aws_security_group.saml_engine_redis.id}"]
+  subnet_group_name             = "${aws_elasticache_subnet_group.saml_engine_replay_cache.name}"
+  at_rest_encryption_enabled    = true
+  transit_encryption_enabled    = true
+  port                          = 6379
+}
+
+resource "aws_elasticache_subnet_group" "saml_engine_replay_cache" {
+  name       = "${var.deployment}-saml-engine"
+  subnet_ids = ["${aws_subnet.internal.*.id}"]
+}
+
+resource "aws_elasticache_parameter_group" "saml_engine_replay_cache" {
+  name   = "${var.deployment}-saml-engine"
+  family = "redis5.0"
+}
+
+resource "aws_security_group" "saml_engine_redis" {
+  name        = "${var.deployment}-saml-engine-redis"
+  description = "${var.deployment}-saml-engine-redis"
+  vpc_id      = "${aws_vpc.hub.id}"
+}
