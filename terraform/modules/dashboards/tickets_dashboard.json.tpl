@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 29,
+  "id": 28,
   "links": [],
   "panels": [
     {
@@ -545,7 +545,7 @@
               "params": [
                 0
               ],
-              "type": "gt"
+              "type": "lt"
             },
             "operator": {
               "type": "and"
@@ -608,7 +608,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "predict_linear(node_filesystem_avail{fstype!=\"squashfs\",mountpoint!=\"/snap/core/6130\",mountpoint!=\"/snap/amazon-ssm-agent/930\",mountpoint!=\"/var/lib/lxcfs\"}[12h], 3 * 86400) and on (instance) (time() - node_creation_time) > 43200\n",
+          "expr": "predict_linear(node_filesystem_avail{fstype!=\"squashfs\",mountpoint!=\"/snap/core/6130\",mountpoint!=\"/snap/amazon-ssm-agent/930\",mountpoint!=\"/var/lib/lxcfs\"}[24h], 3 * 86400) and on (instance) (time() - node_creation_time) > 86400\n",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -620,7 +620,7 @@
           "colorMode": "critical",
           "fill": true,
           "line": true,
-          "op": "gt",
+          "op": "lt",
           "value": 0
         }
       ],
@@ -735,8 +735,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(verify_metadata_certificate_ocsp_success or verify_config_certificate_ocsp_success) ",
+          "expr": "(verify_metadata_certificate_ocsp_success or verify_config_certificate_ocsp_success)",
           "format": "time_series",
+          "instant": false,
           "intervalFactor": 1,
           "refId": "A"
         }
@@ -753,7 +754,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Certificates failed OCSP",
+      "title": "Certificate OCSP Check",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -831,6 +832,6 @@
   },
   "timezone": "",
   "title": "[${deployment}] Ticket Type Alerts",
-  "uid": "cPRQFflmz",
-  "version": 2
+  "uid": "4FhsFB_mz",
+  "version": 7
 }
