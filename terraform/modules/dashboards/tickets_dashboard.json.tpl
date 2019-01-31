@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 23,
+  "id": 29,
   "links": [],
   "panels": [
     {
@@ -419,7 +419,7 @@
               "params": [
                 432000
               ],
-              "type": "gt"
+              "type": "lt"
             },
             "operator": {
               "type": "and"
@@ -493,7 +493,7 @@
           "colorMode": "critical",
           "fill": true,
           "line": true,
-          "op": "gt",
+          "op": "lt",
           "value": 432000
         }
       ],
@@ -831,6 +831,6 @@
   },
   "timezone": "",
   "title": "[${deployment}] Ticket Type Alerts",
-  "uid": "AfmINtlmz",
-  "version": 43
+  "uid": "cPRQFflmz",
+  "version": 2
 }
