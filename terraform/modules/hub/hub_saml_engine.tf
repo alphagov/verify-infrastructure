@@ -49,6 +49,7 @@ data "template_file" "saml_engine_task_def" {
     nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
     region                 = "${data.aws_region.region.id}"
     location_blocks_base64 = "${local.nginx_saml_engine_location_blocks_base64}"
+    redis_host             = "rediss://${aws_elasticache_replication_group.saml_engine_replay_cache.primary_endpoint_address}:6379"
   }
 }
 
@@ -118,6 +119,14 @@ resource "aws_iam_policy" "saml_engine_parameter_execution" {
 resource "aws_iam_role_policy_attachment" "saml_engine_parameter_execution" {
   role       = "${var.deployment}-saml-engine-execution"
   policy_arn = "${aws_iam_policy.saml_engine_parameter_execution.arn}"
+}
+
+module "saml_engine_can_connect_to_saml_engine_redis" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${module.saml_engine_ecs_asg.instance_sg_id}"
+  destination_sg_id = "${aws_security_group.saml_engine_redis.id}"
+  port              = 6379
 }
 
 module "saml_engine_can_connect_to_ingress_for_metadata" {

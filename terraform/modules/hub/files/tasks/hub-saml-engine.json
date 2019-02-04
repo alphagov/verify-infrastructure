@@ -62,6 +62,10 @@
       {
         "Name": "JAVA_OPTS",
         "Value": "-Dservice.name=config -Xms3000m -Xmx3200m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.proxyHost=\"egress-proxy.${domain}\" -Dhttp.proxyPort=\"8080\" -Dhttps.proxyHost=\"egress-proxy.${domain}\" -Dhttps.proxyPort=\"8080\" -Dhttp.nonProxyHosts=\"www.${domain}|config.${domain}|policy.${domain}|saml-soap-proxy.${domain}|saml-soap-proxy.${domain}\" -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5"
+      },
+      {
+        "Name": "REDIS_HOST",
+        "Value": "${redis_host}"
       }
     ]
   }
