@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -ueo pipefail
 
+export DEBIAN_FRONTEND=noninteractive
+
 CURL="curl --proxy ${egress_proxy_url_with_protocol}"
 
 # Apt
@@ -128,10 +130,7 @@ if [ -z "$(lsblk | grep "$vol" | awk '{print $7}')" ] ; then
   fi
 fi
 
-echo 'Installing prometheus'
-apt-get install --yes prometheus
-systemctl enable prometheus
-systemctl start  prometheus
+chown -R nobody /var/lib/prometheus
 
 echo 'Installing awscli'
 apt-get install --yes awscli

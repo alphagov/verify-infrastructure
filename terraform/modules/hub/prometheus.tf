@@ -394,3 +394,40 @@ resource "aws_lb_listener_rule" "prometheus_https" {
     values = ["prom-${count.index + 1}.*"]
   }
 }
+
+module "prometheus_ecs_roles" {
+  source = "modules/ecs_iam_role_pair"
+
+  deployment       = "${var.deployment}"
+  service_name     = "prometheus"
+  image_name       = "verify-prometheus"
+  tools_account_id = "${var.tools_account_id}"
+}
+
+data "template_file" "prometheus_task_def" {
+  template = "${file("${path.module}/files/tasks/prometheus.json")}"
+
+  vars {
+    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-prometheus:latest"
+    config_base64 = "${base64encode(data.template_file.prometheus_config.rendered)}"
+  }
+}
+
+resource "aws_ecs_task_definition" "prometheus" {
+  family                = "${var.deployment}-prometheus"
+  container_definitions = "${data.template_file.prometheus_task_def.rendered}"
+  execution_role_arn    = "${module.prometheus_ecs_roles.execution_role_arn}"
+  network_mode          = "host"
+
+  volume {
+    name      = "tsdb"
+    host_path = "/var/lib/prometheus/metrics2"
+  }
+}
+
+resource "aws_ecs_service" "prometheus" {
+  name                = "${var.deployment}-prometheus"
+  cluster             = "${aws_ecs_cluster.prometheus.id}"
+  task_definition     = "${aws_ecs_task_definition.prometheus.arn}"
+  scheduling_strategy = "DAEMON"
+}
