@@ -305,7 +305,7 @@ resource "aws_instance" "prometheus" {
   count = "${var.number_of_apps}"
 
   ami                  = "${data.aws_ami.ubuntu_bionic.id}"
-  instance_type        = "t3.medium"
+  instance_type        = "t3.large"
   subnet_id            = "${element(aws_subnet.internal.*.id, count.index)}"
   iam_instance_profile = "${aws_iam_instance_profile.prometheus.name}"
   user_data            = "${data.template_file.prometheus_cloud_init.rendered}"
