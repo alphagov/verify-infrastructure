@@ -37,7 +37,7 @@ resource "aws_elasticache_replication_group" "saml_engine_replay_cache" {
   replication_group_description = "Replication group for the ${var.deployment} SAML Engine replay cache"
   maintenance_window            = "tue:02:00-tue:04:00"
   node_type                     = "cache.t2.small"
-  number_cache_clusters         = "${var.number_of_availability_zones}"
+  number_cache_clusters         = "${local.number_of_availability_zones}"
   parameter_group_name          = "${aws_elasticache_parameter_group.saml_engine_replay_cache.name}"
   security_group_ids            = ["${aws_security_group.saml_engine_redis.id}"]
   subnet_group_name             = "${aws_elasticache_subnet_group.saml_engine_replay_cache.name}"
