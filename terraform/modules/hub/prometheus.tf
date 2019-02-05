@@ -160,14 +160,6 @@ resource "aws_iam_policy" "prometheus" {
       {
         "Effect": "Allow",
         "Action": [
-          "s3:ListBucket",
-          "s3:GetObject"
-        ],
-        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml"
-      },
-      {
-        "Effect": "Allow",
-        "Action": [
           "ssm:ListAssociations",
           "ssm:UpdateInstanceInformation",
           "ssmmessages:CreateControlChannel",
@@ -248,40 +240,12 @@ resource "aws_iam_role_policy_attachment" "prometheus" {
   policy_arn = "${aws_iam_policy.prometheus.arn}"
 }
 
-resource "aws_s3_bucket_policy" "access_prometheus_config" {
-  bucket = "${aws_s3_bucket.deployment_config.id}"
-
-  policy = <<-POLICY
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Action": [
-          "s3:GetObject"
-        ],
-        "Effect": "Allow",
-        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml",
-        "Principal": {
-          "AWS": "${data.aws_caller_identity.account.account_id}"
-        }
-      }
-    ]
-  }
-  POLICY
-}
-
 data "template_file" "prometheus_config" {
   template = "${file("${path.module}/files/prometheus/prometheus.yml")}"
 
   vars {
     deployment = "${var.deployment}"
   }
-}
-
-resource "aws_s3_bucket_object" "prometheus_config_file" {
-  bucket  = "${aws_s3_bucket.deployment_config.id}"
-  key     = "prometheus/prometheus.yml"
-  content = "${data.template_file.prometheus_config.rendered}"
 }
 
 data "template_file" "prometheus_cloud_init" {
@@ -294,7 +258,6 @@ data "template_file" "prometheus_cloud_init" {
     egress_proxy_url_with_protocol = "${local.egress_proxy_url_with_protocol}"
     logit_elasticsearch_url        = "${var.logit_elasticsearch_url}"
     logit_api_key                  = "${var.logit_api_key}"
-    config_bucket                  = "${aws_s3_bucket.deployment_config.id}"
     cluster                        = "${aws_ecs_cluster.prometheus.name}"
     ecs_agent_image_and_tag        = "${local.ecs_agent_image_and_tag}"
     tools_account_id               = "${var.tools_account_id}"

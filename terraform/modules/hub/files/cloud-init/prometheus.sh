@@ -135,28 +135,6 @@ chown -R nobody /var/lib/prometheus
 echo 'Installing awscli'
 apt-get install --yes awscli
 
-echo 'Installing prometheus-update-config'
-cat <<EOF > /usr/bin/prometheus-update-config
-#!/usr/bin/env bash
-set -ueo pipefail
-
-aws s3 cp \
-       --region eu-west-2 \
-       s3://${config_bucket}/prometheus/prometheus.yml \
-       /tmp/prometheus.yml
-
-if ! cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml ; then
-  mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml
-  systemctl reload prometheus
-fi
-EOF
-chmod +x /usr/bin/prometheus-update-config
-
-cat <<EOF | crontab -
-$(crontab -l | grep -v 'no crontab')
-* * * * * /usr/bin/prometheus-update-config
-EOF
-
 # ECS
 echo 'Running ECS using Docker'
 mkdir -p /etc/ecs

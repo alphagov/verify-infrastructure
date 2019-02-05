@@ -34,8 +34,6 @@ resource "aws_vpc_endpoint" "s3" {
             "Resource": [
                 "arn:aws:s3:::prod-eu-west-2-starport-layer-bucket",
                 "arn:aws:s3:::prod-eu-west-2-starport-layer-bucket/*",
-                "${aws_s3_bucket.deployment_config.arn}",
-                "${aws_s3_bucket.deployment_config.arn}/*",
                 "*"
             ]
         }
