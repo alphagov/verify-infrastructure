@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -ueo pipefail
 
+export DEBIAN_FRONTEND=noninteractive
+
 CURL="curl"
 if [ -n "${egress_proxy_url_with_protocol}" ]; then
   CURL="curl --proxy ${egress_proxy_url_with_protocol}"
