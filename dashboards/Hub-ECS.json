@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1548860865964,
+  "iteration": 1549441326789,
   "links": [],
   "panels": [
     {
@@ -82,7 +82,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(verify_config_certificate_ocsp_success == bool 0)",
+          "expr": "sum((verify_config_certificate_ocsp_revocation_status or verify_metadata_certificate_ocsp_success) == bool 0)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -160,7 +160,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "verify_federation_metadata_expiry/1000 - time()",
+          "expr": "verify_metadata_expiry/1000 - time()",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -238,7 +238,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum((verify_config_certificate_expiry or verify_federation_certificate_expiry / 1000) < bool (time() + (7 * 24 * 60 * 60)))",
+          "expr": "sum((verify_config_certificate_expiry_date or verify_metadata_certificate_expiry / 1000) < bool (time() + (7 * 24 * 60 * 60)))",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -316,7 +316,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum((verify_config_certificate_expiry or verify_federation_certificate_expiry / 1000) < bool (time() + (2 * 7 * 24 * 60 * 60)))",
+          "expr": "sum((verify_config_certificate_expiry_date or verify_metadata_certificate_expiry / 1000) < bool (time() + (2 * 7 * 24 * 60 * 60)))",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -394,7 +394,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum((verify_config_certificate_expiry or verify_federation_certificate_expiry / 1000) < bool (time() + (30 * 24 * 60 * 60)))",
+          "expr": "sum((verify_config_certificate_expiry_date or verify_metadata_certificate_expiry / 1000) < bool (time() + (30 * 24 * 60 * 60)))",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -472,7 +472,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum((verify_config_certificate_expiry or verify_federation_certificate_expiry / 1000) < bool (time() + (60 * 24 * 60 * 60)))",
+          "expr": "sum((verify_config_certificate_expiry_date or verify_metadata_certificate_expiry / 1000) < bool (time() + (60 * 24 * 60 * 60)))",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -488,6 +488,273 @@
       "valueName": "current"
     },
     {
+      "columns": [],
+      "datasource": "$Prometheus",
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 2
+      },
+      "id": 21,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "hidden"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "__name__",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "Instance",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "instance",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "job",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "Matching Service",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "matchingService",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "eIDAS Enabled",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "eidasEnabled",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": [
+            {
+              "text": "Yes",
+              "value": "true"
+            },
+            {
+              "text": "No",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "alias": "Onboarding",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "onboarding",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": [
+            {
+              "text": "Yes",
+              "value": "true"
+            },
+            {
+              "text": "No",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "alias": "Should Sign With SHA-1",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "shouldSignWithSha1",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": [
+            {
+              "text": "Yes",
+              "value": "true"
+            },
+            {
+              "text": "No",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "alias": "Version Number",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "versionNumber",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "Version Supported",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "versionSupported",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": [
+            {
+              "text": "No",
+              "value": "false"
+            },
+            {
+              "text": "Yes",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "alias": "Status",
+          "colorMode": "cell",
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value",
+          "thresholds": [
+            "0.5",
+            "1"
+          ],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": [
+            {
+              "text": "Unhealthy",
+              "value": "0"
+            },
+            {
+              "text": "Healthy",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "(verify_saml_soap_proxy_msa_info\nand on (instance, job)\nverify_saml_soap_proxy_msa_health_status == 1\nand on (instance, job)\ntime()  - verify_saml_soap_proxy_msa_health_status_last_updated/1000 <  120)\nor verify_saml_soap_proxy_msa_health_status == 0",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "title": "Matching Service Health",
+      "transform": "table",
+      "type": "table"
+    },
+    {
       "dashboardFilter": "",
       "dashboardTags": [
         "verify"
@@ -497,7 +764,7 @@
         "h": 10,
         "w": 7,
         "x": 0,
-        "y": 2
+        "y": 6
       },
       "id": 19,
       "limit": 10,
@@ -518,7 +785,7 @@
         "h": 10,
         "w": 17,
         "x": 7,
-        "y": 2
+        "y": 6
       },
       "id": 10,
       "links": [],
@@ -526,7 +793,7 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 6,
+        "col": 4,
         "desc": false
       },
       "styles": [
@@ -597,8 +864,9 @@
           "mappingType": 1,
           "pattern": "fingerprint",
           "thresholds": [],
-          "type": "string",
-          "unit": "short"
+          "type": "hidden",
+          "unit": "short",
+          "valueMaps": []
         },
         {
           "alias": "",
@@ -716,6 +984,22 @@
           "unit": "short"
         },
         {
+          "alias": "Serial Number",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "serial",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
           "alias": "",
           "colorMode": null,
           "colors": [
@@ -732,7 +1016,7 @@
       ],
       "targets": [
         {
-          "expr": "avg (label_replace(verify_config_certificate_expiry or verify_federation_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ()]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)",
+          "expr": "avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ()]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -740,7 +1024,7 @@
           "refId": "A"
         },
         {
-          "expr": "avg (label_replace(verify_config_certificate_expiry or verify_federation_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ()]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name) - time()*1000",
+          "expr": "avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ()]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name) - time()*1000",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -763,7 +1047,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 12
+        "y": 16
       },
       "id": 4,
       "legend": {
@@ -848,7 +1132,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 12
+        "y": 16
       },
       "id": 2,
       "legend": {
@@ -933,7 +1217,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 21
+        "y": 25
       },
       "hideTimeOverride": false,
       "id": 8,
@@ -1143,5 +1427,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 34
+  "version": 42
 }
