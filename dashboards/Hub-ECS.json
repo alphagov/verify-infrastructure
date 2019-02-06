@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1549441326789,
+  "iteration": 1549450537854,
   "links": [],
   "panels": [
     {
@@ -743,7 +743,7 @@
       ],
       "targets": [
         {
-          "expr": "(verify_saml_soap_proxy_msa_info\nand on (instance, job)\nverify_saml_soap_proxy_msa_health_status == 1\nand on (instance, job)\ntime()  - verify_saml_soap_proxy_msa_health_status_last_updated/1000 <  120)\nor verify_saml_soap_proxy_msa_health_status == 0",
+          "expr": "avg((verify_saml_soap_proxy_msa_info\nand on (instance, job)\nverify_saml_soap_proxy_msa_health_status == 1\nand on (instance, job)\ntime()  - verify_saml_soap_proxy_msa_health_status_last_updated/1000 <  120)\nor verify_saml_soap_proxy_msa_health_status == 0) without (instance)",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -1427,5 +1427,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 42
+  "version": 44
 }
