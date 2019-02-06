@@ -21,6 +21,13 @@ module "egress_proxy_ecs_asg" {
   ]
 }
 
+resource "aws_security_group" "egress_via_proxy" {
+  name        = "${var.deployment}-egress-via-proxy"
+  description = "${var.deployment}-egress-via-proxy"
+
+  vpc_id = "${aws_vpc.hub.id}"
+}
+
 # Egress proxy instance has to be able to access the internet directly (HTTP)
 resource "aws_security_group_rule" "egress_proxy_instance_egress_to_internet_over_http" {
   type      = "egress"
@@ -187,6 +194,17 @@ resource "aws_route53_record" "egress_proxy_lb" {
     zone_id                = "${aws_elb.egress_proxy.zone_id}"
     evaluate_target_health = false
   }
+}
+
+resource "aws_security_group_rule" "egress_via_proxy_egress_to_egress_proxy_lb_over_nonpriv_http" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 8080
+  to_port   = 8080
+
+  # source is destination for egress rules
+  source_security_group_id = "${aws_security_group.egress_proxy_lb.id}"
+  security_group_id        = "${aws_security_group.egress_via_proxy.id}"
 }
 
 module "egress_proxy_instance_can_connect_to_config_https" {
