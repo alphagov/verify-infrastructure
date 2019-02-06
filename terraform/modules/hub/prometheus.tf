@@ -160,14 +160,6 @@ resource "aws_iam_policy" "prometheus" {
       {
         "Effect": "Allow",
         "Action": [
-          "s3:ListBucket",
-          "s3:GetObject"
-        ],
-        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml"
-      },
-      {
-        "Effect": "Allow",
-        "Action": [
           "ssm:ListAssociations",
           "ssm:UpdateInstanceInformation",
           "ssmmessages:CreateControlChannel",
@@ -248,40 +240,12 @@ resource "aws_iam_role_policy_attachment" "prometheus" {
   policy_arn = "${aws_iam_policy.prometheus.arn}"
 }
 
-resource "aws_s3_bucket_policy" "access_prometheus_config" {
-  bucket = "${aws_s3_bucket.deployment_config.id}"
-
-  policy = <<-POLICY
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Action": [
-          "s3:GetObject"
-        ],
-        "Effect": "Allow",
-        "Resource": "${aws_s3_bucket.deployment_config.arn}/prometheus/prometheus.yml",
-        "Principal": {
-          "AWS": "${data.aws_caller_identity.account.account_id}"
-        }
-      }
-    ]
-  }
-  POLICY
-}
-
 data "template_file" "prometheus_config" {
   template = "${file("${path.module}/files/prometheus/prometheus.yml")}"
 
   vars {
     deployment = "${var.deployment}"
   }
-}
-
-resource "aws_s3_bucket_object" "prometheus_config_file" {
-  bucket  = "${aws_s3_bucket.deployment_config.id}"
-  key     = "prometheus/prometheus.yml"
-  content = "${data.template_file.prometheus_config.rendered}"
 }
 
 data "template_file" "prometheus_cloud_init" {
@@ -294,7 +258,6 @@ data "template_file" "prometheus_cloud_init" {
     egress_proxy_url_with_protocol = "${local.egress_proxy_url_with_protocol}"
     logit_elasticsearch_url        = "${var.logit_elasticsearch_url}"
     logit_api_key                  = "${var.logit_api_key}"
-    config_bucket                  = "${aws_s3_bucket.deployment_config.id}"
     cluster                        = "${aws_ecs_cluster.prometheus.name}"
     ecs_agent_image_and_tag        = "${local.ecs_agent_image_and_tag}"
     tools_account_id               = "${var.tools_account_id}"
@@ -305,7 +268,7 @@ resource "aws_instance" "prometheus" {
   count = "${var.number_of_apps}"
 
   ami                  = "${data.aws_ami.ubuntu_bionic.id}"
-  instance_type        = "t3.medium"
+  instance_type        = "t3.large"
   subnet_id            = "${element(aws_subnet.internal.*.id, count.index)}"
   iam_instance_profile = "${aws_iam_instance_profile.prometheus.name}"
   user_data            = "${data.template_file.prometheus_cloud_init.rendered}"
@@ -393,4 +356,41 @@ resource "aws_lb_listener_rule" "prometheus_https" {
     field  = "host-header"
     values = ["prom-${count.index + 1}.*"]
   }
+}
+
+module "prometheus_ecs_roles" {
+  source = "modules/ecs_iam_role_pair"
+
+  deployment       = "${var.deployment}"
+  service_name     = "prometheus"
+  image_name       = "verify-prometheus"
+  tools_account_id = "${var.tools_account_id}"
+}
+
+data "template_file" "prometheus_task_def" {
+  template = "${file("${path.module}/files/tasks/prometheus.json")}"
+
+  vars {
+    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-prometheus:latest"
+    config_base64 = "${base64encode(data.template_file.prometheus_config.rendered)}"
+  }
+}
+
+resource "aws_ecs_task_definition" "prometheus" {
+  family                = "${var.deployment}-prometheus"
+  container_definitions = "${data.template_file.prometheus_task_def.rendered}"
+  execution_role_arn    = "${module.prometheus_ecs_roles.execution_role_arn}"
+  network_mode          = "host"
+
+  volume {
+    name      = "tsdb"
+    host_path = "/var/lib/prometheus/metrics2"
+  }
+}
+
+resource "aws_ecs_service" "prometheus" {
+  name                = "${var.deployment}-prometheus"
+  cluster             = "${aws_ecs_cluster.prometheus.id}"
+  task_definition     = "${aws_ecs_task_definition.prometheus.arn}"
+  scheduling_strategy = "DAEMON"
 }

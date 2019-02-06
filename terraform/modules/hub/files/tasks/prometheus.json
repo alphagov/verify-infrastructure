@@ -1,0 +1,32 @@
+[
+  {
+    "name": "prometheus",
+    "image": "${image_and_tag}",
+    "cpu": 0,
+    "memory": 3500,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 9090,
+        "hostPort": 9090
+      }
+    ],
+    "mountPoints": [
+      {
+        "sourceVolume": "tsdb",
+        "containerPath": "/prometheus"
+      }
+    ],
+    "environment": [
+      {
+        "Name": "CONFIG_BASE64",
+        "Value": "${config_base64}"
+      }
+    ],
+    "entryPoint": [
+      "sh",
+      "-c",
+      "set -ueo pipefail; unset AWS_CONTAINER_CREDENTIALS_RELATIVE_URI; unset AWS_EXECUTION_ENV; echo $CONFIG_BASE64 | base64 -d > /etc/prometheus/prometheus.yml; prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles"
+    ]
+  }
+]

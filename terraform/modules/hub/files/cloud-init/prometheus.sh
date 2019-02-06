@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -ueo pipefail
 
+export DEBIAN_FRONTEND=noninteractive
+
 CURL="curl --proxy ${egress_proxy_url_with_protocol}"
 
 # Apt
@@ -128,35 +130,10 @@ if [ -z "$(lsblk | grep "$vol" | awk '{print $7}')" ] ; then
   fi
 fi
 
-echo 'Installing prometheus'
-apt-get install --yes prometheus
-systemctl enable prometheus
-systemctl start  prometheus
+chown -R nobody /var/lib/prometheus
 
 echo 'Installing awscli'
 apt-get install --yes awscli
-
-echo 'Installing prometheus-update-config'
-cat <<EOF > /usr/bin/prometheus-update-config
-#!/usr/bin/env bash
-set -ueo pipefail
-
-aws s3 cp \
-       --region eu-west-2 \
-       s3://${config_bucket}/prometheus/prometheus.yml \
-       /tmp/prometheus.yml
-
-if ! cmp -s /tmp/prometheus.yml /etc/prometheus/prometheus.yml ; then
-  mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml
-  systemctl reload prometheus
-fi
-EOF
-chmod +x /usr/bin/prometheus-update-config
-
-cat <<EOF | crontab -
-$(crontab -l | grep -v 'no crontab')
-* * * * * /usr/bin/prometheus-update-config
-EOF
 
 # ECS
 echo 'Running ECS using Docker'
