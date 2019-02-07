@@ -41,13 +41,14 @@ data "template_file" "saml_proxy_task_def" {
   template = "${file("${path.module}/files/tasks/hub-saml-proxy.json")}"
 
   vars {
-    image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-saml-proxy:latest"
-    nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
-    domain                 = "${local.root_domain}"
-    deployment             = "${var.deployment}"
-    location_blocks_base64 = "${local.nginx_saml_proxy_location_blocks_base64}"
-    region                 = "${data.aws_region.region.id}"
-    account_id             = "${data.aws_caller_identity.account.account_id}"
+    image_and_tag                 = "${local.tools_account_ecr_url_prefix}-verify-saml-proxy:latest"
+    nginx_image_and_tag           = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    domain                        = "${local.root_domain}"
+    deployment                    = "${var.deployment}"
+    location_blocks_base64        = "${local.nginx_saml_proxy_location_blocks_base64}"
+    region                        = "${data.aws_region.region.id}"
+    account_id                    = "${data.aws_caller_identity.account.account_id}"
+    event_emitter_api_gateway_url = "${var.event_emitter_api_gateway_url}"
   }
 }
 
@@ -87,6 +88,11 @@ resource "aws_iam_policy" "saml_proxy_parameter_execution" {
     }]
   }
   EOF
+}
+
+resource "aws_iam_role_policy_attachment" "saml_proxy_parameter_execution" {
+  role       = "${var.deployment}-saml-proxy-execution"
+  policy_arn = "${aws_iam_policy.saml_proxy_parameter_execution.arn}"
 }
 
 module "saml_proxy_can_connect_to_config" {

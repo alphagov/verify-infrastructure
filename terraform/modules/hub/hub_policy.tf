@@ -42,13 +42,14 @@ data "template_file" "policy_task_def" {
   template = "${file("${path.module}/files/tasks/hub-policy.json")}"
 
   vars {
-    image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-policy:latest"
-    nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
-    domain                 = "${local.root_domain}"
-    deployment             = "${var.deployment}"
-    location_blocks_base64 = "${local.nginx_policy_location_blocks_base64}"
-    region                 = "${data.aws_region.region.id}"
-    account_id             = "${data.aws_caller_identity.account.account_id}"
+    image_and_tag                 = "${local.tools_account_ecr_url_prefix}-verify-policy:latest"
+    nginx_image_and_tag           = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    domain                        = "${local.root_domain}"
+    deployment                    = "${var.deployment}"
+    location_blocks_base64        = "${local.nginx_policy_location_blocks_base64}"
+    region                        = "${data.aws_region.region.id}"
+    account_id                    = "${data.aws_caller_identity.account.account_id}"
+    event_emitter_api_gateway_url = "${var.event_emitter_api_gateway_url}"
 
     redis_host = "rediss://${
       aws_elasticache_replication_group.policy_session_store.primary_endpoint_address

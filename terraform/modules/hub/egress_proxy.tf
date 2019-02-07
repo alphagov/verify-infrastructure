@@ -51,6 +51,10 @@ resource "aws_security_group_rule" "egress_proxy_instance_egress_to_internet_ove
 }
 
 locals {
+  event_emitter_api_gateway = "${split("/", replace(var.event_emitter_api_gateway_url, "https://", ""))}"
+}
+
+locals {
   egress_proxy_whitelist_list = [
     "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com",                                     # Apt
     "security\\.ubuntu\\.com",                                                      # Apt
@@ -59,6 +63,7 @@ locals {
     "${replace(var.logit_elasticsearch_url, ".", "\\.")}",                          # Logit
     "sentry\\.tools\\.signin\\.service\\.gov\\.uk",                                 # Tools Sentry
     "std-ocsp\\.trustwise\\.com",                                                   # OCSP check URI
+    "${replace(local.event_emitter_api_gateway[0], ".", "\\.")}"                    # API Gateway
   ]
 
   egress_proxy_whitelist = "${join(" ", local.egress_proxy_whitelist_list)}"
