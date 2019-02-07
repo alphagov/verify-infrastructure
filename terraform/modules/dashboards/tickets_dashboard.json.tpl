@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 28,
+  "id": 29,
   "links": [],
   "panels": [
     {
@@ -608,7 +608,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "predict_linear(node_filesystem_avail{fstype!=\"squashfs\",mountpoint!=\"fuse[.]lxcfs"}[24h], 3 * 86400) and on (instance) (time() - node_creation_time) > 86400\n",
+          "expr": "predict_linear(node_filesystem_avail{fstype!=\"squashfs\",mountpoint!=\"/snap/core/6130\",mountpoint!=\"/snap/amazon-ssm-agent/930\",mountpoint!=\"/var/lib/lxcfs\"}[24h], 3 * 86400) and on (instance) (time() - node_creation_time) > 86400\n",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -692,7 +692,7 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "5m",
+        "for": "30m",
         "frequency": "1m",
         "handler": 1,
         "name": "Certificates failed OCSP alert",
@@ -735,9 +735,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(verify_metadata_certificate_ocsp_success or verify_config_certificate_ocsp_success)",
+          "expr": "(verify_metadata_certificate_ocsp_success or verify_config_certificate_ocsp_success) ",
           "format": "time_series",
-          "instant": false,
           "intervalFactor": 1,
           "refId": "A"
         }
@@ -754,7 +753,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Certificate OCSP Check",
+      "title": "Certificates failed OCSP",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -832,6 +831,6 @@
   },
   "timezone": "",
   "title": "[${deployment}] Ticket Type Alerts",
-  "uid": "4FhsFB_mz",
-  "version": 7
+  "uid": "cPRQFflmz",
+  "version": 5
 }
