@@ -73,3 +73,117 @@ resource "aws_kms_alias" "frontend" {
   name          = "alias/${var.deployment}-frontend-key"
   target_key_id = "${aws_kms_key.frontend.key_id}"
 }
+
+data "aws_iam_policy_document" "policy" {
+  statement {
+    sid    = "Enable IAM User Permissions"
+    effect = "Allow"
+
+    principals {
+      type = "AWS"
+
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:root",
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${var.deployment}-policy-execution",
+      ]
+    }
+
+    actions = [
+      "kms:*",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
+resource "aws_kms_key" "policy" {
+  description = "Used for encrypting and decrypting policy secret parameters"
+  key_usage   = "ENCRYPT_DECRYPT"
+
+  deletion_window_in_days = 7
+
+  policy = "${data.aws_iam_policy_document.policy.json}"
+}
+
+resource "aws_kms_alias" "policy" {
+  name          = "alias/${var.deployment}-policy-key"
+  target_key_id = "${aws_kms_key.policy.key_id}"
+}
+
+data "aws_iam_policy_document" "saml_proxy" {
+  statement {
+    sid    = "Enable IAM User Permissions"
+    effect = "Allow"
+
+    principals {
+      type = "AWS"
+
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:root",
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${var.deployment}-saml-proxy-execution",
+      ]
+    }
+
+    actions = [
+      "kms:*",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
+resource "aws_kms_key" "saml_proxy" {
+  description = "Used for encrypting and decrypting saml-proxy secret parameters"
+  key_usage   = "ENCRYPT_DECRYPT"
+
+  deletion_window_in_days = 7
+
+  policy = "${data.aws_iam_policy_document.saml_proxy.json}"
+}
+
+resource "aws_kms_alias" "saml_proxy" {
+  name          = "alias/${var.deployment}-saml-proxy-key"
+  target_key_id = "${aws_kms_key.saml_proxy.key_id}"
+}
+
+data "aws_iam_policy_document" "saml_soap_proxy" {
+  statement {
+    sid    = "Enable IAM User Permissions"
+    effect = "Allow"
+
+    principals {
+      type = "AWS"
+
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:root",
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${var.deployment}-saml-soap-proxy-execution",
+      ]
+    }
+
+    actions = [
+      "kms:*",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
+resource "aws_kms_key" "saml_soap_proxy" {
+  description = "Used for encrypting and decrypting saml-soap-proxy secret parameters"
+  key_usage   = "ENCRYPT_DECRYPT"
+
+  deletion_window_in_days = 7
+
+  policy = "${data.aws_iam_policy_document.saml_soap_proxy.json}"
+}
+
+resource "aws_kms_alias" "saml_soap_proxy" {
+  name          = "alias/${var.deployment}-saml-soap-proxy-key"
+  target_key_id = "${aws_kms_key.saml_soap_proxy.key_id}"
+}
