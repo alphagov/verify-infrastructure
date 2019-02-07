@@ -26,10 +26,10 @@ resolvers vpcdns
 
 frontend nlb
     mode tcp
-    bind *:$PORT
+    bind *:$BIND_PORT
     default_backend alb
 
 backend alb
     mode tcp
     balance roundrobin
-    server alb $BACKEND:$PORT resolvers vpcdns check inter 100 fastinter 100
+    server alb $BACKEND:$BACKEND_PORT resolvers vpcdns check inter 100 fastinter 100

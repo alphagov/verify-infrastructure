@@ -7,16 +7,19 @@
     "essential": true,
     "portMappings": [
       {
-        "containerPort": ${port},
-        "hostPort": ${port}
+        "containerPort": ${bind_port},
+        "hostPort": ${bind_port}
       }
     ],
     "environment": [{
       "Name": "BACKEND",
       "Value": "${backend}"
     }, {
-      "Name": "PORT",
-      "Value": "${port}"
+      "Name": "BIND_PORT",
+      "Value": "${bind_port}"
+    }, {
+      "Name": "BACKEND_PORT",
+      "Value": "${backend_port}"
     }, {
       "Name": "RESOLVER",
       "Value": "169.254.169.253:53"
