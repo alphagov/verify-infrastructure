@@ -19,6 +19,7 @@ resource "aws_ecs_task_definition" "beat_exporter" {
   family                = "${var.deployment}-beat-exporter"
   container_definitions = "${data.template_file.beat_exporter_task_def.rendered}"
   execution_role_arn    = "${module.beat_exporter_ecs_roles.execution_role_arn}"
+  network_mode          = "host"
 }
 
 locals {
