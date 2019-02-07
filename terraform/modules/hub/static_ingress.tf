@@ -87,7 +87,8 @@ data "template_file" "static_ingress_http_task_def" {
   vars {
     image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
     backend       = "${var.signin_domain}"
-    port          = 80
+    bind_port     = 80
+    backend_port  = 80
   }
 }
 
@@ -97,7 +98,8 @@ data "template_file" "static_ingress_https_task_def" {
   vars {
     image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
     backend       = "${var.signin_domain}"
-    port          = 443
+    bind_port     = 443
+    backend_port  = 443
   }
 }
 
