@@ -2,6 +2,10 @@ resource "aws_ecs_cluster" "cluster" {
   name = "${local.identifier}"
 }
 
+output "cluster_id" {
+  value = "${aws_ecs_cluster.cluster.id}"
+}
+
 module "cluster_ecs_roles" {
   source = "../ecs_iam_role_pair"
 

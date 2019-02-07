@@ -1,0 +1,15 @@
+[
+  {
+    "name": "beat-exporter",
+    "image": "${image_and_tag}",
+    "cpu": 0,
+    "memory": 64,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 9479,
+        "hostPort": 9479
+      }
+    ]
+  }
+]
