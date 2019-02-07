@@ -40,3 +40,7 @@ variable "logit_api_key" {
 variable "logit_elasticsearch_url" {
   description = "URL for logit.io elasticsearch, format: $guid-es.logit.io"
 }
+
+variable "event_emitter_api_gateway_url" {
+  description = "URL for Event Emitter API Gateway"
+}

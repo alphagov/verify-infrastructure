@@ -42,13 +42,14 @@ data "template_file" "policy_task_def" {
   template = "${file("${path.module}/files/tasks/hub-policy.json")}"
 
   vars {
-    image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-policy:latest"
-    nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
-    domain                 = "${local.root_domain}"
-    deployment             = "${var.deployment}"
-    location_blocks_base64 = "${local.nginx_policy_location_blocks_base64}"
-    region                 = "${data.aws_region.region.id}"
-    account_id             = "${data.aws_caller_identity.account.account_id}"
+    image_and_tag                 = "${local.tools_account_ecr_url_prefix}-verify-policy:latest"
+    nginx_image_and_tag           = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    domain                        = "${local.root_domain}"
+    deployment                    = "${var.deployment}"
+    location_blocks_base64        = "${local.nginx_policy_location_blocks_base64}"
+    region                        = "${data.aws_region.region.id}"
+    account_id                    = "${data.aws_caller_identity.account.account_id}"
+    event_emitter_api_gateway_url = "${var.event_emitter_api_gateway_url}"
 
     redis_host = "rediss://${
       aws_elasticache_replication_group.policy_session_store.primary_endpoint_address
@@ -73,6 +74,30 @@ module "policy" {
   image_name                 = "verify-policy"
   instance_security_group_id = "${module.policy_ecs_asg.instance_sg_id}"
   certificate_arn            = "${local.wildcard_cert_arn}"
+}
+
+resource "aws_iam_policy" "policy_parameter_execution" {
+  name = "${var.deployment}-policy-parameter-execution"
+
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [{
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": [
+        "arn:aws:kms:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:alias/${var.deployment}-policy-key"
+      ]
+    }]
+  }
+  EOF
+}
+
+resource "aws_iam_role_policy_attachment" "policy_parameter_execution" {
+  role       = "${var.deployment}-policy-execution"
+  policy_arn = "${aws_iam_policy.policy_parameter_execution.arn}"
 }
 
 module "policy_can_connect_to_config" {

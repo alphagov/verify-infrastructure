@@ -40,12 +40,28 @@
       {
         "name": "SENTRY_DSN",
         "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/ecs-app-shared/sentry-dsn"
+      },
+      {
+        "name": "EVENT_EMITTER_ACCESS_KEY_ID",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/saml-soap-proxy/event-emitter-access-key-id"
+      },
+      {
+        "name": "EVENT_EMITTER_SECRET_ACCESS_KEY",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/saml-soap-proxy/event-emitter-secret-access-key"
+      },
+      {
+        "name": "EVENT_EMITTER_ENCRYPTION_KEY",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/saml-soap-proxy/event-emitter-encryption-key"
       }
     ],
     "environment": [
       {
         "Name": "DEPLOYMENT",
         "Value": "${deployment}"
+      },
+      {
+        "Name": "EVENT_EMITTER_API_GATEWAY_URL",
+        "Value": "${event_emitter_api_gateway_url}"
       },
       {
         "Name": "JAVA_OPTS",
