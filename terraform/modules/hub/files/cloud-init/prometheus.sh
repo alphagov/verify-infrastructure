@@ -79,6 +79,8 @@ dpkg -i journalbeat-6.6.0-amd64.deb
 )
 
 cat <<EOF > /etc/journalbeat/journalbeat.yml
+http.enabled: true
+
 journalbeat.inputs:
 - paths: []
   seek: cursor
