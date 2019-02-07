@@ -75,6 +75,30 @@ module "policy" {
   certificate_arn            = "${local.wildcard_cert_arn}"
 }
 
+resource "aws_iam_policy" "policy_parameter_execution" {
+  name = "${var.deployment}-policy-parameter-execution"
+
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [{
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": [
+        "arn:aws:kms:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:alias/${var.deployment}-policy-key"
+      ]
+    }]
+  }
+  EOF
+}
+
+resource "aws_iam_role_policy_attachment" "policy_parameter_execution" {
+  role       = "${var.deployment}-policy-execution"
+  policy_arn = "${aws_iam_policy.policy_parameter_execution.arn}"
+}
+
 module "policy_can_connect_to_config" {
   source = "modules/microservice_connection"
 

@@ -70,6 +70,25 @@ module "saml_proxy" {
   image_name                 = "verify-saml-proxy"
 }
 
+resource "aws_iam_policy" "saml_proxy_parameter_execution" {
+  name = "${var.deployment}-saml-proxy-parameter-execution"
+
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [{
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": [
+        "arn:aws:kms:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:alias/${var.deployment}-saml-proxy-key"
+      ]
+    }]
+  }
+  EOF
+}
+
 module "saml_proxy_can_connect_to_config" {
   source = "modules/microservice_connection"
 
