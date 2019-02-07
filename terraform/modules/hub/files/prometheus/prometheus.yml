@@ -34,6 +34,24 @@ scrape_configs:
       - source_labels: [__meta_ec2_tag_Cluster]
         replacement: $${1}_node
         target_label: job
+  - job_name: beat_exporter
+    ec2_sd_configs:
+      - region: eu-west-2
+        refresh_interval: 30s
+        port: 9479
+    relabel_configs:
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: instance
+      - source_labels: [__meta_ec2_tag_Role]
+        target_label: role
+      - source_labels: [__meta_ec2_tag_Deployment]
+        regex: '^${deployment}$'
+        action: keep
+      - source_labels: [__meta_ec2_tag_Team]
+        target_label: team
+      - source_labels: [__meta_ec2_tag_Cluster]
+        replacement: $${1}_journalbeat
+        target_label: job
   - job_name: apps
     scheme: 'https'
     metrics_path: '/prometheus/metrics'
