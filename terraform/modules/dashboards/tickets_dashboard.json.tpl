@@ -608,7 +608,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "predict_linear(node_filesystem_avail{fstype!=\"squashfs\",mountpoint!=\"/snap/core/6130\",mountpoint!=\"/snap/amazon-ssm-agent/930\",mountpoint!=\"/var/lib/lxcfs\"}[24h], 3 * 86400) and on (instance) (time() - node_creation_time) > 86400\n",
+          "expr": "predict_linear(node_filesystem_avail{fstype!=\"squashfs\",mountpoint!=\"fuse[.]lxcfs"}[24h], 3 * 86400) and on (instance) (time() - node_creation_time) > 86400\n",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
