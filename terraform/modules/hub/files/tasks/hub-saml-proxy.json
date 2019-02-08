@@ -60,6 +60,10 @@
         "Value": "${deployment}"
       },
       {
+        "Name": "DOMAIN",
+        "Value": "${domain}"
+      },
+      {
         "Name": "EVENT_EMITTER_API_GATEWAY_URL",
         "Value": "${event_emitter_api_gateway_url}"
       },
