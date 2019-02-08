@@ -45,6 +45,9 @@
       }, {
         "name": "SENTRY_DSN",
         "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/frontend/sentry-dsn"
+      }, {
+        "name": "ZENDESK_TOKEN",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/frontend/prod-zendesk-token"
       }
     ],
     "environment": [{
@@ -113,9 +116,6 @@
     }, {
       "Name": "ZENDESK_USERNAME",
       "Value": "fake@zendesk.user"
-    }, {
-      "Name": "ZENDESK_TOKEN",
-      "Value": "123"
     }, {
       "Name": "SAML_PROXY_HOST",
       "Value": "https://saml-proxy.${domain}:443"
