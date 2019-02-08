@@ -63,7 +63,8 @@ locals {
     "${replace(var.logit_elasticsearch_url, ".", "\\.")}",                          # Logit
     "sentry\\.tools\\.signin\\.service\\.gov\\.uk",                                 # Tools Sentry
     "std-ocsp\\.trustwise\\.com",                                                   # OCSP check URI
-    "${replace(local.event_emitter_api_gateway[0], ".", "\\.")}"                    # API Gateway
+    "${replace(local.event_emitter_api_gateway[0], ".", "\\.")}",                   # API Gateway
+    "govuk\\.zendesk\\.com"                                                         # Zendesk
   ]
 
   egress_proxy_whitelist = "${join(" ", local.egress_proxy_whitelist_list)}"
