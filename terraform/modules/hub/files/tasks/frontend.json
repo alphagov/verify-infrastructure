@@ -112,7 +112,7 @@
       "Value": "1"
     }, {
       "Name": "ZENDESK_URL",
-      "Value": "https://example.com"
+      "Value": "${var.zendesk_url}"
     }, {
       "Name": "ZENDESK_USERNAME",
       "Value": "fake@zendesk.user"
