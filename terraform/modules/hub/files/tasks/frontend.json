@@ -115,7 +115,7 @@
       "Value": "${var.zendesk_url}"
     }, {
       "Name": "ZENDESK_USERNAME",
-      "Value": "fake@zendesk.user"
+      "Value": "${var.zendesk_username}"
     }, {
       "Name": "SAML_PROXY_HOST",
       "Value": "https://saml-proxy.${domain}:443"
