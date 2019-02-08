@@ -44,3 +44,11 @@ variable "logit_elasticsearch_url" {
 variable "event_emitter_api_gateway_url" {
   description = "URL for Event Emitter API Gateway"
 }
+
+variable "zendesk_url" {
+  description = "URL for Zendesk"
+}
+
+variable "zendesk_username" {
+  description = "Username (email address) for Zendesk access"
+}

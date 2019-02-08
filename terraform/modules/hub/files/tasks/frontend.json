@@ -112,10 +112,10 @@
       "Value": "1"
     }, {
       "Name": "ZENDESK_URL",
-      "Value": "${var.zendesk_url}"
+      "Value": "${zendesk_url}"
     }, {
       "Name": "ZENDESK_USERNAME",
-      "Value": "${var.zendesk_username}"
+      "Value": "${zendesk_username}"
     }, {
       "Name": "SAML_PROXY_HOST",
       "Value": "https://saml-proxy.${domain}:443"
