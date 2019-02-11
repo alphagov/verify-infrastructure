@@ -85,7 +85,7 @@ journalbeat.inputs:
 - paths: []
   seek: cursor
 
-logging.level: warning
+logging.level: info
 logging.to_files: false
 logging.to_syslog: true
 
