@@ -88,8 +88,6 @@ dpkg -i journalbeat-6.6.0-amd64.deb
 cat <<EOF > /etc/journalbeat/journalbeat.yml
 http.enabled: true
 
-flush.timeout: 30s
-
 journalbeat.inputs:
 - paths: []
   seek: cursor
