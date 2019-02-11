@@ -49,7 +49,11 @@
         "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}-secondary-hub-encryption-private-key"
       }
     ],
-    "entryPoint": ["/saml-engine/bin/saml-engine", "server", "/tmp/saml-engine.yml"],
+    "entryPoint": [
+      "/verify-hub/bin/saml-engine",
+      "server",
+      "/tmp/saml-engine.yml"
+    ],
     "environment": [
       {
         "Name": "DEPLOYMENT",

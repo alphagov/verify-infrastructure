@@ -32,7 +32,7 @@
       }
     ],
     "entryPoint": [
-      "/policy/bin/policy",
+      "/verify-hub/bin/policy",
       "server",
       "/tmp/policy.yml"
     ],
