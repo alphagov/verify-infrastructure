@@ -31,7 +31,7 @@ data "template_file" "frontend_task_def" {
   vars {
     account_id                 = "${data.aws_caller_identity.account.account_id}"
     deployment                 = "${var.deployment}"
-    image_and_tag              = "${local.tools_account_ecr_url_prefix}-verify-frontend:latest"
+    image_and_tag              = "${local.tools_account_ecr_url_prefix}-verify-frontend:${var.hub_frontend_image_tag}"
     nginx_image_and_tag        = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
     domain                     = "${local.root_domain}"
     region                     = "${data.aws_region.region.id}"

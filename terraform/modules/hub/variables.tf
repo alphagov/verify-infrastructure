@@ -52,3 +52,11 @@ variable "zendesk_url" {
 variable "zendesk_username" {
   description = "Username (email address) for Zendesk access"
 }
+
+variable "hub_config_image_tag" {}
+variable "hub_policy_image_tag" {}
+variable "hub_saml_proxy_image_tag" {}
+variable "hub_saml_soap_proxy_image_tag" {}
+variable "hub_saml_engine_image_tag" {}
+variable "hub_frontend_image_tag" {}
+variable "hub_metadata_image_tag" {}

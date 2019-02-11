@@ -14,7 +14,7 @@ data "template_file" "metadata_task_def" {
 
   vars {
     deployment    = "${var.deployment}"
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-metadata:latest"
+    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-metadata:${var.hub_metadata_image_tag}"
   }
 }
 
