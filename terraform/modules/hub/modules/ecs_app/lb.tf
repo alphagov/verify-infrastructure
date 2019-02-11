@@ -53,7 +53,7 @@ resource "aws_lb_listener" "cluster_https" {
   load_balancer_arn = "${aws_lb.cluster.arn}"
   port              = "443"
   protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2015-05"
+  ssl_policy        = "ELBSecurityPolicy-TLS-1-1-2017-01"
   certificate_arn   = "${var.certificate_arn}"
 
   default_action {
