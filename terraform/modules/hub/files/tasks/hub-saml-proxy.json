@@ -32,7 +32,7 @@
       }
     ],
     "entryPoint": [
-      "/saml-proxy/bin/saml-proxy",
+      "/verify-hub/bin/saml-proxy",
       "server",
       "/tmp/saml-proxy.yml"
     ],

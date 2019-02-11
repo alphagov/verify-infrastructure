@@ -32,7 +32,7 @@
       }
     ],
     "entryPoint": [
-      "/config/bin/config",
+      "/verify-hub/bin/config",
       "server",
       "/tmp/config.yml"
     ],
