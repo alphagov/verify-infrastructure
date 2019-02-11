@@ -41,7 +41,7 @@ data "template_file" "saml_soap_proxy_task_def" {
   template = "${file("${path.module}/files/tasks/hub-saml-soap-proxy.json")}"
 
   vars {
-    image_and_tag                 = "${local.tools_account_ecr_url_prefix}-verify-saml-soap-proxy:latest"
+    image_and_tag                 = "${local.tools_account_ecr_url_prefix}-verify-saml-soap-proxy:${var.hub_saml_soap_proxy_image_tag}"
     nginx_image_and_tag           = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
     domain                        = "${local.root_domain}"
     deployment                    = "${var.deployment}"
