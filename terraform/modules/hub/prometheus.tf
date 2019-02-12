@@ -432,8 +432,8 @@ data "template_file" "prometheus_task_def" {
   template = "${file("${path.module}/files/tasks/prometheus.json")}"
 
   vars {
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-prometheus:latest"
-    config_base64 = "${base64encode(data.template_file.prometheus_config.rendered)}"
+    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-prometheus@${var.prometheus_image_digest}"
+    config_base64    = "${base64encode(data.template_file.prometheus_config.rendered)}"
   }
 }
 

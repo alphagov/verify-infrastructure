@@ -1,7 +1,7 @@
 [
   {
     "name": "static-ingress",
-    "image": "${image_and_tag}",
+    "image": "${image_identifier}",
     "cpu": 0,
     "memory": ${allocated_memory},
     "essential": true,

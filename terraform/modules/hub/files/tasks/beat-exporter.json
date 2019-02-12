@@ -1,7 +1,7 @@
 [
   {
     "name": "beat-exporter",
-    "image": "${image_and_tag}",
+    "image": "${image_identifier}",
     "cpu": 0,
     "memory": 64,
     "essential": true,
