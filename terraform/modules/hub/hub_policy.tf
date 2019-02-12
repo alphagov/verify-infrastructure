@@ -62,7 +62,7 @@ data "template_file" "policy_task_def" {
 
   vars {
     image_and_tag                 = "${local.tools_account_ecr_url_prefix}-verify-policy:${var.hub_policy_image_tag}"
-    nginx_image_and_tag           = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    nginx_image_identifier        = "${local.nginx_image_identifier}"
     domain                        = "${local.root_domain}"
     deployment                    = "${var.deployment}"
     location_blocks_base64        = "${local.nginx_policy_location_blocks_base64}"

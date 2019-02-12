@@ -62,7 +62,7 @@ data "template_file" "config_task_def" {
 
   vars {
     image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-config:${var.hub_config_image_tag}"
-    nginx_image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls:latest"
+    nginx_image_identifier = "${local.nginx_image_identifier}"
     domain                 = "${local.root_domain}"
     deployment             = "${var.deployment}"
     truststore_password    = "${var.truststore_password}"
