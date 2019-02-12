@@ -29,7 +29,7 @@ variable "instance_type" {
 }
 
 variable "use_egress_proxy" {
-  default = true
+  default = false
 }
 
 variable "logit_api_key" {}

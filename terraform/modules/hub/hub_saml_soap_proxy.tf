@@ -8,7 +8,6 @@ module "saml_soap_proxy_ecs_asg" {
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
-  use_egress_proxy    = false
 
   ecs_agent_image_and_tag = "${local.ecs_agent_image_and_tag}"
   tools_account_id        = "${var.tools_account_id}"

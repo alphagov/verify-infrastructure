@@ -7,7 +7,6 @@ module "policy_ecs_asg" {
   vpc_id           = "${aws_vpc.hub.id}"
   instance_subnets = ["${aws_subnet.internal.*.id}"]
 
-  use_egress_proxy    = false
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
 

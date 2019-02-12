@@ -7,7 +7,6 @@ module "egress_proxy_ecs_asg" {
   vpc_id              = "${aws_vpc.hub.id}"
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
   number_of_instances = "${var.number_of_apps}"
-  use_egress_proxy    = false
   domain              = "${local.root_domain}"
 
   ecs_agent_image_and_tag = "${local.ecs_agent_image_and_tag}"
