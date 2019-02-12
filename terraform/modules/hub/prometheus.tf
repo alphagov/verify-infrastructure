@@ -10,6 +10,26 @@ resource "aws_security_group" "prometheus" {
   vpc_id = "${aws_vpc.hub.id}"
 }
 
+resource "aws_security_group_rule" "prometheus_egress_to_internet_over_http" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 80
+  to_port   = 80
+
+  security_group_id = "${aws_security_group.prometheus.id}"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "prometheus_egress_to_internet_over_https" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = "${aws_security_group.prometheus.id}"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 module "prometheus_can_talk_to_prometheus" {
   source = "modules/microservice_connection"
 
@@ -298,7 +318,6 @@ data "template_file" "prometheus_cloud_init" {
     prometheus_config              = "${data.template_file.prometheus_config.rendered}"
     deployment                     = "${var.deployment}"
     domain                         = "${local.root_domain}"
-    egress_proxy_url_with_protocol = "${local.egress_proxy_url_with_protocol}"
     logit_elasticsearch_url        = "${var.logit_elasticsearch_url}"
     logit_api_key                  = "${var.logit_api_key}"
     cluster                        = "${aws_ecs_cluster.prometheus.name}"
@@ -319,7 +338,6 @@ resource "aws_instance" "prometheus" {
   vpc_security_group_ids = [
     "${aws_security_group.prometheus.id}",
     "${aws_security_group.scraped_by_prometheus.id}",
-    "${aws_security_group.egress_via_proxy.id}",
     "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
   ]
 

@@ -128,15 +128,6 @@
     }, {
       "Name": "RAILS_LOG_TO_STDOUT",
       "Value": "true"
-    }, {
-      "Name": "http_proxy",
-      "Value": "${egress_proxy_url_with_port}"
-    }, {
-      "Name": "https_proxy",
-      "Value": "${egress_proxy_url_with_port}"
-    }, {
-      "Name": "no_proxy",
-      "Value": "config.${domain},policy.${domain},saml-proxy.${domain},www.${domain}"
     }]
   }
 ]

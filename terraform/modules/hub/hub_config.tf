@@ -14,13 +14,32 @@ module "config_ecs_asg" {
   tools_account_id        = "${var.tools_account_id}"
 
   additional_instance_security_group_ids = [
-    "${aws_security_group.egress_via_proxy.id}",
     "${aws_security_group.scraped_by_prometheus.id}",
     "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
   ]
 
   logit_api_key           = "${var.logit_api_key}"
   logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
+}
+
+resource "aws_security_group_rule" "config_instance_egress_to_internet_over_http" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 80
+  to_port   = 80
+
+  security_group_id = "${module.config_ecs_asg.instance_sg_id}"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "config_instance_egress_to_internet_over_https" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = "${module.config_ecs_asg.instance_sg_id}"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 locals {

@@ -16,15 +16,6 @@
       "-c",
       "bundle exec bin/prometheus-metadata-exporter -m https://${signin_domain}/SAML2/metadata/federation -p 9199 --cas /tmp/cas/${deployment}"
     ],
-    "environment": [
-      {
-        "Name": "http_proxy",
-        "Value": "${egress_proxy_url_with_port}"
-      },
-      {
-        "Name": "no_proxy",
-        "Value": "${signin_domain}"
-      }
-    ]
+    "environment": []
   }
 ]

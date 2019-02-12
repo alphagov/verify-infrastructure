@@ -7,7 +7,6 @@ module "egress_proxy_ecs_asg" {
   vpc_id              = "${aws_vpc.hub.id}"
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
   number_of_instances = "${var.number_of_apps}"
-  use_egress_proxy    = false
   domain              = "${local.root_domain}"
 
   ecs_agent_image_and_tag = "${local.ecs_agent_image_and_tag}"
@@ -211,50 +210,4 @@ resource "aws_security_group_rule" "egress_via_proxy_egress_to_egress_proxy_lb_o
   # source is destination for egress rules
   source_security_group_id = "${aws_security_group.egress_proxy_lb.id}"
   security_group_id        = "${aws_security_group.egress_via_proxy.id}"
-}
-
-module "egress_proxy_instance_can_connect_to_config_https" {
-  source = "modules/microservice_connection"
-
-  source_sg_id      = "${module.egress_proxy_ecs_asg.instance_sg_id}"
-  destination_sg_id = "${module.config.lb_sg_id}"
-
-  port = 443
-}
-
-module "egress_proxy_instance_can_connect_to_config_http" {
-  source = "modules/microservice_connection"
-
-  source_sg_id      = "${module.egress_proxy_ecs_asg.instance_sg_id}"
-  destination_sg_id = "${module.config.lb_sg_id}"
-
-  port = 80
-}
-
-module "egress_proxy_instance_can_connect_to_policy" {
-  source = "modules/microservice_connection"
-
-  source_sg_id      = "${module.egress_proxy_ecs_asg.instance_sg_id}"
-  destination_sg_id = "${module.policy.lb_sg_id}"
-}
-
-module "egress_proxy_instance_can_connect_to_saml_proxy" {
-  source = "modules/microservice_connection"
-
-  source_sg_id      = "${module.egress_proxy_ecs_asg.instance_sg_id}"
-  destination_sg_id = "${module.saml_proxy.lb_sg_id}"
-}
-
-module "egress_proxy_instance_can_connect_to_saml_soap_proxy" {
-  source = "modules/microservice_connection"
-
-  source_sg_id      = "${module.egress_proxy_ecs_asg.instance_sg_id}"
-  destination_sg_id = "${module.saml_soap_proxy.lb_sg_id}"
-}
-
-module "egress_proxy_instance_can_connect_to_saml_engine" {
-  source = "modules/microservice_connection"
-
-  source_sg_id      = "${module.egress_proxy_ecs_asg.instance_sg_id}"
-  destination_sg_id = "${module.saml_engine.lb_sg_id}"
 }
