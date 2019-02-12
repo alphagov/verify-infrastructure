@@ -14,7 +14,6 @@ module "policy_ecs_asg" {
   tools_account_id        = "${var.tools_account_id}"
 
   additional_instance_security_group_ids = [
-    "${aws_security_group.egress_via_proxy.id}",
     "${aws_security_group.scraped_by_prometheus.id}",
     "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
   ]
