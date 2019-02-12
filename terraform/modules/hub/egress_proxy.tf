@@ -63,7 +63,7 @@ locals {
     "sentry\\.tools\\.signin\\.service\\.gov\\.uk",                                 # Tools Sentry
     "std-ocsp\\.trustwise\\.com",                                                   # OCSP check URI
     "${replace(local.event_emitter_api_gateway[0], ".", "\\.")}",                   # API Gateway
-    "govuk\\.zendesk\\.com"                                                         # Zendesk
+    "govuk\\.zendesk\\.com",                                                        # Zendesk
   ]
 
   egress_proxy_whitelist = "${join(" ", local.egress_proxy_whitelist_list)}"
@@ -168,7 +168,7 @@ resource "aws_ecs_service" "egress_proxy" {
   name            = "${var.deployment}-egress-proxy"
   cluster         = "${aws_ecs_cluster.egress_proxy.id}"
   task_definition = "${aws_ecs_task_definition.egress_proxy.arn}"
-  desired_count   = 1
+  desired_count   = "${var.number_of_tasks}"
 
   load_balancer {
     elb_name       = "${aws_elb.egress_proxy.name}"

@@ -38,7 +38,7 @@ resource "aws_ecs_service" "metadata" {
   name            = "${var.deployment}-metadata"
   cluster         = "${aws_ecs_cluster.ingress.id}"
   task_definition = "${aws_ecs_task_definition.metadata.arn}"
-  desired_count   = 1
+  desired_count   = "${var.number_of_tasks}"
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.ingress_metadata.arn}"
@@ -47,7 +47,8 @@ resource "aws_ecs_service" "metadata" {
   }
 
   network_configuration {
-    subnets         = ["${aws_subnet.internal.*.id}"]
+    subnets = ["${aws_subnet.internal.*.id}"]
+
     security_groups = [
       "${aws_security_group.metadata_task.id}",
       "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
