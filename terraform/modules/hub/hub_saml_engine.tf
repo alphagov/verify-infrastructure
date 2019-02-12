@@ -11,8 +11,8 @@ module "saml_engine_ecs_asg" {
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
 
-  ecs_agent_image_and_tag = "${local.ecs_agent_image_and_tag}"
-  tools_account_id        = "${var.tools_account_id}"
+  ecs_agent_image_identifier = "${local.ecs_agent_image_identifier}"
+  tools_account_id           = "${var.tools_account_id}"
 
   additional_instance_security_group_ids = [
     "${aws_security_group.egress_via_proxy.id}",

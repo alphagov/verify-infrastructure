@@ -199,4 +199,4 @@ docker run \
   --env=ECS_ENABLE_TASK_IAM_ROLE_NETWORK_HOST=true \
   --env='ECS_AVAILABLE_LOGGING_DRIVERS=["journald"]' \
   --env="ECS_LOGLEVEL=warn" \
-  ${ecs_agent_image_and_tag}
+  ${ecs_agent_image_identifier}
