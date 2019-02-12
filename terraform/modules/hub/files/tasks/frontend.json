@@ -109,7 +109,7 @@
       "Value": "https://www.${domain}:443/piwik.php"
     }, {
       "Name": "PIWIK_SITE_ID",
-      "Value": "1"
+      "Value": "${matomo_site_id}"
     }, {
       "Name": "ZENDESK_URL",
       "Value": "${zendesk_url}"

@@ -53,6 +53,11 @@ variable "zendesk_username" {
   description = "Username (email address) for Zendesk access"
 }
 
+variable "matomo_site_id" {
+  description = "Site ID to use for Matomo"
+  default = 1
+}
+
 variable "hub_config_image_tag" {}
 variable "hub_policy_image_tag" {}
 variable "hub_saml_proxy_image_tag" {}
