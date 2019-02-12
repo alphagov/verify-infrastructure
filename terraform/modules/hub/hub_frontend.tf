@@ -14,6 +14,26 @@ resource "aws_security_group" "frontend_task" {
   vpc_id = "${aws_vpc.hub.id}"
 }
 
+resource "aws_security_group_rule" "frontend_task_egress_to_internet_over_http" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 80
+  to_port   = 80
+
+  security_group_id = "${aws_security_group.frontend_task.id}"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "frontend_task_egress_to_internet_over_https" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = "${aws_security_group.frontend_task.id}"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 locals {
   location_blocks = <<-LOCATIONS
   location / {
@@ -36,7 +56,6 @@ data "template_file" "frontend_task_def" {
     domain                     = "${local.root_domain}"
     region                     = "${data.aws_region.region.id}"
     location_blocks_base64     = "${local.location_blocks_base64}"
-    egress_proxy_url_with_port = "${local.egress_proxy_url_with_protocol}"
     zendesk_username           = "${var.zendesk_username}"
     zendesk_url                = "${var.zendesk_url}"
   }
@@ -74,7 +93,6 @@ resource "aws_ecs_service" "frontend" {
     subnets         = ["${aws_subnet.internal.*.id}"]
     security_groups = [
       "${aws_security_group.frontend_task.id}",
-      "${aws_security_group.egress_via_proxy.id}",
       "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
     ]
   }
