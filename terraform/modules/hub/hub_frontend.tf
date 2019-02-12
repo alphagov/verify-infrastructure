@@ -39,6 +39,7 @@ data "template_file" "frontend_task_def" {
     egress_proxy_url_with_port = "${local.egress_proxy_url_with_protocol}"
     zendesk_username           = "${var.zendesk_username}"
     zendesk_url                = "${var.zendesk_url}"
+    matomo_site_id             = "${var.matomo_site_id}"
   }
 }
 
