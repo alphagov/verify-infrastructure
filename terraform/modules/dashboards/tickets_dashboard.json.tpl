@@ -796,7 +796,7 @@
           {
             "evaluator": {
               "params": [
-                0.1
+                0.01
               ],
               "type": "lt"
             },
@@ -874,7 +874,7 @@
           "fill": true,
           "line": true,
           "op": "lt",
-          "value": 0.1
+          "value": 0.01
         }
       ],
       "timeFrom": null,
