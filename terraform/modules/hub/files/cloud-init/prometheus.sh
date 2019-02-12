@@ -85,9 +85,6 @@ journalbeat.inputs:
 - paths: []
   seek: cursor
 
-flush.timeout: 30s
-
-logging.level: info
 logging.to_files: false
 logging.to_syslog: true
 
