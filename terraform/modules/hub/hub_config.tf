@@ -7,6 +7,7 @@ module "config_ecs_asg" {
   vpc_id           = "${aws_vpc.hub.id}"
   instance_subnets = ["${aws_subnet.internal.*.id}"]
 
+  use_egress_proxy    = false
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
 
@@ -21,6 +22,26 @@ module "config_ecs_asg" {
 
   logit_api_key           = "${var.logit_api_key}"
   logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
+}
+
+resource "aws_security_group_rule" "config_instance_egress_to_internet_over_http" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 80
+  to_port   = 80
+
+  security_group_id = "${module.config_ecs_asg.instance_sg_id}"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "config_instance_egress_to_internet_over_https" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = "${module.config_ecs_asg.instance_sg_id}"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 locals {
