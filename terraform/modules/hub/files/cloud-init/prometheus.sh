@@ -3,15 +3,7 @@ set -ueo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-CURL="curl --proxy ${egress_proxy_url_with_protocol}"
-
 # Apt
-echo 'Configuring apt'
-mkdir -p /etc/apt/apt.conf.d
-cat << EOF > /etc/apt/apt.conf.d/egress.conf
-Acquire::http::Proxy "${egress_proxy_url_with_protocol}/";
-Acquire::https::Proxy "${egress_proxy_url_with_protocol}/";
-EOF
 apt-get update  --yes
 apt-get upgrade --yes
 
@@ -70,9 +62,9 @@ cat <<EOF > journalbeat-6.6.0-amd64.deb.sha512
 a40b695a125a2ed333a776844eccb4519152ceafb3dc0e31bb002720671f9a1344dde1b319fb7242bfde3ba2ff2a838e0b37fbd128f690018c6fb7bd63e8c451  journalbeat-6.6.0-amd64.deb
 EOF
 
-$CURL --silent --fail \
-      -L -O \
-      "https://$elastic_beats/journalbeat/journalbeat-6.6.0-amd64.deb"
+curl --silent --fail \
+     -L -O \
+     "https://$elastic_beats/journalbeat/journalbeat-6.6.0-amd64.deb"
 
 sha512sum -c journalbeat-6.6.0-amd64.deb.sha512
 dpkg -i journalbeat-6.6.0-amd64.deb
@@ -95,7 +87,6 @@ processors:
 - add_cloud_metadata: ~
 
 output.elasticsearch:
-  proxy_url: ${egress_proxy_url_with_protocol}
   hosts: ["https://${logit_elasticsearch_url}:443"]
   headers:
     Apikey: ${logit_api_key}
