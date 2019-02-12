@@ -13,8 +13,8 @@ data "template_file" "metadata_task_def" {
   template = "${file("${path.module}/files/tasks/metadata.json")}"
 
   vars {
-    deployment    = "${var.deployment}"
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-metadata:${var.hub_metadata_image_tag}"
+    deployment       = "${var.deployment}"
+    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-metadata@${var.hub_metadata_image_digest}"
   }
 }
 

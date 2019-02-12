@@ -61,7 +61,7 @@ data "template_file" "config_task_def" {
   template = "${file("${path.module}/files/tasks/hub-config.json")}"
 
   vars {
-    image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-config:${var.hub_config_image_tag}"
+    image_identifier       = "${local.tools_account_ecr_url_prefix}-verify-config@${var.hub_config_image_digest}"
     nginx_image_identifier = "${local.nginx_image_identifier}"
     domain                 = "${local.root_domain}"
     deployment             = "${var.deployment}"

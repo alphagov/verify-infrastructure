@@ -21,7 +21,7 @@
   },
   {
     "name": "saml-proxy",
-    "image": "${image_and_tag}",
+    "image": "${image_identifier}",
     "cpu": 0,
     "memory": 3500,
     "essential": true,

@@ -46,7 +46,7 @@ data "template_file" "saml_engine_task_def" {
     account_id             = "${data.aws_caller_identity.account.account_id}"
     deployment             = "${var.deployment}"
     domain                 = "${local.root_domain}"
-    image_and_tag          = "${local.tools_account_ecr_url_prefix}-verify-saml-engine:${var.hub_saml_engine_image_tag}"
+    image_identifier       = "${local.tools_account_ecr_url_prefix}-verify-saml-engine@${var.hub_saml_engine_image_digest}"
     nginx_image_identifier = "${local.nginx_image_identifier}"
     region                 = "${data.aws_region.region.id}"
     location_blocks_base64 = "${local.nginx_saml_engine_location_blocks_base64}"
