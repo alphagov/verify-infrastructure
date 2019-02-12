@@ -150,7 +150,10 @@ resource "aws_ecs_service" "static_ingress_http" {
   name            = "${var.deployment}-static-ingress-http"
   cluster         = "${aws_ecs_cluster.static-ingress.id}"
   task_definition = "${aws_ecs_task_definition.static_ingress_http.arn}"
-  desired_count   = 1
+
+  desired_count                      = "${var.number_of_apps}"
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.static_ingress_http.arn}"
@@ -163,7 +166,10 @@ resource "aws_ecs_service" "static_ingress_https" {
   name            = "${var.deployment}-static-ingress-https"
   cluster         = "${aws_ecs_cluster.static-ingress.id}"
   task_definition = "${aws_ecs_task_definition.static_ingress_https.arn}"
-  desired_count   = 1
+
+  desired_count                      = "${var.number_of_apps}"
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.static_ingress_https.arn}"

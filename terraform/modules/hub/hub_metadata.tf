@@ -38,7 +38,10 @@ resource "aws_ecs_service" "metadata" {
   name            = "${var.deployment}-metadata"
   cluster         = "${aws_ecs_cluster.ingress.id}"
   task_definition = "${aws_ecs_task_definition.metadata.arn}"
-  desired_count   = 1
+
+  desired_count                      = "${var.number_of_apps}"
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.ingress_metadata.arn}"
