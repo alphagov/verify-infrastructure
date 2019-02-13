@@ -107,7 +107,7 @@ systemctl start prometheus-node-exporter
 
 echo 'Configuring prometheus EBS'
 vol="nvme1n1"
-mkdir -p /var/lib/prometheus
+mkdir -p /srv/prometheus
 while true; do
   lsblk | grep -q "$vol" && break
   echo "still waiting for volume /dev/$vol ; sleeping 5"
@@ -123,16 +123,16 @@ if [ -z "$(lsblk | grep "$vol" | awk '{print $7}')" ] ; then
 
   if [ -z "$(lsblk | grep "$vol" | awk '{print $7}')" ] ; then
     echo "volume /dev/$vol is not mounted ; mounting"
-    mount "/dev/$vol" /var/lib/prometheus
+    mount "/dev/$vol" /srv/prometheus
   fi
     echo "volume /dev/$vol is mounted ; mounting"
 
   if grep -qv "/dev/$vol" /etc/fstab ; then
-    echo "/dev/$vol /var/lib/prometheus ext4 defaults,nofail 0 2" >> /etc/fstab
+    echo "/dev/$vol /srv/prometheus ext4 defaults,nofail 0 2" >> /etc/fstab
   fi
 fi
 
-chown -R nobody /var/lib/prometheus
+chown -R nobody /srv/prometheus
 
 echo 'Installing awscli'
 apt-get install --yes awscli

@@ -445,7 +445,7 @@ resource "aws_ecs_task_definition" "prometheus" {
 
   volume {
     name      = "tsdb"
-    host_path = "/var/lib/prometheus/metrics2"
+    host_path = "/srv/prometheus/metrics2"
   }
 }
 
