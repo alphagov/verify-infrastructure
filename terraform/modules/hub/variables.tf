@@ -15,7 +15,11 @@ variable "number_of_apps" {
 }
 
 variable "publically_accessible_from_cidrs" {
-  default = ["0.0.0.0/0"]
+  type    = "list"
+}
+
+variable "mgmt_accessible_from_cidrs" {
+  type    = "list"
 }
 
 variable "redis_cache_size" {
