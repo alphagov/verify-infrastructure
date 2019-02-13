@@ -30,10 +30,20 @@ resource "aws_security_group" "policy_redis" {
   vpc_id      = "${aws_vpc.hub.id}"
 }
 
+locals {
+  saml_engine_replay_cache_id = "${var.deployment}-saml-engine"
+
+  trunc_saml_engine_replace_cache_id = "${substr(
+    local.saml_engine_replay_cache_id,
+    0,
+    min(20, "${length(local.saml_engine_replay_cache_id)}")
+  )}"
+}
+
 resource "aws_elasticache_replication_group" "saml_engine_replay_cache" {
   automatic_failover_enabled    = true
   availability_zones            = ["${local.azs}"]
-  replication_group_id          = "${var.deployment}-saml-engine"
+  replication_group_id          = "${local.trunc_saml_engine_replace_cache_id}"
   replication_group_description = "Replication group for the ${var.deployment} SAML Engine replay cache"
   maintenance_window            = "tue:02:00-tue:04:00"
   node_type                     = "cache.t2.small"
