@@ -86,7 +86,7 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": false,
+      "stack": true,
       "steppedLine": false,
       "targets": [
         {
@@ -256,7 +256,7 @@
       },
       "yaxes": [
         {
-          "format": "short",
+          "format": "s",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -390,7 +390,7 @@
       },
       "yaxes": [
         {
-          "format": "short",
+          "format": "s",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -516,7 +516,7 @@
       },
       "yaxes": [
         {
-          "format": "short",
+          "format": "s",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -643,7 +643,7 @@
       },
       "yaxes": [
         {
-          "format": "short",
+          "format": "bytes",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -796,7 +796,7 @@
           {
             "evaluator": {
               "params": [
-                0.1
+                0.01
               ],
               "type": "lt"
             },
@@ -874,7 +874,7 @@
           "fill": true,
           "line": true,
           "op": "lt",
-          "value": 0.1
+          "value": 0.01
         }
       ],
       "timeFrom": null,
