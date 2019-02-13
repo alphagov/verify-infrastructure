@@ -50,7 +50,7 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "Servers needing reboot alert",
+        "name": "[${deployment}] Servers needing reboot alert",
         "noDataState": "ok",
         "notifications": []
       },
@@ -176,7 +176,7 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "Certificate Expiry is Less than 14 days",
+        "name": "[${deployment}] Certificate Expiry is Less than 14 days",
         "noDataState": "no_data",
         "notifications": [
           {
@@ -309,7 +309,7 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "NTP Time Drift alert",
+        "name": "[${deployment}] NTP Time Drift alert",
         "noDataState": "no_data",
         "notifications": []
       },
@@ -695,7 +695,7 @@
         "for": "30m",
         "frequency": "1m",
         "handler": 1,
-        "name": "Certificates failed OCSP alert",
+        "name": "[${deployment}] Certificates failed OCSP alert",
         "noDataState": "no_data",
         "notifications": []
       },
