@@ -21,7 +21,7 @@ resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_http" {
   to_port   = 80
 
   security_group_id = "${aws_security_group.mgmt_lb.id}"
-  cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
+  cidr_blocks       = ["${var.mgmt_accessible_from_cidrs}"]
 }
 
 resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_https" {
@@ -31,7 +31,7 @@ resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_https" {
   to_port   = 443
 
   security_group_id = "${aws_security_group.mgmt_lb.id}"
-  cidr_blocks       = ["${var.publically_accessible_from_cidrs}"]
+  cidr_blocks       = ["${var.mgmt_accessible_from_cidrs}"]
 }
 
 locals {
