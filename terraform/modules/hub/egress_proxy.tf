@@ -168,7 +168,10 @@ resource "aws_ecs_service" "egress_proxy" {
   name            = "${var.deployment}-egress-proxy"
   cluster         = "${aws_ecs_cluster.egress_proxy.id}"
   task_definition = "${aws_ecs_task_definition.egress_proxy.arn}"
-  desired_count   = 1
+
+  desired_count                      = "${var.number_of_apps}"
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
 
   load_balancer {
     elb_name       = "${aws_elb.egress_proxy.name}"

@@ -218,7 +218,7 @@ module "ingress_ecs_asg" {
   cluster             = "ingress"
   vpc_id              = "${aws_vpc.hub.id}"
   instance_subnets    = ["${aws_subnet.internal.*.id}"]
-  number_of_instances = "${var.number_of_apps + 1}"
+  number_of_instances = "${var.number_of_apps + 2}"
   domain              = "${local.root_domain}"
 
   ecs_agent_image_and_tag = "${local.ecs_agent_image_and_tag}"
