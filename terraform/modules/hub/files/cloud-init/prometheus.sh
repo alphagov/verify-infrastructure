@@ -92,12 +92,22 @@ systemctl restart journalbeat
 
 echo 'Installing prometheus node exporter'
 apt-get install --yes prometheus-node-exporter
+mkdir /etc/systemd/system/prometheus-node-exporter.service.d
+# Create an environment file for prometheus node exporter
+cat >  /etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env <<EOF
+ARGS="--collector.ntp --collector.diskstats.ignored-devices=^(ram|loop|fd|(h|s|v|xv)d[a-z]|nvme\\d+n\\d+p)\\d+$ --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|run|var/lib/docker)($|/) --collector.netdev.ignored-devices=^lo$ --collector.textfile.directory=/var/lib/prometheus/node-exporter"
+EOF\
+# Create an override file which will override prometheus node exporter service file
+cat > /etc/systemd/system/prometheus-node-exporter.service.d/10-override-args.conf <<EOF
+[Service]
+EnvironmentFile=/etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env
+EOF
 systemctl enable prometheus-node-exporter
 systemctl start prometheus-node-exporter
 
 echo 'Configuring prometheus EBS'
 vol="nvme1n1"
-mkdir -p /var/lib/prometheus
+mkdir -p /srv/prometheus
 while true; do
   lsblk | grep -q "$vol" && break
   echo "still waiting for volume /dev/$vol ; sleeping 5"
@@ -113,16 +123,16 @@ if [ -z "$(lsblk | grep "$vol" | awk '{print $7}')" ] ; then
 
   if [ -z "$(lsblk | grep "$vol" | awk '{print $7}')" ] ; then
     echo "volume /dev/$vol is not mounted ; mounting"
-    mount "/dev/$vol" /var/lib/prometheus
+    mount "/dev/$vol" /srv/prometheus
   fi
     echo "volume /dev/$vol is mounted ; mounting"
 
   if grep -qv "/dev/$vol" /etc/fstab ; then
-    echo "/dev/$vol /var/lib/prometheus ext4 defaults,nofail 0 2" >> /etc/fstab
+    echo "/dev/$vol /srv/prometheus ext4 defaults,nofail 0 2" >> /etc/fstab
   fi
 fi
 
-chown -R nobody /var/lib/prometheus
+chown -R nobody /srv/prometheus
 
 echo 'Installing awscli'
 apt-get install --yes awscli
