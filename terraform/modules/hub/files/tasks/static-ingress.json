@@ -3,7 +3,7 @@
     "name": "static-ingress",
     "image": "${image_and_tag}",
     "cpu": 0,
-    "memory": 3500,
+    "memory": ${allocated_memory},
     "essential": true,
     "portMappings": [
       {

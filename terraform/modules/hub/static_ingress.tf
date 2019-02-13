@@ -103,10 +103,11 @@ data "template_file" "static_ingress_http_task_def" {
   template = "${file("${path.module}/files/tasks/static-ingress.json")}"
 
   vars {
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
-    backend       = "${var.signin_domain}"
-    bind_port     = 80
-    backend_port  = 80
+    image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
+    backend          = "${var.signin_domain}"
+    bind_port        = 80
+    backend_port     = 80
+    allocated_memory = 500
   }
 }
 
@@ -114,10 +115,11 @@ data "template_file" "static_ingress_https_task_def" {
   template = "${file("${path.module}/files/tasks/static-ingress.json")}"
 
   vars {
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
-    backend       = "${var.signin_domain}"
-    bind_port     = 443
-    backend_port  = 443
+    image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
+    backend          = "${var.signin_domain}"
+    bind_port        = 443
+    backend_port     = 443
+    allocated_memory = 3000
   }
 }
 
