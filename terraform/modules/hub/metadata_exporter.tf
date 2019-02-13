@@ -11,7 +11,7 @@ data "template_file" "metadata_exporter_task_def" {
   template = "${file("${path.module}/files/tasks/metadata-exporter.json")}"
 
   vars {
-    image_and_tag              = "${local.tools_account_ecr_url_prefix}-verify-metadata-exporter:latest"
+    image_identifier           = "${local.tools_account_ecr_url_prefix}-verify-metadata-exporter@${var.metadate_exporter_image_digest}"
     signin_domain              = "${var.signin_domain}"
     deployment                 = "${var.deployment}"
   }

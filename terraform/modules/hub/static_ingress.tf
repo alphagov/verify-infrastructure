@@ -9,8 +9,8 @@ module "static_ingress_ecs_asg" {
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
 
-  ecs_agent_image_and_tag = "${local.ecs_agent_image_and_tag}"
-  tools_account_id        = "${var.tools_account_id}"
+  ecs_agent_image_identifier = "${local.ecs_agent_image_identifier}"
+  tools_account_id           = "${var.tools_account_id}"
 
   additional_instance_security_group_ids = [
     "${aws_security_group.scraped_by_prometheus.id}",
@@ -103,7 +103,7 @@ data "template_file" "static_ingress_http_task_def" {
   template = "${file("${path.module}/files/tasks/static-ingress.json")}"
 
   vars {
-    image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
+    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress@${var.static_ingress_image_digest}"
     backend          = "${var.signin_domain}"
     bind_port        = 80
     backend_port     = 80
@@ -115,7 +115,7 @@ data "template_file" "static_ingress_https_task_def" {
   template = "${file("${path.module}/files/tasks/static-ingress.json")}"
 
   vars {
-    image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-static-ingress:latest"
+    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress@${var.static_ingress_image_digest}"
     backend          = "${var.signin_domain}"
     bind_port        = 443
     backend_port     = 443

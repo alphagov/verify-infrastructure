@@ -62,10 +62,19 @@ variable "matomo_site_id" {
   default = 1
 }
 
-variable "hub_config_image_tag" {}
-variable "hub_policy_image_tag" {}
-variable "hub_saml_proxy_image_tag" {}
-variable "hub_saml_soap_proxy_image_tag" {}
-variable "hub_saml_engine_image_tag" {}
-variable "hub_frontend_image_tag" {}
-variable "hub_metadata_image_tag" {}
+variable "hub_config_image_digest" {}
+variable "hub_policy_image_digest" {}
+variable "hub_saml_proxy_image_digest" {}
+variable "hub_saml_soap_proxy_image_digest" {}
+variable "hub_saml_engine_image_digest" {}
+variable "hub_frontend_image_digest" {}
+variable "hub_metadata_image_digest" {}
+
+variable "ecs_agent_image_digest" {}
+variable "nginx_image_digest" {}
+variable "static_ingress_image_digest" {}
+variable "beat_exporter_image_digest" {}
+variable "cloudwatch_exporter_image_digest" {}
+variable "squid_image_digest" {}
+variable "metadate_exporter_image_digest" {}
+variable "prometheus_image_digest" {}

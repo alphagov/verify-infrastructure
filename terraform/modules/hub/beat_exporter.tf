@@ -11,7 +11,7 @@ data "template_file" "beat_exporter_task_def" {
   template = "${file("${path.module}/files/tasks/beat-exporter.json")}"
 
   vars {
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-beat-exporter:latest"
+    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-beat-exporter@${var.beat_exporter_image_digest}"
   }
 }
 

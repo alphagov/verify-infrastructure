@@ -9,8 +9,8 @@ module "egress_proxy_ecs_asg" {
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
 
-  ecs_agent_image_and_tag = "${local.ecs_agent_image_and_tag}"
-  tools_account_id        = "${var.tools_account_id}"
+  ecs_agent_image_identifier = "${local.ecs_agent_image_identifier}"
+  tools_account_id           = "${var.tools_account_id}"
 
   logit_api_key           = "${var.logit_api_key}"
   logit_elasticsearch_url = "${var.logit_elasticsearch_url}"
@@ -71,7 +71,7 @@ data "template_file" "egress_proxy_task_def" {
 
   vars {
     whitelist_base64 = "${base64encode(local.egress_proxy_whitelist)}"
-    image_and_tag    = "${local.tools_account_ecr_url_prefix}-verify-squid:latest"
+    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-squid@${var.squid_image_digest}"
   }
 }
 

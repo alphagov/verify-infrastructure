@@ -1,7 +1,7 @@
 [
   {
     "name": "nginx",
-    "image": "${image_and_tag}",
+    "image": "${image_identifier}",
     "cpu": 0,
     "memory": 250,
     "essential": true,

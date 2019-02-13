@@ -321,7 +321,7 @@ data "template_file" "prometheus_cloud_init" {
     logit_elasticsearch_url        = "${var.logit_elasticsearch_url}"
     logit_api_key                  = "${var.logit_api_key}"
     cluster                        = "${aws_ecs_cluster.prometheus.name}"
-    ecs_agent_image_and_tag        = "${local.ecs_agent_image_and_tag}"
+    ecs_agent_image_identifier     = "${local.ecs_agent_image_identifier}"
     tools_account_id               = "${var.tools_account_id}"
   }
 }
@@ -432,8 +432,8 @@ data "template_file" "prometheus_task_def" {
   template = "${file("${path.module}/files/tasks/prometheus.json")}"
 
   vars {
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-prometheus:latest"
-    config_base64 = "${base64encode(data.template_file.prometheus_config.rendered)}"
+    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-prometheus@${var.prometheus_image_digest}"
+    config_base64    = "${base64encode(data.template_file.prometheus_config.rendered)}"
   }
 }
 

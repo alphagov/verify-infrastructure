@@ -1,7 +1,7 @@
 [
   {
     "name": "nginx",
-    "image": "${nginx_image_and_tag}",
+    "image": "${nginx_image_identifier}",
     "cpu": 0,
     "memory": 250,
     "essential": true,
@@ -20,7 +20,7 @@
   },
   {
     "name": "frontend",
-    "image": "${image_and_tag}",
+    "image": "${image_identifier}",
     "cpu": 0,
     "memory": 3500,
     "essential": true,

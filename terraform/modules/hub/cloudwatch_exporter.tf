@@ -11,8 +11,8 @@ data "template_file" "cloudwatch_exporter_task_def" {
   template = "${file("${path.module}/files/tasks/cloudwatch-exporter.json")}"
 
   vars {
-    image_and_tag = "${local.tools_account_ecr_url_prefix}-verify-cloudwatch-exporter:latest"
-    config_base64 = "${base64encode(file("${path.module}/files/prometheus/cloudwatch_exporter.yml"))}"
+    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-cloudwatch-exporter@${var.cloudwatch_exporter_image_digest}"
+    config_base64    = "${base64encode(file("${path.module}/files/prometheus/cloudwatch_exporter.yml"))}"
   }
 }
 
