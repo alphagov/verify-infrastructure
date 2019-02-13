@@ -18,32 +18,7 @@ resource "aws_iam_role" "deployer" {
   EOF
 }
 
-resource "aws_iam_policy" "deployer_update_ecs" {
-  name        = "${var.deployment}-deployer-update-ecs"
-  description = "${var.deployment}-deployer-update-ecs"
-
-  policy = <<-EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Action": [
-          "ecs:List*",
-          "ecs:Describe*",
-          "ecs:UpdateService",
-          "ecs:RegisterTaskDefinition"
-        ],
-        "Resource": [
-          "*"
-        ]
-      }
-    ]
-  }
-  EOF
-}
-
-resource "aws_iam_role_policy_attachment" "deployer_deployer_update_ecs" {
+resource "aws_iam_role_policy_attachment" "deployer_administrator_access" {
   role       = "${aws_iam_role.deployer.name}"
-  policy_arn = "${aws_iam_policy.deployer_update_ecs.arn}"
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
