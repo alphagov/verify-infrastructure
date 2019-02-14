@@ -30,7 +30,6 @@ data "template_file" "analytics_task_def" {
   template = "${file("${path.module}/files/tasks/analytics.json")}"
 
   vars {
-    deployment             = "${var.deployment}"
     nginx_image_identifier = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls@${var.nginx_image_digest}"
     location_blocks_base64 = "${local.nginx_analytics_location_blocks_base64}"
   }
@@ -49,16 +48,6 @@ resource "aws_ecs_task_definition" "analytics" {
   container_definitions = "${data.template_file.analytics_task_def.rendered}"
   network_mode          = "awsvpc"
   execution_role_arn    = "${module.analytics_ecs_roles.execution_role_arn}"
-}
-
-resource "aws_security_group_rule" "analytics_task_egress_to_internet_over_http" {
-  type      = "egress"
-  protocol  = "tcp"
-  from_port = 80
-  to_port   = 80
-
-  security_group_id = "${aws_security_group.analytics_task.id}"
-  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "analytics_task_egress_to_internet_over_https" {
