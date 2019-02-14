@@ -43,6 +43,15 @@ module "ingress_can_connect_to_metadata_task" {
   port = 8443
 }
 
+module "ingress_can_connect_to_analytics_task" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.ingress.id}"
+  destination_sg_id = "${aws_security_group.analytics_task.id}"
+
+  port = 8443
+}
+
 resource "aws_security_group_rule" "ingress_ingress_from_internet_over_http" {
   type      = "ingress"
   protocol  = "tcp"
@@ -73,6 +82,22 @@ resource "aws_security_group_rule" "ingress_ingress_from_internet_over_https" {
       formatlist("%s/32", aws_eip.egress.*.public_ip)
     )
   }"] # adding the egress IPs is a hack to let us access metadata through egress proxy
+}
+
+resource "aws_lb_target_group" "ingress_analytics" {
+  name                 = "${var.deployment}-ingress-analytics"
+  port                 = 8443
+  protocol             = "HTTPS"
+  vpc_id               = "${aws_vpc.hub.id}"
+  target_type          = "ip"
+  deregistration_delay = 60
+  slow_start           = 30
+
+  health_check {
+    path     = "/healthcheck"
+    interval = 10
+    timeout  = 5
+  }
 }
 
 resource "aws_lb_target_group" "ingress_metadata" {
@@ -171,13 +196,8 @@ resource "aws_lb_listener_rule" "ingress_analytics" {
   priority     = 120
 
   action {
-    type = "fixed-response"
-
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "forward to matomo"
-      status_code  = "200"
-    }
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.ingress_analytics.arn}"
   }
 
   condition {
