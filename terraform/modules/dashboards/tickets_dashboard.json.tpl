@@ -1078,7 +1078,7 @@
   "schemaVersion": 16,
   "style": "dark",
   "tags": [
-    "verify"
+    "verify", "${deployment}"
   ],
   "templating": {
     "list": []
