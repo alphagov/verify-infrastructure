@@ -1145,7 +1145,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate({__name__=~\"aws_applicationelb_httpcode_target_[23]_xx_count_sum\",target_group=~\"targetgroup/${deployment}-ingress-analytics/.*\"}[60m])) / sum(rate({__name__=~\"aws_applicationelb_httpcode_target_[2345]_xx_count_sum\",target_group=~\"targetgroup/${deployment}-ingress-analytics/.*\"}[60m])) * 100",
+          "expr": "sum(rate({__name__=~\"aws_applicationelb_httpcode_target_[23]_xx_count_sum\",target_group=~\"targetgroup/${lower(deployment)}-ingress-analytics/.*\"}[60m])) / sum(rate({__name__=~\"aws_applicationelb_httpcode_target_[2345]_xx_count_sum\",target_group=~\"targetgroup/${lower(deployment)}-ingress-analytics/.*\"}[60m])) * 100",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "",
