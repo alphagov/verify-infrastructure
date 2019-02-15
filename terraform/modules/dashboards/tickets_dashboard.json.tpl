@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 29,
+  "id": 47,
   "links": [],
   "panels": [
     {
@@ -918,6 +918,63 @@
       }
     },
     {
+      "alert": {
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          },
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "or"
+            },
+            "query": {
+              "params": [
+                "B",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "15m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "[${deployment}] Service down",
+        "noDataState": "no_data",
+        "notifications": []
+      },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -961,10 +1018,19 @@
           "refId": "A"
         },
         {
-          "refId": "B",
           "expr": "journalbeat_up",
+          "format": "time_series",
           "intervalFactor": 1,
-          "format": "time_series"
+          "refId": "B"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 1
         }
       ],
       "timeFrom": null,
@@ -1005,72 +1071,135 @@
       "yaxis": {
         "align": false,
         "alignLevel": null
-      },
-      "thresholds": [
-        {
-          "value": 1,
-          "op": "lt",
-          "fill": true,
-          "line": true,
-          "colorMode": "critical"
-        }
-      ],
+      }
+    },
+    {
       "alert": {
         "conditions": [
           {
-            "type": "query",
-            "query": {
-              "params": [
-                "A",
-                "1m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "type": "last",
-              "params": []
-            },
             "evaluator": {
-              "type": "lt",
               "params": [
-                1
-              ]
+                95
+              ],
+              "type": "lt"
             },
             "operator": {
               "type": "and"
-            }
-          },
-          {
-            "type": "query",
+            },
             "query": {
               "params": [
-                "B",
-                "1m",
+                "A",
+                "5m",
                 "now"
               ]
             },
             "reducer": {
-              "type": "last",
-              "params": []
+              "params": [],
+              "type": "min"
             },
-            "evaluator": {
-              "type": "lt",
-              "params": [
-                1
-              ]
-            },
-            "operator": {
-              "type": "or"
-            }
+            "type": "query"
           }
         ],
-        "noDataState": "no_data",
         "executionErrorState": "alerting",
+        "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "notifications": [],
-        "for": "15m",
-        "name": "[${deployment}] Service down"
+        "name": "Analytics % of successful requests as a proportion of total requests. alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${source}",
+      "description": "2xx + 3xx  / [2,3,4,5]xx Response Codes",
+      "fill": 1,
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 16,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate({__name__=~\"aws_applicationelb_httpcode_target_[23]_xx_count_sum\",target_group=~\"targetgroup/${lower(deployment)}-ingress-analytics/.*\"}[60m])) / sum(rate({__name__=~\"aws_applicationelb_httpcode_target_[2345]_xx_count_sum\",target_group=~\"targetgroup/${lower(deployment)}-ingress-analytics/.*\"}[60m])) * 100",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 95
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Analytics % of successful requests as a proportion of total requests.",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": "100",
+          "min": null,
+          "show": true
+        },
+        {
+          "decimals": null,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
       }
     }
   ],
@@ -1114,6 +1243,6 @@
   },
   "timezone": "",
   "title": "[${deployment}] Ticket Type Alerts",
-  "uid": "cPRQFflmz",
+  "uid": "fsdtjUumz",
   "version": 5
 }
