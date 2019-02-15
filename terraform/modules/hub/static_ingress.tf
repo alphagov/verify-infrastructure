@@ -107,7 +107,7 @@ data "template_file" "static_ingress_http_task_def" {
     backend          = "${var.signin_domain}"
     bind_port        = 80
     backend_port     = 80
-    allocated_memory = 500
+    allocated_memory = 250
   }
 }
 
