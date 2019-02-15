@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "ssm_session_logs_store" {
-  bucket = "${var.deployment}-ssm-session-logs-store"
+  bucket = "gds-${var.deployment}-ssm-session-logs-store"
   acl    = "private"
   region = "eu-west-2"
 
