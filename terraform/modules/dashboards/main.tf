@@ -6,4 +6,10 @@ data "template_file" "tickets_dashboard" {
   }
 }
 
+data "template_file" "pages_dashboard" {
+  template = "${file("${path.module}/pages_dashboard.json.tpl")}"
+  vars = {
+    source     = "${var.data_source}"
+  }
+}
 
