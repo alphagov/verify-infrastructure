@@ -106,7 +106,7 @@
       "Value": "https://www.${domain}:443/analytics"
     }, {
       "Name": "INTERNAL_PIWIK_HOST",
-      "Value": "https://www.${domain}:443/piwik.php"
+      "Value": "${analytics_endpoint}:443/piwik.php"
     }, {
       "Name": "PIWIK_SITE_ID",
       "Value": "${matomo_site_id}"

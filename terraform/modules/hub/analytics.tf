@@ -12,7 +12,7 @@ resource "aws_security_group" "analytics_task" {
 locals {
   analytics_location_blocks = <<-LOCATIONS
 
-  set $analytics "https://analytics.tools.signin.service.gov.uk";
+  set $analytics "${var.analytics_endpoint}";
   location /analytics {
     proxy_pass $analytics/matomo.php?$args;
   }
