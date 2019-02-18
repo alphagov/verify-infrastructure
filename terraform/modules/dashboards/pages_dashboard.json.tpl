@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 66,
+  "id": 72,
   "links": [],
   "panels": [
     {
@@ -158,25 +158,25 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_2xx_responses_total / uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count",
+          "expr": "uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_2xx_responses_total or up * 0 / uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count or up * 0",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
         },
         {
-          "expr": "uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_2xx_responses_total / uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count",
+          "expr": "uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_2xx_responses_total or up * 0 / uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count or up * 0",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "B"
         },
         {
-          "expr": "uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_2xx_responses_total / uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count",
+          "expr": "uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_2xx_responses_total or up * 0 / uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count or up * 0",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "C"
         },
         {
-          "expr": "uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_2xx_responses_total / uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_count",
+          "expr": "uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_2xx_responses_total or up * 0 / uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_count or up * 0",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "D"
@@ -302,7 +302,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_2xx_responses_total / uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_count",
+          "expr": "uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_2xx_responses_total / uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_count or up * 0",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -521,6 +521,6 @@
   },
   "timezone": "",
   "title": "[${deployment}] Page Type Alerts",
-  "uid": "ngMZYuuiz",
-  "version": 6
+  "uid": "Pcz1_Xumz",
+  "version": 5
 }
