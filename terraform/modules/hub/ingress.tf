@@ -95,6 +95,7 @@ resource "aws_lb_target_group" "ingress_analytics" {
 
   health_check {
     path     = "/healthcheck"
+    protocol = "HTTPS"
     interval = 10
     timeout  = 5
   }
