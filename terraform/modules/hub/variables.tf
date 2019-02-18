@@ -15,11 +15,11 @@ variable "number_of_apps" {
 }
 
 variable "publically_accessible_from_cidrs" {
-  type    = "list"
+  type = "list"
 }
 
 variable "mgmt_accessible_from_cidrs" {
-  type    = "list"
+  type = "list"
 }
 
 variable "redis_cache_size" {
@@ -59,7 +59,11 @@ variable "zendesk_username" {
 
 variable "matomo_site_id" {
   description = "Site ID to use for Matomo"
-  default = 1
+  default     = 1
+}
+
+variable "analytics_endpoint" {
+  description = "Analytics endpoint"
 }
 
 variable "hub_config_image_digest" {}

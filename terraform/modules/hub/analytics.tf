@@ -12,7 +12,7 @@ resource "aws_security_group" "analytics_task" {
 locals {
   analytics_location_blocks = <<-LOCATIONS
 
-  set $analytics "https://analytics.tools.signin.service.gov.uk";
+  set $analytics "$ANALYTICS_ENDPOINT";
   location /analytics {
     proxy_pass $analytics/matomo.php?$args;
   }
@@ -32,6 +32,7 @@ data "template_file" "analytics_task_def" {
   vars {
     nginx_image_identifier = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls@${var.nginx_image_digest}"
     location_blocks_base64 = "${local.nginx_analytics_location_blocks_base64}"
+    analytics_endpoint     = "${var.analytics_endpoint}"
   }
 }
 
