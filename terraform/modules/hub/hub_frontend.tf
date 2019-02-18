@@ -49,16 +49,17 @@ data "template_file" "frontend_task_def" {
   template = "${file("${path.module}/files/tasks/frontend.json")}"
 
   vars {
-    account_id                 = "${data.aws_caller_identity.account.account_id}"
-    deployment                 = "${var.deployment}"
-    image_identifier           = "${local.tools_account_ecr_url_prefix}-verify-frontend@${var.hub_frontend_image_digest}"
-    nginx_image_identifier     = "${local.nginx_image_identifier}"
-    domain                     = "${local.root_domain}"
-    region                     = "${data.aws_region.region.id}"
-    location_blocks_base64     = "${local.location_blocks_base64}"
-    zendesk_username           = "${var.zendesk_username}"
-    zendesk_url                = "${var.zendesk_url}"
-    matomo_site_id             = "${var.matomo_site_id}"
+    account_id             = "${data.aws_caller_identity.account.account_id}"
+    deployment             = "${var.deployment}"
+    image_identifier       = "${local.tools_account_ecr_url_prefix}-verify-frontend@${var.hub_frontend_image_digest}"
+    nginx_image_identifier = "${local.nginx_image_identifier}"
+    domain                 = "${local.root_domain}"
+    region                 = "${data.aws_region.region.id}"
+    location_blocks_base64 = "${local.location_blocks_base64}"
+    zendesk_username       = "${var.zendesk_username}"
+    zendesk_url            = "${var.zendesk_url}"
+    matomo_site_id         = "${var.matomo_site_id}"
+    analytics_endpoint     = "${var.analytics_endpoint}"
   }
 }
 
@@ -94,7 +95,8 @@ resource "aws_ecs_service" "frontend" {
   }
 
   network_configuration {
-    subnets         = ["${aws_subnet.internal.*.id}"]
+    subnets = ["${aws_subnet.internal.*.id}"]
+
     security_groups = [
       "${aws_security_group.frontend_task.id}",
       "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
