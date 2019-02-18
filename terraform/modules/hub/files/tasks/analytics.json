@@ -15,10 +15,6 @@
       {
         "Name": "LOCATION_BLOCKS",
         "Value": "${location_blocks_base64}"
-      },
-      {
-        "Name": "ANALYTICS_ENDPOINT",
-        "Value": "${analytics_endpoint}"
       }
     ]
   }
