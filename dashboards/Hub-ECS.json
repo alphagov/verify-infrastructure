@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1549450537854,
+  "iteration": 1550578455149,
   "links": [],
   "panels": [
     {
@@ -222,13 +222,7 @@
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
+      "rangeMaps": [],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -238,7 +232,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum((verify_config_certificate_expiry_date or verify_metadata_certificate_expiry / 1000) < bool (time() + (7 * 24 * 60 * 60)))",
+          "expr": "\nsum(((avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)/1000 - time()) / 60 / 60 / 24) < bool 8)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -300,13 +294,7 @@
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
+      "rangeMaps": [],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -316,7 +304,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum((verify_config_certificate_expiry_date or verify_metadata_certificate_expiry / 1000) < bool (time() + (2 * 7 * 24 * 60 * 60)))",
+          "expr": "sum(((avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)/1000 - time()) / 60 / 60 / 24) < bool 15)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -378,13 +366,7 @@
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
+      "rangeMaps": [],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -394,7 +376,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum((verify_config_certificate_expiry_date or verify_metadata_certificate_expiry / 1000) < bool (time() + (30 * 24 * 60 * 60)))",
+          "expr": "\nsum(((avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)/1000 - time()) / 60 / 60 / 24) < bool 31)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -456,13 +438,7 @@
       "postfixFontSize": "50%",
       "prefix": "",
       "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
+      "rangeMaps": [],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -472,7 +448,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum((verify_config_certificate_expiry_date or verify_metadata_certificate_expiry / 1000) < bool (time() + (60 * 24 * 60 * 60)))",
+          "expr": "\nsum(((avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)/1000 - time()) / 60 / 60 / 24) < bool 61)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -492,7 +468,7 @@
       "datasource": "$Prometheus",
       "fontSize": "80%",
       "gridPos": {
-        "h": 4,
+        "h": 8,
         "w": 24,
         "x": 0,
         "y": 2
@@ -503,8 +479,8 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 0,
-        "desc": true
+        "col": 8,
+        "desc": false
       },
       "styles": [
         {
@@ -707,11 +683,28 @@
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
-          "mappingType": 1,
+          "mappingType": 2,
           "pattern": "Value",
+          "rangeMaps": [
+            {
+              "from": "0",
+              "text": "Unhealthy",
+              "to": "0.1"
+            },
+            {
+              "from": "0.1",
+              "text": "Some failures",
+              "to": "0.9"
+            },
+            {
+              "from": "0.9",
+              "text": "Healthy",
+              "to": "1"
+            }
+          ],
           "thresholds": [
-            "0.5",
-            "1"
+            "0.1",
+            "0.9"
           ],
           "type": "string",
           "unit": "short",
@@ -757,16 +750,17 @@
     {
       "dashboardFilter": "",
       "dashboardTags": [
-        "verify"
+        "verify",
+        "Production"
       ],
       "folderId": null,
       "gridPos": {
         "h": 10,
         "w": 7,
         "x": 0,
-        "y": 6
+        "y": 10
       },
-      "id": 19,
+      "id": 22,
       "limit": 10,
       "links": [],
       "nameFilter": "",
@@ -774,18 +768,18 @@
       "show": "current",
       "sortOrder": 3,
       "stateFilter": [],
-      "title": "Alerts",
+      "title": "Prod Alerts",
       "type": "alertlist"
     },
     {
       "columns": [],
-      "datasource": "Prom 1 Joint ECS",
+      "datasource": "$Prometheus",
       "fontSize": "80%",
       "gridPos": {
         "h": 10,
         "w": 17,
         "x": 7,
-        "y": 6
+        "y": 10
       },
       "id": 10,
       "links": [],
@@ -912,6 +906,7 @@
           "decimals": 2,
           "mappingType": 1,
           "pattern": "subject",
+          "sanitize": false,
           "thresholds": [],
           "type": "hidden",
           "unit": "short"
@@ -965,7 +960,7 @@
             "1209600000"
           ],
           "type": "number",
-          "unit": "dtdurationms"
+          "unit": "ms"
         },
         {
           "alias": "Timestamp",
@@ -1016,7 +1011,7 @@
       ],
       "targets": [
         {
-          "expr": "avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ()]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)",
+          "expr": "avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1024,7 +1019,7 @@
           "refId": "A"
         },
         {
-          "expr": "avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ()]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name) - time()*1000",
+          "expr": "avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name) - time()*1000",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1037,89 +1032,27 @@
       "type": "table"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$Prometheus",
-      "fill": 1,
+      "dashboardFilter": "",
+      "dashboardTags": [
+        "verify"
+      ],
+      "folderId": null,
       "gridPos": {
-        "h": 9,
-        "w": 12,
+        "h": 10,
+        "w": 7,
         "x": 0,
-        "y": 16
+        "y": 20
       },
-      "id": 4,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
+      "id": 19,
+      "limit": 10,
       "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "rate(io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total[1m])",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{job}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "2xx responses",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "Number of 2xx responses per second",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "nameFilter": "",
+      "onlyAlertsOnDashboard": false,
+      "show": "current",
+      "sortOrder": 3,
+      "stateFilter": [],
+      "title": "All Alerts",
+      "type": "alertlist"
     },
     {
       "aliasColors": {},
@@ -1132,7 +1065,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 20
       },
       "id": 2,
       "legend": {
@@ -1210,6 +1143,91 @@
       }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "id": 4,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "rate(io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total[1m])",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "2xx responses",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Number of 2xx responses per second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "columns": [],
       "datasource": "$Prometheus",
       "fontSize": "100%",
@@ -1217,7 +1235,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 25
+        "y": 30
       },
       "hideTimeOverride": false,
       "id": 8,
@@ -1380,8 +1398,10 @@
       },
       {
         "current": {
-          "text": "Prom 1 Joint ECS",
-          "value": "Prom 1 Joint ECS"
+          "selected": false,
+          "tags": [],
+          "text": "hub-joint-prom-1",
+          "value": "hub-joint-prom-1"
         },
         "hide": 0,
         "label": null,
@@ -1427,5 +1447,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 44
+  "version": 56
 }
