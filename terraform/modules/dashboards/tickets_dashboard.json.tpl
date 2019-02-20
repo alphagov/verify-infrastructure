@@ -1104,7 +1104,7 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "Analytics % of successful requests as a proportion of total requests. alert",
+        "name": "[${deployment}] Analytics % of successful requests as a proportion of total requests. alert",
         "noDataState": "no_data",
         "notifications": []
       },
