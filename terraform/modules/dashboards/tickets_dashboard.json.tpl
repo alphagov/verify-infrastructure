@@ -309,7 +309,7 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "[${deployment}] NTP Time Drift alert",
+        "name": "[${deployment}] Server time more than 1 second out of sync",
         "noDataState": "no_data",
         "notifications": []
       },
@@ -442,7 +442,7 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "[${deployment}] Metadata Expiry alert",
+        "name": "[${deployment}] Metadata expires in under 5 days",
         "noDataState": "no_data",
         "notifications": []
       },
@@ -568,7 +568,7 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "[${deployment}] Disk Predicted to Fill Alert",
+        "name": "[${deployment}] Disk predicted to fill in 3 days",
         "noDataState": "no_data",
         "notifications": []
       },
@@ -695,7 +695,7 @@
         "for": "30m",
         "frequency": "1m",
         "handler": 1,
-        "name": "[${deployment}] Certificates failed OCSP alert",
+        "name": "[${deployment}] Certificates failed OCSP checks",
         "noDataState": "no_data",
         "notifications": []
       },
@@ -971,7 +971,7 @@
         "for": "15m",
         "frequency": "1m",
         "handler": 1,
-        "name": "[${deployment}] Service down",
+        "name": "[${deployment}] Prometheus scrape target down",
         "noDataState": "no_data",
         "notifications": []
       },
@@ -1104,7 +1104,7 @@
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "[${deployment}] Analytics % of successful requests as a proportion of total requests. alert",
+        "name": "[${deployment}] Less than 95% of analytics requests were successful",
         "noDataState": "no_data",
         "notifications": []
       },
