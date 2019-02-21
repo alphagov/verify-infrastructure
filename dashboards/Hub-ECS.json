@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1550578455149,
+  "iteration": 1550747426019,
   "links": [],
   "panels": [
     {
@@ -109,7 +109,7 @@
         "#299c46"
       ],
       "datasource": "$Prometheus",
-      "format": "dtdurations",
+      "format": "s",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -751,7 +751,7 @@
       "dashboardFilter": "",
       "dashboardTags": [
         "verify",
-        "Production"
+        "Prod"
       ],
       "folderId": null,
       "gridPos": {
@@ -1398,10 +1398,9 @@
       },
       {
         "current": {
-          "selected": false,
           "tags": [],
-          "text": "hub-joint-prom-1",
-          "value": "hub-joint-prom-1"
+          "text": "hub-prod-prom-1",
+          "value": "hub-prod-prom-1"
         },
         "hide": 0,
         "label": null,
@@ -1447,5 +1446,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 56
+  "version": 58
 }
