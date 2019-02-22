@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 47,
+  "id": 83,
   "links": [],
   "panels": [
     {
@@ -58,7 +58,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${source}",
+      "datasource": "${deployment}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -177,7 +177,7 @@
         "frequency": "1m",
         "handler": 1,
         "name": "[${deployment}] Certificate Expiry is Less than 14 days",
-        "noDataState": "no_data",
+        "noDataState": "ok",
         "notifications": [
           {
             "id": 4
@@ -188,7 +188,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${source}",
+      "datasource": "${deployment}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -310,14 +310,14 @@
         "frequency": "1m",
         "handler": 1,
         "name": "[${deployment}] Server time more than 1 second out of sync",
-        "noDataState": "no_data",
+        "noDataState": "ok",
         "notifications": []
       },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${source}",
+      "datasource": "${deployment}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -443,14 +443,14 @@
         "frequency": "1m",
         "handler": 1,
         "name": "[${deployment}] Metadata expires in under 5 days",
-        "noDataState": "no_data",
+        "noDataState": "ok",
         "notifications": []
       },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${source}",
+      "datasource": "${deployment}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -569,14 +569,14 @@
         "frequency": "1m",
         "handler": 1,
         "name": "[${deployment}] Disk predicted to fill in 3 days",
-        "noDataState": "no_data",
+        "noDataState": "ok",
         "notifications": []
       },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${source}",
+      "datasource": "${deployment}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -696,14 +696,14 @@
         "frequency": "1m",
         "handler": 1,
         "name": "[${deployment}] Certificates failed OCSP checks",
-        "noDataState": "no_data",
+        "noDataState": "ok",
         "notifications": []
       },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${source}",
+      "datasource": "${deployment}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -822,14 +822,14 @@
         "frequency": "1m",
         "handler": 1,
         "name": "[${deployment}] Journalbeat sent no events in last 15 minutes",
-        "noDataState": "no_data",
+        "noDataState": "ok",
         "notifications": []
       },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${source}",
+      "datasource": "${deployment}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -972,14 +972,14 @@
         "frequency": "1m",
         "handler": 1,
         "name": "[${deployment}] Prometheus scrape target down",
-        "noDataState": "no_data",
+        "noDataState": "ok",
         "notifications": []
       },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${source}",
+      "datasource": "${deployment}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -1105,14 +1105,14 @@
         "frequency": "1m",
         "handler": 1,
         "name": "[${deployment}] Less than 95% of analytics requests were successful",
-        "noDataState": "no_data",
+        "noDataState": "ok",
         "notifications": []
       },
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${source}",
+      "datasource": "${deployment}",
       "description": "2xx + 3xx  / [2,3,4,5]xx Response Codes",
       "fill": 1,
       "gridPos": {
@@ -1207,7 +1207,8 @@
   "schemaVersion": 16,
   "style": "dark",
   "tags": [
-    "verify", "${deployment}"
+    "verify",
+    "${deployment}"
   ],
   "templating": {
     "list": []
@@ -1243,6 +1244,6 @@
   },
   "timezone": "",
   "title": "[${deployment}] Ticket Type Alerts",
-  "uid": "fsdtjUumz",
-  "version": 5
+  "uid": "G-LKLOriz",
+  "version": 10
 }
