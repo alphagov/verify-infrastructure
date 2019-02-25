@@ -1,6 +1,9 @@
 global:
   scrape_interval:     15s
   evaluation_interval: 15s
+  external_labels:
+    product: verify
+    deployment: ${deployment}
 rule_files:
   - "alerts.yml"
 scrape_configs:
