@@ -1,0 +1,31 @@
+---
+groups:
+- name: prometheus_base
+  rules:
+  - alert: Watchdog
+    annotations:
+      message: |
+        This is an alert meant to ensure that the entire alerting pipeline is functional.
+        This alert is always firing, therefore it should always be firing in Alertmanager
+        and always fire against a receiver.  We use cronitor to alert us if this ever
+        *doesn't* fire, because this indicates a problem with our alerting pipeline
+    expr: vector(1)
+    labels:
+      severity: "constant"
+- name: service
+  rules:
+  - alert: HubSamlProxyErrorsReceivingRequest
+    annotations:
+      message: |
+        It looks like users are having trouble starting sessions at
+        the hub.  We expect that the saml-proxy handleRequestPost
+        endpoint should return a 2xx response under normal conditions.
+        We are observing the rate of 2xx responses has dropped below
+        95%.
+    expr: |
+      sum without(instance)(
+          rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_2xx_responses_total[1m]))
+      / sum without(instance)(
+          rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count[1m]))
+      < 0.95
+

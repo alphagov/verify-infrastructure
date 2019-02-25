@@ -315,14 +315,14 @@ data "template_file" "prometheus_cloud_init" {
   template = "${file("${path.module}/files/cloud-init/prometheus.sh")}"
 
   vars {
-    prometheus_config              = "${data.template_file.prometheus_config.rendered}"
-    deployment                     = "${var.deployment}"
-    domain                         = "${local.root_domain}"
-    logit_elasticsearch_url        = "${var.logit_elasticsearch_url}"
-    logit_api_key                  = "${var.logit_api_key}"
-    cluster                        = "${aws_ecs_cluster.prometheus.name}"
-    ecs_agent_image_identifier     = "${local.ecs_agent_image_identifier}"
-    tools_account_id               = "${var.tools_account_id}"
+    prometheus_config          = "${data.template_file.prometheus_config.rendered}"
+    deployment                 = "${var.deployment}"
+    domain                     = "${local.root_domain}"
+    logit_elasticsearch_url    = "${var.logit_elasticsearch_url}"
+    logit_api_key              = "${var.logit_api_key}"
+    cluster                    = "${aws_ecs_cluster.prometheus.name}"
+    ecs_agent_image_identifier = "${local.ecs_agent_image_identifier}"
+    tools_account_id           = "${var.tools_account_id}"
   }
 }
 
@@ -434,6 +434,7 @@ data "template_file" "prometheus_task_def" {
   vars {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-prometheus@${var.prometheus_image_digest}"
     config_base64    = "${base64encode(data.template_file.prometheus_config.rendered)}"
+    alerts_base64    = "${base64encode(file("${path.module}/files/prometheus/alerts.yml"))}"
   }
 }
 
