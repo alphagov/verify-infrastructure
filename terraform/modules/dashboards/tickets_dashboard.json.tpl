@@ -58,7 +58,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${deployment}",
+      "datasource": "${source}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -188,7 +188,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${deployment}",
+      "datasource": "${source}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -317,7 +317,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${deployment}",
+      "datasource": "${source}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -450,7 +450,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${deployment}",
+      "datasource": "${source}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -576,7 +576,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${deployment}",
+      "datasource": "${source}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -703,7 +703,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${deployment}",
+      "datasource": "${source}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -829,7 +829,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${deployment}",
+      "datasource": "${source}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -979,7 +979,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${deployment}",
+      "datasource": "${source}",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -1112,7 +1112,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${deployment}",
+      "datasource": "${source}",
       "description": "2xx + 3xx  / [2,3,4,5]xx Response Codes",
       "fill": 1,
       "gridPos": {
