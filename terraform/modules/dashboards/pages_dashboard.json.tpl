@@ -158,25 +158,25 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_2xx_responses_total[1m]) / rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1m])",
+          "expr": "sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_2xx_responses_total[1m])) / sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
         },
         {
-          "expr": "rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_2xx_responses_total[1m]) / rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count[1m])",
+          "expr": "sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_2xx_responses_total[1m])) / sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "B"
         },
         {
-          "expr": "rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_2xx_responses_total[1m]) / rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1m])",
+          "expr": "sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_2xx_responses_total[1m])) / sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "C"
         },
         {
-          "expr": "rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_2xx_responses_total[1m]) / rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_count[1m])",
+          "expr": "sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_2xx_responses_total[1m])) / sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_count[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "D"
@@ -302,7 +302,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_2xx_responses_total[1m]) / rate(uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_count[1m])",
+          "expr": "sum without(instance)(rate(uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_2xx_responses_total[1m])) / sum without(instance)(rate(uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_count[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
