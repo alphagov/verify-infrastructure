@@ -1,6 +1,17 @@
 global:
   scrape_interval:     15s
   evaluation_interval: 15s
+  external_labels:
+    product: verify
+    deployment: ${deployment}
+alerting:
+  alertmanagers:
+  - scheme: https
+    static_configs:
+    - targets:
+      - 'alerts-1.monitoring.gds-reliability.engineering'
+      - 'alerts-2.monitoring.gds-reliability.engineering'
+      - 'alerts-3.monitoring.gds-reliability.engineering'
 rule_files:
   - "alerts.yml"
 scrape_configs:
