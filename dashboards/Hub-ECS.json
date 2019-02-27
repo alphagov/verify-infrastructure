@@ -142,7 +142,7 @@
       "nullText": null,
       "postfix": "",
       "postfixFontSize": "50%",
-      "prefix": "in",
+      "prefix": "",
       "prefixFontSize": "50%",
       "rangeMaps": [
         {
@@ -169,7 +169,7 @@
         }
       ],
       "thresholds": "432000,604800",
-      "title": "Metadata expires",
+      "title": "Metadata expires in",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [],
