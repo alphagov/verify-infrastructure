@@ -429,18 +429,21 @@ module "prometheus_ecs_roles" {
 }
 
 data "template_file" "prometheus_task_def" {
+  count    = "${var.number_of_apps}"
   template = "${file("${path.module}/files/tasks/prometheus.json")}"
 
   vars {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-prometheus@${var.prometheus_image_digest}"
     config_base64    = "${base64encode(data.template_file.prometheus_config.rendered)}"
     alerts_base64    = "${base64encode(file("${path.module}/files/prometheus/alerts.yml"))}"
+    external_url     = "https://prom-${count.index + 1}.${local.mgmt_domain}"
   }
 }
 
 resource "aws_ecs_task_definition" "prometheus" {
-  family                = "${var.deployment}-prometheus"
-  container_definitions = "${data.template_file.prometheus_task_def.rendered}"
+  count                 = "${var.number_of_apps}"
+  family                = "${var.deployment}-prometheus-${count.index+1}"
+  container_definitions = "${element(data.template_file.prometheus_task_def.*.rendered, count.index)}"
   execution_role_arn    = "${module.prometheus_ecs_roles.execution_role_arn}"
   network_mode          = "host"
 
@@ -448,11 +451,17 @@ resource "aws_ecs_task_definition" "prometheus" {
     name      = "tsdb"
     host_path = "/srv/prometheus/metrics2"
   }
+
+  placement_constraints {
+    type       = "memberOf"
+    expression = "attribute:ecs.availability-zone == ${element(local.azs, count.index)}"
+  }
 }
 
 resource "aws_ecs_service" "prometheus" {
-  name                = "${var.deployment}-prometheus"
+  count               = "${var.number_of_apps}"
+  name                = "${var.deployment}-prometheus-${count.index+1}"
   cluster             = "${aws_ecs_cluster.prometheus.id}"
-  task_definition     = "${aws_ecs_task_definition.prometheus.arn}"
+  task_definition     = "${element(aws_ecs_task_definition.prometheus.*.arn, count.index)}"
   scheduling_strategy = "DAEMON"
 }
