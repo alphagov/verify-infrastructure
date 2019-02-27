@@ -15,6 +15,8 @@ groups:
 - name: service
   rules:
   - alert: HubSamlProxyErrorsReceivingRequest
+    labels:
+      severity: "p1"
     annotations:
       message: |
         It looks like users are having trouble starting sessions at
@@ -24,8 +26,57 @@ groups:
         95%.
     expr: |
       sum without(instance)(
+          rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_2xx_responses_total[1m]))
+      / sum without(instance)(]
+          rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1m]))
+      < 0.95
+  - alert: HubSamlProxyErrorsReceivingResponse
+    labels:
+      severity: "p1"
+    annotations:
+      message: |
+        It looks like users are having trouble returning to the hub
+        having verified at an IDP.  We expect that the saml-proxy
+        handleResponsePost endpoint should return a 2xx response under
+        normal conditions.  We are observing the rate of 2xx responses
+        has dropped below 95%.
+    expr: |
+      sum without(instance)(
           rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_2xx_responses_total[1m]))
       / sum without(instance)(
           rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count[1m]))
+      < 0.95
+  - alert: HubSamlProxyErrorsSendingRequest
+    labels:
+      severity: "p1"
+    annotations:
+      message: |
+        It looks like users are hitting errors when we try to redirect
+        users to an IDP that they have chosen.  We expect that the
+        saml-proxy sendJsonAuthnRequestFromHub endpoint should return
+        a 2xx response under normal conditions.  We are observing the
+        rate of 2xx responses has dropped below 95%.
+    expr: |
+      sum without(instance)(
+          rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_2xx_responses_total[1m]))
+      / sum without(instance)(
+          rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1m]))
+      < 0.95
+  - alert: HubSamlProxyErrorsSendingResponse
+    labels:
+      severity: "p1"
+    annotations:
+      message: |
+        It looks like users are hitting errors when we try to finish
+        their journey and redirect them back to the service they want
+        to use.  We expect that the saml-proxy
+        sendJsonAuthResponseFromHub endpoint should return a 2xx
+        response under normal conditions.  We are observing the rate
+        of 2xx responses has dropped below 95%.
+    expr: |
+      sum without(instance)(
+          rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_2xx_responses_total[1m]))
+      / sum without(instance)(
+          rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_count[1m]))
       < 0.95
 
