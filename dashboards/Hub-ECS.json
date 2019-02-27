@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1551083830301,
+  "iteration": 1551257520804,
   "links": [],
   "panels": [
     {
@@ -1340,6 +1340,193 @@
       "type": "table"
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 30
+      },
+      "id": 25,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_2xx_responses_total) / (sum(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_1xx_responses_total + uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_2xx_responses_total + uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_3xx_responses_total +\nuk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_4xx_responses_total +\nuk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_5xx_responses_total))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "saml-proxy-handle-request-post-2xx-%",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_2xx_responses_total) / sum(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_1xx_responses_total+uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_2xx_responses_total+uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_3xx_responses_total+uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_4xx_responses_total+uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_5xx_responses_total)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "saml-proxy-handle-response-post-2xx-%",
+          "refId": "B"
+        },
+        {
+          "expr": "sum(uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_2xx_responses_total) / \nsum(uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_1xx_responses_total + uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_2xx_responses_total + uk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_3xx_responses_total +\nuk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_4xx_responses_total +\nuk_gov_ida_hub_samlsoapproxy_resources_AttributeQueryRequestSenderResource_sendAttributeQueryRequest_5xx_responses_total)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "saml-soap-proxy-send-aqr-2xx-%",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "SAML Endpoint reliability",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": null,
+          "logBase": 1,
+          "max": "1",
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
+      "id": 2,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "rate(io_dropwizard_jetty_MutableServletContextHandler_5xx_responses_total[1m])",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "5xx responses",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Number of 5xx responses per second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "columns": [],
       "datasource": "$Prometheus",
       "fontSize": "100%",
@@ -1347,7 +1534,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 30
+        "y": 39
       },
       "hideTimeOverride": false,
       "id": 8,
@@ -1483,94 +1670,6 @@
       "transform": "table",
       "transparent": false,
       "type": "table"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 30
-      },
-      "id": 2,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "hideEmpty": false,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "rate(io_dropwizard_jetty_MutableServletContextHandler_5xx_responses_total[1m])",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{job}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "5xx responses",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "Number of 5xx responses per second",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     },
     {
       "aliasColors": {},
