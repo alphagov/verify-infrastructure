@@ -27,7 +27,7 @@ groups:
     expr: |
       sum without(instance)(
           rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_2xx_responses_total[1m]))
-      / sum without(instance)(]
+      / sum without(instance)(
           rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1m]))
       < 0.95
   - alert: HubSamlProxyErrorsReceivingResponse
