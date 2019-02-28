@@ -2,7 +2,7 @@
 groups:
 - name: prometheus_base
   rules:
-  - alert: Watchdog
+  - alert: AlwaysAlert
     annotations:
       message: |
         This is an alert meant to ensure that the entire alerting pipeline is functional.
