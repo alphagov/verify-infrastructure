@@ -5,6 +5,10 @@ location_blocks="${LOCATION_BLOCKS:?LOCATION_BLOCKS not set}"
 location_blocks="$(echo "$location_blocks" | base64 -d)"
 export location_blocks
 
+log_format="${LOG_FORMAT:-I2xvZ19mb3JtYXQgaXMgbm90IGRlZmluZWQK}"
+log_format="$(echo "$log_format" | base64 -d)"
+export log_format
+
 resolver="${RESOLVER:-10.0.0.2}"
 export resolver
 

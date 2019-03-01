@@ -17,6 +17,8 @@ http {
 
   resolver     "$resolver";
 
+  $log_format
+
   server {
     listen       8443 ssl;
     ssl_protocols       TLSv1.1 TLSv1.2;
