@@ -14,6 +14,7 @@ locals {
 
   set $analytics "${var.analytics_endpoint}";
   location /analytics {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_pass $analytics/matomo.php?$args;
   }
 
