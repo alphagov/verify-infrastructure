@@ -5,7 +5,7 @@ location_blocks="${LOCATION_BLOCKS:?LOCATION_BLOCKS not set}"
 location_blocks="$(echo "$location_blocks" | base64 -d)"
 export location_blocks
 
-log_format="${LOG_FORMAT:-I2xvZ19mb3JtYXQgaXMgbm90IGRlZmluZWQK}"
+log_format="${LOG_FORMAT:-YWNjZXNzX2xvZyAgIC90bXAvc3Rkb3V0Ow==}"
 log_format="$(echo "$log_format" | base64 -d)"
 export log_format
 

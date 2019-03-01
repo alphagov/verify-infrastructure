@@ -7,7 +7,6 @@ events {
 }
 
 http {
-  access_log   /tmp/stdout;
   sendfile     on;
   tcp_nopush   on;
   server_names_hash_bucket_size 128;
