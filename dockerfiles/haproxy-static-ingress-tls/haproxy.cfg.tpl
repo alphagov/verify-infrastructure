@@ -35,5 +35,5 @@ backend alb
     balance roundrobin
     option forwardfor
     http-request add-header x-client-ip %[src]
-    http-request add-header ida-forward-for %[src]
+    http-request add-header hub-forwarded-for %[src]
     server alb $BACKEND:$BACKEND_PORT resolvers vpcdns ssl verify required ca-file ca-certificates.crt check inter 100 fastinter 100
