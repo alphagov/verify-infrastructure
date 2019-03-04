@@ -232,7 +232,7 @@ resource "aws_lb_listener" "static_ingress_http" {
 
 resource "aws_lb_listener" "static_ingress_https" {
   load_balancer_arn = "${aws_lb.static_ingress.arn}"
-  protocol          = "TCP"
+  protocol          = "TLS"
   port              = 443
   certificate_arn   = "${local.wildcard_cert_arn}"
 
