@@ -92,7 +92,7 @@ module "policy" {
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-policy"
   instance_security_group_id = "${module.policy_ecs_asg.instance_sg_id}"
-  certificate_arn            = "${local.wildcard_cert_arn}"
+  certificate_arn            = "${var.wildcard_cert_arn}"
 }
 
 resource "aws_iam_policy" "policy_parameter_execution" {

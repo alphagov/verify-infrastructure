@@ -86,7 +86,7 @@ module "saml_proxy" {
   health_check_path          = "/service-status"
   tools_account_id           = "${var.tools_account_id}"
   instance_security_group_id = "${module.saml_proxy_ecs_asg.instance_sg_id}"
-  certificate_arn            = "${local.wildcard_cert_arn}"
+  certificate_arn            = "${var.wildcard_cert_arn}"
   image_name                 = "verify-saml-proxy"
 }
 
