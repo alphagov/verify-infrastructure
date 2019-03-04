@@ -129,6 +129,7 @@ module "static_ingress_ecs_roles" {
   deployment       = "${var.deployment}"
   tools_account_id = "${var.tools_account_id}"
   service_name     = "static-ingress"
+  # This is used in an IAM Policy document, so wildcards are ok
   image_name       = "verify-static-ingress*"
 }
 
