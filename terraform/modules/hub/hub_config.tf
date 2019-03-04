@@ -88,5 +88,5 @@ module "config" {
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-config"
   instance_security_group_id = "${module.config_ecs_asg.instance_sg_id}"
-  certificate_arn            = "${local.wildcard_cert_arn}"
+  certificate_arn            = "${var.wildcard_cert_arn}"
 }

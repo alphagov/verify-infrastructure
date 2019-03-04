@@ -70,7 +70,7 @@ module "saml_engine" {
   tools_account_id           = "${var.tools_account_id}"
   image_name                 = "verify-saml-engine"
   instance_security_group_id = "${module.saml_engine_ecs_asg.instance_sg_id}"
-  certificate_arn            = "${local.wildcard_cert_arn}"
+  certificate_arn            = "${var.wildcard_cert_arn}"
 }
 
 module "saml_engine_can_connect_to_config" {
