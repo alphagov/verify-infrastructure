@@ -115,7 +115,7 @@ data "template_file" "static_ingress_https_task_def" {
   template = "${file("${path.module}/files/tasks/static-ingress.json")}"
 
   vars {
-    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress@${var.static_ingress_image_digest}"
+    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-tls@${var.static_ingress_tls_image_digest}"
     backend          = "${var.signin_domain}"
     bind_port        = 443
     backend_port     = 443
@@ -129,7 +129,8 @@ module "static_ingress_ecs_roles" {
   deployment       = "${var.deployment}"
   tools_account_id = "${var.tools_account_id}"
   service_name     = "static-ingress"
-  image_name       = "verify-static-ingress"
+  # This is used in an IAM Policy document, so wildcards are ok
+  image_name       = "verify-static-ingress*"
 }
 
 resource "aws_ecs_task_definition" "static_ingress_http" {
@@ -213,7 +214,7 @@ resource "aws_lb_target_group" "static_ingress_http" {
 resource "aws_lb_target_group" "static_ingress_https" {
   name                 = "${var.deployment}-static-ingress-https"
   port                 = 443
-  protocol             = "TCP"
+  protocol             = "TLS"
   vpc_id               = "${aws_vpc.hub.id}"
   deregistration_delay = 30
 }
@@ -233,6 +234,7 @@ resource "aws_lb_listener" "static_ingress_https" {
   load_balancer_arn = "${aws_lb.static_ingress.arn}"
   protocol          = "TCP"
   port              = 443
+  certificate_arn   = "${local.wildcard_cert_arn}"
 
   default_action {
     type             = "forward"
