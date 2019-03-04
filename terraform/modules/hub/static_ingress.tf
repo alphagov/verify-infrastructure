@@ -129,7 +129,7 @@ module "static_ingress_ecs_roles" {
   deployment       = "${var.deployment}"
   tools_account_id = "${var.tools_account_id}"
   service_name     = "static-ingress"
-  image_name       = "verify-static-ingress"
+  image_name       = "verify-static-ingress*"
 }
 
 resource "aws_ecs_task_definition" "static_ingress_http" {
