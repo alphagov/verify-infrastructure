@@ -99,6 +99,12 @@ logging.to_syslog: true
 processors:
 - add_cloud_metadata: ~
 - add_docker_metadata: ~
+- decode_json_fields:
+    fields: ["message"]
+    process_array: false
+    max_depth: 5
+    target: "log"
+    overwrite_keys: false
 
 output.elasticsearch:
   ${journalbeat_egress_proxy_setting}
