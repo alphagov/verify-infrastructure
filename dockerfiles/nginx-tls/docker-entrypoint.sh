@@ -5,7 +5,43 @@ location_blocks="${LOCATION_BLOCKS:?LOCATION_BLOCKS not set}"
 location_blocks="$(echo "$location_blocks" | base64 -d)"
 export location_blocks
 
-log_format="${LOG_FORMAT:-YWNjZXNzX2xvZyAgIC90bXAvc3Rkb3V0Ow==}"
+default_log_format =
+"log_format json_event '{ \"@timestamp\": \"\$time_iso8601\", '
+                         '\"@message\": \"\$request\", '
+                         '\"@fields\": { '
+                         '\"remote_addr\": \"\$remote_addr\", '
+                         '\"remote_user\": \"\$remote_user\", '
+                         '\"body_bytes_sent\": \$body_bytes_sent, '
+                         '\"bytes_sent\": \$bytes_sent, '
+                         '\"request_time\": \$request_time, '
+                         '\"upstream_response_time\": \"\$upstream_response_time\", '
+                         '\"upstream_addr\": \"\$upstream_addr\", '
+                         '\"gzip_ratio\": \"\$gzip_ratio\", '
+                         '\"sent_http_x_cache\": \"\$sent_http_x_cache\", '
+                         '\"sent_http_location\": \"\$sent_http_location\", '
+                         '\"http_host\": \"\$http_host\", '
+                         '\"server_name\": \"\$server_name\", '
+                         '\"server_port\": \"\$server_port\", '
+                         '\"status\": \$status, '
+                         '\"request\": \"\$request\", '
+                         '\"content_type\": \"\$content_type\", '
+                         '\"request_method\": \"\$request_method\", '
+                         '\"http_referrer\": \"\$http_referer\", '
+                         '\"http_user_agent\": \"\$http_user_agent\", '
+                         '\"http_x_forwarded_for\": \"\$http_x_forwarded_for\", '
+                         '\"ssl_cipher\": \"\$ssl_cipher\", '
+                         '\"ssl_protocol\": \"\$ssl_protocol\", '
+                         '\"ssl_session_reused\": \"\$ssl_session_reused\", '
+                         '\"msec\": \"\$msec\", '
+                         '\"connection\": \"\$connection\", '
+                         '\"session_id_cookie\": \"\$cookie_x_govuk_session_cookie\", '
+                         '\"augur_cookie\": \"\$cookie_augur\", '
+                         '\"ssl_client_s_dn\": \"\$ssl_client_s_dn_legacy\", '
+                         '\"upstream_cookie_x_govuk_session_cookie\": \"\$upstream_cookie_x_govuk_session_cookie\"'
+                         '} }';
+
+access_log /tmp/stdout json_event;"
+log_format="${LOG_FORMAT:-$default_log_format}"
 log_format="$(echo "$log_format" | base64 -d)"
 export log_format
 
