@@ -5,8 +5,8 @@ location_blocks="${LOCATION_BLOCKS:?LOCATION_BLOCKS not set}"
 location_blocks="$(echo "$location_blocks" | base64 -d)"
 export location_blocks
 
-default_log_format =
-"log_format json_event '{ \"@timestamp\": \"\$time_iso8601\", '
+default_log_format="$(cat <<LOGFORMAT | base64
+log_format json_event '{ \"@timestamp\": \"\$time_iso8601\", '
                          '\"@message\": \"\$request\", '
                          '\"@fields\": { '
                          '\"remote_addr\": \"\$remote_addr\", '
@@ -40,7 +40,10 @@ default_log_format =
                          '\"upstream_cookie_x_govuk_session_cookie\": \"\$upstream_cookie_x_govuk_session_cookie\"'
                          '} }';
 
-access_log /tmp/stdout json_event;"
+access_log /tmp/stdout json_event;
+LOGFORMAT
+)"
+
 log_format="${LOG_FORMAT:-$default_log_format}"
 log_format="$(echo "$log_format" | base64 -d)"
 export log_format
