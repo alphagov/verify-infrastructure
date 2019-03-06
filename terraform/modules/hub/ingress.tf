@@ -207,6 +207,27 @@ resource "aws_lb_listener_rule" "ingress_analytics" {
   }
 }
 
+resource "aws_lb_listener_rule" "ingress_metrics" {
+  listener_arn = "${aws_lb_listener.ingress_https.arn}"
+  priority     = 130
+
+  action {
+    type = "redirect"
+
+    redirect {
+      host        = "www.gov.uk"
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+
+  condition {
+    field  = "path-pattern"
+    values = ["/metrics*"]
+  }
+}
+
 resource "aws_route53_zone" "ingress_www" {
   name = "www.${local.root_domain}."
 
