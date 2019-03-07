@@ -253,6 +253,7 @@ resource "aws_lb_listener_rule" "ingress_metrics" {
     redirect {
       host        = "www.gov.uk"
       port        = "443"
+      path        = "/"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
     }
