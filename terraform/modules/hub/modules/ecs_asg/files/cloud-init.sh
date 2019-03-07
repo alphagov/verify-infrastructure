@@ -109,7 +109,7 @@ journalbeat.inputs:
 
 logging.level: warning
 logging.to_files: false
-logging.to_syslog: false
+logging.to_syslog: true
 logging.json: true
 
 processors:
