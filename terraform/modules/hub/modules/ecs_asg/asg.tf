@@ -40,6 +40,10 @@ resource "aws_launch_configuration" "cluster" {
     "${aws_security_group.instance.id}",
   ]
 
+  root_block_device {
+    volume_size = 20
+  }
+
   lifecycle {
     create_before_destroy = true
   }
