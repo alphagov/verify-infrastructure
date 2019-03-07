@@ -102,7 +102,7 @@ processors:
 - decode_json_fields:
     fields: ["message"]
     process_array: false
-    max_depth: 5
+    max_depth: 1
     target: "log"
     overwrite_keys: false
 
