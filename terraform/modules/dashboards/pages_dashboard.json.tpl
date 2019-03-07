@@ -40,7 +40,7 @@
             },
             "reducer": {
               "params": [],
-              "type": "min"
+              "type": "max"
             },
             "type": "query"
           },
@@ -63,7 +63,7 @@
             },
             "reducer": {
               "params": [],
-              "type": "min"
+              "type": "max"
             },
             "type": "query"
           },
@@ -86,7 +86,7 @@
             },
             "reducer": {
               "params": [],
-              "type": "min"
+              "type": "max"
             },
             "type": "query"
           },
@@ -109,7 +109,7 @@
             },
             "reducer": {
               "params": [],
-              "type": "min"
+              "type": "max"
             },
             "type": "query"
           }
