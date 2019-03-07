@@ -177,6 +177,21 @@ resource "aws_lb_listener" "ingress_https" {
   }
 }
 
+resource "aws_lb_listener_rule" "ingress_metadata_sp" {
+  listener_arn = "${aws_lb_listener.ingress_https.arn}"
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.ingress_frontend.arn}"
+  }
+
+  condition {
+    field  = "path-pattern"
+    values = ["/SAML2/metadata/sp"]
+  }
+}
+
 resource "aws_lb_listener_rule" "ingress_root" {
   listener_arn = "${aws_lb_listener.ingress_https.arn}"
   priority     = 140
