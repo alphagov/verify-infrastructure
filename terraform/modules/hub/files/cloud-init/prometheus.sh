@@ -29,6 +29,21 @@ systemctl stop snap.amazon-ssm-agent.amazon-ssm-agent
 systemctl daemon-reload
 systemctl start snap.amazon-ssm-agent.amazon-ssm-agent
 
+# We want to make sure that the journal does not write to syslog
+# This would fill up the disk, with logs we already have in the journal
+echo "Ensure journal does not write to syslog"
+mkdir -p /etc/systemd/journald.conf.d/
+cat <<JOURNAL > /etc/systemd/journald.conf.d/override.conf
+[Journal]
+SystemMaxUse=2G
+RuntimeMaxUse=2G
+ForwardToSyslog=no
+ForwardToWall=no
+JOURNAL
+
+systemctl daemon-reload
+systemctl restart systemd-journald
+
 # Use Amazon NTP
 echo 'Installing and configuring chrony'
 apt-get install --yes chrony
