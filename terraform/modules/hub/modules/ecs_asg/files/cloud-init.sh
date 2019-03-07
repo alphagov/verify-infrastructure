@@ -109,7 +109,8 @@ journalbeat.inputs:
 
 logging.level: warning
 logging.to_files: false
-logging.to_syslog: true
+logging.to_syslog: false
+logging.json: true
 
 processors:
 - add_cloud_metadata: ~
