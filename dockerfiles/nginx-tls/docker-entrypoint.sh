@@ -59,7 +59,13 @@ openssl req -x509 \
             -keyout /tmp/tls/key.pem \
             -out    /tmp/tls/cert.pem \
             -days   365 \
-            -subj "/C=GB/O=GDS"
+            -subj "/C=GB/O=GDS" 2>&1 | {
+              message=""
+              while read line; do
+                message="$message $line"
+              done
+              echo "{ \"logger_name\": \"openssl\", \"message\": \"$message\" }"
+            }
 
 envsubst > /tmp/nginx.conf < /tmp/nginx.conf.tpl
 
