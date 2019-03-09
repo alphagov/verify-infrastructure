@@ -30,6 +30,7 @@ groups:
       / sum without(instance)(
           rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[15m]))
       < 0.95
+    for: 15m
   - alert: HubSamlProxyErrorsReceivingResponse
     labels:
       severity: "p1"
@@ -46,6 +47,7 @@ groups:
       / sum without(instance)(
           rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count[15m]))
       < 0.95
+    for: 15m
   - alert: HubSamlProxyErrorsSendingRequest
     labels:
       severity: "p1"
@@ -62,6 +64,7 @@ groups:
       / sum without(instance)(
           rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[15m]))
       < 0.95
+    for: 15m
   - alert: HubSamlProxyErrorsSendingResponse
     labels:
       severity: "p1"
@@ -79,6 +82,7 @@ groups:
       / sum without(instance)(
           rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_count[15m]))
       < 0.95
+    for: 15m
   - alert: EveryMsaIsUnhealthy
     labels:
       severity: "p1"
