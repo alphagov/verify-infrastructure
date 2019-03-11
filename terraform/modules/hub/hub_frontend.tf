@@ -125,18 +125,6 @@ module "frontend_can_connect_to_saml_proxy" {
   destination_sg_id = "${module.saml_proxy.lb_sg_id}"
 }
 
-resource "random_string" "frontend_secret_key_base" {
-  length  = 64
-  special = false
-}
-
-resource "aws_ssm_parameter" "frontend_secret_key_base" {
-  name   = "/${var.deployment}/frontend/secret-key-base"
-  type   = "SecureString"
-  key_id = "${aws_kms_key.frontend.key_id}"
-  value  = "${random_string.frontend_secret_key_base.result}"
-}
-
 resource "aws_iam_policy" "frontend_parameter_execution" {
   name = "${var.deployment}-frontend-parameter-execution"
 
