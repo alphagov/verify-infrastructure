@@ -36,6 +36,11 @@ resource "aws_security_group_rule" "frontend_task_egress_to_internet_over_https"
 
 locals {
   location_blocks = <<-LOCATIONS
+  # Reject DEBUG verb in all cases.
+  if ($request_method = DEBUG) {
+      return 405;
+  }
+
   location / {
     proxy_pass http://localhost:8080;
     proxy_set_header Host ${var.signin_domain};
