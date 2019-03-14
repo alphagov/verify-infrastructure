@@ -75,6 +75,15 @@ module "prometheus_can_talk_to_egress_proxy_beat_exporter" {
   port = 9479
 }
 
+module "prometheus_can_talk_to_frontend_task" {
+  source = "modules/microservice_connection"
+
+  source_sg_id      = "${aws_security_group.prometheus.id}"
+  destination_sg_id = "${module.frontend_task.instance_sg_id}"
+
+  port = 8443
+}
+
 module "prometheus_can_talk_to_policy" {
   source = "modules/microservice_connection"
 
