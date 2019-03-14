@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 83,
+  "id": 97,
   "links": [],
   "panels": [
     {
@@ -46,11 +46,11 @@
             "type": "query"
           }
         ],
-        "executionErrorState": "alerting",
+        "executionErrorState": "keep_state",
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "[${deployment}] Servers needing reboot alert",
+        "name": "[${deployment}] Servers need rebooting",
         "noDataState": "ok",
         "notifications": []
       },
@@ -151,7 +151,7 @@
           {
             "evaluator": {
               "params": [
-                1209600
+                1
               ],
               "type": "lt"
             },
@@ -161,28 +161,47 @@
             "query": {
               "params": [
                 "A",
-                "5m",
+                "1m",
                 "now"
               ]
             },
             "reducer": {
               "params": [],
-              "type": "max"
+              "type": "last"
+            },
+            "type": "query"
+          },
+          {
+            "evaluator": {
+              "params": [
+                1
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "or"
+            },
+            "query": {
+              "params": [
+                "A",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
             },
             "type": "query"
           }
         ],
         "executionErrorState": "alerting",
-        "for": "5m",
+        "for": "15m",
         "frequency": "1m",
         "handler": 1,
-        "name": "[${deployment}] Certificate Expiry is Less than 14 days",
+        "name": "[${deployment}] Prometheus scrape target down",
         "noDataState": "ok",
-        "notifications": [
-          {
-            "id": 4
-          }
-        ]
+        "notifications": []
       },
       "aliasColors": {},
       "bars": false,
@@ -196,7 +215,7 @@
         "x": 12,
         "y": 0
       },
-      "id": 8,
+      "id": 14,
       "legend": {
         "avg": false,
         "current": false,
@@ -220,12 +239,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(verify_metadata_certificate_expiry or verify_config_certificate_expiry) / 1000 - time()",
+          "expr": "up",
           "format": "time_series",
           "hide": false,
-          "instant": true,
           "intervalFactor": 1,
           "refId": "A"
+        },
+        {
+          "expr": "journalbeat_up",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "B"
         }
       ],
       "thresholds": [
@@ -234,13 +258,13 @@
           "fill": true,
           "line": true,
           "op": "lt",
-          "value": 1209600
+          "value": 1
         }
       ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Certificate Expiry Time Left in Seconds",
+      "title": "Up targets & services",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -256,7 +280,7 @@
       },
       "yaxes": [
         {
-          "format": "s",
+          "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -305,7 +329,7 @@
             "type": "query"
           }
         ],
-        "executionErrorState": "alerting",
+        "executionErrorState": "keep_state",
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
@@ -417,7 +441,7 @@
           {
             "evaluator": {
               "params": [
-                432000
+                95
               ],
               "type": "lt"
             },
@@ -433,16 +457,16 @@
             },
             "reducer": {
               "params": [],
-              "type": "max"
+              "type": "min"
             },
             "type": "query"
           }
         ],
-        "executionErrorState": "alerting",
+        "executionErrorState": "keep_state",
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
-        "name": "[${deployment}] Metadata expires in under 5 days",
+        "name": "[${deployment}] Less than 95% of analytics requests were successful",
         "noDataState": "ok",
         "notifications": []
       },
@@ -451,6 +475,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${source}",
+      "description": "2xx + 3xx  / [2,3,4,5]xx Response Codes",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -458,7 +483,7 @@
         "x": 12,
         "y": 4
       },
-      "id": 12,
+      "id": 16,
       "legend": {
         "avg": false,
         "current": false,
@@ -482,9 +507,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(verify_metadata_expiry/1000) - time()",
+          "expr": "sum(rate({__name__=~\"aws_applicationelb_httpcode_target_[23]_xx_count_sum\",target_group=~\"targetgroup/prod-ingress-analytics/.*\"}[60m])) / sum(rate({__name__=~\"aws_applicationelb_httpcode_target_[2345]_xx_count_sum\",target_group=~\"targetgroup/prod-ingress-analytics/.*\"}[60m])) * 100",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -494,13 +520,13 @@
           "fill": true,
           "line": true,
           "op": "lt",
-          "value": 432000
+          "value": 95
         }
       ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Metadata Expiry",
+      "title": "Analytics % of successful requests as a proportion of total requests.",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -516,14 +542,15 @@
       },
       "yaxes": [
         {
-          "format": "s",
+          "format": "percent",
           "label": null,
           "logBase": 1,
-          "max": null,
+          "max": "100",
           "min": null,
           "show": true
         },
         {
+          "decimals": null,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -564,7 +591,7 @@
             "type": "query"
           }
         ],
-        "executionErrorState": "alerting",
+        "executionErrorState": "keep_state",
         "for": "5m",
         "frequency": "1m",
         "handler": 1,
@@ -670,132 +697,6 @@
           {
             "evaluator": {
               "params": [
-                1
-              ],
-              "type": "lt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "5m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "min"
-            },
-            "type": "query"
-          }
-        ],
-        "executionErrorState": "alerting",
-        "for": "30m",
-        "frequency": "1m",
-        "handler": 1,
-        "name": "[${deployment}] Certificates failed OCSP checks",
-        "noDataState": "ok",
-        "notifications": []
-      },
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${source}",
-      "fill": 1,
-      "gridPos": {
-        "h": 4,
-        "w": 12,
-        "x": 12,
-        "y": 8
-      },
-      "id": 10,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "(verify_metadata_certificate_ocsp_success or verify_config_certificate_ocsp_success) ",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "lt",
-          "value": 1
-        }
-      ],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Certificates failed OCSP",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "alert": {
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
                 0.001
               ],
               "type": "lt"
@@ -817,8 +718,8 @@
             "type": "query"
           }
         ],
-        "executionErrorState": "alerting",
-        "for": "0m",
+        "executionErrorState": "keep_state",
+        "for": "5m",
         "frequency": "1m",
         "handler": 1,
         "name": "[${deployment}] Journalbeat sent no events in last 15 minutes",
@@ -834,8 +735,8 @@
       "gridPos": {
         "h": 4,
         "w": 12,
-        "x": 0,
-        "y": 12
+        "x": 12,
+        "y": 8
       },
       "id": 13,
       "legend": {
@@ -916,299 +817,14 @@
         "align": false,
         "alignLevel": null
       }
-    },
-    {
-      "alert": {
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
-                1
-              ],
-              "type": "lt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "1m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "last"
-            },
-            "type": "query"
-          },
-          {
-            "evaluator": {
-              "params": [
-                1
-              ],
-              "type": "lt"
-            },
-            "operator": {
-              "type": "or"
-            },
-            "query": {
-              "params": [
-                "B",
-                "1m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "last"
-            },
-            "type": "query"
-          }
-        ],
-        "executionErrorState": "alerting",
-        "for": "15m",
-        "frequency": "1m",
-        "handler": 1,
-        "name": "[${deployment}] Prometheus scrape target down",
-        "noDataState": "ok",
-        "notifications": []
-      },
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${source}",
-      "fill": 1,
-      "gridPos": {
-        "h": 4,
-        "w": 12,
-        "x": 12,
-        "y": 12
-      },
-      "id": 14,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "up",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 1,
-          "refId": "A"
-        },
-        {
-          "expr": "journalbeat_up",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "B"
-        }
-      ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "lt",
-          "value": 1
-        }
-      ],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Up targets & services",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "alert": {
-        "conditions": [
-          {
-            "evaluator": {
-              "params": [
-                95
-              ],
-              "type": "lt"
-            },
-            "operator": {
-              "type": "and"
-            },
-            "query": {
-              "params": [
-                "A",
-                "5m",
-                "now"
-              ]
-            },
-            "reducer": {
-              "params": [],
-              "type": "min"
-            },
-            "type": "query"
-          }
-        ],
-        "executionErrorState": "alerting",
-        "for": "5m",
-        "frequency": "1m",
-        "handler": 1,
-        "name": "[${deployment}] Less than 95% of analytics requests were successful",
-        "noDataState": "ok",
-        "notifications": []
-      },
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${source}",
-      "description": "2xx + 3xx  / [2,3,4,5]xx Response Codes",
-      "fill": 1,
-      "gridPos": {
-        "h": 4,
-        "w": 12,
-        "x": 0,
-        "y": 16
-      },
-      "id": 16,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate({__name__=~\"aws_applicationelb_httpcode_target_[23]_xx_count_sum\",target_group=~\"targetgroup/${lower(deployment)}-ingress-analytics/.*\"}[60m])) / sum(rate({__name__=~\"aws_applicationelb_httpcode_target_[2345]_xx_count_sum\",target_group=~\"targetgroup/${lower(deployment)}-ingress-analytics/.*\"}[60m])) * 100",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [
-        {
-          "colorMode": "critical",
-          "fill": true,
-          "line": true,
-          "op": "lt",
-          "value": 95
-        }
-      ],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Analytics % of successful requests as a proportion of total requests.",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": "100",
-          "min": null,
-          "show": true
-        },
-        {
-          "decimals": null,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     }
   ],
   "refresh": false,
   "schemaVersion": 16,
   "style": "dark",
   "tags": [
-    "verify",
-    "${deployment}"
+    "${deployment}",
+    "RE"
   ],
   "templating": {
     "list": []
@@ -1243,7 +859,7 @@
     ]
   },
   "timezone": "",
-  "title": "[${deployment}] Ticket Type Alerts",
-  "uid": "G-LKLOriz",
-  "version": 10
+  "title": "[${deployment}] Infra Tickets",
+  "uid": "LAaZ1Xjik",
+  "version": 3
 }
