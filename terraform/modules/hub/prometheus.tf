@@ -79,7 +79,7 @@ module "prometheus_can_talk_to_frontend_task" {
   source = "modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${module.frontend_task.instance_sg_id}"
+  destination_sg_id = "${aws_security_group.frontend_task.id}"
 
   port = 8443
 }
