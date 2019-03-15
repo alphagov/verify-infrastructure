@@ -107,11 +107,6 @@ resource "aws_ecs_service" "frontend" {
       "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
     ]
   }
-
-  service_registries {
-    registry_arn = "${aws_service_discovery_service.frontend.arn}"
-    port         = 8443
-  }
 }
 
 module "frontend_can_connect_to_config" {
