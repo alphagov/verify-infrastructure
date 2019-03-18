@@ -44,6 +44,7 @@ locals {
   location / {
     proxy_pass http://localhost:8080;
     proxy_set_header Host ${var.signin_domain};
+    proxy_set_header X-Forwarded-Proto https;
   }
   LOCATIONS
 
