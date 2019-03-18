@@ -128,11 +128,11 @@ resource "aws_lb_target_group" "ingress_frontend" {
   slow_start           = 30
 
   health_check {
-    path     = "/"
+    path     = "/cookies"
     protocol = "HTTPS"
     interval = 10
     timeout  = 5
-    matcher  = "200,301"
+    matcher  = "200"
   }
 }
 
