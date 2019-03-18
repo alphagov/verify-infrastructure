@@ -110,7 +110,7 @@ resource "aws_ecs_service" "frontend" {
 }
 
 resource "aws_ecs_service" "frontend_v2" {
-  name            = "${var.deployment}-frontend"
+  name            = "${var.deployment}-frontend-v2"
   cluster         = "${aws_ecs_cluster.ingress.id}"
   task_definition = "${aws_ecs_task_definition.frontend.arn}"
 
