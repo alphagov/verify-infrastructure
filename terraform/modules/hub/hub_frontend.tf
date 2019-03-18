@@ -85,37 +85,15 @@ resource "aws_ecs_task_definition" "frontend" {
   execution_role_arn    = "${module.frontend_ecs_roles.execution_role_arn}"
 }
 
-resource "aws_ecs_service" "frontend" {
-  name            = "${var.deployment}-frontend"
-  cluster         = "${aws_ecs_cluster.ingress.id}"
-  task_definition = "${aws_ecs_task_definition.frontend.arn}"
-
-  desired_count                      = "${var.number_of_apps/2}"
-  deployment_minimum_healthy_percent = 50
-  deployment_maximum_percent         = 200
-
-  load_balancer {
-    target_group_arn = "${aws_lb_target_group.ingress_frontend.arn}"
-    container_name   = "nginx"
-    container_port   = "8443"
-  }
-
-  network_configuration {
-    subnets = ["${aws_subnet.internal.*.id}"]
-
-    security_groups = [
-      "${aws_security_group.frontend_task.id}",
-      "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
-    ]
-  }
-}
-
+# This is called frontend_v2 because there was an old frontend service
+# that coexisted at the same time for a while and life is sometimes
+# too short to `terraform state mv`
 resource "aws_ecs_service" "frontend_v2" {
   name            = "${var.deployment}-frontend-v2"
   cluster         = "${aws_ecs_cluster.ingress.id}"
   task_definition = "${aws_ecs_task_definition.frontend.arn}"
 
-  desired_count                      = "${var.number_of_apps/2 + var.number_of_apps%2}"
+  desired_count                      = "${var.number_of_apps}"
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
 
