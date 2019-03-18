@@ -132,7 +132,7 @@ resource "aws_lb_target_group" "ingress_frontend" {
     protocol = "HTTPS"
     interval = 10
     timeout  = 5
-    matcher  = "200"
+    matcher  = "200,301"
   }
 }
 
