@@ -65,6 +65,13 @@ scrape_configs:
       - source_labels: [__meta_ec2_tag_Cluster]
         replacement: $${1}_journalbeat
         target_label: job
+  - job_name: frontend
+    scheme: 'https'
+    tls_config:
+      insecure_skip_verify: true
+    dns_sd_configs:
+      - names:
+          - 'frontend.hub.local'
   - job_name: apps
     scheme: 'https'
     metrics_path: '/prometheus/metrics'
