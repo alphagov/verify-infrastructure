@@ -31,12 +31,11 @@
       }
     ],
     "entryPoint": [
-      "rails",
-      "server",
+      "puma",
       "-p",
       "8080",
       "-b",
-      "0.0.0.0"
+      "tcp://0.0.0.0"
     ],
     "secrets": [
       {
