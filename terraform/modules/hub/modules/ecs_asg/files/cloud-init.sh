@@ -88,16 +88,16 @@ elastic_beats="artifacts.elastic.co/downloads/beats"
 mkdir -p /tmp/journalbeat
 cd /tmp/journalbeat
 
-cat <<EOF > journalbeat-6.6.0-amd64.deb.sha512
-a40b695a125a2ed333a776844eccb4519152ceafb3dc0e31bb002720671f9a1344dde1b319fb7242bfde3ba2ff2a838e0b37fbd128f690018c6fb7bd63e8c451  journalbeat-6.6.0-amd64.deb
+cat <<EOF > journalbeat-6.7.0-amd64.deb.sha512
+d2ed4e5a073bbaed04c7a2488c901452c4c7e814c006c9c341a1795608d14362541f6fb1614afe132577290477b59a62d0d197f14d0c60b66ea27d654cf078c9  journalbeat-6.7.0-amd64.deb
 EOF
 
 $CURL --silent --fail \
       -L -O \
-      "https://$elastic_beats/journalbeat/journalbeat-6.6.0-amd64.deb"
+      "https://$elastic_beats/journalbeat/journalbeat-6.7.0-amd64.deb"
 
-sha512sum -c journalbeat-6.6.0-amd64.deb.sha512
-dpkg -i journalbeat-6.6.0-amd64.deb
+sha512sum -c journalbeat-6.7.0-amd64.deb.sha512
+dpkg -i journalbeat-6.7.0-amd64.deb
 )
 
 cat <<EOF > /etc/journalbeat/journalbeat.yml
@@ -207,5 +207,4 @@ apt-get install --yes moreutils
 crontab - <<EOF
 $(crontab -l | grep -v 'no crontab')
 */5 * * * * /usr/bin/instance-reboot-required-metric.sh | sponge /var/lib/prometheus/node-exporter/reboot-required.prom
-*/5 * * * * /usr/sbin/service journalbeat restart
 EOF
