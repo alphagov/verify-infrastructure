@@ -88,16 +88,16 @@ elastic_beats="artifacts.elastic.co/downloads/beats"
 mkdir -p /tmp/journalbeat
 cd /tmp/journalbeat
 
-cat <<EOF > journalbeat-6.7.0-amd64.deb.sha512
-d2ed4e5a073bbaed04c7a2488c901452c4c7e814c006c9c341a1795608d14362541f6fb1614afe132577290477b59a62d0d197f14d0c60b66ea27d654cf078c9  journalbeat-6.7.0-amd64.deb
+cat <<EOF > journalbeat-oss-6.7.0-amd64.deb.sha512
+532c910eb3e2d37d04990a166d4930e1b9c7ea9139cadf1870022a6877066844480240a13b6a57433020b6e9c13a084e757e510d6d5d7a9a35783e94b51bddea  journalbeat-oss-6.7.0-amd64.deb
 EOF
 
 $CURL --silent --fail \
       -L -O \
-      "https://$elastic_beats/journalbeat/journalbeat-6.7.0-amd64.deb"
+      "https://$elastic_beats/journalbeat/journalbeat-oss-6.7.0-amd64.deb"
 
-sha512sum -c journalbeat-6.7.0-amd64.deb.sha512
-dpkg -i journalbeat-6.7.0-amd64.deb
+sha512sum -c journalbeat-oss-6.7.0-amd64.deb.sha512
+dpkg -i journalbeat-oss-6.7.0-amd64.deb
 )
 
 cat <<EOF > /etc/journalbeat/journalbeat.yml
