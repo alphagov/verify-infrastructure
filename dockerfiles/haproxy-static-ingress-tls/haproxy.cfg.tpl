@@ -37,4 +37,10 @@ backend alb
     option forwardfor
     http-request add-header x-client-ip %[src]
     http-request add-header hub-forwarded-for %[src]
-    server alb $BACKEND:$BACKEND_PORT resolvers vpcdns ssl verify required ca-file ca-certificates.crt check inter 100 fastinter 100
+
+    timeout check   250ms
+    timeout connect 250ms
+
+    server alb1 $BACKEND:$BACKEND_PORT resolvers vpcdns ssl verify required ca-file ca-certificates.crt check inter 1000 fastinter 100 downinter 100
+    server alb2 $BACKEND:$BACKEND_PORT resolvers vpcdns ssl verify required ca-file ca-certificates.crt check inter 1000 fastinter 100 downinter 100
+    server alb3 $BACKEND:$BACKEND_PORT resolvers vpcdns ssl verify required ca-file ca-certificates.crt check inter 1000 fastinter 100 downinter 100
