@@ -12,6 +12,7 @@ defaults
     log global
     option httplog
     maxconn 10000
+    option persist
 
 resolvers vpcdns
     nameserver vpc ${RESOLVER}
