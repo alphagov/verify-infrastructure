@@ -75,35 +75,6 @@ data "aws_iam_policy_document" "ssm_session_logs_store" {
       "${aws_s3_bucket.ssm_session_logs_store.arn}/*",
     ]
   }
-
-  statement {
-    sid    = "DenyPlainTextAccess"
-    effect = "Deny"
-
-    principals {
-      type = "AWS"
-
-      identifiers = [
-        "*",
-      ]
-    }
-
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values   = ["false"]
-    }
-
-    actions = [
-      "s3:GetObject",
-      "s3:ListObjects",
-    ]
-
-    resources = [
-      "${aws_s3_bucket.ssm_session_logs_store.arn}",
-      "${aws_s3_bucket.ssm_session_logs_store.arn}/*",
-    ]
-  }
 }
 
 resource "aws_s3_bucket_policy" "ssm_session_logs_store" {
