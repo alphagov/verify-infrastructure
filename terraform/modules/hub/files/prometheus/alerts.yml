@@ -94,3 +94,76 @@ groups:
         with the hub rather than with any corresponding MSA.
     expr: |
       sum(verify_saml_soap_proxy_msa_health_status) < 1
+- name: infra
+  rules:
+  - alert: TargetDown
+    labels: &infraticket
+      layer: infra
+      severity: ticket
+    annotations:
+      message: |
+        A prometheus scrape target is down.
+    expr: |
+      up == 0
+    for: 15m
+  - alert: JournalbeatDown
+    labels: *infraticket
+    annotations:
+      message: |
+        beat-exporter couldn't find a running journalbeat.
+    expr: |
+      journalbeat_up == 0
+    for: 15m
+  - alert: RebootRequired
+    labels: *infraticket
+    annotations:
+      message: |
+        An instance has installed an upgrade which requires a reboot to take effect.
+    expr: |
+      node_reboot_required == 1
+  - alert: NtpOffsetTooGreat
+    labels: *infraticket
+    annotations:
+      message: |
+        The system time is more than a second out of sync with the ntp reference server
+    expr: |
+      abs(node_ntp_offset_seconds) >= 1
+    for: 5m
+  - alert: DiskPredictedToFill
+    labels: *infraticket
+    annotations:
+      message: |
+        The instance's disk is predicted to fill within 3 days.
+    expr: |
+      predict_linear(
+        node_filesystem_avail{
+          fstype!~"squashfs|fuse[.]lxcfs"
+        }[24h],
+        3 * 86400) <= 0
+      and on (instance) (time() - node_creation_time) > 86400
+  - alert: AnalyticsHighErrorRate
+    labels: *infraticket
+    annotations:
+      message: |
+        We're seeing an elevated error rate in the analytics target group.
+    expr: |
+      sum(
+        rate({
+          __name__=~"aws_applicationelb_httpcode_target_[23]_xx_count_sum",
+          target_group=~"targetgroup/.*-ingress-analytics/.*"
+        }[60m]))
+      / sum(
+        rate({
+          __name__=~"aws_applicationelb_httpcode_target_[2345]_xx_count_sum",
+          target_group=~"targetgroup/.*-ingress-analytics/.*"
+        }[60m])) < 0.95
+    for: 15m
+  - alert: NoJournalbeatLogs
+    labels: *infraticket
+    annotations:
+      message: |
+        We haven't seen any journalbeat logs for 20 minutes.
+    expr: |
+      rate(journalbeat_libbeat_output_events{type="acked"}[20m]) == 0
+
+
