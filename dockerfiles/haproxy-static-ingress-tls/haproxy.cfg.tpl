@@ -1,7 +1,7 @@
 global
     ca-base /etc/ssl/certs
     maxconn 10000
-    log stdout local0 info
+    log stdout len 65535 format raw local0 info
     user haproxy
     group haproxy
 
@@ -10,9 +10,9 @@ defaults
     timeout client 30s
     timeout server 30s
     log global
-    option httplog
     maxconn 10000
     option persist
+    log-format '{"type":"haproxy","timestamp":%Ts,"http_status":%ST,"http_request":"%r","remote_addr":"%ci","bytes_read":%B,"upstream_addr":"%si","backend_name":"%b","retries":%rc,"bytes_uploaded":%U,"upstream_response_time":"%Tr","upstream_connect_time":"%Tc","session_duration":"%Tt","termination_state":"%ts","conc_cons":%fc,"frontend_name":"%f"}'
 
 resolvers vpcdns
     nameserver vpc ${RESOLVER}
