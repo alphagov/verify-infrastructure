@@ -30,7 +30,7 @@ variable "deployment_min_healthy_percent" {
 }
 
 variable "deployment_max_percent" {
-  default = 200
+  default = 100
 }
 
 variable "additional_task_role_policy_arns" {

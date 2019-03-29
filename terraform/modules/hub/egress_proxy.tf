@@ -168,7 +168,7 @@ resource "aws_ecs_service" "egress_proxy" {
 
   desired_count                      = "${var.number_of_apps}"
   deployment_minimum_healthy_percent = 50
-  deployment_maximum_percent         = 200
+  deployment_maximum_percent         = 100
 
   load_balancer {
     elb_name       = "${aws_elb.egress_proxy.name}"
