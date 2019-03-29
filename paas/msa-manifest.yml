@@ -1,0 +1,30 @@
+---
+applications:
+  - name: ((env))-test-rp-msa
+    routes:
+      - route: ((env))-test-rp-msa.apps.internal
+    network_policies:
+      outbound:
+        - ((env))-test-rp-msa
+      inbound:
+    memory: 1G
+    buildpacks:
+      - java_buildpack
+    env:
+      CONFIG_FILE: /app/msa/test-rp-msa.yml
+      LOG_LEVEL: INFO
+      TEST_RP_MSA_URL: https://((env))-test-rp.cloudapps.digital/matching-service/POST
+      TEST_RP_ROUTE: ((env))-test-rp.apps.internal:8080
+      METADATA_URL: https://verify-((env))-metadata.cloudapps.digital/metadata.xml
+      SIGNIN_DOMAIN: ((env)).signin.service.gov.uk
+      METADATA_ENTITY_ID: https://signin.service.gov.uk
+      TRUSTSTORE_PATH: /app/msa/truststores/((truststore_name))
+      TRUSTSTORE_PASSWORD: puppet
+      EUROPEAN_IDENTITY_ENABLED: true
+      HUB_CONNECTOR_ENTITY_ID: https://hub-connector-eidas-((env)).cloudapps.digital/metadata.xml
+      TRUST_ANCHOR_URI: https://www.((env)).signin.service.gov.uk/SAML2/metadata/trust-anchor
+      METADATA_SOURCE_URI: https://www.((env)).signin.service.gov.uk/SAML2/metadata/aggregator
+      ENCRYPTION_KEY: ((encryption_key))
+      ENCRYPTION_CERT: ((encryption_cert))
+      SIGNING_KEY: ((signing_key))
+      SIGNING_CERT: ((signing_cert))

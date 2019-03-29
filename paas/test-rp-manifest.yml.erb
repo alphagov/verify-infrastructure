@@ -1,0 +1,22 @@
+---
+applications:
+  - name: <%= ENV['DEPLOYMENT'] %>-test-rp
+    memory: 1G
+    buildpacks:
+      - java_buildpack
+    path: <%= ENV['DEPLOYMENT'] %>
+    env:
+      CONFIG_FILE: /app/test-rp/test-rp.yml
+      LOG_PATH: /app/test-rp/logs
+      LOG_LEVEL: INFO
+      TEST_RP_URL: https://<%= ENV['DEPLOYMENT'] %>-test-rp.cloudapps.digital
+      TEST_RP_MSA_METADATA_URL: http://<%= ENV['DEPLOYMENT'] %>-test-rp-msa.apps.internal:8080/matching-service/SAML2/metadata
+      METADATA_ENTITY_ID: https://www.signin.service.gov.uk
+      TRUSTSTORE_PATH: /app/test-rp/truststores/<%= ENV['TRUSTSTORE'] %>
+      TRUSTSTORE_PASSWORD: puppet
+      PRIVATE_BETA_USER_ACCESS_RESTRICTION_ENABLED: <%= ENV['ACCESS_CONTROLLED'] %>
+      SHOULD_SHOW_START_WITH_EIDAS_BUTTON: true
+      ENCRYPTION_KEY: <%= ENV['ENCRYPTION_KEY'] %>
+      ENCRYPTION_CERT: <%= ENV['ENCRYPTION_CERT'] %>
+      SIGNING_KEY: <%= ENV['SIGNING_KEY'] %>
+      SIGNING_CERT: <%= ENV['SIGNING_CERT'] %>
