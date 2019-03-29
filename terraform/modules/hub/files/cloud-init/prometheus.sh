@@ -113,7 +113,7 @@ mkdir /etc/systemd/system/prometheus-node-exporter.service.d
 # Create an environment file for prometheus node exporter
 cat >  /etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env <<EOF
 ARGS="--collector.ntp --collector.diskstats.ignored-devices=^(ram|loop|fd|(h|s|v|xv)d[a-z]|nvme\\d+n\\d+p)\\d+$ --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|run|var/lib/docker)($|/) --collector.netdev.ignored-devices=^lo$ --collector.textfile.directory=/var/lib/prometheus/node-exporter"
-EOF\
+EOF
 # Create an override file which will override prometheus node exporter service file
 cat > /etc/systemd/system/prometheus-node-exporter.service.d/10-override-args.conf <<EOF
 [Service]
