@@ -41,7 +41,7 @@ resource "aws_ecs_service" "metadata" {
 
   desired_count                      = "${var.number_of_apps}"
   deployment_minimum_healthy_percent = 50
-  deployment_maximum_percent         = 200
+  deployment_maximum_percent         = 100
 
   load_balancer {
     target_group_arn = "${aws_lb_target_group.ingress_metadata.arn}"
