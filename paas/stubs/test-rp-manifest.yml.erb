@@ -4,7 +4,6 @@ applications:
     memory: 1G
     buildpacks:
       - java_buildpack
-    path: <%= ENV['DEPLOYMENT'] %>
     env:
       CONFIG_FILE: /app/test-rp/test-rp.yml
       LOG_PATH: /app/test-rp/logs
@@ -16,7 +15,7 @@ applications:
       TRUSTSTORE_PASSWORD: puppet
       PRIVATE_BETA_USER_ACCESS_RESTRICTION_ENABLED: <%= ENV['ACCESS_CONTROLLED'] %>
       SHOULD_SHOW_START_WITH_EIDAS_BUTTON: true
-      ENCRYPTION_KEY: <%= ENV['ENCRYPTION_KEY'] %>
-      ENCRYPTION_CERT: <%= ENV['ENCRYPTION_CERT'] %>
-      SIGNING_KEY: <%= ENV['SIGNING_KEY'] %>
-      SIGNING_CERT: <%= ENV['SIGNING_CERT'] %>
+      ENCRYPTION_KEY: <%= ENV['TEST_RP_ENCRYPTION_KEY'] %>
+      ENCRYPTION_CERT: <%= ENV['TEST_RP_ENCRYPTION_CERT'] %>
+      SIGNING_KEY: <%= ENV['TEST_RP_SIGNING_KEY'] %>
+      SIGNING_CERT: <%= ENV['TEST_RP_SIGNING_CERT'] %>
