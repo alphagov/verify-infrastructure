@@ -42,7 +42,7 @@ cf add-network-policy "$ENVIRONMENT-test-rp" --destination-app "$ENVIRONMENT-tes
 # Allow MSA to access local matching service in test-rp
 cf add-network-policy "$ENVIRONMENT-test-rp-msa" --destination-app "$ENVIRONMENT-test-rp" --protocol tcp --port 8080
 
-git clone git@github.com:alphagov/re-paas-ip-safelist-service.git
+git clone https://github.com/alphagov/re-paas-ip-safelist-service
 cd re-paas-ip-safelist-service
 # The templating in re-paas-ip-safelist-service doesn't really work for us so let's override it
 cat << MANIFEST > manifest.yml
@@ -59,19 +59,19 @@ applications:
 MANIFEST
 
 # Set up route service for test-rp web access
-SERVICE_NAME="$ENV-test-rp-ip-safelist-service"
-cf push --var app=$ENV-test-rp --var allowed_ips=$TEST_RP_IP_SAFELIST
+SERVICE_NAME="$ENVIRONMENT-test-rp-ip-safelist-service"
+cf push --var app=$ENVIRONMENT-test-rp --var allowed_ips=$TEST_RP_IP_SAFELIST
 cf create-user-provided-service $SERVICE_NAME -r "https://$SERVICE_NAME.cloudapps.digital"
-cf bind-route-service cloudapps.digital --hostname $ENV-test-rp $SERVICE_NAME
+cf bind-route-service cloudapps.digital --hostname $ENVIRONMENT-test-rp $SERVICE_NAME
 
 # Set up route service for test-rp private access
-SERVICE_NAME="$ENV-test-rp-private-ip-safelist-service"
-cf push --var app=$ENV-test-rp-private --var allowed_ips=$TEST_RP_PRIVATE_IP_SAFELIST
+SERVICE_NAME="$ENVIRONMENT-test-rp-private-ip-safelist-service"
+cf push --var app=$ENVIRONMENT-test-rp-private --var allowed_ips=$TEST_RP_PRIVATE_IP_SAFELIST
 cf create-user-provided-service $SERVICE_NAME -r "https://$SERVICE_NAME.cloudapps.digital"
-cf bind-route-service cloudapps.digital --hostname $ENV-test-rp --path private $SERVICE_NAME
+cf bind-route-service cloudapps.digital --hostname $ENVIRONMENT-test-rp --path private $SERVICE_NAME
 
 # Set up route service for MSA access
-SERVICE_NAME="$ENV-test-rp-msa-ip-safelist-service"
-cf push --var app=$ENV-test-rp-msa --var allowed_ips=$MSA_IP_SAFELIST
+SERVICE_NAME="$ENVIRONMENT-test-rp-msa-ip-safelist-service"
+cf push --var app=$ENVIRONMENT-test-rp-msa --var allowed_ips=$MSA_IP_SAFELIST
 cf create-user-provided-service $SERVICE_NAME -r "https://$SERVICE_NAME.cloudapps.digital"
-cf bind-route-service cloudapps.digital --hostname $ENV-test-rp-msa $SERVICE_NAME
+cf bind-route-service cloudapps.digital --hostname $ENVIRONMENT-test-rp-msa $SERVICE_NAME
