@@ -114,13 +114,6 @@ groups:
     expr: |
       journalbeat_up == 0
     for: 15m
-  - alert: RebootRequired
-    labels: *infraticket
-    annotations:
-      message: |
-        An instance has installed an upgrade which requires a reboot to take effect.
-    expr: |
-      node_reboot_required == 1
   - alert: NtpOffsetTooGreat
     labels: *infraticket
     annotations:
@@ -141,6 +134,12 @@ groups:
         }[24h],
         3 * 86400) <= 0
       and on (instance) (time() - node_creation_time) > 86400
+  - alert: InstanceTooOld
+    labels: *infraticket
+    annotations:
+      message: |
+        An instance is older than 2 days.
+    expr: (time() - node_creation_time) > 172800
   - alert: AnalyticsHighErrorRate
     labels: *infraticket
     annotations:

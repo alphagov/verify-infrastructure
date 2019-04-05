@@ -5,7 +5,6 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Apt
 apt-get update  --yes
-apt-get upgrade --yes
 
 # AWS SSM Agent
 # Installed by default on Ubuntu Bionic AMIs via Snap
@@ -156,28 +155,6 @@ apt-get install --yes awscli
 
 #Initialise a node_creation_time metric to enable the predict_linear function to handle new nodes
 echo "node_creation_time `date +%s`" > /var/lib/prometheus/node-exporter/node-creation-time.prom
-
-cat <<EOF > /usr/bin/instance-reboot-required-metric.sh
-#!/usr/bin/env bash
-
-echo '# HELP node_reboot_required Node reboot is required for software updates.'
-echo '# TYPE node_reboot_required gauge'
-if [[ -f '/run/reboot-required' ]] ; then
-  echo 'node_reboot_required 1'
-else
-  echo 'node_reboot_required 0'
-fi
-EOF
-
-chmod +x /usr/bin/instance-reboot-required-metric.sh
-
-apt-get install --yes moreutils
-
-crontab - <<EOF
-$(crontab -l | grep -v 'no crontab')
-*/5 * * * * /usr/bin/instance-reboot-required-metric.sh | sponge /var/lib/prometheus/node-exporter/reboot-required.prom
-EOF
-
 # ECS
 echo 'Running ECS using Docker'
 mkdir -p /etc/ecs
