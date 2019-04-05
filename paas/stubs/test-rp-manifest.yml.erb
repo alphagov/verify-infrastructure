@@ -2,6 +2,7 @@
 applications:
   - name: <%= ENV['DEPLOYMENT'] %>-test-rp
     memory: 1G
+    command: /app/test-rp/bin/test-rp
     buildpacks:
       - java_buildpack
     env:
