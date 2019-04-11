@@ -121,8 +121,9 @@ cat > /etc/systemd/system/prometheus-node-exporter.service.d/10-override-args.co
 [Service]
 EnvironmentFile=/etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env
 EOF
+systemctl daemon-reload
 systemctl enable prometheus-node-exporter
-systemctl start prometheus-node-exporter
+systemctl restart prometheus-node-exporter
 
 echo 'Configuring prometheus EBS'
 vol="nvme1n1"
