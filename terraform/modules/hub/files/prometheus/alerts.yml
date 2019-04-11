@@ -163,7 +163,8 @@ groups:
     annotations:
       message: |
         We haven't seen any journalbeat logs for 20 minutes.
+    for: 20m
     expr: |
-      rate(journalbeat_libbeat_output_events{type="acked"}[20m]) == 0
+      rate(journalbeat_libbeat_output_events{type="acked"}[1m]) == 0
 
 
