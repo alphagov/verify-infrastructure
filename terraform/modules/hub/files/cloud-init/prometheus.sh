@@ -49,7 +49,9 @@ echo 'Installing and configuring chrony'
 apt-get install --yes chrony
 sed '/pool/d' /etc/chrony/chrony.conf \
 | cat <(echo "server 169.254.169.123 prefer iburst") - > /tmp/chrony.conf
+echo "allow 127/8" >> /tmp/chrony.conf
 mv /tmp/chrony.conf /etc/chrony/chrony.conf
+systemctl restart chrony
 
 # Docker
 echo 'Installing and configuring docker'
@@ -119,8 +121,9 @@ cat > /etc/systemd/system/prometheus-node-exporter.service.d/10-override-args.co
 [Service]
 EnvironmentFile=/etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env
 EOF
+systemctl daemon-reload
 systemctl enable prometheus-node-exporter
-systemctl start prometheus-node-exporter
+systemctl restart prometheus-node-exporter
 
 echo 'Configuring prometheus EBS'
 vol="nvme1n1"
