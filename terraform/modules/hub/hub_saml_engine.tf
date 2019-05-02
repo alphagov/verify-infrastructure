@@ -51,6 +51,8 @@ data "template_file" "saml_engine_task_def" {
     region                 = "${data.aws_region.region.id}"
     location_blocks_base64 = "${local.nginx_saml_engine_location_blocks_base64}"
     redis_host             = "rediss://${aws_elasticache_replication_group.saml_engine_replay_cache.primary_endpoint_address}:6379"
+    splunk_url             = "${var.splunk_url}"
+    splunk_source_type     = "${var.splunk_source_type}"
   }
 }
 
