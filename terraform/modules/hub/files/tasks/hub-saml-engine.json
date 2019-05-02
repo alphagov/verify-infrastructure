@@ -47,6 +47,10 @@
       {
         "name": "SECONDARY_HUB_ENCRYPTION_PRIVATE_KEY",
         "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}-secondary-hub-encryption-private-key"
+      },
+      {
+        "name": "SPLUNK_TOKEN",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/saml-engine/splunk-token"
       }
     ],
     "entryPoint": [
@@ -70,6 +74,22 @@
       {
         "Name": "REDIS_HOST",
         "Value": "${redis_host}"
+      },
+      {
+        "Name": "SPLUNK_URL",
+        "Value": "https://http-inputs-gds.splunkcloud.com/services/collector"
+      },
+      {
+        "Name": "SPLUNK_SOURCE",
+        "Value": "verify-hub_saml-engine_${deployment}"
+      },
+      {
+        "Name": "SPLUNK_SOURCE_TYPE",
+        "Value": "https://gds.splunk.com:8088/services/collector/event"
+      },
+      {
+        "Name": "SPLUNK_INDEX",
+        "Value": "verify_eidas_notification_saml"
       }
     ]
   }
