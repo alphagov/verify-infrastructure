@@ -61,6 +61,7 @@ locals {
     "${replace(var.logit_elasticsearch_url, ".", "\\.")}",                          # Logit
     "sentry\\.tools\\.signin\\.service\\.gov\\.uk",                                 # Tools Sentry
     "${replace(local.event_emitter_api_gateway[0], ".", "\\.")}",                   # API Gateway
+    "${var.splunk_hostname}",                                                       # Splunk
   ]
 
   egress_proxy_whitelist = "${join(" ", local.egress_proxy_whitelist_list)}"

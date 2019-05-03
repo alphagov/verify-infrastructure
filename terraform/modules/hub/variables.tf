@@ -70,6 +70,10 @@ variable "splunk_url" {
   description = "Splunk http event collector endpoint, used by saml-engine"
 }
 
+variable "splunk_hostname" {
+  description "Splunk hostname, used by saml-engine's egress proxy"
+}
+
 variable "splunk_source_type" {
   description = "Splunk source type for http event collector endpoint, used by saml-engine"
 }
