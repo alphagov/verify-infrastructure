@@ -71,7 +71,7 @@ variable "splunk_url" {
 }
 
 variable "splunk_hostname" {
-  description "Splunk hostname, used by saml-engine's egress proxy"
+  description = "Splunk hostname, used by saml-engine's egress proxy"
 }
 
 variable "splunk_source_type" {
