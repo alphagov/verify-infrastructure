@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1551083830301,
+  "iteration": 1556875622162,
   "links": [],
   "panels": [
     {
@@ -47,7 +47,15 @@
       },
       "id": 12,
       "interval": null,
-      "links": [],
+      "links": [
+        {
+          "dashboard": "Certificate details",
+          "includeVars": true,
+          "title": "Certificate details",
+          "type": "dashboard",
+          "url": "/d/nflmvWqmk/certificate-details"
+        }
+      ],
       "mappingType": 1,
       "mappingTypes": [
         {
@@ -171,7 +179,7 @@
       "thresholds": "432000,604800",
       "title": "Metadata expires in",
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "70%",
       "valueMaps": [],
       "valueName": "current"
     },
@@ -203,7 +211,15 @@
       },
       "id": 13,
       "interval": null,
-      "links": [],
+      "links": [
+        {
+          "dashboard": "Certificate details",
+          "includeVars": true,
+          "title": "Certificate details",
+          "type": "dashboard",
+          "url": "/d/nflmvWqmk/certificate-details"
+        }
+      ],
       "mappingType": 1,
       "mappingTypes": [
         {
@@ -232,7 +248,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "\nsum(((avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)/1000 - time()) / 60 / 60 / 24) < bool 8)",
+          "expr": "sum(((avg without(instance) (verify_config_certificate_expiry_date or verify_metadata_certificate_expiry) /1000 - time()) / 60 / 60 / 24) < bool 7)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -241,7 +257,7 @@
         }
       ],
       "thresholds": "1,2",
-      "title": "1 week",
+      "title": "0 - 7 days",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [],
@@ -255,8 +271,8 @@
       "colorValue": false,
       "colors": [
         "#299c46",
-        "#e24d42",
-        "#d44a3a"
+        "#c15c17",
+        "#c15c17"
       ],
       "datasource": "$Prometheus",
       "format": "none",
@@ -275,7 +291,15 @@
       },
       "id": 14,
       "interval": null,
-      "links": [],
+      "links": [
+        {
+          "dashboard": "Certificate details",
+          "includeVars": true,
+          "title": "Certificate details",
+          "type": "dashboard",
+          "url": "/d/nflmvWqmk/certificate-details"
+        }
+      ],
       "mappingType": 1,
       "mappingTypes": [
         {
@@ -304,7 +328,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(((avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)/1000 - time()) / 60 / 60 / 24) < bool 15)",
+          "expr": "sum(((avg without(instance) (verify_config_certificate_expiry_date or verify_metadata_certificate_expiry)/1000 - time()) / 60 / 60 / 24) > 7 < bool 14)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -312,8 +336,8 @@
           "refId": "A"
         }
       ],
-      "thresholds": "1,2",
-      "title": "2 weeks",
+      "thresholds": "0.5,0.5",
+      "title": "7 - 14 days",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [],
@@ -321,14 +345,14 @@
     },
     {
       "cacheTimeout": null,
-      "colorBackground": true,
+      "colorBackground": false,
       "colorPostfix": false,
       "colorPrefix": false,
       "colorValue": false,
       "colors": [
         "#299c46",
-        "#e24d42",
-        "#d44a3a"
+        "#629e51",
+        "#629e51"
       ],
       "datasource": "$Prometheus",
       "format": "none",
@@ -347,7 +371,15 @@
       },
       "id": 15,
       "interval": null,
-      "links": [],
+      "links": [
+        {
+          "dashboard": "Certificate details",
+          "includeVars": true,
+          "title": "Certificate details",
+          "type": "dashboard",
+          "url": "/d/nflmvWqmk/certificate-details"
+        }
+      ],
       "mappingType": 1,
       "mappingTypes": [
         {
@@ -376,7 +408,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "\nsum(((avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)/1000 - time()) / 60 / 60 / 24) < bool 31)",
+          "expr": "\nsum(((avg without(instance)(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry)/1000 - time()) / 60 / 60 / 24) > 14 < bool 30)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -384,8 +416,8 @@
           "refId": "A"
         }
       ],
-      "thresholds": "1,2",
-      "title": "30 days",
+      "thresholds": "",
+      "title": "14 - 30 days",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [],
@@ -393,14 +425,14 @@
     },
     {
       "cacheTimeout": null,
-      "colorBackground": true,
+      "colorBackground": false,
       "colorPostfix": false,
       "colorPrefix": false,
       "colorValue": false,
       "colors": [
         "#299c46",
-        "#e24d42",
-        "#d44a3a"
+        "#629e51",
+        "#629e51"
       ],
       "datasource": "$Prometheus",
       "format": "none",
@@ -419,7 +451,15 @@
       },
       "id": 16,
       "interval": null,
-      "links": [],
+      "links": [
+        {
+          "dashboard": "Certificate details",
+          "includeVars": true,
+          "title": "Certificate details",
+          "type": "dashboard",
+          "url": "/d/nflmvWqmk/certificate-details"
+        }
+      ],
       "mappingType": 1,
       "mappingTypes": [
         {
@@ -448,7 +488,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "\nsum(((avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)/1000 - time()) / 60 / 60 / 24) < bool 61)",
+          "expr": "\nsum(((avg without(instance) (verify_config_certificate_expiry_date or verify_metadata_certificate_expiry)/1000 - time()) / 60 / 60 / 24) > 30 < bool 60)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -456,8 +496,8 @@
           "refId": "A"
         }
       ],
-      "thresholds": "1,2",
-      "title": "60 days",
+      "thresholds": "",
+      "title": "30 - 60 days",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [],
@@ -472,7 +512,7 @@
       "folderId": null,
       "gridPos": {
         "h": 10,
-        "w": 7,
+        "w": 6,
         "x": 0,
         "y": 2
       },
@@ -481,10 +521,39 @@
       "links": [],
       "nameFilter": "",
       "onlyAlertsOnDashboard": false,
+      "repeat": null,
+      "repeatDirection": "h",
       "show": "current",
       "sortOrder": 3,
-      "stateFilter": [],
+      "stateFilter": [
+        "alerting"
+      ],
       "title": "Prod Alerts",
+      "type": "alertlist"
+    },
+    {
+      "dashboardFilter": "",
+      "dashboardTags": [
+        "verify"
+      ],
+      "folderId": null,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 6,
+        "y": 2
+      },
+      "id": 19,
+      "limit": 10,
+      "links": [],
+      "nameFilter": "",
+      "onlyAlertsOnDashboard": false,
+      "show": "current",
+      "sortOrder": 3,
+      "stateFilter": [
+        "alerting"
+      ],
+      "title": "All Alerts",
       "type": "alertlist"
     },
     {
@@ -493,8 +562,8 @@
       "fontSize": "80%",
       "gridPos": {
         "h": 10,
-        "w": 17,
-        "x": 7,
+        "w": 12,
+        "x": 12,
         "y": 2
       },
       "id": 21,
@@ -1057,297 +1126,14 @@
       "type": "table"
     },
     {
-      "dashboardFilter": "",
-      "dashboardTags": [
-        "verify"
-      ],
-      "folderId": null,
-      "gridPos": {
-        "h": 10,
-        "w": 7,
-        "x": 0,
-        "y": 20
-      },
-      "id": 19,
-      "limit": 10,
-      "links": [],
-      "nameFilter": "",
-      "onlyAlertsOnDashboard": false,
-      "show": "current",
-      "sortOrder": 3,
-      "stateFilter": [],
-      "title": "All Alerts",
-      "type": "alertlist"
-    },
-    {
-      "columns": [],
-      "datasource": "$Prometheus",
-      "fontSize": "80%",
-      "gridPos": {
-        "h": 10,
-        "w": 17,
-        "x": 7,
-        "y": 20
-      },
-      "id": 10,
-      "links": [],
-      "pageSize": null,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 4,
-        "desc": false
-      },
-      "styles": [
-        {
-          "alias": "Time",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "Common Name",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "cn",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "__name__",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "Entity ID",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "entity_id",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Fingerprint",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "fingerprint",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short",
-          "valueMaps": []
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "instance",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "job",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "subject",
-          "sanitize": false,
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "Use",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "use",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Expiry Date",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #A",
-          "thresholds": [],
-          "type": "date",
-          "unit": "short"
-        },
-        {
-          "alias": "Time Remaining",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "mappingType": 1,
-          "pattern": "Value #B",
-          "thresholds": [
-            "604800000",
-            "1209600000"
-          ],
-          "type": "number",
-          "unit": "ms"
-        },
-        {
-          "alias": "Timestamp",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "timestamp",
-          "thresholds": [],
-          "type": "date",
-          "unit": "short"
-        },
-        {
-          "alias": "Serial Number",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "serial",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "expr": "avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name)",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "intervalFactor": 1,
-          "refId": "A"
-        },
-        {
-          "expr": "avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, entity_id, subject, job, timestamp, key_name) - time()*1000",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "intervalFactor": 1,
-          "refId": "B"
-        }
-      ],
-      "title": "Upcoming Certificates Expiry",
-      "transform": "table",
-      "type": "table"
-    },
-    {
       "columns": [],
       "datasource": "$Prometheus",
       "fontSize": "100%",
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 12,
         "x": 0,
-        "y": 30
+        "y": 20
       },
       "hideTimeOverride": false,
       "id": 8,
@@ -1481,7 +1267,6 @@
       "timeShift": null,
       "title": "EC2 Memory Free Space",
       "transform": "table",
-      "transparent": false,
       "type": "table"
     },
     {
@@ -1492,10 +1277,10 @@
       "datasource": "$Prometheus",
       "fill": 1,
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 12,
         "x": 12,
-        "y": 30
+        "y": 20
       },
       "id": 2,
       "legend": {
@@ -1524,7 +1309,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(io_dropwizard_jetty_MutableServletContextHandler_5xx_responses_total[1m])",
+          "expr": "sum(rate(io_dropwizard_jetty_MutableServletContextHandler_5xx_responses_total[1m])) without (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{job}}",
@@ -1552,7 +1337,7 @@
       "yaxes": [
         {
           "format": "short",
-          "label": "Number of 5xx responses per second",
+          "label": "5xx responses per second rate measured over the last 1 minute",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -1580,10 +1365,10 @@
       "datasource": "$Prometheus",
       "fill": 1,
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 12,
         "x": 12,
-        "y": 39
+        "y": 31
       },
       "id": 4,
       "legend": {
@@ -1609,7 +1394,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total[1m])",
+          "expr": "sum(rate(io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total[1m])) without (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{job}}",
@@ -1637,7 +1422,7 @@
       "yaxes": [
         {
           "format": "short",
-          "label": "Number of 2xx responses per second",
+          "label": "2xx responses per second rate measured over the last 1 minute",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -1659,7 +1444,7 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 16,
+  "schemaVersion": 18,
   "style": "dark",
   "tags": [
     "verify"
@@ -1683,12 +1468,13 @@
       },
       {
         "current": {
-          "tags": [],
           "text": "hub-prod-prom-1",
           "value": "hub-prod-prom-1"
         },
         "hide": 0,
+        "includeAll": false,
         "label": null,
+        "multi": false,
         "name": "Prometheus",
         "options": [],
         "query": "prometheus",
@@ -1731,5 +1517,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 61
+  "version": 78
 }
