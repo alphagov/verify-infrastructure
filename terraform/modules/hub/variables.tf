@@ -74,10 +74,6 @@ variable "splunk_hostname" {
   description = "Splunk hostname, used by saml-engine's egress proxy"
 }
 
-variable "splunk_source_type" {
-  description = "Splunk source type for http event collector endpoint, used by saml-engine"
-}
-
 variable "hub_config_image_digest" {}
 variable "hub_policy_image_digest" {}
 variable "hub_saml_proxy_image_digest" {}
