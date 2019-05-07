@@ -82,14 +82,6 @@
       {
         "Name": "SPLUNK_SOURCE",
         "Value": "verify-hub_saml-engine_${deployment}"
-      },
-      {
-        "Name": "SPLUNK_SOURCE_TYPE",
-        "Value": "${splunk_source_type}"
-      },
-      {
-        "Name": "SPLUNK_INDEX",
-        "Value": "verify_eidas_notification_saml"
       }
     ]
   }
