@@ -100,6 +100,7 @@ scrape_configs:
       - source_labels: [__meta_ec2_tag_Cluster]
         target_label: job
   - job_name: cloudwatch_exporter
+    scrape_interval: 60s
     metrics_path: '/metrics'
     scheme: 'http'
     static_configs:
