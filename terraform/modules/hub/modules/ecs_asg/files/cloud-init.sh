@@ -148,7 +148,7 @@ docker run \
   --privileged \
   --name ecs-agent \
   --detach=true \
-  --restart=on-failure:10 \
+  --restart=always \
   --volume=/etc/ecs:/etc/ecs \
   --volume=/lib64:/lib64 \
   --volume=/lib:/lib \
@@ -208,3 +208,5 @@ crontab - <<EOF
 $(crontab -l | grep -v 'no crontab')
 */5 * * * * /usr/bin/instance-reboot-required-metric.sh | sponge /var/lib/prometheus/node-exporter/reboot-required.prom
 EOF
+
+reboot
