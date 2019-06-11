@@ -79,6 +79,7 @@ EOF
 # Reload systemctl daemon to pick up new override files
 systemctl stop docker
 systemctl daemon-reload
+systemctl enable docker
 systemctl start docker
 
 # Journalbeat for log shipping
@@ -128,7 +129,8 @@ output.elasticsearch:
   headers:
     Apikey: ${logit_api_key}
 EOF
-systemctl restart journalbeat
+systemctl enable journalbeat
+systemctl start journalbeat
 
 # ECS
 echo 'Installing awscli and running ECS using Docker'
