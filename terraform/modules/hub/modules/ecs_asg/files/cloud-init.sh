@@ -18,7 +18,7 @@ Acquire::https::Proxy "${egress_proxy_url_with_protocol}/";
 EOF
 fi
 apt-get update  --yes
-apt-get upgrade --yes
+apt-get dist-upgrade --yes
 
 # AWS SSM Agent
 # Installed by default on Ubuntu Bionic AMIs via Snap
