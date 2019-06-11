@@ -210,5 +210,3 @@ crontab - <<EOF
 $(crontab -l | grep -v 'no crontab')
 */5 * * * * /usr/bin/instance-reboot-required-metric.sh | sponge /var/lib/prometheus/node-exporter/reboot-required.prom
 EOF
-
-reboot
