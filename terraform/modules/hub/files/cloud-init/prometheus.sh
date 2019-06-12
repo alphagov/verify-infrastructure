@@ -53,6 +53,10 @@ echo "allow 127/8" >> /tmp/chrony.conf
 mv /tmp/chrony.conf /etc/chrony/chrony.conf
 systemctl restart chrony
 
+# create directory for prometheus data
+mkdir -p /srv/prometheus/metrics2
+chown nobody: /srv/prometheus/metrics2
+
 # Docker
 echo 'Installing and configuring docker'
 mkdir -p /etc/systemd/system/docker.service.d
