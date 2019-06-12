@@ -198,7 +198,7 @@ docker run \
   --privileged \
   --name ecs-agent \
   --detach=true \
-  --restart=on-failure:10 \
+  --restart=always \
   --volume=/etc/ecs:/etc/ecs \
   --volume=/lib64:/lib64 \
   --volume=/lib:/lib \
@@ -219,3 +219,5 @@ docker run \
   --env='ECS_AVAILABLE_LOGGING_DRIVERS=["journald"]' \
   --env="ECS_LOGLEVEL=warn" \
   ${ecs_agent_image_identifier}
+
+reboot
