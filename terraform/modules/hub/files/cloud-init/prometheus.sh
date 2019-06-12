@@ -66,7 +66,7 @@ EOF
 # Reload systemctl daemon to pick up new override files
 systemctl stop docker
 systemctl daemon-reload
-systemctl start docker
+systemctl enable --now docker
 
 # Journalbeat for log shipping
 echo 'Installing and configuring journalbeat'
@@ -107,7 +107,11 @@ output.elasticsearch:
   headers:
     Apikey: ${logit_api_key}
 EOF
-systemctl restart journalbeat
+# It seems that journalbeat is very unhappy if docker isn't running
+# when it starts, so let's update the systemd unit to reflect that
+sed -i -e 's/Wants=.*/& docker.service/' /lib/systemd/system/journalbeat.service
+sed -i -e 's/After=.*/& docker.service/' /lib/systemd/system/journalbeat.service
+systemctl enable --now journalbeat
 
 echo 'Installing prometheus node exporter'
 apt-get install --yes prometheus-node-exporter
@@ -152,6 +156,7 @@ if [ -z "$(lsblk | grep "$vol" | awk '{print $7}')" ] ; then
   fi
 fi
 
+mkdir -p /srv/prometheus/metrics2
 chown -R nobody /srv/prometheus
 
 echo 'Installing awscli'
