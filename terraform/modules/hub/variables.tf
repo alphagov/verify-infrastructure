@@ -74,6 +74,11 @@ variable "splunk_hostname" {
   description = "Splunk hostname, used by saml-engine's egress proxy"
 }
 
+variable "ab_test_file" {
+  description = "File containing percentage values for variant and control"
+  deault      = "deactivated_ab_test.yml"
+}
+
 variable "hub_config_image_digest" {}
 variable "hub_policy_image_digest" {}
 variable "hub_saml_proxy_image_digest" {}

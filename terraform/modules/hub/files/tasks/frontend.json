@@ -88,6 +88,9 @@
       "Name": "RULES_DIRECTORY",
       "Value": "/verify-frontend/federation/configuration/idp-rules"
     }, {
+      "Name": "RULES_DIRECTORY_VARIANT",
+      "Value": "/verify-frontend/federation/configuration/idp-rules-variant"
+    }, {
       "Name": "RP_CONFIG",
       "Value": "/verify-frontend/federation/configuration/relying_parties.yml"
     }, {
@@ -98,7 +101,7 @@
       "Value": "/verify-frontend/federation/configuration/cycle-three-attributes"
     }, {
       "Name": "AB_TEST_FILE",
-      "Value": "/verify-frontend/federation/configuration/ab_test/ab_test.yml"
+      "Value": "/verify-frontend/federation/configuration/ab_test/${ab_test_file}"
     }, {
       "Name": "SEGMENT_DEFINITIONS",
       "Value": "/verify-frontend/federation/configuration/segment_definitions.yml"
