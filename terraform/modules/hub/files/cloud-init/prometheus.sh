@@ -145,17 +145,14 @@ if [ -z "$(lsblk | grep "$vol" | awk '{print $7}')" ] ; then
   fi
   echo "volume /dev/$vol is formatted"
 
-  e2label /dev/$vol srv-prometheus
-
   if [ -z "$(lsblk | grep "$vol" | awk '{print $7}')" ] ; then
     echo "volume /dev/$vol is not mounted ; mounting"
     mount "/dev/$vol" /srv/prometheus
   fi
-
-  echo "volume /dev/$vol is mounted ; writing fstab entry"
+    echo "volume /dev/$vol is mounted ; mounting"
 
   if grep -qv "/dev/$vol" /etc/fstab ; then
-    echo "LABEL=srv-prometheus /srv/prometheus ext4 defaults,nofail 0 2" >> /etc/fstab
+    echo "/dev/$vol /srv/prometheus ext4 defaults,nofail 0 2" >> /etc/fstab
   fi
 fi
 
