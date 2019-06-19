@@ -1,11 +1,16 @@
 locals {
-   service     = "govukverify-self-service"
-   aws_region  = "eu-west-2"
+  service = "govukverify-self-service"
 }
 
+data "aws_region" "region" {}
+
 resource "aws_s3_bucket" "config_metadata" {
-  bucket  = "${local.service}-${var.deployment}-config-metadata"
-  region  = "${local.aws_region}"
+  bucket = "${local.service}-${var.deployment}-config-metadata"
+  region = "${data.aws_region.region.id}"
+
+  versioning {
+    enabled = true
+  }
 
   server_side_encryption_configuration {
     rule {
