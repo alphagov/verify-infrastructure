@@ -72,6 +72,35 @@ data "template_file" "config_task_def" {
   }
 }
 
+resource "aws_iam_policy" "can_read_config_metadata_bucket" {
+  name   = "${var.deployment}-can-read-config-metadata-bucket"
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "BucketCanBeReadFrom",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetO*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::govukverify-self-service-${var.deployment}-config-metadata",
+                "arn:aws:s3:::govukverify-self-service-${var.deployment}-config-metadata/*"
+            ]
+        }
+    ]
+  }
+  EOF
+}
+
+resource "aws_iam_role_policy_attachment" "config_task_can_read_metadata_bucket" {
+  role       = "${module.config.task_role_arn}"
+  policy_arn = "${aws_iam_policy.can_read_config_metadata_bucket.arn}"
+}
+
 module "config" {
   source = "modules/ecs_app"
 
