@@ -1,9 +1,14 @@
 data "aws_iam_policy_document" "self_service_user_write_to_bucket" {
   statement {
-    sid       = "AllowPutObject"
+    sid       = "AllowGetAndPutObject"
     effect    = "Allow"
     resources = ["${aws_s3_bucket.config_metadata.arn}/*"]
-    actions   = ["s3:PutObject"]
+    actions   = [
+      "s3:GetO*",
+      "s3:PutO*",
+      "s3:DeleteO*",
+      "s3:ListBucket",
+    ]
   }
 }
 
