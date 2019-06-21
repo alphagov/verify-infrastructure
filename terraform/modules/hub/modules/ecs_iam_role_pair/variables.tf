@@ -14,14 +14,6 @@ locals {
   }"
 }
 
-variable "additional_execution_role_policy_arns" {
-  default = []
-}
-
-variable "additional_task_role_policy_arns" {
-  default = []
-}
-
 data "aws_caller_identity" "account" {}
 
 locals {

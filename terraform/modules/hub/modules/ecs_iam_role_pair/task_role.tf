@@ -19,3 +19,7 @@ resource "aws_iam_role" "task" {
   }
   EOF
 }
+
+output "task_role_arn" {
+  value = "${aws_iam_role.task.arn}"
+}
