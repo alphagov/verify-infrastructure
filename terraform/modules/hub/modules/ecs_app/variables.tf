@@ -33,14 +33,6 @@ variable "deployment_max_percent" {
   default = 100
 }
 
-variable "additional_task_role_policy_arns" {
-  default = []
-}
-
-variable "additional_execution_role_policy_arns" {
-  default = []
-}
-
 variable "health_check_path" {
   default = "/"
 }
