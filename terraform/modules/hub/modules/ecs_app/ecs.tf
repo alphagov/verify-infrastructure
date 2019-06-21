@@ -19,7 +19,12 @@ resource "aws_ecs_task_definition" "cluster" {
   family                = "${local.identifier}"
   container_definitions = "${var.task_definition}"
   execution_role_arn    = "${module.cluster_ecs_roles.execution_role_arn}"
+  task_role_arn         = "${module.cluster_ecs_roles.task_role_arn}"
   network_mode          = "bridge"
+}
+
+output "task_role_arn" {
+  value = "${module.cluster_ecs_roles.task_role_arn}"
 }
 
 resource "aws_ecs_service" "cluster" {
