@@ -23,8 +23,8 @@ resource "aws_ecs_task_definition" "cluster" {
   network_mode          = "bridge"
 }
 
-output "task_role_arn" {
-  value = "${module.cluster_ecs_roles.task_role_arn}"
+output "task_role_name" {
+  value = "${module.cluster_ecs_roles.task_role_name}"
 }
 
 resource "aws_ecs_service" "cluster" {

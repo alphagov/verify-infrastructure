@@ -96,7 +96,7 @@ resource "aws_iam_policy" "can_read_config_metadata_bucket" {
 }
 
 resource "aws_iam_role_policy_attachment" "config_task_can_read_metadata_bucket" {
-  role       = "${module.config.task_role_arn}"
+  role       = "${module.config.task_role_name}"
   policy_arn = "${aws_iam_policy.can_read_config_metadata_bucket.arn}"
 }
 
