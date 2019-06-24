@@ -35,7 +35,9 @@ resource "aws_vpc_endpoint" "s3" {
                 "arn:aws:s3:::prod-eu-west-2-starport-layer-bucket",
                 "arn:aws:s3:::prod-eu-west-2-starport-layer-bucket/*",
                 "arn:aws:s3:::gds-${var.deployment}-ssm-session-logs-store",
-                "arn:aws:s3:::gds-${var.deployment}-ssm-session-logs-store/*"
+                "arn:aws:s3:::gds-${var.deployment}-ssm-session-logs-store/*",
+                "arn:aws:s3:::govukverify-self-service-${var.deployment}-config-metadata",
+                "arn:aws:s3:::govukverify-self-service-${var.deployment}-config-metadata/*"
             ]
         }
     ]
