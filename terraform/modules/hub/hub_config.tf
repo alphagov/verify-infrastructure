@@ -81,7 +81,6 @@ resource "aws_iam_policy" "can_read_config_metadata_bucket" {
         {
             "Sid": "BucketCanBeReadFrom",
             "Effect": "Allow",
-            "Principal": "*",
             "Action": [
                 "s3:ListBucket",
                 "s3:GetO*"
