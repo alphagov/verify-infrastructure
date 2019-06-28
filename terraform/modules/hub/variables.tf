@@ -79,6 +79,11 @@ variable "ab_test_file" {
   default      = "deactivated_ab_test.yml"
 }
 
+variable "self_service_enabled" {
+  description = "Enable the use of the Self Service generated metadata"
+  default     = "false"
+}
+
 variable "hub_config_image_digest" {}
 variable "hub_policy_image_digest" {}
 variable "hub_saml_proxy_image_digest" {}
