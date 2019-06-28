@@ -30,7 +30,7 @@
     "entryPoint": [
       "sh",
       "-c",
-      "set -ueo pipefail; unset AWS_CONTAINER_CREDENTIALS_RELATIVE_URI; unset AWS_EXECUTION_ENV; echo $CONFIG_BASE64 | base64 -d > /etc/prometheus/prometheus.yml; echo $ALERTS_BASE64 | base64 -d > /etc/prometheus/alerts.yml; prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --storage.tsdb.retention.time=60d --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles --web.external-url=${external_url}"
+      "set -ueo pipefail; unset AWS_CONTAINER_CREDENTIALS_RELATIVE_URI; unset AWS_EXECUTION_ENV; echo $CONFIG_BASE64 | base64 -d > /etc/prometheus/prometheus.yml; echo $ALERTS_BASE64 | base64 -d > /etc/prometheus/alerts.yml; prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --storage.tsdb.retention.time=120d --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles --web.external-url=${external_url}"
     ]
   }
 ]
