@@ -55,20 +55,25 @@ locals {
   LOCATIONS
 
   nginx_config_location_blocks_base64 = "${base64encode(local.config_location_blocks)}"
+  services_metadata_bucket            = "govukverify-self-service-${var.deployment}-config-metadata"
+  metadata_object_key                 = "verify_services_metadata.json"
 }
 
 data "template_file" "config_task_def" {
   template = "${file("${path.module}/files/tasks/hub-config.json")}"
 
   vars {
-    image_identifier       = "${local.tools_account_ecr_url_prefix}-verify-config@${var.hub_config_image_digest}"
-    nginx_image_identifier = "${local.nginx_image_identifier}"
-    domain                 = "${local.root_domain}"
-    deployment             = "${var.deployment}"
-    truststore_password    = "${var.truststore_password}"
-    location_blocks_base64 = "${local.nginx_config_location_blocks_base64}"
-    region                 = "${data.aws_region.region.id}"
-    account_id             = "${data.aws_caller_identity.account.account_id}"
+    image_identifier         = "${local.tools_account_ecr_url_prefix}-verify-config@${var.hub_config_image_digest}"
+    nginx_image_identifier   = "${local.nginx_image_identifier}"
+    domain                   = "${local.root_domain}"
+    deployment               = "${var.deployment}"
+    truststore_password      = "${var.truststore_password}"
+    location_blocks_base64   = "${local.nginx_config_location_blocks_base64}"
+    region                   = "${data.aws_region.region.id}"
+    account_id               = "${data.aws_caller_identity.account.account_id}"
+    self_service_enabled     = "${var.self_service_enabled}"
+    services_metadata_bucket = "${local.services_metadata_bucket}"
+    metadata_object_key      = "${local.metadata_object_key}"
   }
 }
 
@@ -86,8 +91,8 @@ resource "aws_iam_policy" "can_read_config_metadata_bucket" {
                 "s3:GetO*"
             ],
             "Resource": [
-                "arn:aws:s3:::govukverify-self-service-${var.deployment}-config-metadata",
-                "arn:aws:s3:::govukverify-self-service-${var.deployment}-config-metadata/*"
+                "arn:aws:s3:::${local.services_metadata_bucket}",
+                "arn:aws:s3:::${local.services_metadata_bucket}/*"
             ]
         }
     ]
