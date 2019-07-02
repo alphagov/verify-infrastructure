@@ -135,14 +135,15 @@ sed -i -e 's/After=.*/& docker.service/' /lib/systemd/system/journalbeat.service
 systemctl enable --now journalbeat
 
 # ECS
-echo 'Installing awscli'
-apt-get install --yes awscli
+echo 'Installing awscli and iptables-persistent'
+apt-get install --yes awscli iptables-persistent
 
 echo 'Adding networking rules for ECS metadata endpoints'
 sh -c "echo 'net.ipv4.conf.all.route_localnet = 1' >> /etc/sysctl.conf"
 sysctl -p /etc/sysctl.conf
 iptables -t nat -A PREROUTING -p tcp -d 169.254.170.2 --dport 80 -j DNAT --to-destination 127.0.0.1:51679
 iptables -t nat -A OUTPUT -d 169.254.170.2 -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 51679
+iptables-save > /etc/iptables/rules.v4
 
 eval $(aws ecr get-login                                          \
            --no-include-email                                     \
