@@ -1,11 +1,5 @@
-locals {
-  service = "govukverify-self-service"
-}
-
-data "aws_region" "region" {}
-
 resource "aws_s3_bucket" "config_metadata" {
-  bucket = "${local.service}-${var.deployment}-config-metadata"
+  bucket = "govukverify-${local.service}-${var.deployment}-config-metadata"
   region = "${data.aws_region.region.id}"
 
   versioning {
