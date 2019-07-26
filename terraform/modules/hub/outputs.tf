@@ -6,6 +6,10 @@ output "vpc_id" {
   value = "${aws_vpc.hub.id}"
 }
 
-output "aws_lb_listener_ingress_https" {
-  value = "${aws_lb_listener.ingress_https.arn}"
+output "can_connect_to_container_vpc_endpoint" {
+  value = "${aws_security_group.container_vpc_endpoint}"
+}
+
+output "cloudwatch_vpc_endpoint" {
+  value = "${aws_security_group.cloudwatch_vpc_endpoint}"
 }
