@@ -13,3 +13,8 @@ output "can_connect_to_container_vpc_endpoint" {
 output "cloudwatch_vpc_endpoint" {
   value = "${aws_security_group.cloudwatch_vpc_endpoint.id}"
 }
+
+output "hub_key_id" {
+  value     = "${aws_kms_key.hub_key.key_id}"
+  sensitive = true
+}
