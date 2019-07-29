@@ -1,7 +1,7 @@
 [
     {
       "essential": true,
-      "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-self-service",
+      "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-self-service:latest",
       "memory": 1024,
       "name": "self-service",
       "portMappings": [
@@ -28,7 +28,7 @@
       "secrets": [
         {
           "name": "SECRET_KEY_BASE",
-          "valueFrom": "arn:aws:ssm:eu-west-2:${aws_account_id}:parameter/self-service/rails-secret-key-base"
+          "valueFrom": "${rails_secret_key_base}"
         }
       ],
       "logConfiguration": {

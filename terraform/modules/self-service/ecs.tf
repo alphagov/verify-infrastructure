@@ -6,7 +6,8 @@ data "template_file" "task_def" {
   template = "${file("${path.module}/files/task-def.json")}"
 
   vars = {
-    aws_account_id = "${data.aws_caller_identity.account.account_id}"
+    deployment            = "${var.deployment}"
+    rails_secret_key_base = "${aws_ssm_parameter.rails_secret_key_base.arn}"
   }
 }
 
@@ -40,10 +41,23 @@ resource "aws_ecs_service" "service" {
   network_configuration {
     security_groups = [
       "${aws_security_group.self_service.id}",
+      "${aws_security_group.egress_over_https.id}",
       "${data.terraform_remote_state.hub.can_connect_to_container_vpc_endpoint}",
-      "${data.terraform_remote_state.hub.cloudwatch_vpc_endpoint}"
     ]
 
     subnets = ["${data.terraform_remote_state.hub.internal_subnet_ids}"]
   }
+}
+
+resource "random_string" "rails_secret_key_base" {
+  length  = 128
+  special = false
+}
+
+ resource "aws_ssm_parameter" "rails_secret_key_base" {
+  name        = "/${var.deployment}/${local.service}/rails-secret-key-base"
+  description = "Rails secret base for self-service"
+  type        = "SecureString"
+  key_id      = "${aws_kms_key.self_service_key.key_id}"
+  value       = "${random_string.rails_secret_key_base.result}"
 }
