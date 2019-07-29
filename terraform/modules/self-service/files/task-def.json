@@ -1,0 +1,43 @@
+[
+    {
+      "essential": true,
+      "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-self-service",
+      "memory": 1024,
+      "name": "self-service",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080
+        }
+      ],
+      "entryPoint": [
+        "bundle",
+        "exec",
+        "puma",
+        "-p",
+        "8080",
+        "-b",
+        "tcp://0.0.0.0"
+      ],
+      "environment": [
+        {
+          "name": "RAILS_ENV",
+          "value": "development"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "SECRET_KEY_BASE",
+          "valueFrom": "arn:aws:ssm:eu-west-2:${aws_account_id}:parameter/self-service/rails-secret-key-base"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "self-service",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "self-service"
+        }
+      }
+    }
+  ]
