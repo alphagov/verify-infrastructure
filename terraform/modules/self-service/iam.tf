@@ -63,7 +63,8 @@ resource "aws_iam_policy" "can_write_to_logs" {
         "Action": [
           "logs:CreateLogStream",
           "logs:PutLogEvents",
-          "logs:DescribeLogStreams"
+          "logs:DescribeLogStreams",
+          "logs:CreateLogGroup"
         ],
         "Resource": [
           "${aws_cloudwatch_log_group.self_service.arn}",
@@ -73,6 +74,26 @@ resource "aws_iam_policy" "can_write_to_logs" {
     ]
   }
   EOF
+}
+
+data "aws_iam_policy_document" "kms_policy_document" {
+  statement {
+    sid    = "EncryptDecryptKMSParameters"
+    effect = "Allow"
+
+    principals {
+      type = "AWS"
+
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:root",
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${local.service}-execution",
+      ]
+    }
+
+    actions = ["kms:*"]
+
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_policy" "self_service_secrets_policy" {
@@ -90,7 +111,7 @@ resource "aws_iam_policy" "self_service_secrets_policy" {
           "ssm:GetParametersByPath"
         ],
         "Resource": [
-          "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/self-service/*"
+          "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/*"
         ]
       }, {
         "Effect": "Allow",
@@ -132,7 +153,6 @@ resource "aws_iam_role" "self_service_task" {
   }
   EOF
 }
-
 
 resource "aws_iam_policy" "execution" {
   name = "${var.deployment}-${local.service}-execution"

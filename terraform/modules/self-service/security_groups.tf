@@ -45,3 +45,16 @@ resource "aws_security_group" "self_service" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_security_group" "egress_over_https" {
+  name        = "${local.service}-egress-over-https"
+  description = "${local.service} security group to allow egress over https"
+  vpc_id      = "${data.terraform_remote_state.hub.vpc_id}"
+
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
