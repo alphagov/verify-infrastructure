@@ -8,6 +8,10 @@ data "template_file" "task_def" {
   vars = {
     deployment            = "${var.deployment}"
     rails_secret_key_base = "${aws_ssm_parameter.rails_secret_key_base.arn}"
+    database_username     = "${var.db_username}"
+    database_password_arn = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/db-self-service-user-password"
+    database_host         = "${aws_db_instance.self_service.endpoint}"
+    database_name         = "${aws_db_instance.self_service.name}"
   }
 }
 
@@ -43,6 +47,7 @@ resource "aws_ecs_service" "service" {
       "${aws_security_group.self_service.id}",
       "${aws_security_group.egress_over_https.id}",
       "${data.terraform_remote_state.hub.can_connect_to_container_vpc_endpoint}",
+      "${aws_security_group.egress_to_db.id}"
     ]
 
     subnets = ["${data.terraform_remote_state.hub.internal_subnet_ids}"]

@@ -58,3 +58,28 @@ resource "aws_security_group" "egress_over_https" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+resource "aws_security_group" "egress_to_db" {
+  name        = "${local.service}-egress-to-db"
+  description = "${local.service} security group connecting to self service db"
+  vpc_id      = "${data.terraform_remote_state.hub.vpc_id}"
+
+  egress {
+    from_port = 5432
+    to_port   = 5432
+    protocol  = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "ingress_to_db" {
+  name        = "${local.service}-ingress-db"
+  description = "Allow inbound access from the self service tasks only"
+  vpc_id      = "${data.terraform_remote_state.hub.vpc_id}"
+
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = ["${aws_security_group.egress_to_db.id}"]
+  }
+}

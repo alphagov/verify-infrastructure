@@ -23,12 +23,28 @@
         {
           "name": "RAILS_ENV",
           "value": "development"
+        },
+        {
+          "name": "DATABASE_HOST",
+          "value": "${database_host}"
+        },
+        {
+          "name": "DATABASE_NAME",
+          "value": "${database_name}"
+        },
+        {
+          "name": "DATABASE_USERNAME",
+          "value": "${database_username}"
         }
       ],
       "secrets": [
         {
           "name": "SECRET_KEY_BASE",
           "valueFrom": "${rails_secret_key_base}"
+        },
+        {
+          "name": "DATABASE_PASSWORD",
+          "valueFrom": "${database_password_arn}"
         }
       ],
       "logConfiguration": {
