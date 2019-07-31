@@ -1,7 +1,7 @@
 [
     {
       "essential": true,
-      "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-self-service:latest",
+      "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-self-service:latest-${deployment}",
       "memory": 1024,
       "name": "self-service",
       "portMappings": [
@@ -22,7 +22,11 @@
       "environment": [
         {
           "name": "RAILS_ENV",
-          "value": "development"
+          "value": "production"
+        },
+        {
+          "name": "AWS_BUCKET",
+          "value": "${aws_bucket}"
         },
         {
           "name": "DATABASE_HOST",
