@@ -9,3 +9,7 @@ output "vpc_id" {
 output "can_connect_to_container_vpc_endpoint" {
   value = "${aws_security_group.can_connect_to_container_vpc_endpoint.id}"
 }
+
+output "public_subnet_ids" {
+  value = "${aws_subnet.ingress.*.id}"
+}
