@@ -13,6 +13,7 @@ data "template_file" "task_def" {
     database_password_arn = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/db-master-password"
     database_host         = "${aws_db_instance.self_service.endpoint}"
     database_name         = "${aws_db_instance.self_service.name}"
+    cognito_client_id     = "${aws_cognito_user_pool_client.client.id}"
   }
 }
 

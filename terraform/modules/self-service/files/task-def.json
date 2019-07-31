@@ -29,6 +29,10 @@
           "value": "${aws_bucket}"
         },
         {
+          "name": "AWS_COGNITO_CLIENT_ID",
+          "value": "${cognito_client_id}"
+        },
+        {
           "name": "DATABASE_HOST",
           "value": "${database_host}"
         },

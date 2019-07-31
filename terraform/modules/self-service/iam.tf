@@ -154,6 +154,30 @@ resource "aws_iam_role" "self_service_task" {
   EOF
 }
 
+resource "aws_iam_policy" "self_service_cognito_policy" {
+  name = "${local.service}-cognito-policy"
+
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": ["*"],
+        "Resource": [
+          "arn:aws:cognito-idp:${data.aws_region.region.name}:${data.aws_caller_identity.account.account_id}:userpool/${aws_cognito_user_pool.user_pool.id}"
+        ]
+      }
+    ]
+  }
+  EOF
+}
+
+resource "aws_iam_role_policy_attachment" "self_service_cognito_policy_attachment" {
+  role       = "${aws_iam_role.self_service_task.name}"
+  policy_arn = "${aws_iam_policy.self_service_cognito_policy.arn}"
+}
+
 resource "aws_iam_policy" "execution" {
   name = "${var.deployment}-${local.service}-execution"
 
