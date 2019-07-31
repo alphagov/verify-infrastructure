@@ -7,9 +7,10 @@ data "template_file" "task_def" {
 
   vars = {
     deployment            = "${var.deployment}"
+    aws_bucket            = "${aws_s3_bucket.config_metadata.bucket}"
     rails_secret_key_base = "${aws_ssm_parameter.rails_secret_key_base.arn}"
     database_username     = "${var.db_username}"
-    database_password_arn = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/db-self-service-user-password"
+    database_password_arn = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/db-master-password"
     database_host         = "${aws_db_instance.self_service.endpoint}"
     database_name         = "${aws_db_instance.self_service.name}"
   }

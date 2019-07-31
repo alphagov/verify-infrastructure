@@ -29,7 +29,7 @@ resource "aws_lb_target_group" "task" {
     protocol = "HTTP"
     interval = "30"
     timeout  = "15"
-    matcher  = "200-399"
+    matcher  = "200-401"
   }
 
   depends_on = [
