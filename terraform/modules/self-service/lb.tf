@@ -8,7 +8,7 @@ resource "aws_lb" "self_service_edge" {
     "${aws_security_group.egress.id}"
   ]
 
-  subnets = ["${data.terraform_remote_state.hub.internal_subnet_ids}"]
+  subnets = ["${data.terraform_remote_state.hub.public_subnet_ids}"]
 
   tags {
     Deployment = "${var.deployment}"
