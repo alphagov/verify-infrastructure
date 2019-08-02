@@ -1,7 +1,7 @@
 [
     {
       "essential": true,
-      "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-self-service:latest-${deployment}",
+      "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-self-service@${image_digest}",
       "memory": 1024,
       "name": "self-service",
       "portMappings": [
@@ -43,6 +43,14 @@
         {
           "name": "DATABASE_USERNAME",
           "value": "${database_username}"
+        },
+        {
+          "name": "ASSET_HOST",
+          "value": "${asset_host}"
+        },
+        {
+          "name": "ASSET_PREFIX",
+          "value": "${asset_prefix}"
         }
       ],
       "secrets": [
