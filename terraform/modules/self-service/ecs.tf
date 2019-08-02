@@ -6,7 +6,7 @@ data "template_file" "task_def" {
   template = "${file("${path.module}/files/task-def.json")}"
 
   vars = {
-    deployment            = "${var.deployment}"
+    image_digest          = "${var.image_digest}"
     aws_bucket            = "${aws_s3_bucket.config_metadata.bucket}"
     rails_secret_key_base = "${aws_ssm_parameter.rails_secret_key_base.arn}"
     database_username     = "${var.db_username}"
@@ -14,6 +14,8 @@ data "template_file" "task_def" {
     database_host         = "${aws_db_instance.self_service.endpoint}"
     database_name         = "${aws_db_instance.self_service.name}"
     cognito_client_id     = "${aws_cognito_user_pool_client.client.id}"
+    asset_host            = "${var.asset_host}"
+    asset_prefix          = "${element(split(":", var.image_digest),1)}/assets/"
   }
 }
 

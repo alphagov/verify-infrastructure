@@ -41,3 +41,10 @@ variable "db_username" {
   description = "Self Service DB username"
   default     = "postgres"
 }
+
+variable "asset_host" {
+  description = "Host where the static assets are hosted"
+  default     = "gds-verify-self-service-assets.s3.amazonaws.com"
+}
+
+variable "image_digest" {}
