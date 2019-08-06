@@ -19,9 +19,39 @@ data "template_file" "task_def" {
   }
 }
 
+data "template_file" "migrations_task_def" {
+  template = "${file("${path.module}/files/migrations-task-def.json")}"
+
+  vars = {
+    image_digest          = "${var.image_digest}"
+    aws_bucket            = "${aws_s3_bucket.config_metadata.bucket}"
+    rails_secret_key_base = "${aws_ssm_parameter.rails_secret_key_base.arn}"
+    database_username     = "${var.db_username}"
+    database_password_arn = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/db-master-password"
+    database_host         = "${aws_db_instance.self_service.address}"
+    database_name         = "${aws_db_instance.self_service.name}"
+    cognito_client_id     = "${aws_cognito_user_pool_client.client.id}"
+    asset_host            = "${var.asset_host}"
+    asset_prefix          = "${element(split(":", var.image_digest),1)}/assets/"
+  }
+}
+
 resource "aws_ecs_task_definition" "task_def" {
   family                = "${local.service}"
   container_definitions = "${data.template_file.task_def.rendered}"
+  network_mode          = "awsvpc"
+  execution_role_arn    = "${aws_iam_role.self_service_execution.arn}"
+  task_role_arn         = "${aws_iam_role.self_service_task.arn}"
+
+  cpu    = 1024
+  memory = 2048
+
+  requires_compatibilities = ["FARGATE"]
+}
+
+resource "aws_ecs_task_definition" "migrations_task_def" {
+  family                = "${local.service}-migrations"
+  container_definitions = "${data.template_file.migrations_task_def.rendered}"
   network_mode          = "awsvpc"
   execution_role_arn    = "${aws_iam_role.self_service_execution.arn}"
   task_role_arn         = "${aws_iam_role.self_service_task.arn}"
@@ -49,6 +79,24 @@ resource "aws_ecs_service" "service" {
   network_configuration {
     security_groups = [
       "${aws_security_group.self_service.id}",
+      "${aws_security_group.egress_over_https.id}",
+      "${data.terraform_remote_state.hub.can_connect_to_container_vpc_endpoint}",
+      "${aws_security_group.egress_to_db.id}"
+    ]
+
+    subnets = ["${data.terraform_remote_state.hub.internal_subnet_ids}"]
+  }
+}
+
+resource "aws_ecs_service" "migrations_service" {
+  name            = "${local.service}-migrations"
+  task_definition = "${aws_ecs_task_definition.migrations_task_def.arn}"
+  cluster         = "${aws_ecs_cluster.cluster.id}"
+  desired_count   = 0
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    security_groups = [
       "${aws_security_group.egress_over_https.id}",
       "${data.terraform_remote_state.hub.can_connect_to_container_vpc_endpoint}",
       "${aws_security_group.egress_to_db.id}"
