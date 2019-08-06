@@ -14,6 +14,7 @@ data "template_file" "task_def" {
     database_host         = "${aws_db_instance.self_service.endpoint}"
     database_name         = "${aws_db_instance.self_service.name}"
     cognito_client_id     = "${aws_cognito_user_pool_client.client.id}"
+    cognito_user_pool_id  = "${aws_cognito_user_pool.user_pool.id}"
     asset_host            = "${var.asset_host}"
     asset_prefix          = "${element(split(":", var.image_digest),1)}/assets/"
   }

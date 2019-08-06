@@ -33,6 +33,10 @@
           "value": "${cognito_client_id}"
         },
         {
+          "name": "AWS_COGNITO_USER_POOL_ID",
+          "value": "${cognito_user_pool_id}"
+        },
+        {
           "name": "DATABASE_HOST",
           "value": "${database_host}"
         },
