@@ -1,29 +1,5 @@
-resource "aws_ecs_cluster" "cluster" {
-  name = "${local.service}"
-}
-
-data "template_file" "task_def" {
-  template = "${file("${path.module}/files/task-def.json")}"
-
-  vars = {
-    image_digest          = "${var.image_digest}"
-    aws_bucket            = "${aws_s3_bucket.config_metadata.bucket}"
-    rails_secret_key_base = "${aws_ssm_parameter.rails_secret_key_base.arn}"
-    database_username     = "${var.db_username}"
-    database_password_arn = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/db-master-password"
-    database_host         = "${aws_db_instance.self_service.endpoint}"
-    database_name         = "${aws_db_instance.self_service.name}"
-    cognito_client_id     = "${aws_cognito_user_pool_client.client.id}"
-    cognito_user_pool_id  = "${aws_cognito_user_pool.user_pool.id}"
-    asset_host            = "${var.asset_host}"
-    asset_prefix          = "${element(split(":", var.image_digest),1)}/assets/"
-  }
-}
-
-data "template_file" "migrations_task_def" {
-  template = "${file("${path.module}/files/migrations-task-def.json")}"
-
-  vars = {
+locals  {
+  task_vars = {
     image_digest          = "${var.image_digest}"
     aws_bucket            = "${aws_s3_bucket.config_metadata.bucket}"
     rails_secret_key_base = "${aws_ssm_parameter.rails_secret_key_base.arn}"
@@ -32,9 +8,26 @@ data "template_file" "migrations_task_def" {
     database_host         = "${aws_db_instance.self_service.address}"
     database_name         = "${aws_db_instance.self_service.name}"
     cognito_client_id     = "${aws_cognito_user_pool_client.client.id}"
+    cognito_user_pool_id  = "${aws_cognito_user_pool.user_pool.id}"
     asset_host            = "${var.asset_host}"
     asset_prefix          = "${element(split(":", var.image_digest),1)}/assets/"
   }
+}
+
+resource "aws_ecs_cluster" "cluster" {
+  name = "${local.service}"
+}
+
+data "template_file" "task_def" {
+  template = "${file("${path.module}/files/task-def.json")}"
+
+  vars = "${local.task_vars}"
+}
+
+data "template_file" "migrations_task_def" {
+  template = "${file("${path.module}/files/migrations-task-def.json")}"
+
+  vars = "${local.task_vars}"
 }
 
 resource "aws_ecs_task_definition" "task_def" {
