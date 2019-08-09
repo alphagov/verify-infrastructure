@@ -62,6 +62,12 @@ resource "aws_cognito_user_pool" "user_pool" {
     }
   }
 
+  lifecycle {
+    ignore_changes = [
+      "mfa_configuration"
+    ]
+  }
+
   provisioner "local-exec" {
     command = "aws cognito-idp set-user-pool-mfa-config --user-pool-id ${aws_cognito_user_pool.user_pool.id} --software-token-mfa-configuration Enabled=true --mfa-configuration OPTIONAL"
   }
