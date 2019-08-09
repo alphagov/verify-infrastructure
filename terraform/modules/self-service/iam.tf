@@ -184,3 +184,28 @@ resource "aws_iam_role_policy_attachment" "execution_execution" {
   role       = "${aws_iam_role.self_service_execution.name}"
   policy_arn = "${aws_iam_policy.execution.arn}"
 }
+
+data "aws_iam_policy_document" "access_config_metadata" {
+  statement {
+    sid       = "AllowGetAndPutObject"
+    effect    = "Allow"
+    resources = ["${aws_s3_bucket.config_metadata.arn}/*"]
+
+    actions = [
+      "s3:GetO*",
+      "s3:PutO*",
+      "s3:DeleteO*",
+      "s3:ListBucket",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "access_config_metadata" {
+  name   = "${local.service}-access-config-metadata"
+  policy = "${data.aws_iam_policy_document.access_config_metadata.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "task_access_metadata_bucket_attachment" {
+  role       = "${aws_iam_role.self_service_task.name}"
+  policy_arn = "${aws_iam_policy.access_config_metadata.arn}"
+}
