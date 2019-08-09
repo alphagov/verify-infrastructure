@@ -1,32 +1,3 @@
-data "aws_iam_policy_document" "self_service_user_write_to_bucket" {
-  statement {
-    sid       = "AllowGetAndPutObject"
-    effect    = "Allow"
-    resources = ["${aws_s3_bucket.config_metadata.arn}/*"]
-
-    actions = [
-      "s3:GetO*",
-      "s3:PutO*",
-      "s3:DeleteO*",
-      "s3:ListBucket",
-    ]
-  }
-}
-
-resource "aws_iam_policy" "self_service_user_write_to_bucket" {
-  name   = "${local.service}-iam-policy"
-  policy = "${data.aws_iam_policy_document.self_service_user_write_to_bucket.json}"
-}
-
-resource "aws_iam_user" "self_service_user" {
-  name = "${local.service}-user"
-}
-
-resource "aws_iam_user_policy_attachment" "self_service_user_policy_attachment" {
-  user       = "${aws_iam_user.self_service_user.name}"
-  policy_arn = "${aws_iam_policy.self_service_user_write_to_bucket.arn}"
-}
-
 resource "aws_iam_role_policy_attachment" "self_service_execution_write_to_logs_attachment" {
   role       = "${aws_iam_role.self_service_execution.name}"
   policy_arn = "${aws_iam_policy.can_write_to_logs.arn}"
@@ -212,4 +183,29 @@ resource "aws_iam_policy" "execution" {
 resource "aws_iam_role_policy_attachment" "execution_execution" {
   role       = "${aws_iam_role.self_service_execution.name}"
   policy_arn = "${aws_iam_policy.execution.arn}"
+}
+
+data "aws_iam_policy_document" "access_config_metadata" {
+  statement {
+    sid       = "AllowGetAndPutObject"
+    effect    = "Allow"
+    resources = ["${aws_s3_bucket.config_metadata.arn}/*"]
+
+    actions = [
+      "s3:GetO*",
+      "s3:PutO*",
+      "s3:DeleteO*",
+      "s3:ListBucket",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "access_config_metadata" {
+  name   = "${local.service}-access-config-metadata"
+  policy = "${data.aws_iam_policy_document.access_config_metadata.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "task_access_metadata_bucket_attachment" {
+  role       = "${aws_iam_role.self_service_task.name}"
+  policy_arn = "${aws_iam_policy.access_config_metadata.arn}"
 }
