@@ -25,11 +25,11 @@ resource "aws_lb_target_group" "task" {
   slow_start           = 30
 
   health_check {
-    path     = "/"
+    path     = "/healthcheck"
     protocol = "HTTP"
-    interval = "30"
+    interval = "120"
     timeout  = "15"
-    matcher  = "200-401"
+    matcher  = "200-299"
   }
 
   depends_on = [
