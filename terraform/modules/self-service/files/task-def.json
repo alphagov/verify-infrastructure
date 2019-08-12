@@ -65,6 +65,10 @@
         {
           "name": "DATABASE_PASSWORD",
           "valueFrom": "${database_password_arn}"
+        },
+        {
+          "name": "SENTRY_DSN",
+          "valueFrom": "${sentry_dsn}"
         }
       ],
       "logConfiguration": {
