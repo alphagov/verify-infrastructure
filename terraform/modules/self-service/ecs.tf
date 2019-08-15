@@ -2,6 +2,7 @@ locals  {
   task_vars = {
     image_digest          = "${var.image_digest}"
     aws_bucket            = "${aws_s3_bucket.config_metadata.bucket}"
+    region                = "${data.aws_region.region.name}"
     rails_secret_key_base = "${aws_ssm_parameter.rails_secret_key_base.arn}"
     database_username     = "${var.db_username}"
     database_password_arn = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/db-master-password"
