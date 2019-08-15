@@ -25,6 +25,10 @@
           "value": "production"
         },
         {
+          "name": "AWS_REGION",
+          "value": "${region}"
+        },
+        {
           "name": "AWS_BUCKET",
           "value": "${aws_bucket}"
         },
