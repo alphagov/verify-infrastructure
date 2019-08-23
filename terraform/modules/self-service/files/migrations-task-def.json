@@ -52,6 +52,10 @@
         {
           "name": "ASSET_PREFIX",
           "value": "${asset_prefix}"
+        },
+        {
+          "name": "HUB_ENVIRONMENTS",
+          "value": "${hub_environments}"
         }
       ],
       "secrets": [
