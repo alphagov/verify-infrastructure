@@ -26,6 +26,14 @@
           "value": "${aws_bucket}"
         },
         {
+          "name": "AWS_COGNITO_CLIENT_ID",
+          "value": "${cognito_client_id}"
+        },
+        {
+          "name": "AWS_COGNITO_USER_POOL_ID",
+          "value": "${cognito_user_pool_id}"
+        },
+        {
           "name": "AWS_REGION",
           "value": "${region}"
         },
