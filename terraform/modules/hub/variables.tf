@@ -28,6 +28,11 @@ variable "redis_cache_size" {
 
 variable "truststore_password" {}
 
+variable "rp_truststore_enabled" {
+  description = "The RP truststore should be disabled if any self-service certs will be used by RPs, since we cannot validate the trust chain for self-signed certs"
+  default = "true"
+}
+
 locals {
   root_domain                  = "${replace(var.signin_domain, "/www[.]/", "")}"
   number_of_availability_zones = 3

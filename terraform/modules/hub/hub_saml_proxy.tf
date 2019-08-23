@@ -68,6 +68,7 @@ data "template_file" "saml_proxy_task_def" {
     region                        = "${data.aws_region.region.id}"
     account_id                    = "${data.aws_caller_identity.account.account_id}"
     event_emitter_api_gateway_url = "${var.event_emitter_api_gateway_url}"
+    rp_truststore_enabled         = "${var.rp_truststore_enabled}"
   }
 }
 
