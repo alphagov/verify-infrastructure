@@ -48,3 +48,7 @@ variable "asset_host" {
 }
 
 variable "image_digest" {}
+
+variable "hub_environments" {
+  description = "JSON string of hub environments and the config metadata buckets"
+}
