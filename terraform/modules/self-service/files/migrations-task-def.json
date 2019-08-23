@@ -22,10 +22,6 @@
           "value": "production"
         },
         {
-          "name": "AWS_BUCKET",
-          "value": "${aws_bucket}"
-        },
-        {
           "name": "AWS_COGNITO_CLIENT_ID",
           "value": "${cognito_client_id}"
         },
