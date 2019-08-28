@@ -82,6 +82,10 @@
       {
         "Name": "SPLUNK_SOURCE",
         "Value": "verify-hub_saml-engine_${deployment}"
+      },
+      {
+        "Name": "RP_TRUSTSTORE_ENABLED",
+        "Value": "${rp_truststore_enabled}"
       }
     ]
   }
