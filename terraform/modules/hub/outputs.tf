@@ -13,3 +13,7 @@ output "can_connect_to_container_vpc_endpoint" {
 output "public_subnet_ids" {
   value = "${aws_subnet.ingress.*.id}"
 }
+
+output "route_table_ids" {
+  value = "${aws_route_table.private.*.id}"
+}
