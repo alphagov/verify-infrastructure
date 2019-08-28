@@ -1,5 +1,9 @@
 locals {
-  service = "self-service"
+  service                      = "self-service"
+  config_metadata_buckets_arns = [
+    "${aws_s3_bucket.config_metadata.arn}",
+    "${aws_s3_bucket.config_metadata.arn}/*"
+  ]
 }
 
 data "aws_region" "region" {}

@@ -37,7 +37,9 @@ resource "aws_vpc_endpoint" "s3" {
                 "arn:aws:s3:::gds-${var.deployment}-ssm-session-logs-store",
                 "arn:aws:s3:::gds-${var.deployment}-ssm-session-logs-store/*",
                 "arn:aws:s3:::govukverify-self-service-${var.deployment}-config-metadata",
-                "arn:aws:s3:::govukverify-self-service-${var.deployment}-config-metadata/*"
+                "arn:aws:s3:::govukverify-self-service-${var.deployment}-config-metadata/*",
+                "arn:aws:s3:::govukverify-self-service-integration-config-metadata",
+                "arn:aws:s3:::govukverify-self-service-integration-config-metadata/*"
             ]
         }
     ]
