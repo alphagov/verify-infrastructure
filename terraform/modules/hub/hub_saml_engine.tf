@@ -52,6 +52,7 @@ data "template_file" "saml_engine_task_def" {
     location_blocks_base64 = "${local.nginx_saml_engine_location_blocks_base64}"
     redis_host             = "rediss://${aws_elasticache_replication_group.saml_engine_replay_cache.primary_endpoint_address}:6379"
     splunk_url             = "${var.splunk_url}"
+    rp_truststore_enabled  = "${var.rp_truststore_enabled}"
   }
 }
 
