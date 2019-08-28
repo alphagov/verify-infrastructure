@@ -70,6 +70,10 @@
       {
         "Name": "JAVA_OPTS",
         "Value": "-Dservice.name=saml-soap-proxy -Xms3000m -Xmx3200m -XX:+HeapDumpOnOutOfMemoryError -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5"
+      },
+      {
+        "Name": "RP_TRUSTSTORE_ENABLED",
+        "Value": "${rp_truststore_enabled}"
       }
     ]
   }
