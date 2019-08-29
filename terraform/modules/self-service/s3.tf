@@ -18,7 +18,7 @@ resource "aws_s3_bucket" "config_metadata" {
     prevent_destroy = true
   }
 
-  tags {
+  tags = {
     Environment = "${var.deployment}"
     Service     = "${local.service}"
     ManagedBy   = "terraform"
@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "config_metadata_bucket_policy" {
     sid    = "DenyIncorrectEncryptionHeader"
     effect = "Deny"
 
-    principals = {
+    principals {
       type        = "AWS"
       identifiers = ["*"]
     }
@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "config_metadata_bucket_policy" {
 
     actions = ["s3:PutObject"]
 
-    condition = {
+    condition {
       test     = "StringNotEquals"
       variable = "s3:x-amz-server-side-encryption"
       values   = ["AES256"]

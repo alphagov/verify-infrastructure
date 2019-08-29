@@ -8,9 +8,9 @@ resource "aws_lb" "self_service_edge" {
     "${aws_security_group.egress.id}"
   ]
 
-  subnets = ["${data.terraform_remote_state.hub.public_subnet_ids}"]
+  subnets = "${data.terraform_remote_state.hub.outputs.public_subnet_ids}"
 
-  tags {
+  tags = {
     Deployment = "${var.deployment}"
   }
 }
@@ -20,7 +20,7 @@ resource "aws_lb_target_group" "task" {
   port                 = 8080
   protocol             = "HTTP"
   target_type          = "ip"
-  vpc_id               = "${data.terraform_remote_state.hub.vpc_id}"
+  vpc_id               = "${data.terraform_remote_state.hub.outputs.vpc_id}"
   deregistration_delay = 15
   slow_start           = 30
 

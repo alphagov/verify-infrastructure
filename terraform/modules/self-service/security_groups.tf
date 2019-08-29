@@ -2,20 +2,20 @@ resource "aws_security_group" "ingress" {
   name        = "${local.service}-ingress"
   description = "${local.service}-ingress"
 
-  vpc_id = "${data.terraform_remote_state.hub.vpc_id}"
+  vpc_id = "${data.terraform_remote_state.hub.outputs.vpc_id}"
 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["${var.accessible_from_cidrs}"]
+    cidr_blocks = "${var.accessible_from_cidrs}"
   }
 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["${var.accessible_from_cidrs}"]
+    cidr_blocks = "${var.accessible_from_cidrs}"
   }
 }
 
@@ -23,7 +23,7 @@ resource "aws_security_group" "egress" {
   name        = "${local.service}-egress"
   description = "${local.service}-egress"
 
-  vpc_id = "${data.terraform_remote_state.hub.vpc_id}"
+  vpc_id = "${data.terraform_remote_state.hub.outputs.vpc_id}"
 
   egress {
     from_port       = 8080
@@ -36,7 +36,7 @@ resource "aws_security_group" "egress" {
 resource "aws_security_group" "self_service" {
   name        = "${local.service}"
   description = "${local.service} security group for hub VPC"
-  vpc_id      = "${data.terraform_remote_state.hub.vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.hub.outputs.vpc_id}"
 
   ingress {
     from_port   = 8080
@@ -49,7 +49,7 @@ resource "aws_security_group" "self_service" {
 resource "aws_security_group" "egress_over_https" {
   name        = "${local.service}-egress-over-https"
   description = "${local.service} security group to allow egress over https"
-  vpc_id      = "${data.terraform_remote_state.hub.vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.hub.outputs.vpc_id}"
 
   egress {
     from_port   = 443
@@ -61,7 +61,7 @@ resource "aws_security_group" "egress_over_https" {
 resource "aws_security_group" "egress_to_db" {
   name        = "${local.service}-egress-to-db"
   description = "${local.service} security group connecting to self service db"
-  vpc_id      = "${data.terraform_remote_state.hub.vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.hub.outputs.vpc_id}"
 
   egress {
     from_port = 5432
@@ -74,7 +74,7 @@ resource "aws_security_group" "egress_to_db" {
 resource "aws_security_group" "ingress_to_db" {
   name        = "${local.service}-ingress-db"
   description = "Allow inbound access from the self service tasks only"
-  vpc_id      = "${data.terraform_remote_state.hub.vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.hub.outputs.vpc_id}"
 
   ingress {
     from_port       = 5432

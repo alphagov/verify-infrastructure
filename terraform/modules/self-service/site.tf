@@ -11,7 +11,7 @@ data "aws_region" "region" {}
 data "terraform_remote_state" "hub" {
   backend = "s3"
 
-  config {
+  config = {
     bucket = "govukverify-tfstate-${var.deployment}"
     key    = "hub.tfstate"
     region = "${data.aws_region.region.id}"
