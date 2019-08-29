@@ -7,7 +7,6 @@ resource "aws_cognito_user_pool" "user_pool" {
 
   admin_create_user_config {
     allow_admin_create_user_only = true
-    unused_account_validity_days = 1
   }
 
   password_policy {
@@ -67,7 +66,7 @@ resource "aws_cognito_user_pool" "user_pool" {
     ignore_changes = [
       "mfa_configuration"
     ]
-    
+
     prevent_destroy = true
   }
 
