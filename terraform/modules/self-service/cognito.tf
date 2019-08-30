@@ -73,6 +73,10 @@ resource "aws_cognito_user_pool" "user_pool" {
   provisioner "local-exec" {
     command = "aws cognito-idp set-user-pool-mfa-config --user-pool-id ${aws_cognito_user_pool.user_pool.id} --software-token-mfa-configuration Enabled=true --mfa-configuration OPTIONAL"
   }
+
+  provisioner "local-exec" {
+    command = "aws cognito-idp update-user-pool --user-pool-id  ${aws_cognito_user_pool.user_pool.id} --admin-create-user-config {'TemporaryPasswordValidityDays': 1}"
+  }
 }
 
 resource "aws_cognito_user_pool_client" "client" {
