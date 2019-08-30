@@ -189,16 +189,13 @@ data "aws_iam_policy_document" "access_config_metadata" {
   statement {
     sid       = "AllowGetAndPutObject"
     effect    = "Allow"
-    resources = [
-      "${aws_s3_bucket.config_metadata.arn}/*",
-      "${data.aws_ssm_parameter.integration_metadata_bucket.value}/*"
-    ]
+    resources = ["${concat(local.config_metadata_buckets_arns, var.additional_buckets)}"]
 
     actions = [
-      "s3:GetO*",
-      "s3:PutO*",
-      "s3:DeleteO*",
-      "s3:ListBucket",
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+      "s3:ListBucket"
     ]
   }
 }
@@ -211,8 +208,4 @@ resource "aws_iam_policy" "access_config_metadata" {
 resource "aws_iam_role_policy_attachment" "task_access_metadata_bucket_attachment" {
   role       = "${aws_iam_role.self_service_task.name}"
   policy_arn = "${aws_iam_policy.access_config_metadata.arn}"
-}
-
-data "aws_ssm_parameter" "integration_metadata_bucket" {
-  name = "/staging/${local.service}/integration-bucket-arn"
 }
