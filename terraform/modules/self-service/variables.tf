@@ -4,15 +4,18 @@ variable "deployment" {
 
 variable "domain" {
   description = "Domain on which the app is hosted"
+  default     = ""
 }
 
 variable "ssl_certificate_arn" {
   description = "ARN for the SSL certificate"
+  default     = ""
 }
 
 variable "accessible_from_cidrs" {
   description = "Accessible from CIDRs"
-  type = "list"
+  type        = "list"
+  default     = []
 }
 
 data "aws_caller_identity" "account" {}
@@ -47,10 +50,13 @@ variable "asset_host" {
   default     = "gds-verify-self-service-assets.s3.amazonaws.com"
 }
 
-variable "image_digest" {}
+variable "image_digest" {
+  default = ""
+}
 
 variable "hub_environments" {
   description = "JSON string of hub environments and the config metadata buckets"
+  default     = ""
 }
 
 variable "additional_buckets" {
