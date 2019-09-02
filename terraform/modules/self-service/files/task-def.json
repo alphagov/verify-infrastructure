@@ -59,6 +59,10 @@
         {
           "name": "HUB_ENVIRONMENTS",
           "value": "${hub_environments}"
+        },
+        {
+          "name": "RAILS_SERVE_STATIC_FILES",
+          "value": "${serve_static_files}"
         }
       ],
       "secrets": [

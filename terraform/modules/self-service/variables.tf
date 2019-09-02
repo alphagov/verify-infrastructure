@@ -64,3 +64,7 @@ variable "additional_buckets" {
   type        = "list"
   default     = []
 }
+
+variable "serve_static_files" {
+  default = true
+}
