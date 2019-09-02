@@ -77,11 +77,11 @@ resource "aws_ecs_service" "service" {
     security_groups = [
       "${aws_security_group.self_service.id}",
       "${aws_security_group.egress_over_https.id}",
-      "${data.terraform_remote_state.hub.can_connect_to_container_vpc_endpoint}",
+      "${data.terraform_remote_state.hub.outputs.can_connect_to_container_vpc_endpoint}",
       "${aws_security_group.egress_to_db.id}"
     ]
 
-    subnets = ["${data.terraform_remote_state.hub.internal_subnet_ids}"]
+    subnets = "${data.terraform_remote_state.hub.outputs.internal_subnet_ids}"
   }
 }
 
@@ -95,11 +95,11 @@ resource "aws_ecs_service" "migrations_service" {
   network_configuration {
     security_groups = [
       "${aws_security_group.egress_over_https.id}",
-      "${data.terraform_remote_state.hub.can_connect_to_container_vpc_endpoint}",
+      "${data.terraform_remote_state.hub.outputs.can_connect_to_container_vpc_endpoint}",
       "${aws_security_group.egress_to_db.id}"
     ]
 
-    subnets = ["${data.terraform_remote_state.hub.internal_subnet_ids}"]
+    subnets = "${data.terraform_remote_state.hub.outputs.internal_subnet_ids}"
   }
 }
 

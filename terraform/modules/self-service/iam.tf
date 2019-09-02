@@ -189,7 +189,7 @@ data "aws_iam_policy_document" "access_config_metadata" {
   statement {
     sid       = "AllowGetAndPutObject"
     effect    = "Allow"
-    resources = ["${concat(local.config_metadata_buckets_arns, var.additional_buckets)}"]
+    resources = "${concat(local.config_metadata_buckets_arns, var.additional_buckets)}"
 
     actions = [
       "s3:GetObject",

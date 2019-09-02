@@ -43,5 +43,5 @@ resource "aws_db_instance" "self_service" {
 
 resource "aws_db_subnet_group" "self_service_db_subnet_group" {
   name       = "${var.deployment}-${local.service}-db-subnet-group"
-  subnet_ids = ["${data.terraform_remote_state.hub.internal_subnet_ids}"]
+  subnet_ids = "${data.terraform_remote_state.hub.outputs.internal_subnet_ids}"
 }
