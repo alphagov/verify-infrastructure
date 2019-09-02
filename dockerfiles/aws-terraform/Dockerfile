@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-ENV TF_VERSION 0.11.13
+ENV TF_VERSION 0.12.7
 
 LABEL ubuntu="18.04"
 LABEL terraform="$TF_VERSION"
@@ -13,7 +13,7 @@ RUN apt-get update  --yes && \
 WORKDIR /tmp
 
 RUN curl https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip > terraform.zip && \
-    echo '5925cd4d81e7d8f42a0054df2aafd66e2ab7408dbed2bd748f0022cfe592f8d2  terraform.zip'  > terraform.sha && \
+    echo 'a0fa11217325f76bf1b4f53b0f7a6efb1be1826826ef8024f2f45e60187925e7  terraform.zip'  > terraform.sha && \
     sha256sum -c terraform.sha && unzip terraform.zip && mv terraform /usr/bin/terraform                    && \
     rm terraform.zip && rm terraform.sha
 
