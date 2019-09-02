@@ -55,18 +55,20 @@ data "template_file" "frontend_task_def" {
   template = "${file("${path.module}/files/tasks/frontend.json")}"
 
   vars {
-    account_id             = "${data.aws_caller_identity.account.account_id}"
-    deployment             = "${var.deployment}"
-    image_identifier       = "${local.tools_account_ecr_url_prefix}-verify-frontend@${var.hub_frontend_image_digest}"
-    nginx_image_identifier = "${local.nginx_image_identifier}"
-    domain                 = "${local.root_domain}"
-    region                 = "${data.aws_region.region.id}"
-    location_blocks_base64 = "${local.location_blocks_base64}"
-    zendesk_username       = "${var.zendesk_username}"
-    zendesk_url            = "${var.zendesk_url}"
-    matomo_site_id         = "${var.matomo_site_id}"
-    ab_test_file           = "${var.ab_test_file}"
-    analytics_endpoint     = "${var.analytics_endpoint}"
+    account_id                = "${data.aws_caller_identity.account.account_id}"
+    deployment                = "${var.deployment}"
+    image_identifier          = "${local.tools_account_ecr_url_prefix}-verify-frontend@${var.hub_frontend_image_digest}"
+    nginx_image_identifier    = "${local.nginx_image_identifier}"
+    domain                    = "${local.root_domain}"
+    region                    = "${data.aws_region.region.id}"
+    location_blocks_base64    = "${local.location_blocks_base64}"
+    zendesk_username          = "${var.zendesk_username}"
+    zendesk_url               = "${var.zendesk_url}"
+    matomo_site_id            = "${var.matomo_site_id}"
+    ab_test_file              = "${var.ab_test_file}"
+    analytics_endpoint        = "${var.analytics_endpoint}"
+    cross_gov_ga_account_id   = "${var.cross_gov_ga_tracker_id}"
+    cross_gov_ga_domain_names = "${var.cross_gov_ga_domain_names}"
   }
 }
 

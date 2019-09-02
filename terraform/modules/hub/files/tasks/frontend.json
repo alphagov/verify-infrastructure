@@ -132,6 +132,12 @@
     }, {
       "Name": "RAILS_LOG_TO_STDOUT",
       "Value": "true"
+    }, {
+      "Name": "CROSS_GOV_GOOGLE_ANALYTICS_TRACKER_ID",
+      "Value": "${cross_gov_ga_tracker_id}"
+    }, {
+      "Name": "CROSS_GOV_GOOGLE_ANALYTICS_DOMAIN_LIST",
+      "Value": "${cross_gov_ga_domain_names}"
     }]
   }
 ]
