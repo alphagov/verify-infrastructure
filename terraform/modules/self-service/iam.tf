@@ -136,7 +136,7 @@ resource "aws_iam_policy" "self_service_cognito_policy" {
         "Effect": "Allow",
         "Action": ["*"],
         "Resource": [
-          "arn:aws:cognito-idp:${data.aws_region.region.name}:${data.aws_caller_identity.account.account_id}:userpool/${aws_cognito_user_pool.user_pool.id}"
+          "arn:aws:cognito-idp:${data.aws_region.region.name}:${data.aws_caller_identity.account.account_id}:userpool/${module.cognito.user_pool_id}"
         ]
       }
     ]
