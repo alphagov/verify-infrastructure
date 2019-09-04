@@ -1,3 +1,7 @@
+locals {
+  service = "self-service"
+}
+
 resource "aws_cognito_user_pool" "user_pool" {
   name = "${local.service}-user-pool"
 

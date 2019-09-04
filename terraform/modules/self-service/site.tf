@@ -18,3 +18,6 @@ data "terraform_remote_state" "hub" {
   }
 }
 
+module "cognito" {
+  source = "modules/cognito"
+}
