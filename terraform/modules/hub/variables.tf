@@ -89,6 +89,16 @@ variable "self_service_enabled" {
   default     = "false"
 }
 
+variable "cross_gov_ga_tracker_id" {
+  description = "The Google Analytics tracker ID for GOV.UK cross domain analysis"
+  default     = ""
+}
+
+variable "cross_gov_ga_domain_names" {
+  description = "List of (space delimited) domains to automatically enable links and forms for cross-domain analytics"
+  default     = "www.gov.uk"
+}
+
 variable "hub_config_image_digest" {}
 variable "hub_policy_image_digest" {}
 variable "hub_saml_proxy_image_digest" {}
