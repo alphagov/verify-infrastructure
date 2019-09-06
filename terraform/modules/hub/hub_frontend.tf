@@ -67,7 +67,7 @@ data "template_file" "frontend_task_def" {
     matomo_site_id            = "${var.matomo_site_id}"
     ab_test_file              = "${var.ab_test_file}"
     analytics_endpoint        = "${var.analytics_endpoint}"
-    cross_gov_ga_account_id   = "${var.cross_gov_ga_tracker_id}"
+    cross_gov_ga_tracker_id   = "${var.cross_gov_ga_tracker_id}"
     cross_gov_ga_domain_names = "${var.cross_gov_ga_domain_names}"
   }
 }
