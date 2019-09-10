@@ -2,18 +2,18 @@ locals {
   service = "self-service"
 }
 
-resource "aws_sns_topic" "cognito-sns-topic" {
+resource "aws_sns_topic" "cognito_sns_topic" {
   name = "cognito-sns-topic"
 }
 
-resource "aws_sns_topic_policy" "cognito-sns-policy" {
-  arn = "${aws_sns_topic.cognito-sns-topic.arn}"
+resource "aws_sns_topic_policy" "cognito_sns_policy" {
+  arn = "${aws_sns_topic.cognito_sns_topic.arn}"
 
-  policy = "${data.aws_iam_policy_document.sns-topic-policy.json}"
+  policy = "${data.aws_iam_policy_document.sns_topic_policy.json}"
 }
 
-data "aws_iam_policy_document" "sns-topic-policy" {
-  policy_id = "__default_policy_ID"
+data "aws_iam_policy_document" "sns_topic_policy" {
+  policy_id = "cognito-sns-topic-policy"
 
   statement {
     actions = [
@@ -28,15 +28,15 @@ data "aws_iam_policy_document" "sns-topic-policy" {
     }
 
     resources = [
-      "${aws_sns_topic.cognito-sns-topic.arn}",
+      "${aws_sns_topic.cognito_sns_topic.arn}",
     ]
 
-    sid = "__default_statement_ID"
+    sid = "20190910-cognito-sns-policy"
   }
 }
 
 resource "aws_iam_role" "cognito_sns_role" {
-  name               = "cognito_sns_role"
+  name               = "cognito-sns-role"
   path               = "/service-role/"
   assume_role_policy = <<-EOF
 {
@@ -57,7 +57,7 @@ resource "aws_iam_role" "cognito_sns_role" {
 }
 
 resource "aws_iam_role_policy" "cognito_sns_role_policy" {
-  name = "cognito_sns_role_policy"
+  name = "cognito-sns-role-policy"
   role = "${aws_iam_role.cognito_sns_role.id}"
 
   policy = <<-EOF
