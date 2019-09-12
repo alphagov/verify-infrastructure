@@ -169,7 +169,6 @@ resource "aws_cognito_user_pool" "user_pool" {
 
   lifecycle {
     ignore_changes = [
-      "mfa_configuration",
       admin_create_user_config["unused_account_validity_days"]
     ]
 
