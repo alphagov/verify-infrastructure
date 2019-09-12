@@ -172,7 +172,7 @@ resource "aws_cognito_user_pool" "user_pool" {
       admin_create_user_config["unused_account_validity_days"]
     ]
 
-    prevent_destroy = false
+    prevent_destroy = true
   }
 
   provisioner "local-exec" {
