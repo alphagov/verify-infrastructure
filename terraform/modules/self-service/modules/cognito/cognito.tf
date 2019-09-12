@@ -96,6 +96,10 @@ resource "aws_cognito_user_pool" "user_pool" {
 
   admin_create_user_config {
     allow_admin_create_user_only = true
+    # This is currently unsupported in terraform
+    # and is manually adjusted in the AWS console.
+    # Having it here makes sure we can ignore it.
+    unused_account_validity_days = 1
   }
 
   password_policy {
@@ -165,7 +169,8 @@ resource "aws_cognito_user_pool" "user_pool" {
 
   lifecycle {
     ignore_changes = [
-      "mfa_configuration"
+      "mfa_configuration",
+      admin_create_user_config["unused_account_validity_days"]
     ]
 
     prevent_destroy = false
