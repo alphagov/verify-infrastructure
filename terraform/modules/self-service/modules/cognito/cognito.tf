@@ -96,14 +96,11 @@ resource "aws_cognito_user_pool" "user_pool" {
 
   admin_create_user_config {
     allow_admin_create_user_only = true
-    # This is currently unsupported in terraform
-    # and is manually adjusted in the AWS console.
-    # Having it here makes sure we can ignore it.
-    unused_account_validity_days = 1
   }
 
   password_policy {
-    minimum_length    = 8
+    minimum_length                   = 8
+    temporary_password_validity_days = 1
   }
 
   schema {
@@ -164,13 +161,6 @@ resource "aws_cognito_user_pool" "user_pool" {
   }
 
   lifecycle {
-    ignore_changes = [
-      # we need to ignore the entire admin_create_user_config block as it
-      # does not seem to be possible to ignore a specific attribute
-      # despite what the docs say
-      admin_create_user_config
-    ]
-
     prevent_destroy = true
   }
 
