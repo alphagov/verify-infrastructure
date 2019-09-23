@@ -165,7 +165,10 @@ resource "aws_cognito_user_pool" "user_pool" {
 
   lifecycle {
     ignore_changes = [
-      admin_create_user_config["unused_account_validity_days"]
+      # we need to ignore the entire admin_create_user_config block as it
+      # does not seem to be possible to ignore a specific attribute
+      # despite what the docs say
+      admin_create_user_config
     ]
 
     prevent_destroy = true
