@@ -8,6 +8,7 @@ locals  {
     database_password_arn = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/db-master-password"
     database_host         = "${aws_db_instance.self_service.address}"
     database_name         = "${aws_db_instance.self_service.name}"
+    db_command            = "${var.db_command}"
     cognito_client_id     = "${module.cognito.user_pool_client_id}"
     cognito_user_pool_id  = "${module.cognito.user_pool_id}"
     asset_host            = "${var.asset_host}"
