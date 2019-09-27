@@ -45,6 +45,11 @@ variable "db_username" {
   default     = "postgres"
 }
 
+variable "db_command" {
+  description = "Command to run during the DB migration step, e.g. `bundle exec rails db:<value>`"
+  default     = "migrate"
+}
+
 variable "asset_host" {
   description = "Host where the static assets are hosted"
   default     = "gds-verify-self-service-assets.s3.amazonaws.com"
