@@ -19,7 +19,7 @@ resource "aws_subnet" "ingress" {
     lookup(local.subnet_offsets, "ingress") + count.index
   )}"
 
-  tags {
+  tags = {
     Name       = "ingress-${var.deployment}"
     Deployment = "${var.deployment}"
   }
@@ -36,7 +36,7 @@ resource "aws_subnet" "internal" {
     lookup(local.subnet_offsets, "internal") + count.index
   )}"
 
-  tags {
+  tags = {
     Name       = "internal-${var.deployment}"
     Deployment = "${var.deployment}"
   }
@@ -53,7 +53,7 @@ resource "aws_subnet" "egress" {
     lookup(local.subnet_offsets, "egress") + count.index
   )}"
 
-  tags {
+  tags = {
     Name       = "egress-${var.deployment}"
     Deployment = "${var.deployment}"
   }

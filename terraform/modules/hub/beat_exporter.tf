@@ -1,5 +1,5 @@
 module "beat_exporter_ecs_roles" {
-  source = "modules/ecs_iam_role_pair"
+  source = "./modules/ecs_iam_role_pair"
 
   deployment       = "${var.deployment}"
   service_name     = "beat-exporter"
@@ -10,7 +10,7 @@ module "beat_exporter_ecs_roles" {
 data "template_file" "beat_exporter_task_def" {
   template = "${file("${path.module}/files/tasks/beat-exporter.json")}"
 
-  vars {
+  vars = {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-beat-exporter@${var.beat_exporter_image_digest}"
   }
 }

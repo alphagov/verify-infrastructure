@@ -5,7 +5,7 @@ resource "aws_route53_zone" "cluster" {
     vpc_id = "${var.vpc_id}"
   }
 
-  tags {
+  tags = {
     Deployment = "${var.deployment}"
   }
 }

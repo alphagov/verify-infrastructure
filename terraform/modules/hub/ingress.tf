@@ -26,7 +26,7 @@ resource "aws_security_group_rule" "ingress_instance_egress_to_internet_over_htt
 }
 
 module "ingress_can_connect_to_frontend_task" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.ingress.id}"
   destination_sg_id = "${aws_security_group.frontend_task.id}"
@@ -35,7 +35,7 @@ module "ingress_can_connect_to_frontend_task" {
 }
 
 module "ingress_can_connect_to_metadata_task" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.ingress.id}"
   destination_sg_id = "${aws_security_group.metadata_task.id}"
@@ -44,7 +44,7 @@ module "ingress_can_connect_to_metadata_task" {
 }
 
 module "ingress_can_connect_to_analytics_task" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.ingress.id}"
   destination_sg_id = "${aws_security_group.analytics_task.id}"
@@ -60,12 +60,12 @@ resource "aws_security_group_rule" "ingress_ingress_from_internet_over_http" {
 
   security_group_id = "${aws_security_group.ingress.id}"
 
-  cidr_blocks = ["${
+  cidr_blocks = "${
     concat(
       var.publically_accessible_from_cidrs,
       formatlist("%s/32", aws_eip.egress.*.public_ip)
     )
-  }"] # adding the egress IPs is a hack to let us access metadata through egress proxy
+  }" # adding the egress IPs is a hack to let us access metadata through egress proxy
 }
 
 resource "aws_security_group_rule" "ingress_ingress_from_internet_over_https" {
@@ -76,12 +76,12 @@ resource "aws_security_group_rule" "ingress_ingress_from_internet_over_https" {
 
   security_group_id = "${aws_security_group.ingress.id}"
 
-  cidr_blocks = ["${
+  cidr_blocks = "${
     concat(
       var.publically_accessible_from_cidrs,
       formatlist("%s/32", aws_eip.egress.*.public_ip)
     )
-  }"] # adding the egress IPs is a hack to let us access metadata through egress proxy
+  }" # adding the egress IPs is a hack to let us access metadata through egress proxy
 }
 
 resource "aws_lb_target_group" "ingress_analytics" {
@@ -142,9 +142,9 @@ resource "aws_lb" "ingress" {
   load_balancer_type = "application"
 
   security_groups = ["${aws_security_group.ingress.id}"]
-  subnets         = ["${aws_subnet.internal.*.id}"]
+  subnets         = "${aws_subnet.internal.*.id}"
 
-  tags {
+  tags = {
     Deployment = "${var.deployment}"
   }
 }
@@ -272,7 +272,7 @@ resource "aws_route53_zone" "ingress_www" {
     vpc_id = "${aws_vpc.hub.id}"
   }
 
-  tags {
+  tags = {
     Deployment = "${var.deployment}"
   }
 }
@@ -290,13 +290,13 @@ resource "aws_route53_record" "ingress_www" {
 }
 
 module "ingress_ecs_asg" {
-  source = "modules/ecs_asg"
+  source = "./modules/ecs_asg"
 
   ami_id              = "${data.aws_ami.ubuntu_bionic.id}"
   deployment          = "${var.deployment}"
   cluster             = "ingress"
   vpc_id              = "${aws_vpc.hub.id}"
-  instance_subnets    = ["${aws_subnet.internal.*.id}"]
+  instance_subnets    = "${aws_subnet.internal.*.id}"
   number_of_instances = "${var.number_of_apps * 2}"
   domain              = "${local.root_domain}"
 

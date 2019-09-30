@@ -1,11 +1,11 @@
 module "policy_ecs_asg" {
-  source = "modules/ecs_asg"
+  source = "./modules/ecs_asg"
 
   ami_id           = "${data.aws_ami.ubuntu_bionic.id}"
   deployment       = "${var.deployment}"
   cluster          = "policy"
   vpc_id           = "${aws_vpc.hub.id}"
-  instance_subnets = ["${aws_subnet.internal.*.id}"]
+  instance_subnets = "${aws_subnet.internal.*.id}"
 
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
@@ -60,7 +60,7 @@ locals {
 data "template_file" "policy_task_def" {
   template = "${file("${path.module}/files/tasks/hub-policy.json")}"
 
-  vars {
+  vars = {
     image_identifier              = "${local.tools_account_ecr_url_prefix}-verify-policy@${var.hub_policy_image_digest}"
     nginx_image_identifier        = "${local.nginx_image_identifier}"
     domain                        = "${local.root_domain}"
@@ -77,13 +77,13 @@ data "template_file" "policy_task_def" {
 }
 
 module "policy" {
-  source = "modules/ecs_app"
+  source = "./modules/ecs_app"
 
   deployment                 = "${var.deployment}"
   cluster                    = "policy"
   domain                     = "${local.root_domain}"
   vpc_id                     = "${aws_vpc.hub.id}"
-  lb_subnets                 = ["${aws_subnet.internal.*.id}"]
+  lb_subnets                 = "${aws_subnet.internal.*.id}"
   task_definition            = "${data.template_file.policy_task_def.rendered}"
   container_name             = "nginx"
   container_port             = "8443"
@@ -120,35 +120,35 @@ resource "aws_iam_role_policy_attachment" "policy_parameter_execution" {
 }
 
 module "policy_can_connect_to_config" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.config.lb_sg_id}"
 }
 
 module "policy_can_connect_to_saml_engine" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.saml_engine.lb_sg_id}"
 }
 
 module "policy_can_connect_to_saml_proxy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.saml_proxy.lb_sg_id}"
 }
 
 module "policy_can_connect_to_saml_soap_proxy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.saml_soap_proxy.lb_sg_id}"
 }
 
 module "policy_can_connect_to_policy_redis" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${aws_security_group.policy_redis.id}"
@@ -156,7 +156,7 @@ module "policy_can_connect_to_policy_redis" {
 }
 
 module "policy_can_connect_to_ingress_for_metadata" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.policy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${aws_security_group.ingress.id}"

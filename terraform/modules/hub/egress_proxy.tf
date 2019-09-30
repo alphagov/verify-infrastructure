@@ -1,11 +1,11 @@
 module "egress_proxy_ecs_asg" {
-  source = "modules/ecs_asg"
+  source = "./modules/ecs_asg"
 
   ami_id              = "${data.aws_ami.ubuntu_bionic.id}"
   deployment          = "${var.deployment}"
   cluster             = "egress-proxy"
   vpc_id              = "${aws_vpc.hub.id}"
-  instance_subnets    = ["${aws_subnet.internal.*.id}"]
+  instance_subnets    = "${aws_subnet.internal.*.id}"
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
 
@@ -55,13 +55,13 @@ locals {
 
 locals {
   egress_proxy_whitelist_list = [
-    "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com",                                     # Apt
-    "security\\.ubuntu\\.com",                                                      # Apt
-    "artifacts\\.elastic\\.co",                                                     # Journalbeat
-    "${replace(var.logit_elasticsearch_url, ".", "\\.")}",                          # Logit
-    "sentry\\.tools\\.signin\\.service\\.gov\\.uk",                                 # Tools Sentry
-    "${replace(local.event_emitter_api_gateway[0], ".", "\\.")}",                   # API Gateway
-    "${var.splunk_hostname}",                                                       # Splunk
+    "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com",                   # Apt
+    "security\\.ubuntu\\.com",                                    # Apt
+    "artifacts\\.elastic\\.co",                                   # Journalbeat
+    "${replace(var.logit_elasticsearch_url, ".", "\\.")}",        # Logit
+    "sentry\\.tools\\.signin\\.service\\.gov\\.uk",               # Tools Sentry
+    "${replace(local.event_emitter_api_gateway[0], ".", "\\.")}", # API Gateway
+    "${var.splunk_hostname}",                                     # Splunk
   ]
 
   egress_proxy_whitelist = "${join(" ", local.egress_proxy_whitelist_list)}"
@@ -70,7 +70,7 @@ locals {
 data "template_file" "egress_proxy_task_def" {
   template = "${file("${path.module}/files/tasks/squid.json")}"
 
-  vars {
+  vars = {
     whitelist_base64 = "${base64encode(local.egress_proxy_whitelist)}"
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-squid@${var.squid_image_digest}"
   }
@@ -79,7 +79,7 @@ data "template_file" "egress_proxy_task_def" {
 resource "aws_elb" "egress_proxy" {
   name            = "${var.deployment}-egress-proxy"
   internal        = true
-  subnets         = ["${aws_subnet.internal.*.id}"]
+  subnets         = "${aws_subnet.internal.*.id}"
   security_groups = ["${aws_security_group.egress_proxy_lb.id}"]
 
   listener {
@@ -97,7 +97,7 @@ resource "aws_elb" "egress_proxy" {
     interval            = 10
   }
 
-  tags {
+  tags = {
     Deployment = "${var.deployment}"
   }
 }
@@ -148,7 +148,7 @@ resource "aws_ecs_cluster" "egress_proxy" {
 }
 
 module "egress_proxy_ecs_roles" {
-  source = "modules/ecs_iam_role_pair"
+  source = "./modules/ecs_iam_role_pair"
 
   deployment       = "${var.deployment}"
   service_name     = "egress-proxy"
@@ -185,7 +185,7 @@ resource "aws_route53_zone" "egress_proxy" {
     vpc_id = "${aws_vpc.hub.id}"
   }
 
-  tags {
+  tags = {
     Deployment = "${var.deployment}"
   }
 }

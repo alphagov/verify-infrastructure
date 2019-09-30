@@ -4,9 +4,9 @@ resource "aws_lb" "cluster" {
   name            = "${local.identifier}"
   internal        = true
   security_groups = ["${aws_security_group.lb.id}"]
-  subnets         = ["${var.lb_subnets}"]
+  subnets         = "${var.lb_subnets}"
 
-  tags {
+  tags = {
     Deployment = "${var.deployment}"
   }
 }

@@ -1,11 +1,11 @@
 module "static_ingress_ecs_asg" {
-  source = "modules/ecs_asg"
+  source = "./modules/ecs_asg"
 
   ami_id              = "${data.aws_ami.ubuntu_bionic.id}"
   deployment          = "${var.deployment}"
   cluster             = "static-ingress"
   vpc_id              = "${aws_vpc.hub.id}"
-  instance_subnets    = ["${aws_subnet.internal.*.id}"]
+  instance_subnets    = "${aws_subnet.internal.*.id}"
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
 
@@ -49,13 +49,13 @@ resource "aws_security_group_rule" "static_ingress_ingress_from_internet_over_ht
 
   security_group_id = "${module.static_ingress_ecs_asg.instance_sg_id}"
 
-  cidr_blocks = ["${
+  cidr_blocks = "${
     concat(
       var.publically_accessible_from_cidrs,
       formatlist("%s/32", aws_eip.egress.*.public_ip),
       aws_subnet.ingress.*.cidr_block,
     )
-  }"]
+  }"
 
   # adding the egress IPs is a hack to let us access metadata through egress proxy
   # adding the ingress cidrs is so the network load balancer can healthcheck the boxes
@@ -69,20 +69,20 @@ resource "aws_security_group_rule" "static_ingress_ingress_from_internet_over_ht
 
   security_group_id = "${module.static_ingress_ecs_asg.instance_sg_id}"
 
-  cidr_blocks = ["${
+  cidr_blocks = "${
     concat(
       var.publically_accessible_from_cidrs,
       formatlist("%s/32", aws_eip.egress.*.public_ip),
       aws_subnet.ingress.*.cidr_block,
     )
-  }"]
+  }"
 
   # adding the egress IPs is a hack to let us access metadata through egress proxy
   # adding the ingress cidrs is so the network load balancer can healthcheck the boxes
 }
 
 module "static_ingress_can_connect_to_ingress_http" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.static_ingress_ecs_asg.instance_sg_id}"
   destination_sg_id = "${aws_security_group.ingress.id}"
@@ -91,7 +91,7 @@ module "static_ingress_can_connect_to_ingress_http" {
 }
 
 module "static_ingress_can_connect_to_ingress_https" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.static_ingress_ecs_asg.instance_sg_id}"
   destination_sg_id = "${aws_security_group.ingress.id}"
@@ -102,7 +102,7 @@ module "static_ingress_can_connect_to_ingress_https" {
 data "template_file" "static_ingress_http_task_def" {
   template = "${file("${path.module}/files/tasks/static-ingress.json")}"
 
-  vars {
+  vars = {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress@${var.static_ingress_image_digest}"
     backend          = "${var.signin_domain}"
     bind_port        = 80
@@ -114,7 +114,7 @@ data "template_file" "static_ingress_http_task_def" {
 data "template_file" "static_ingress_https_task_def" {
   template = "${file("${path.module}/files/tasks/static-ingress.json")}"
 
-  vars {
+  vars = {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-tls@${var.static_ingress_tls_image_digest}"
     backend          = "${var.signin_domain}"
     bind_port        = 443
@@ -124,13 +124,13 @@ data "template_file" "static_ingress_https_task_def" {
 }
 
 module "static_ingress_ecs_roles" {
-  source = "modules/ecs_iam_role_pair"
+  source = "./modules/ecs_iam_role_pair"
 
   deployment       = "${var.deployment}"
   tools_account_id = "${var.tools_account_id}"
   service_name     = "static-ingress"
   # This is used in an IAM Policy document, so wildcards are ok
-  image_name       = "verify-static-ingress*"
+  image_name = "verify-static-ingress*"
 }
 
 resource "aws_ecs_task_definition" "static_ingress_http" {

@@ -1,7 +1,7 @@
 resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.hub.id}"
 
-  tags {
+  tags = {
     Name       = "public-${var.deployment}"
     Deployment = "${var.deployment}"
   }
@@ -30,7 +30,7 @@ resource "aws_route_table" "private" {
 
   vpc_id = "${aws_vpc.hub.id}"
 
-  tags {
+  tags = {
     Name       = "private-${var.deployment}"
     Deployment = "${var.deployment}"
   }

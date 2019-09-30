@@ -6,7 +6,7 @@ resource "aws_security_group" "mgmt_lb" {
 }
 
 module "mgmt_lb_can_talk_to_prometheus" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.mgmt_lb.id}"
   destination_sg_id = "${aws_security_group.prometheus.id}"
@@ -21,7 +21,7 @@ resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_http" {
   to_port   = 80
 
   security_group_id = "${aws_security_group.mgmt_lb.id}"
-  cidr_blocks       = ["${var.mgmt_accessible_from_cidrs}"]
+  cidr_blocks       = "${var.mgmt_accessible_from_cidrs}"
 }
 
 resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_https" {
@@ -31,7 +31,7 @@ resource "aws_security_group_rule" "mgmt_lb_ingress_from_internet_over_https" {
   to_port   = 443
 
   security_group_id = "${aws_security_group.mgmt_lb.id}"
-  cidr_blocks       = ["${var.mgmt_accessible_from_cidrs}"]
+  cidr_blocks       = "${var.mgmt_accessible_from_cidrs}"
 }
 
 locals {
@@ -41,7 +41,7 @@ locals {
 resource "aws_route53_zone" "mgmt_domain" {
   name = "${local.mgmt_domain}"
 
-  tags {
+  tags = {
     Deployment = "${var.deployment}"
   }
 }
@@ -51,7 +51,7 @@ resource "aws_acm_certificate" "mgmt_wildcard" {
   subject_alternative_names = ["*.${local.mgmt_domain}"]
   validation_method         = "DNS"
 
-  tags {
+  tags = {
     Deployment = "${var.deployment}"
   }
 }
@@ -103,9 +103,9 @@ resource "aws_lb" "mgmt" {
   load_balancer_type = "application"
 
   security_groups = ["${aws_security_group.mgmt_lb.id}"]
-  subnets         = ["${aws_subnet.ingress.*.id}"]
+  subnets         = "${aws_subnet.ingress.*.id}"
 
-  tags {
+  tags = {
     Deployment = "${var.deployment}"
   }
 }

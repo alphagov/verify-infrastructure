@@ -30,14 +30,14 @@ locals {
 data "template_file" "analytics_task_def" {
   template = "${file("${path.module}/files/tasks/analytics.json")}"
 
-  vars {
+  vars = {
     nginx_image_identifier = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls@${var.nginx_image_digest}"
     location_blocks_base64 = "${local.nginx_analytics_location_blocks_base64}"
   }
 }
 
 module "analytics_ecs_roles" {
-  source = "modules/ecs_iam_role_pair"
+  source = "./modules/ecs_iam_role_pair"
 
   deployment       = "${var.deployment}"
   service_name     = "analytics"
@@ -77,7 +77,7 @@ resource "aws_ecs_service" "analytics" {
   }
 
   network_configuration {
-    subnets = ["${aws_subnet.internal.*.id}"]
+    subnets = "${aws_subnet.internal.*.id}"
 
     security_groups = [
       "${aws_security_group.analytics_task.id}",

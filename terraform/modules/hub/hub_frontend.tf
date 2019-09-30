@@ -54,7 +54,7 @@ locals {
 data "template_file" "frontend_task_def" {
   template = "${file("${path.module}/files/tasks/frontend.json")}"
 
-  vars {
+  vars = {
     account_id                = "${data.aws_caller_identity.account.account_id}"
     deployment                = "${var.deployment}"
     image_identifier          = "${local.tools_account_ecr_url_prefix}-verify-frontend@${var.hub_frontend_image_digest}"
@@ -73,7 +73,7 @@ data "template_file" "frontend_task_def" {
 }
 
 module "frontend_ecs_roles" {
-  source = "modules/ecs_iam_role_pair"
+  source = "./modules/ecs_iam_role_pair"
 
   deployment       = "${var.deployment}"
   tools_account_id = "${var.tools_account_id}"
@@ -107,7 +107,7 @@ resource "aws_ecs_service" "frontend_v2" {
   }
 
   network_configuration {
-    subnets = ["${aws_subnet.internal.*.id}"]
+    subnets = "${aws_subnet.internal.*.id}"
 
     security_groups = [
       "${aws_security_group.frontend_task.id}",
@@ -122,21 +122,21 @@ resource "aws_ecs_service" "frontend_v2" {
 }
 
 module "frontend_can_connect_to_config" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.frontend_task.id}"
   destination_sg_id = "${module.config.lb_sg_id}"
 }
 
 module "frontend_can_connect_to_policy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.frontend_task.id}"
   destination_sg_id = "${module.policy.lb_sg_id}"
 }
 
 module "frontend_can_connect_to_saml_proxy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.frontend_task.id}"
   destination_sg_id = "${module.saml_proxy.lb_sg_id}"

@@ -31,7 +31,7 @@ resource "aws_security_group_rule" "prometheus_egress_to_internet_over_https" {
 }
 
 module "prometheus_can_talk_to_prometheus" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${aws_security_group.prometheus.id}"
@@ -40,7 +40,7 @@ module "prometheus_can_talk_to_prometheus" {
 }
 
 module "prometheus_can_talk_to_prometheus_node_exporter" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${aws_security_group.prometheus.id}"
@@ -49,7 +49,7 @@ module "prometheus_can_talk_to_prometheus_node_exporter" {
 }
 
 module "prometheus_can_talk_to_egress_proxy_node_exporter" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${module.egress_proxy_ecs_asg.instance_sg_id}"
@@ -58,7 +58,7 @@ module "prometheus_can_talk_to_egress_proxy_node_exporter" {
 }
 
 module "prometheus_can_talk_to_prometheus_beat_exporter" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${aws_security_group.prometheus.id}"
@@ -67,7 +67,7 @@ module "prometheus_can_talk_to_prometheus_beat_exporter" {
 }
 
 module "prometheus_can_talk_to_egress_proxy_beat_exporter" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${module.egress_proxy_ecs_asg.instance_sg_id}"
@@ -76,7 +76,7 @@ module "prometheus_can_talk_to_egress_proxy_beat_exporter" {
 }
 
 module "prometheus_can_talk_to_frontend_task" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${aws_security_group.frontend_task.id}"
@@ -85,7 +85,7 @@ module "prometheus_can_talk_to_frontend_task" {
 }
 
 module "prometheus_can_talk_to_policy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${module.policy_ecs_asg.instance_sg_id}"
@@ -94,7 +94,7 @@ module "prometheus_can_talk_to_policy" {
 }
 
 module "prometheus_can_talk_to_config" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${module.config_ecs_asg.instance_sg_id}"
@@ -103,7 +103,7 @@ module "prometheus_can_talk_to_config" {
 }
 
 module "prometheus_can_talk_to_saml_engine" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${module.saml_engine_ecs_asg.instance_sg_id}"
@@ -112,7 +112,7 @@ module "prometheus_can_talk_to_saml_engine" {
 }
 
 module "prometheus_can_talk_to_saml_proxy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${module.saml_proxy_ecs_asg.instance_sg_id}"
@@ -121,7 +121,7 @@ module "prometheus_can_talk_to_saml_proxy" {
 }
 
 module "prometheus_can_talk_to_saml_soap_proxy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
@@ -130,14 +130,14 @@ module "prometheus_can_talk_to_saml_soap_proxy" {
 }
 
 module "prometheus_can_talk_to_ingress_for_scraping_metadata" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${aws_security_group.ingress.id}"
 }
 
 module "prometheus_can_talk_to_cloudwatch_vpc_endpoint" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${aws_security_group.cloudwatch_vpc_endpoint.id}"
@@ -161,7 +161,7 @@ resource "aws_security_group" "scraped_by_prometheus" {
 }
 
 module "scraped_by_prometheus_can_be_scraped_by_prometheus" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${aws_security_group.scraped_by_prometheus.id}"
@@ -170,7 +170,7 @@ module "scraped_by_prometheus_can_be_scraped_by_prometheus" {
 }
 
 module "scraped_by_prometheus_beat_can_be_scraped_by_prometheus" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${aws_security_group.prometheus.id}"
   destination_sg_id = "${aws_security_group.scraped_by_prometheus.id}"
@@ -315,7 +315,7 @@ resource "aws_iam_role_policy_attachment" "prometheus" {
 data "template_file" "prometheus_config" {
   template = "${file("${path.module}/files/prometheus/prometheus.yml")}"
 
-  vars {
+  vars = {
     deployment = "${var.deployment}"
   }
 }
@@ -323,7 +323,7 @@ data "template_file" "prometheus_config" {
 data "template_file" "prometheus_cloud_init" {
   template = "${file("${path.module}/files/cloud-init/prometheus.sh")}"
 
-  vars {
+  vars = {
     prometheus_config          = "${data.template_file.prometheus_config.rendered}"
     deployment                 = "${var.deployment}"
     domain                     = "${local.root_domain}"
@@ -354,7 +354,7 @@ resource "aws_instance" "prometheus" {
     volume_size = 20
   }
 
-  tags {
+  tags = {
     Name       = "${var.deployment}-prometheus"
     Deployment = "${var.deployment}"
     Cluster    = "prometheus"
@@ -429,7 +429,7 @@ resource "aws_lb_listener_rule" "prometheus_https" {
 }
 
 module "prometheus_ecs_roles" {
-  source = "modules/ecs_iam_role_pair"
+  source = "./modules/ecs_iam_role_pair"
 
   deployment       = "${var.deployment}"
   service_name     = "prometheus"
@@ -441,7 +441,7 @@ data "template_file" "prometheus_task_def" {
   count    = "${var.number_of_apps}"
   template = "${file("${path.module}/files/tasks/prometheus.json")}"
 
-  vars {
+  vars = {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-prometheus@${var.prometheus_image_digest}"
     config_base64    = "${base64encode(data.template_file.prometheus_config.rendered)}"
     alerts_base64    = "${base64encode(file("${path.module}/files/prometheus/alerts.yml"))}"
@@ -451,7 +451,7 @@ data "template_file" "prometheus_task_def" {
 
 resource "aws_ecs_task_definition" "prometheus" {
   count                 = "${var.number_of_apps}"
-  family                = "${var.deployment}-prometheus-${count.index+1}"
+  family                = "${var.deployment}-prometheus-${count.index + 1}"
   container_definitions = "${element(data.template_file.prometheus_task_def.*.rendered, count.index)}"
   execution_role_arn    = "${module.prometheus_ecs_roles.execution_role_arn}"
   network_mode          = "host"
@@ -469,7 +469,7 @@ resource "aws_ecs_task_definition" "prometheus" {
 
 resource "aws_ecs_service" "prometheus" {
   count               = "${var.number_of_apps}"
-  name                = "${var.deployment}-prometheus-${count.index+1}"
+  name                = "${var.deployment}-prometheus-${count.index + 1}"
   cluster             = "${aws_ecs_cluster.prometheus.id}"
   task_definition     = "${element(aws_ecs_task_definition.prometheus.*.arn, count.index)}"
   scheduling_strategy = "DAEMON"

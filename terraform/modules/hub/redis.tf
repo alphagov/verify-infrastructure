@@ -1,6 +1,6 @@
 resource "aws_elasticache_replication_group" "policy_session_store" {
   automatic_failover_enabled    = true
-  availability_zones            = ["${local.azs}"]
+  availability_zones            = "${local.azs}"
   replication_group_id          = "${var.deployment}-policy"
   replication_group_description = "Replication group for the ${var.deployment} Policy session store"
   maintenance_window            = "tue:02:00-tue:04:00"
@@ -16,7 +16,7 @@ resource "aws_elasticache_replication_group" "policy_session_store" {
 
 resource "aws_elasticache_subnet_group" "policy_session_store" {
   name       = "${var.deployment}-policy"
-  subnet_ids = ["${aws_subnet.internal.*.id}"]
+  subnet_ids = "${aws_subnet.internal.*.id}"
 }
 
 resource "aws_elasticache_parameter_group" "policy_session_store" {
@@ -42,7 +42,7 @@ locals {
 
 resource "aws_elasticache_replication_group" "saml_engine_replay_cache" {
   automatic_failover_enabled    = true
-  availability_zones            = ["${local.azs}"]
+  availability_zones            = "${local.azs}"
   replication_group_id          = "${local.trunc_saml_engine_replace_cache_id}"
   replication_group_description = "Replication group for the ${var.deployment} SAML Engine replay cache"
   maintenance_window            = "tue:02:00-tue:04:00"
@@ -58,7 +58,7 @@ resource "aws_elasticache_replication_group" "saml_engine_replay_cache" {
 
 resource "aws_elasticache_subnet_group" "saml_engine_replay_cache" {
   name       = "${var.deployment}-saml-engine"
-  subnet_ids = ["${aws_subnet.internal.*.id}"]
+  subnet_ids = "${aws_subnet.internal.*.id}"
 }
 
 resource "aws_elasticache_parameter_group" "saml_engine_replay_cache" {

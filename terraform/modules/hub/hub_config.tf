@@ -1,11 +1,11 @@
 module "config_ecs_asg" {
-  source = "modules/ecs_asg"
+  source = "./modules/ecs_asg"
 
   ami_id           = "${data.aws_ami.ubuntu_bionic.id}"
   deployment       = "${var.deployment}"
   cluster          = "config"
   vpc_id           = "${aws_vpc.hub.id}"
-  instance_subnets = ["${aws_subnet.internal.*.id}"]
+  instance_subnets = "${aws_subnet.internal.*.id}"
 
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
@@ -62,7 +62,7 @@ locals {
 data "template_file" "config_task_def" {
   template = "${file("${path.module}/files/tasks/hub-config.json")}"
 
-  vars {
+  vars = {
     image_identifier         = "${local.tools_account_ecr_url_prefix}-verify-config@${var.hub_config_image_digest}"
     nginx_image_identifier   = "${local.nginx_image_identifier}"
     domain                   = "${local.root_domain}"
@@ -106,13 +106,13 @@ resource "aws_iam_role_policy_attachment" "config_task_can_read_metadata_bucket"
 }
 
 module "config" {
-  source = "modules/ecs_app"
+  source = "./modules/ecs_app"
 
   deployment                 = "${var.deployment}"
   cluster                    = "config"
   domain                     = "${local.root_domain}"
   vpc_id                     = "${aws_vpc.hub.id}"
-  lb_subnets                 = ["${aws_subnet.internal.*.id}"]
+  lb_subnets                 = "${aws_subnet.internal.*.id}"
   task_definition            = "${data.template_file.config_task_def.rendered}"
   container_name             = "nginx"
   container_port             = "8443"

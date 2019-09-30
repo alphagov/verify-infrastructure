@@ -1,11 +1,11 @@
 module "saml_engine_ecs_asg" {
-  source = "modules/ecs_asg"
+  source = "./modules/ecs_asg"
 
   ami_id           = "${data.aws_ami.ubuntu_bionic.id}"
   deployment       = "${var.deployment}"
   cluster          = "saml-engine"
   vpc_id           = "${aws_vpc.hub.id}"
-  instance_subnets = ["${aws_subnet.internal.*.id}"]
+  instance_subnets = "${aws_subnet.internal.*.id}"
 
   use_egress_proxy    = true
   number_of_instances = "${var.number_of_apps}"
@@ -42,7 +42,7 @@ locals {
 data "template_file" "saml_engine_task_def" {
   template = "${file("${path.module}/files/tasks/hub-saml-engine.json")}"
 
-  vars {
+  vars = {
     account_id             = "${data.aws_caller_identity.account.account_id}"
     deployment             = "${var.deployment}"
     domain                 = "${local.root_domain}"
@@ -57,13 +57,13 @@ data "template_file" "saml_engine_task_def" {
 }
 
 module "saml_engine" {
-  source = "modules/ecs_app"
+  source = "./modules/ecs_app"
 
   deployment                 = "${var.deployment}"
   cluster                    = "saml-engine"
   domain                     = "${local.root_domain}"
   vpc_id                     = "${aws_vpc.hub.id}"
-  lb_subnets                 = ["${aws_subnet.internal.*.id}"]
+  lb_subnets                 = "${aws_subnet.internal.*.id}"
   task_definition            = "${data.template_file.saml_engine_task_def.rendered}"
   container_name             = "nginx"
   container_port             = "8443"
@@ -76,21 +76,21 @@ module "saml_engine" {
 }
 
 module "saml_engine_can_connect_to_config" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.saml_engine_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.config.lb_sg_id}"
 }
 
 module "saml_engine_can_connect_to_policy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.saml_engine_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.policy.lb_sg_id}"
 }
 
 module "saml_engine_can_connect_to_saml_soap_proxy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.saml_engine_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.saml_soap_proxy.lb_sg_id}"
@@ -125,7 +125,7 @@ resource "aws_iam_role_policy_attachment" "saml_engine_parameter_execution" {
 }
 
 module "saml_engine_can_connect_to_saml_engine_redis" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.saml_engine_ecs_asg.instance_sg_id}"
   destination_sg_id = "${aws_security_group.saml_engine_redis.id}"
@@ -133,7 +133,7 @@ module "saml_engine_can_connect_to_saml_engine_redis" {
 }
 
 module "saml_engine_can_connect_to_ingress_for_metadata" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.saml_engine_ecs_asg.instance_sg_id}"
   destination_sg_id = "${aws_security_group.ingress.id}"

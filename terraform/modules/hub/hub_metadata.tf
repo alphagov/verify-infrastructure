@@ -12,14 +12,14 @@ resource "aws_security_group" "metadata_task" {
 data "template_file" "metadata_task_def" {
   template = "${file("${path.module}/files/tasks/metadata.json")}"
 
-  vars {
+  vars = {
     deployment       = "${var.deployment}"
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-metadata@${var.hub_metadata_image_digest}"
   }
 }
 
 module "metadata_ecs_roles" {
-  source = "modules/ecs_iam_role_pair"
+  source = "./modules/ecs_iam_role_pair"
 
   deployment       = "${var.deployment}"
   service_name     = "metadata"
@@ -50,7 +50,7 @@ resource "aws_ecs_service" "metadata" {
   }
 
   network_configuration {
-    subnets         = ["${aws_subnet.internal.*.id}"]
+    subnets = "${aws_subnet.internal.*.id}"
     security_groups = [
       "${aws_security_group.metadata_task.id}",
       "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",

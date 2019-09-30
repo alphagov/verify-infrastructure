@@ -1,11 +1,11 @@
 module "saml_proxy_ecs_asg" {
-  source = "modules/ecs_asg"
+  source = "./modules/ecs_asg"
 
   ami_id              = "${data.aws_ami.ubuntu_bionic.id}"
   deployment          = "${var.deployment}"
   cluster             = "saml-proxy"
   vpc_id              = "${aws_vpc.hub.id}"
-  instance_subnets    = ["${aws_subnet.internal.*.id}"]
+  instance_subnets    = "${aws_subnet.internal.*.id}"
   number_of_instances = "${var.number_of_apps}"
   domain              = "${local.root_domain}"
 
@@ -59,7 +59,7 @@ locals {
 data "template_file" "saml_proxy_task_def" {
   template = "${file("${path.module}/files/tasks/hub-saml-proxy.json")}"
 
-  vars {
+  vars = {
     image_identifier              = "${local.tools_account_ecr_url_prefix}-verify-saml-proxy@${var.hub_saml_proxy_image_digest}"
     nginx_image_identifier        = "${local.nginx_image_identifier}"
     domain                        = "${local.root_domain}"
@@ -73,13 +73,13 @@ data "template_file" "saml_proxy_task_def" {
 }
 
 module "saml_proxy" {
-  source = "modules/ecs_app"
+  source = "./modules/ecs_app"
 
   deployment                 = "${var.deployment}"
   cluster                    = "saml-proxy"
   domain                     = "${local.root_domain}"
   vpc_id                     = "${aws_vpc.hub.id}"
-  lb_subnets                 = ["${aws_subnet.internal.*.id}"]
+  lb_subnets                 = "${aws_subnet.internal.*.id}"
   task_definition            = "${data.template_file.saml_proxy_task_def.rendered}"
   container_name             = "nginx"
   container_port             = "8443"
@@ -116,21 +116,21 @@ resource "aws_iam_role_policy_attachment" "saml_proxy_parameter_execution" {
 }
 
 module "saml_proxy_can_connect_to_config" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.saml_proxy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.config.lb_sg_id}"
 }
 
 module "saml_proxy_can_connect_to_policy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.saml_proxy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${module.policy.lb_sg_id}"
 }
 
 module "saml_proxy_can_connect_to_ingress_for_metadata" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
   source_sg_id      = "${module.saml_proxy_ecs_asg.instance_sg_id}"
   destination_sg_id = "${aws_security_group.ingress.id}"
