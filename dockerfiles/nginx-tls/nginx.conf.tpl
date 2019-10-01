@@ -25,7 +25,6 @@ http {
     ssl_certificate     /tmp/tls/cert.pem;
     ssl_certificate_key /tmp/tls/key.pem;
     ssl_session_cache   shared:SSL:1m;
-    ssl_session_timeout 1m;
 
     $location_blocks
   }
