@@ -19,6 +19,6 @@ resource "aws_iam_role" "deployer" {
 }
 
 resource "aws_iam_role_policy_attachment" "deployer_administrator_access" {
-  role       = "${aws_iam_role.deployer.name}"
+  role       = aws_iam_role.deployer.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }

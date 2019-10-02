@@ -7,7 +7,7 @@ resource "aws_security_group" "prometheus" {
   name        = "${var.deployment}-prometheus"
   description = "${var.deployment}-prometheus"
 
-  vpc_id = "${aws_vpc.hub.id}"
+  vpc_id = aws_vpc.hub.id
 }
 
 resource "aws_security_group_rule" "prometheus_egress_to_internet_over_http" {
@@ -16,7 +16,7 @@ resource "aws_security_group_rule" "prometheus_egress_to_internet_over_http" {
   from_port = 80
   to_port   = 80
 
-  security_group_id = "${aws_security_group.prometheus.id}"
+  security_group_id = aws_security_group.prometheus.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -26,15 +26,15 @@ resource "aws_security_group_rule" "prometheus_egress_to_internet_over_https" {
   from_port = 443
   to_port   = 443
 
-  security_group_id = "${aws_security_group.prometheus.id}"
+  security_group_id = aws_security_group.prometheus.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
 module "prometheus_can_talk_to_prometheus" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${aws_security_group.prometheus.id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = aws_security_group.prometheus.id
 
   port = 9090
 }
@@ -42,8 +42,8 @@ module "prometheus_can_talk_to_prometheus" {
 module "prometheus_can_talk_to_prometheus_node_exporter" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${aws_security_group.prometheus.id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = aws_security_group.prometheus.id
 
   port = 9100
 }
@@ -51,8 +51,8 @@ module "prometheus_can_talk_to_prometheus_node_exporter" {
 module "prometheus_can_talk_to_egress_proxy_node_exporter" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${module.egress_proxy_ecs_asg.instance_sg_id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = module.egress_proxy_ecs_asg.instance_sg_id
 
   port = 9100
 }
@@ -60,8 +60,8 @@ module "prometheus_can_talk_to_egress_proxy_node_exporter" {
 module "prometheus_can_talk_to_prometheus_beat_exporter" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${aws_security_group.prometheus.id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = aws_security_group.prometheus.id
 
   port = 9479
 }
@@ -69,8 +69,8 @@ module "prometheus_can_talk_to_prometheus_beat_exporter" {
 module "prometheus_can_talk_to_egress_proxy_beat_exporter" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${module.egress_proxy_ecs_asg.instance_sg_id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = module.egress_proxy_ecs_asg.instance_sg_id
 
   port = 9479
 }
@@ -78,8 +78,8 @@ module "prometheus_can_talk_to_egress_proxy_beat_exporter" {
 module "prometheus_can_talk_to_frontend_task" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${aws_security_group.frontend_task.id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = aws_security_group.frontend_task.id
 
   port = 8443
 }
@@ -87,8 +87,8 @@ module "prometheus_can_talk_to_frontend_task" {
 module "prometheus_can_talk_to_policy" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${module.policy_ecs_asg.instance_sg_id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = module.policy_ecs_asg.instance_sg_id
 
   port = 8443
 }
@@ -96,8 +96,8 @@ module "prometheus_can_talk_to_policy" {
 module "prometheus_can_talk_to_config" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${module.config_ecs_asg.instance_sg_id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = module.config_ecs_asg.instance_sg_id
 
   port = 8443
 }
@@ -105,8 +105,8 @@ module "prometheus_can_talk_to_config" {
 module "prometheus_can_talk_to_saml_engine" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${module.saml_engine_ecs_asg.instance_sg_id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = module.saml_engine_ecs_asg.instance_sg_id
 
   port = 8443
 }
@@ -114,8 +114,8 @@ module "prometheus_can_talk_to_saml_engine" {
 module "prometheus_can_talk_to_saml_proxy" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${module.saml_proxy_ecs_asg.instance_sg_id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = module.saml_proxy_ecs_asg.instance_sg_id
 
   port = 8443
 }
@@ -123,8 +123,8 @@ module "prometheus_can_talk_to_saml_proxy" {
 module "prometheus_can_talk_to_saml_soap_proxy" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${module.saml_soap_proxy_ecs_asg.instance_sg_id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = module.saml_soap_proxy_ecs_asg.instance_sg_id
 
   port = 8443
 }
@@ -132,15 +132,15 @@ module "prometheus_can_talk_to_saml_soap_proxy" {
 module "prometheus_can_talk_to_ingress_for_scraping_metadata" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${aws_security_group.ingress.id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = aws_security_group.ingress.id
 }
 
 module "prometheus_can_talk_to_cloudwatch_vpc_endpoint" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${aws_security_group.cloudwatch_vpc_endpoint.id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = aws_security_group.cloudwatch_vpc_endpoint.id
 }
 
 resource "aws_security_group_rule" "prometheus_can_pull_config_from_s3" {
@@ -149,22 +149,22 @@ resource "aws_security_group_rule" "prometheus_can_pull_config_from_s3" {
   from_port = 443
   to_port   = 443
 
-  security_group_id = "${aws_security_group.prometheus.id}"
-  prefix_list_ids   = ["${aws_vpc_endpoint.s3.prefix_list_id}"]
+  security_group_id = aws_security_group.prometheus.id
+  prefix_list_ids   = [aws_vpc_endpoint.s3.prefix_list_id]
 }
 
 resource "aws_security_group" "scraped_by_prometheus" {
   name        = "${var.deployment}-scraped-by-prometheus"
   description = "${var.deployment}-scraped-by-prometheus"
 
-  vpc_id = "${aws_vpc.hub.id}"
+  vpc_id = aws_vpc.hub.id
 }
 
 module "scraped_by_prometheus_can_be_scraped_by_prometheus" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${aws_security_group.scraped_by_prometheus.id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = aws_security_group.scraped_by_prometheus.id
 
   port = 9100
 }
@@ -172,8 +172,8 @@ module "scraped_by_prometheus_can_be_scraped_by_prometheus" {
 module "scraped_by_prometheus_beat_can_be_scraped_by_prometheus" {
   source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.prometheus.id}"
-  destination_sg_id = "${aws_security_group.scraped_by_prometheus.id}"
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = aws_security_group.scraped_by_prometheus.id
 
   port = 9479
 }
@@ -198,13 +198,13 @@ resource "aws_iam_role" "prometheus" {
   EOF
 
   tags = {
-    Deployment = "${var.deployment}"
+    Deployment = var.deployment
   }
 }
 
 resource "aws_iam_instance_profile" "prometheus" {
   name = "${var.deployment}-prometheus"
-  role = "${aws_iam_role.prometheus.name}"
+  role = aws_iam_role.prometheus.name
 }
 
 resource "aws_iam_policy" "prometheus" {
@@ -308,46 +308,46 @@ resource "aws_iam_policy" "prometheus" {
 }
 
 resource "aws_iam_role_policy_attachment" "prometheus" {
-  role       = "${aws_iam_role.prometheus.name}"
-  policy_arn = "${aws_iam_policy.prometheus.arn}"
+  role       = aws_iam_role.prometheus.name
+  policy_arn = aws_iam_policy.prometheus.arn
 }
 
 data "template_file" "prometheus_config" {
-  template = "${file("${path.module}/files/prometheus/prometheus.yml")}"
+  template = file("${path.module}/files/prometheus/prometheus.yml")
 
   vars = {
-    deployment = "${var.deployment}"
+    deployment = var.deployment
   }
 }
 
 data "template_file" "prometheus_cloud_init" {
-  template = "${file("${path.module}/files/cloud-init/prometheus.sh")}"
+  template = file("${path.module}/files/cloud-init/prometheus.sh")
 
   vars = {
-    prometheus_config          = "${data.template_file.prometheus_config.rendered}"
-    deployment                 = "${var.deployment}"
-    domain                     = "${local.root_domain}"
-    logit_elasticsearch_url    = "${var.logit_elasticsearch_url}"
-    logit_api_key              = "${var.logit_api_key}"
-    cluster                    = "${aws_ecs_cluster.prometheus.name}"
-    ecs_agent_image_identifier = "${local.ecs_agent_image_identifier}"
-    tools_account_id           = "${var.tools_account_id}"
+    prometheus_config          = data.template_file.prometheus_config.rendered
+    deployment                 = var.deployment
+    domain                     = local.root_domain
+    logit_elasticsearch_url    = var.logit_elasticsearch_url
+    logit_api_key              = var.logit_api_key
+    cluster                    = aws_ecs_cluster.prometheus.name
+    ecs_agent_image_identifier = local.ecs_agent_image_identifier
+    tools_account_id           = var.tools_account_id
   }
 }
 
 resource "aws_instance" "prometheus" {
-  count = "${var.number_of_apps}"
+  count = var.number_of_apps
 
-  ami                  = "${data.aws_ami.ubuntu_bionic.id}"
+  ami                  = data.aws_ami.ubuntu_bionic.id
   instance_type        = "t3.large"
-  subnet_id            = "${element(aws_subnet.internal.*.id, count.index)}"
-  iam_instance_profile = "${aws_iam_instance_profile.prometheus.name}"
-  user_data            = "${data.template_file.prometheus_cloud_init.rendered}"
+  subnet_id            = element(aws_subnet.internal.*.id, count.index)
+  iam_instance_profile = aws_iam_instance_profile.prometheus.name
+  user_data            = data.template_file.prometheus_cloud_init.rendered
 
   vpc_security_group_ids = [
-    "${aws_security_group.prometheus.id}",
-    "${aws_security_group.scraped_by_prometheus.id}",
-    "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
+    aws_security_group.prometheus.id,
+    aws_security_group.scraped_by_prometheus.id,
+    aws_security_group.can_connect_to_container_vpc_endpoint.id,
   ]
 
   root_block_device {
@@ -356,42 +356,42 @@ resource "aws_instance" "prometheus" {
 
   tags = {
     Name       = "${var.deployment}-prometheus"
-    Deployment = "${var.deployment}"
+    Deployment = var.deployment
     Cluster    = "prometheus"
   }
 }
 
 resource "aws_ebs_volume" "prometheus" {
-  count = "${var.number_of_apps}"
+  count = var.number_of_apps
 
   size      = 100
   encrypted = true
 
-  availability_zone = "${element(
+  availability_zone = element(
     aws_subnet.internal.*.availability_zone, count.index
-  )}"
+  )
 
   tags = {
     Name       = "${var.deployment}-prometheus"
-    Deployment = "${var.deployment}"
+    Deployment = var.deployment
   }
 }
 
 resource "aws_volume_attachment" "prometheus_prometheus" {
-  count = "${var.number_of_apps}"
+  count = var.number_of_apps
 
   device_name = "/dev/xvdp"
-  volume_id   = "${element(aws_ebs_volume.prometheus.*.id, count.index)}"
-  instance_id = "${element(aws_instance.prometheus.*.id, count.index)}"
+  volume_id   = element(aws_ebs_volume.prometheus.*.id, count.index)
+  instance_id = element(aws_instance.prometheus.*.id, count.index)
 }
 
 resource "aws_lb_target_group" "prometheus" {
-  count = "${var.number_of_apps}"
+  count = var.number_of_apps
 
   name     = "${var.deployment}-prometheus-${count.index}"
   port     = 9090
   protocol = "HTTP"
-  vpc_id   = "${aws_vpc.hub.id}"
+  vpc_id   = aws_vpc.hub.id
 
   health_check {
     path     = "/metrics"
@@ -402,24 +402,22 @@ resource "aws_lb_target_group" "prometheus" {
 }
 
 resource "aws_lb_target_group_attachment" "prometheus" {
-  count = "${var.number_of_apps}"
+  count = var.number_of_apps
 
-  target_group_arn = "${element(aws_lb_target_group.prometheus.*.arn, count.index)}"
-  target_id        = "${element(aws_instance.prometheus.*.id, count.index)}"
+  target_group_arn = element(aws_lb_target_group.prometheus.*.arn, count.index)
+  target_id        = element(aws_instance.prometheus.*.id, count.index)
   port             = 9090
 }
 
 resource "aws_lb_listener_rule" "prometheus_https" {
-  count        = "${var.number_of_apps}"
-  listener_arn = "${aws_lb_listener.mgmt_https.arn}"
-  priority     = "${100 + count.index}"
+  count        = var.number_of_apps
+  listener_arn = aws_lb_listener.mgmt_https.arn
+  priority     = 100 + count.index
 
   action {
     type = "forward"
 
-    target_group_arn = "${
-      element(aws_lb_target_group.prometheus.*.arn, count.index)
-    }"
+    target_group_arn = element(aws_lb_target_group.prometheus.*.arn, count.index)
   }
 
   condition {
@@ -431,29 +429,29 @@ resource "aws_lb_listener_rule" "prometheus_https" {
 module "prometheus_ecs_roles" {
   source = "./modules/ecs_iam_role_pair"
 
-  deployment       = "${var.deployment}"
+  deployment       = var.deployment
   service_name     = "prometheus"
   image_name       = "verify-prometheus"
-  tools_account_id = "${var.tools_account_id}"
+  tools_account_id = var.tools_account_id
 }
 
 data "template_file" "prometheus_task_def" {
-  count    = "${var.number_of_apps}"
-  template = "${file("${path.module}/files/tasks/prometheus.json")}"
+  count    = var.number_of_apps
+  template = file("${path.module}/files/tasks/prometheus.json")
 
   vars = {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-prometheus@${var.prometheus_image_digest}"
-    config_base64    = "${base64encode(data.template_file.prometheus_config.rendered)}"
-    alerts_base64    = "${base64encode(file("${path.module}/files/prometheus/alerts.yml"))}"
+    config_base64    = base64encode(data.template_file.prometheus_config.rendered)
+    alerts_base64    = base64encode(file("${path.module}/files/prometheus/alerts.yml"))
     external_url     = "https://prom-${count.index + 1}.${local.mgmt_domain}"
   }
 }
 
 resource "aws_ecs_task_definition" "prometheus" {
-  count                 = "${var.number_of_apps}"
+  count                 = var.number_of_apps
   family                = "${var.deployment}-prometheus-${count.index + 1}"
-  container_definitions = "${element(data.template_file.prometheus_task_def.*.rendered, count.index)}"
-  execution_role_arn    = "${module.prometheus_ecs_roles.execution_role_arn}"
+  container_definitions = element(data.template_file.prometheus_task_def.*.rendered, count.index)
+  execution_role_arn    = module.prometheus_ecs_roles.execution_role_arn
   network_mode          = "host"
 
   volume {
@@ -468,9 +466,9 @@ resource "aws_ecs_task_definition" "prometheus" {
 }
 
 resource "aws_ecs_service" "prometheus" {
-  count               = "${var.number_of_apps}"
+  count               = var.number_of_apps
   name                = "${var.deployment}-prometheus-${count.index + 1}"
-  cluster             = "${aws_ecs_cluster.prometheus.id}"
-  task_definition     = "${element(aws_ecs_task_definition.prometheus.*.arn, count.index)}"
+  cluster             = aws_ecs_cluster.prometheus.id
+  task_definition     = element(aws_ecs_task_definition.prometheus.*.arn, count.index)
   scheduling_strategy = "DAEMON"
 }

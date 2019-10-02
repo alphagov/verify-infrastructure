@@ -34,7 +34,7 @@ variable "rp_truststore_enabled" {
 }
 
 locals {
-  root_domain                  = "${replace(var.signin_domain, "/www[.]/", "")}"
+  root_domain                  = replace(var.signin_domain, "/www[.]/", "")
   number_of_availability_zones = 3
 }
 

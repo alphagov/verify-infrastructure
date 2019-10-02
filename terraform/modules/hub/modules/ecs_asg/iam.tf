@@ -22,13 +22,13 @@ resource "aws_iam_role" "instance" {
   EOF
 
   tags = {
-    Deployment = "${var.deployment}"
+    Deployment = var.deployment
   }
 }
 
 resource "aws_iam_instance_profile" "instance" {
   name = "${local.identifier}-instance"
-  role = "${aws_iam_role.instance.name}"
+  role = aws_iam_role.instance.name
 }
 
 resource "aws_iam_policy" "instance" {
@@ -140,12 +140,12 @@ resource "aws_iam_policy" "instance" {
 }
 
 resource "aws_iam_role_policy_attachment" "instance" {
-  role       = "${aws_iam_role.instance.name}"
-  policy_arn = "${aws_iam_policy.instance.arn}"
+  role       = aws_iam_role.instance.name
+  policy_arn = aws_iam_policy.instance.arn
 }
 
 resource "aws_iam_role_policy_attachment" "instance_additional" {
-  count      = "${length(var.additional_instance_role_policy_arns)}"
-  role       = "${aws_iam_role.instance.name}"
-  policy_arn = "${element(var.additional_instance_role_policy_arns, count.index)}"
+  count      = length(var.additional_instance_role_policy_arns)
+  role       = aws_iam_role.instance.name
+  policy_arn = element(var.additional_instance_role_policy_arns, count.index)
 }

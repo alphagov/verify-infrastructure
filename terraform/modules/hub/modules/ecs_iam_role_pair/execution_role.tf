@@ -22,7 +22,7 @@ resource "aws_iam_role" "execution" {
 }
 
 output "execution_role_arn" {
-  value = "${aws_iam_role.execution.arn}"
+  value = aws_iam_role.execution.arn
 }
 
 resource "aws_iam_policy" "execution" {
@@ -68,6 +68,6 @@ resource "aws_iam_policy" "execution" {
 }
 
 resource "aws_iam_role_policy_attachment" "execution_execution" {
-  role       = "${aws_iam_role.execution.name}"
-  policy_arn = "${aws_iam_policy.execution.arn}"
+  role       = aws_iam_role.execution.name
+  policy_arn = aws_iam_policy.execution.arn
 }
