@@ -153,7 +153,7 @@ if [ -z "$(lsblk | grep "$vol" | awk '{print $7}')" ] ; then
   echo "volume /dev/$vol is mounted ; writing fstab entry"
 
   if grep -qv "/dev/$vol" /etc/fstab ; then
-    UUID=$(ls -l /dev/disk/by-uuid | grep $vol | cut -d' ' -f9)
+    UUID=$(blkid /dev/$vol -s UUID -o value)
     echo "UUID=$UUID /srv/prometheus ext4 defaults,nofail 0 2" >> /etc/fstab
   fi
 fi
