@@ -22,6 +22,14 @@
           "value": "production"
         },
         {
+          "name": "DISABLE_COGNITO_SEEDING",
+          "value": "true"
+        },
+        {
+          "name": "DISABLE_INTEGRITY_CHECKER",
+          "value": "true"
+        },
+        {
           "name": "AWS_COGNITO_CLIENT_ID",
           "value": "${cognito_client_id}"
         },
