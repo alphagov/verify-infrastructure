@@ -1,7 +1,7 @@
 locals {
   service                      = "self-service"
   config_metadata_buckets_arns = [
-    "${aws_s3_bucket.config_metadata.arn}",
+    aws_s3_bucket.config_metadata.arn,
     "${aws_s3_bucket.config_metadata.arn}/*"
   ]
 }
@@ -14,7 +14,7 @@ data "terraform_remote_state" "hub" {
   config = {
     bucket = "govukverify-tfstate-${var.deployment}"
     key    = "hub.tfstate"
-    region = "${data.aws_region.region.id}"
+    region = data.aws_region.region.id
   }
 }
 

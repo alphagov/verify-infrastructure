@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "config_metadata" {
   bucket = "govukverify-${local.service}-${var.deployment}-config-metadata"
-  region = "${data.aws_region.region.id}"
+  region = data.aws_region.region.id
 
   versioning {
     enabled = true
@@ -19,8 +19,8 @@ resource "aws_s3_bucket" "config_metadata" {
   }
 
   tags = {
-    Environment = "${var.deployment}"
-    Service     = "${local.service}"
+    Environment = var.deployment
+    Service     = local.service
     ManagedBy   = "terraform"
   }
 }
@@ -48,6 +48,6 @@ data "aws_iam_policy_document" "config_metadata_bucket_policy" {
 }
 
 resource "aws_s3_bucket_policy" "config_metadata_policy" {
-  bucket = "${aws_s3_bucket.config_metadata.id}"
-  policy = "${data.aws_iam_policy_document.config_metadata_bucket_policy.json}"
+  bucket = aws_s3_bucket.config_metadata.id
+  policy = data.aws_iam_policy_document.config_metadata_bucket_policy.json
 }

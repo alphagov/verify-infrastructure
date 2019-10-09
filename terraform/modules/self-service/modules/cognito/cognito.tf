@@ -7,9 +7,9 @@ resource "aws_sns_topic" "cognito_sns_topic" {
 }
 
 resource "aws_sns_topic_policy" "cognito_sns_policy" {
-  arn = "${aws_sns_topic.cognito_sns_topic.arn}"
+  arn = aws_sns_topic.cognito_sns_topic.arn
 
-  policy = "${data.aws_iam_policy_document.sns_topic_policy.json}"
+  policy = data.aws_iam_policy_document.sns_topic_policy.json
 }
 
 data "aws_iam_policy_document" "sns_topic_policy" {
@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "sns_topic_policy" {
     }
 
     resources = [
-      "${aws_sns_topic.cognito_sns_topic.arn}",
+      aws_sns_topic.cognito_sns_topic.arn,
     ]
 
     sid = "20190910-cognito-sns-policy"
@@ -58,7 +58,7 @@ resource "aws_iam_role" "cognito_sns_role" {
 
 resource "aws_iam_role_policy" "cognito_sns_role_policy" {
   name = "cognito-sns-role-policy"
-  role = "${aws_iam_role.cognito_sns_role.id}"
+  role = aws_iam_role.cognito_sns_role.id
 
   policy = <<-EOF
 {
@@ -87,7 +87,7 @@ resource "aws_cognito_user_pool" "user_pool" {
 
   sms_configuration {
     external_id = "self-service-external"
-    sns_caller_arn = "${aws_iam_role.cognito_sns_role.arn}"
+    sns_caller_arn = aws_iam_role.cognito_sns_role.arn
   }
 
   username_attributes = [
@@ -172,7 +172,7 @@ resource "aws_cognito_user_pool" "user_pool" {
 
 resource "aws_cognito_user_pool_client" "client" {
   name                         = "${local.service}-user-pool-client"
-  user_pool_id                 = "${aws_cognito_user_pool.user_pool.id}"
+  user_pool_id                 = aws_cognito_user_pool.user_pool.id
   explicit_auth_flows          = ["USER_PASSWORD_AUTH"]
   supported_identity_providers = ["COGNITO"]
   refresh_token_validity       = 1
@@ -180,9 +180,9 @@ resource "aws_cognito_user_pool_client" "client" {
 
 
 output "user_pool_client_id" {
-  value = "${aws_cognito_user_pool_client.client.id}"
+  value = aws_cognito_user_pool_client.client.id
 }
 
 output "user_pool_id" {
-  value = "${aws_cognito_user_pool.user_pool.id}"
+  value = aws_cognito_user_pool.user_pool.id
 }
