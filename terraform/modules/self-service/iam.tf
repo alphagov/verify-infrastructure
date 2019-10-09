@@ -1,6 +1,6 @@
 resource "aws_iam_role_policy_attachment" "self_service_execution_write_to_logs_attachment" {
-  role       = "${aws_iam_role.self_service_execution.name}"
-  policy_arn = "${aws_iam_policy.can_write_to_logs.arn}"
+  role       = aws_iam_role.self_service_execution.name
+  policy_arn = aws_iam_policy.can_write_to_logs.arn
 }
 
 resource "aws_iam_role" "self_service_execution" {
@@ -102,8 +102,8 @@ resource "aws_iam_policy" "self_service_secrets_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "self_service_execution_secrets_policy_attachment" {
-  role       = "${aws_iam_role.self_service_execution.name}"
-  policy_arn = "${aws_iam_policy.self_service_secrets_policy.arn}"
+  role       = aws_iam_role.self_service_execution.name
+  policy_arn = aws_iam_policy.self_service_secrets_policy.arn
 }
 
 resource "aws_iam_role" "self_service_task" {
@@ -145,8 +145,8 @@ resource "aws_iam_policy" "self_service_cognito_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "self_service_cognito_policy_attachment" {
-  role       = "${aws_iam_role.self_service_task.name}"
-  policy_arn = "${aws_iam_policy.self_service_cognito_policy.arn}"
+  role       = aws_iam_role.self_service_task.name
+  policy_arn = aws_iam_policy.self_service_cognito_policy.arn
 }
 
 resource "aws_iam_policy" "execution" {
@@ -181,15 +181,15 @@ resource "aws_iam_policy" "execution" {
 }
 
 resource "aws_iam_role_policy_attachment" "execution_execution" {
-  role       = "${aws_iam_role.self_service_execution.name}"
-  policy_arn = "${aws_iam_policy.execution.arn}"
+  role       = aws_iam_role.self_service_execution.name
+  policy_arn = aws_iam_policy.execution.arn
 }
 
 data "aws_iam_policy_document" "access_config_metadata" {
   statement {
     sid       = "AllowGetAndPutObject"
     effect    = "Allow"
-    resources = "${concat(local.config_metadata_buckets_arns, var.additional_buckets)}"
+    resources = concat(local.config_metadata_buckets_arns, var.additional_buckets)
 
     actions = [
       "s3:GetObject",
@@ -202,10 +202,10 @@ data "aws_iam_policy_document" "access_config_metadata" {
 
 resource "aws_iam_policy" "access_config_metadata" {
   name   = "${local.service}-access-config-metadata"
-  policy = "${data.aws_iam_policy_document.access_config_metadata.json}"
+  policy = data.aws_iam_policy_document.access_config_metadata.json
 }
 
 resource "aws_iam_role_policy_attachment" "task_access_metadata_bucket_attachment" {
-  role       = "${aws_iam_role.self_service_task.name}"
-  policy_arn = "${aws_iam_policy.access_config_metadata.arn}"
+  role       = aws_iam_role.self_service_task.name
+  policy_arn = aws_iam_policy.access_config_metadata.arn
 }

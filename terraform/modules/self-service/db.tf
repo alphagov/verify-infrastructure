@@ -3,12 +3,12 @@ resource "aws_db_instance" "self_service" {
   engine       = "postgres"
   storage_type = "gp2"
 
-  instance_class    = "${var.db_instance_class}"
-  allocated_storage = "${var.db_allocated_storage}"
-  multi_az          = "${var.db_multi_az}"
+  instance_class    = var.db_instance_class
+  allocated_storage = var.db_allocated_storage
+  multi_az          = var.db_multi_az
 
   identifier = "${var.deployment}-${local.service}-db"
-  username   = "${var.db_username}"
+  username   = var.db_username
 
   # NOT THE REAL PASSWORD
   # The password is stored in SSM Parameter Store
@@ -17,12 +17,12 @@ resource "aws_db_instance" "self_service" {
 
   storage_encrypted = true
 
-  vpc_security_group_ids = ["${aws_security_group.ingress_to_db.id}"]
-  db_subnet_group_name   = "${aws_db_subnet_group.self_service_db_subnet_group.name}"
+  vpc_security_group_ids = [aws_security_group.ingress_to_db.id]
+  db_subnet_group_name   = aws_db_subnet_group.self_service_db_subnet_group.name
 
   maintenance_window      = "Tue:02:00-Tue:03:00"
   backup_window           = "03:00-03:30"
-  backup_retention_period = "${var.db_backup_retention_period}"
+  backup_retention_period = var.db_backup_retention_period
 
   final_snapshot_identifier = "${var.deployment}-${local.service}-db-final-snapshot"
 
@@ -43,5 +43,5 @@ resource "aws_db_instance" "self_service" {
 
 resource "aws_db_subnet_group" "self_service_db_subnet_group" {
   name       = "${var.deployment}-${local.service}-db-subnet-group"
-  subnet_ids = "${data.terraform_remote_state.hub.outputs.internal_subnet_ids}"
+  subnet_ids = data.terraform_remote_state.hub.outputs.internal_subnet_ids
 }

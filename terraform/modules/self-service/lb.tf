@@ -4,11 +4,11 @@ resource "aws_lb" "self_service_edge" {
   name            = "${var.deployment}-${local.service}"
   internal        = false
   security_groups = [
-    "${aws_security_group.ingress.id}",
-    "${aws_security_group.egress.id}"
+    aws_security_group.ingress.id,
+    aws_security_group.egress.id
   ]
 
-  subnets = "${data.terraform_remote_state.hub.outputs.public_subnet_ids}"
+  subnets = data.terraform_remote_state.hub.outputs.public_subnet_ids
 
   tags = {
     Deployment = "${var.deployment}"
@@ -20,7 +20,7 @@ resource "aws_lb_target_group" "task" {
   port                 = 8080
   protocol             = "HTTP"
   target_type          = "ip"
-  vpc_id               = "${data.terraform_remote_state.hub.outputs.vpc_id}"
+  vpc_id               = data.terraform_remote_state.hub.outputs.vpc_id
   deregistration_delay = 15
   slow_start           = 30
 
@@ -38,7 +38,7 @@ resource "aws_lb_target_group" "task" {
 }
 
 resource "aws_lb_listener" "cluster_http" {
-  load_balancer_arn = "${aws_lb.self_service_edge.arn}"
+  load_balancer_arn = aws_lb.self_service_edge.arn
   port              = "80"
   protocol          = "HTTP"
 
@@ -54,15 +54,15 @@ resource "aws_lb_listener" "cluster_http" {
 }
 
 resource "aws_lb_listener" "cluster_https" {
-  load_balancer_arn = "${aws_lb.self_service_edge.arn}"
+  load_balancer_arn = aws_lb.self_service_edge.arn
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS-1-1-2017-01"
 
-  certificate_arn = "${var.ssl_certificate_arn}"
+  certificate_arn = var.ssl_certificate_arn
 
   default_action {
     type             = "forward"
-    target_group_arn = "${aws_lb_target_group.task.arn}"
+    target_group_arn = aws_lb_target_group.task.arn
   }
 }
