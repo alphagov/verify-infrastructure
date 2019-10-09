@@ -9,52 +9,52 @@ locals {
 }
 
 resource "aws_subnet" "ingress" {
-  count             = "${local.number_of_availability_zones}"
-  vpc_id            = "${aws_vpc.hub.id}"
-  availability_zone = "${element(local.azs, count.index)}"
+  count             = local.number_of_availability_zones
+  vpc_id            = aws_vpc.hub.id
+  availability_zone = element(local.azs, count.index)
 
-  cidr_block = "${cidrsubnet(
+  cidr_block = cidrsubnet(
     aws_vpc.hub.cidr_block,
     local.subnet_bits,
     lookup(local.subnet_offsets, "ingress") + count.index
-  )}"
+  )
 
-  tags {
+  tags = {
     Name       = "ingress-${var.deployment}"
-    Deployment = "${var.deployment}"
+    Deployment = var.deployment
   }
 }
 
 resource "aws_subnet" "internal" {
-  count             = "${local.number_of_availability_zones}"
-  vpc_id            = "${aws_vpc.hub.id}"
-  availability_zone = "${element(local.azs, count.index)}"
+  count             = local.number_of_availability_zones
+  vpc_id            = aws_vpc.hub.id
+  availability_zone = element(local.azs, count.index)
 
-  cidr_block = "${cidrsubnet(
+  cidr_block = cidrsubnet(
     aws_vpc.hub.cidr_block,
     local.subnet_bits,
     lookup(local.subnet_offsets, "internal") + count.index
-  )}"
+  )
 
-  tags {
+  tags = {
     Name       = "internal-${var.deployment}"
-    Deployment = "${var.deployment}"
+    Deployment = var.deployment
   }
 }
 
 resource "aws_subnet" "egress" {
-  count             = "${local.number_of_availability_zones}"
-  vpc_id            = "${aws_vpc.hub.id}"
-  availability_zone = "${element(local.azs, count.index)}"
+  count             = local.number_of_availability_zones
+  vpc_id            = aws_vpc.hub.id
+  availability_zone = element(local.azs, count.index)
 
-  cidr_block = "${cidrsubnet(
+  cidr_block = cidrsubnet(
     aws_vpc.hub.cidr_block,
     local.subnet_bits,
     lookup(local.subnet_offsets, "egress") + count.index
-  )}"
+  )
 
-  tags {
+  tags = {
     Name       = "egress-${var.deployment}"
-    Deployment = "${var.deployment}"
+    Deployment = var.deployment
   }
 }

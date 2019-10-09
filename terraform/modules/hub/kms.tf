@@ -28,12 +28,12 @@ resource "aws_kms_key" "hub_key" {
 
   deletion_window_in_days = 7
 
-  policy = "${data.aws_iam_policy_document.hub_key.json}"
+  policy = data.aws_iam_policy_document.hub_key.json
 }
 
 resource "aws_kms_alias" "hub_key" {
   name          = "alias/${var.deployment}-hub-key"
-  target_key_id = "${aws_kms_key.hub_key.key_id}"
+  target_key_id = aws_kms_key.hub_key.key_id
 }
 
 data "aws_iam_policy_document" "frontend_key" {
@@ -66,7 +66,7 @@ resource "aws_kms_key" "frontend" {
 
   deletion_window_in_days = 7
 
-  policy = "${data.aws_iam_policy_document.frontend_key.json}"
+  policy = data.aws_iam_policy_document.frontend_key.json
 }
 
 resource "aws_kms_alias" "frontend" {
@@ -104,12 +104,12 @@ resource "aws_kms_key" "policy" {
 
   deletion_window_in_days = 7
 
-  policy = "${data.aws_iam_policy_document.policy.json}"
+  policy = data.aws_iam_policy_document.policy.json
 }
 
 resource "aws_kms_alias" "policy" {
   name          = "alias/${var.deployment}-policy-key"
-  target_key_id = "${aws_kms_key.policy.key_id}"
+  target_key_id = aws_kms_key.policy.key_id
 }
 
 data "aws_iam_policy_document" "saml_proxy" {
@@ -142,7 +142,7 @@ resource "aws_kms_key" "saml_proxy" {
 
   deletion_window_in_days = 7
 
-  policy = "${data.aws_iam_policy_document.saml_proxy.json}"
+  policy = data.aws_iam_policy_document.saml_proxy.json
 }
 
 resource "aws_kms_alias" "saml_proxy" {
@@ -180,10 +180,10 @@ resource "aws_kms_key" "saml_soap_proxy" {
 
   deletion_window_in_days = 7
 
-  policy = "${data.aws_iam_policy_document.saml_soap_proxy.json}"
+  policy = data.aws_iam_policy_document.saml_soap_proxy.json
 }
 
 resource "aws_kms_alias" "saml_soap_proxy" {
   name          = "alias/${var.deployment}-saml-soap-proxy-key"
-  target_key_id = "${aws_kms_key.saml_soap_proxy.key_id}"
+  target_key_id = aws_kms_key.saml_soap_proxy.key_id
 }

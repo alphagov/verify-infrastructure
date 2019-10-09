@@ -30,11 +30,11 @@ variable "truststore_password" {}
 
 variable "rp_truststore_enabled" {
   description = "The RP truststore should be disabled if any self-service certs will be used by RPs, since we cannot validate the trust chain for self-signed certs"
-  default = "true"
+  default     = "true"
 }
 
 locals {
-  root_domain                  = "${replace(var.signin_domain, "/www[.]/", "")}"
+  root_domain                  = replace(var.signin_domain, "/www[.]/", "")
   number_of_availability_zones = 3
 }
 
@@ -81,7 +81,7 @@ variable "splunk_hostname" {
 
 variable "ab_test_file" {
   description = "File containing percentage values for variant and control"
-  default      = "deactivated_ab_test.yml"
+  default     = "deactivated_ab_test.yml"
 }
 
 variable "self_service_enabled" {

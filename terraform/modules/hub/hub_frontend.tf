@@ -11,7 +11,7 @@ resource "aws_security_group" "frontend_task" {
   name        = "${var.deployment}-frontend-task"
   description = "${var.deployment}-frontend-task"
 
-  vpc_id = "${aws_vpc.hub.id}"
+  vpc_id = aws_vpc.hub.id
 }
 
 resource "aws_security_group_rule" "frontend_task_egress_to_internet_over_http" {
@@ -20,7 +20,7 @@ resource "aws_security_group_rule" "frontend_task_egress_to_internet_over_http" 
   from_port = 80
   to_port   = 80
 
-  security_group_id = "${aws_security_group.frontend_task.id}"
+  security_group_id = aws_security_group.frontend_task.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -30,7 +30,7 @@ resource "aws_security_group_rule" "frontend_task_egress_to_internet_over_https"
   from_port = 443
   to_port   = 443
 
-  security_group_id = "${aws_security_group.frontend_task.id}"
+  security_group_id = aws_security_group.frontend_task.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -48,44 +48,44 @@ locals {
   }
   LOCATIONS
 
-  location_blocks_base64 = "${base64encode(local.location_blocks)}"
+  location_blocks_base64 = base64encode(local.location_blocks)
 }
 
 data "template_file" "frontend_task_def" {
-  template = "${file("${path.module}/files/tasks/frontend.json")}"
+  template = file("${path.module}/files/tasks/frontend.json")
 
-  vars {
-    account_id                = "${data.aws_caller_identity.account.account_id}"
-    deployment                = "${var.deployment}"
+  vars = {
+    account_id                = data.aws_caller_identity.account.account_id
+    deployment                = var.deployment
     image_identifier          = "${local.tools_account_ecr_url_prefix}-verify-frontend@${var.hub_frontend_image_digest}"
-    nginx_image_identifier    = "${local.nginx_image_identifier}"
-    domain                    = "${local.root_domain}"
-    region                    = "${data.aws_region.region.id}"
-    location_blocks_base64    = "${local.location_blocks_base64}"
-    zendesk_username          = "${var.zendesk_username}"
-    zendesk_url               = "${var.zendesk_url}"
-    matomo_site_id            = "${var.matomo_site_id}"
-    ab_test_file              = "${var.ab_test_file}"
-    analytics_endpoint        = "${var.analytics_endpoint}"
-    cross_gov_ga_tracker_id   = "${var.cross_gov_ga_tracker_id}"
-    cross_gov_ga_domain_names = "${var.cross_gov_ga_domain_names}"
+    nginx_image_identifier    = local.nginx_image_identifier
+    domain                    = local.root_domain
+    region                    = data.aws_region.region.id
+    location_blocks_base64    = local.location_blocks_base64
+    zendesk_username          = var.zendesk_username
+    zendesk_url               = var.zendesk_url
+    matomo_site_id            = var.matomo_site_id
+    ab_test_file              = var.ab_test_file
+    analytics_endpoint        = var.analytics_endpoint
+    cross_gov_ga_tracker_id   = var.cross_gov_ga_tracker_id
+    cross_gov_ga_domain_names = var.cross_gov_ga_domain_names
   }
 }
 
 module "frontend_ecs_roles" {
-  source = "modules/ecs_iam_role_pair"
+  source = "./modules/ecs_iam_role_pair"
 
-  deployment       = "${var.deployment}"
-  tools_account_id = "${var.tools_account_id}"
+  deployment       = var.deployment
+  tools_account_id = var.tools_account_id
   service_name     = "frontend"
   image_name       = "verify-frontend"
 }
 
 resource "aws_ecs_task_definition" "frontend" {
   family                = "${var.deployment}-frontend"
-  container_definitions = "${data.template_file.frontend_task_def.rendered}"
+  container_definitions = data.template_file.frontend_task_def.rendered
   network_mode          = "awsvpc"
-  execution_role_arn    = "${module.frontend_ecs_roles.execution_role_arn}"
+  execution_role_arn    = module.frontend_ecs_roles.execution_role_arn
 }
 
 # This is called frontend_v2 because there was an old frontend service
@@ -93,53 +93,53 @@ resource "aws_ecs_task_definition" "frontend" {
 # too short to `terraform state mv`
 resource "aws_ecs_service" "frontend_v2" {
   name            = "${var.deployment}-frontend-v2"
-  cluster         = "${aws_ecs_cluster.ingress.id}"
-  task_definition = "${aws_ecs_task_definition.frontend.arn}"
+  cluster         = aws_ecs_cluster.ingress.id
+  task_definition = aws_ecs_task_definition.frontend.arn
 
-  desired_count                      = "${var.number_of_apps}"
+  desired_count                      = var.number_of_apps
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 
   load_balancer {
-    target_group_arn = "${aws_lb_target_group.ingress_frontend.arn}"
+    target_group_arn = aws_lb_target_group.ingress_frontend.arn
     container_name   = "nginx"
     container_port   = "8443"
   }
 
   network_configuration {
-    subnets = ["${aws_subnet.internal.*.id}"]
+    subnets = "${aws_subnet.internal.*.id}"
 
     security_groups = [
-      "${aws_security_group.frontend_task.id}",
-      "${aws_security_group.can_connect_to_container_vpc_endpoint.id}",
+      aws_security_group.frontend_task.id,
+      aws_security_group.can_connect_to_container_vpc_endpoint.id,
     ]
   }
 
   service_registries {
-    registry_arn = "${aws_service_discovery_service.frontend.arn}"
+    registry_arn = aws_service_discovery_service.frontend.arn
     port         = 8443
   }
 }
 
 module "frontend_can_connect_to_config" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.frontend_task.id}"
-  destination_sg_id = "${module.config.lb_sg_id}"
+  source_sg_id      = aws_security_group.frontend_task.id
+  destination_sg_id = module.config.lb_sg_id
 }
 
 module "frontend_can_connect_to_policy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.frontend_task.id}"
-  destination_sg_id = "${module.policy.lb_sg_id}"
+  source_sg_id      = aws_security_group.frontend_task.id
+  destination_sg_id = module.policy.lb_sg_id
 }
 
 module "frontend_can_connect_to_saml_proxy" {
-  source = "modules/microservice_connection"
+  source = "./modules/microservice_connection"
 
-  source_sg_id      = "${aws_security_group.frontend_task.id}"
-  destination_sg_id = "${module.saml_proxy.lb_sg_id}"
+  source_sg_id      = aws_security_group.frontend_task.id
+  destination_sg_id = module.saml_proxy.lb_sg_id
 }
 
 resource "aws_iam_policy" "frontend_parameter_execution" {
@@ -165,5 +165,5 @@ resource "aws_iam_policy" "frontend_parameter_execution" {
 
 resource "aws_iam_role_policy_attachment" "frontend_parameter_execution" {
   role       = "${var.deployment}-frontend-execution"
-  policy_arn = "${aws_iam_policy.frontend_parameter_execution.arn}"
+  policy_arn = aws_iam_policy.frontend_parameter_execution.arn
 }
