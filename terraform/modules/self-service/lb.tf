@@ -66,3 +66,22 @@ resource "aws_lb_listener" "cluster_https" {
     target_group_arn = aws_lb_target_group.task.arn
   }
 }
+
+resource "aws_lb_listener_rule" "disable_health_check_from_public" {
+  listener_arn = "${aws_lb_listener.cluster_https.arn}"
+
+  action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Unauthorized"
+      status_code  = "401"
+    }
+  }
+
+  condition {
+    field  = "path-pattern"
+    values = ["/healthcheck"]
+  }
+}
