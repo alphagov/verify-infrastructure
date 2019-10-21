@@ -1,3 +1,8 @@
+variable "domain" {
+  description = "Domain on which the app is hosted"
+  default     = "localhost:3000"
+}
+
 locals {
   service = "self-service"
 }
@@ -96,6 +101,30 @@ resource "aws_cognito_user_pool" "user_pool" {
 
   admin_create_user_config {
     allow_admin_create_user_only = true
+    invite_message_template {
+      email_subject = "You have been invited to collaborate on the GOV.UK Verify Manage certificates service"
+      email_message = <<-EOT
+        Dear {username}
+
+        You have been invited to collaborate on the GOV.UK Verify Manage certificates service.
+
+        Sign in at ${var.domain} using the following temporary password:
+
+        {####}
+
+        You will be asked to create a new password and set up multi-factor authentication using your preferred authentication app.
+
+        Please sign in within 24 hours, otherwise the temporary password will expire.
+
+        If you miss this deadline, contact your admin to ask for another temporary password.
+
+        Thanks
+
+        The GOV.UK Verify team
+        https://www.verify.service.gov.uk/
+      EOT
+      sms_message = "Sign in at ${var.domain} using the following temporary password {####} and your email {username}."
+    }
   }
 
   password_policy {
