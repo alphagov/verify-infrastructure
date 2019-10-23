@@ -1,5 +1,4 @@
-worker_processes  5;
-error_log         /tmp/sterr;
+worker_processes  auto;
 pid               /tmp/nginx.pid;
 
 events {
