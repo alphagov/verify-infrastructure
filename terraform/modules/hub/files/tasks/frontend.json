@@ -16,6 +16,12 @@
         "Name": "LOCATION_BLOCKS",
         "Value": "${location_blocks_base64}"
       }
+    ],
+    "dependsOn": [
+      {
+        "containerName": "frontend",
+        "condition": "SUCCESS"
+      }
     ]
   },
   {
