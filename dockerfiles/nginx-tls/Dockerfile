@@ -1,4 +1,4 @@
-FROM nginx:1.15.8-alpine
+FROM nginx:1.17.5-alpine
 
 EXPOSE 8443
 
