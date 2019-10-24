@@ -20,7 +20,7 @@
     "dependsOn": [
       {
         "containerName": "frontend",
-        "condition": "SUCCESS"
+        "condition": "HEALTHY"
       }
     ]
   },
