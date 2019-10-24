@@ -144,6 +144,15 @@
     }, {
       "Name": "CROSS_GOV_GOOGLE_ANALYTICS_DOMAIN_LIST",
       "Value": "${cross_gov_ga_domain_names}"
-    }]
+    }],
+    "healthCheck" : [
+      {
+        "Command": "curl -sfm10 localhost:8080/cookies",
+        "Interval": 10,
+        "Retries": 3,
+        "StartPeriod": 30,
+        "Timeout": 5
+      }
+    ]
   }
 ]
