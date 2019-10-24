@@ -145,14 +145,12 @@
       "Name": "CROSS_GOV_GOOGLE_ANALYTICS_DOMAIN_LIST",
       "Value": "${cross_gov_ga_domain_names}"
     }],
-    "healthCheck" : [
-      {
-        "Command": [ "CMD-SHELL", "curl -sfm10 http://localhost:8080/cookies || exit 1" ],
-        "Interval": 10,
-        "Retries": 3,
-        "StartPeriod": 30,
-        "Timeout": 5
-      }
-    ]
+    "healthCheck" : {
+      "Command": [ "CMD-SHELL", "curl -sfm10 http://localhost:8080/cookies || exit 1" ],
+      "Interval": 10,
+      "Retries": 3,
+      "StartPeriod": 30,
+      "Timeout": 5
+    }
   }
 ]
