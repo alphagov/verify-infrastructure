@@ -45,7 +45,7 @@ log_format json_event '{ \"@timestamp\": \"\$time_iso8601\", '
                          '\"upstream_cookie_x_govuk_session_cookie\": \"\$upstream_cookie_x_govuk_session_cookie\"'
                          '} }';
 
-access_log /tmp/stdout json_event;
+access_log /var/log/nginx/access.log json_event;
 LOGFORMAT
 )"
 
