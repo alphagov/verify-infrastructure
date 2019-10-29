@@ -149,7 +149,7 @@
       "Command": [ "CMD-SHELL", "curl -sfm10 http://localhost:8080/cookies || exit 1" ],
       "Interval": 10,
       "Retries": 3,
-      "StartPeriod": 30,
+      "StartPeriod": 10,
       "Timeout": 5
     }
   }

@@ -17,6 +17,12 @@
         "Name": "LOCATION_BLOCKS",
         "Value": "${location_blocks_base64}"
       }
+    ],
+    "dependsOn": [
+      {
+        "containerName": "saml-engine",
+        "condition": "HEALTHY"
+      }
     ]
   },
   {
@@ -87,6 +93,13 @@
         "Name": "RP_TRUSTSTORE_ENABLED",
         "Value": "${rp_truststore_enabled}"
       }
-    ]
+    ],
+    "healthCheck" : {
+      "Command": [ "CMD-SHELL", "curl -f http://localhost:8080/service-status || exit 1" ],
+      "Interval": 10,
+      "Retries": 3,
+      "StartPeriod": 10,
+      "Timeout": 5
+    }
   }
 ]
