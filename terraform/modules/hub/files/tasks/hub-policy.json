@@ -17,6 +17,12 @@
         "Name": "LOCATION_BLOCKS",
         "Value": "${location_blocks_base64}"
       }
+    ],
+    "dependsOn": [
+      {
+        "containerName": "policy",
+        "condition": "HEALTHY"
+      }
     ]
   },
   {
@@ -75,6 +81,13 @@
         "Name": "JAVA_OPTS",
         "Value": "-Dservice.name=policy -Xms3000m -Xmx3200m -XX:+HeapDumpOnOutOfMemoryError -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5"
       }
-    ]
+    ],
+    "healthCheck" : {
+      "Command": [ "CMD-SHELL", "curl -f http://localhost:8080/service-status || exit 1" ],
+      "Interval": 10,
+      "Retries": 3,
+      "StartPeriod": 10,
+      "Timeout": 5
+    }
   }
 ]

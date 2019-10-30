@@ -17,6 +17,12 @@
         "Name": "LOCATION_BLOCKS",
         "Value": "${location_blocks_base64}"
       }
+    ],
+    "dependsOn": [
+      {
+        "containerName": "config",
+        "condition": "HEALTHY"
+      }
     ]
   },
   {
@@ -75,6 +81,13 @@
         "Name": "METADATA_OBJECT_KEY",
         "Value": "${metadata_object_key}"
       }
-    ]
+    ],
+    "healthCheck" : {
+      "Command": [ "CMD-SHELL", "curl -f http://localhost:8080/service-status || exit 1" ],
+      "Interval": 10,
+      "Retries": 3,
+      "StartPeriod": 10,
+      "Timeout": 5
+    }
   }
 ]
