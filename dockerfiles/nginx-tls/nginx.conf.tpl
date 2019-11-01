@@ -29,7 +29,9 @@ http {
     ssl_ciphers         ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA384;
     ssl_certificate     /tmp/tls/cert.pem;
     ssl_certificate_key /tmp/tls/key.pem;
-    ssl_session_cache   shared:SSL:1m;
+    ssl_session_cache   shared:SSL:2m;
+
+    client_body_buffer_size 64k;
 
     $location_blocks
   }
