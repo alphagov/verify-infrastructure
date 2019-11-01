@@ -104,24 +104,24 @@ resource "aws_cognito_user_pool" "user_pool" {
     invite_message_template {
       email_subject = "You have been invited to collaborate on the GOV.UK Verify Manage certificates service"
       email_message = <<-EOT
-        Dear {username}<br>
-        <br>
-        You have been invited to collaborate on the GOV.UK Verify Manage certificates service.<br>
-        <br>
-        Sign in at ${var.domain} using the following temporary password:<br>
-        <br>
-        <strong>{####}</strong><br>
-        <br>
-        You will be asked to create a new password and set up multi-factor authentication using your preferred authentication app.<br>
-        <br>
-        <span style="color: #d4351c">Please sign in within 24 hours, otherwise the temporary password will expire.</span><br>
-        <br>
-        If you miss this deadline, contact your admin to ask for another temporary password.<br>
-        <br>
-        Thanks<br>
-        <br>
-        The GOV.UK Verify team<br>
-        <a href="https://www.verify.service.gov.uk/">https://www.verify.service.gov.uk/</a>
+        <p>Dear {username}</p>
+        
+        <p>You have been invited to collaborate on the GOV.UK Verify Manage certificates service.</p>
+        
+        <p>Sign in at ${var.domain} using the following temporary password:</p>
+        
+        <p style="font-weight: bold;">{####}</p>
+        
+        <p>You will be asked to create a new password and set up multi-factor authentication using your preferred authentication app.</p>
+        
+        <p style="color: #d4351c">Please sign in within 24 hours, otherwise the temporary password will expire.</p>
+        
+        <p>If you miss this deadline, contact your admin to ask for another temporary password.</p>
+        
+        <p>Thanks</p>
+        
+        <p style="font-weight: bold;">The GOV.UK Verify team<br>
+        <a href="https://www.verify.service.gov.uk/">https://www.verify.service.gov.uk/</a></p>
       EOT
       sms_message = "Sign in at ${var.domain} using the following temporary password {####} and your email {username}."
     }
