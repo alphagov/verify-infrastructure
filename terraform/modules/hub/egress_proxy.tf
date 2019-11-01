@@ -160,6 +160,8 @@ resource "aws_ecs_task_definition" "egress_proxy" {
   family                = "${var.deployment}-egress-proxy"
   container_definitions = data.template_file.egress_proxy_task_def.rendered
   execution_role_arn    = module.egress_proxy_ecs_roles.execution_role_arn
+  cpu                   = 1024
+  memory                = 3500
 }
 
 resource "aws_ecs_service" "egress_proxy" {

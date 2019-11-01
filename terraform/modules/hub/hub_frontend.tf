@@ -86,6 +86,8 @@ resource "aws_ecs_task_definition" "frontend" {
   container_definitions = data.template_file.frontend_task_def.rendered
   network_mode          = "awsvpc"
   execution_role_arn    = module.frontend_ecs_roles.execution_role_arn
+  cpu                   = 1948
+  memory                = 3250
 }
 
 # This is called frontend_v2 because there was an old frontend service
