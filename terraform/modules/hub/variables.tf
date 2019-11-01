@@ -99,6 +99,11 @@ variable "cross_gov_ga_domain_names" {
   default     = "www.gov.uk"
 }
 
+variable "log_level" {
+  description = "Log level for Puma and Frontend applications"
+  default     = "warn"
+}
+
 variable "hub_config_image_digest" {}
 variable "hub_policy_image_digest" {}
 variable "hub_saml_proxy_image_digest" {}
