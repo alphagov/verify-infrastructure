@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1556875622162,
+  "iteration": 1572866598377,
   "links": [],
   "panels": [
     {
@@ -506,41 +506,13 @@
     {
       "dashboardFilter": "",
       "dashboardTags": [
-        "verify",
-        "Prod"
-      ],
-      "folderId": null,
-      "gridPos": {
-        "h": 10,
-        "w": 6,
-        "x": 0,
-        "y": 2
-      },
-      "id": 22,
-      "limit": 10,
-      "links": [],
-      "nameFilter": "",
-      "onlyAlertsOnDashboard": false,
-      "repeat": null,
-      "repeatDirection": "h",
-      "show": "current",
-      "sortOrder": 3,
-      "stateFilter": [
-        "alerting"
-      ],
-      "title": "Prod Alerts",
-      "type": "alertlist"
-    },
-    {
-      "dashboardFilter": "",
-      "dashboardTags": [
         "verify"
       ],
       "folderId": null,
       "gridPos": {
-        "h": 10,
+        "h": 5,
         "w": 6,
-        "x": 6,
+        "x": 0,
         "y": 2
       },
       "id": 19,
@@ -561,9 +533,9 @@
       "datasource": "$Prometheus",
       "fontSize": "80%",
       "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 12,
+        "h": 5,
+        "w": 18,
+        "x": 6,
         "y": 2
       },
       "id": 21,
@@ -572,202 +544,19 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 3,
+        "col": 5,
         "desc": false
       },
       "styles": [
         {
-          "alias": "Time",
+          "alias": "Common Name",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
           "mappingType": 1,
-          "pattern": "__name__",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
+          "pattern": "cn",
+          "type": "string"
         },
         {
-          "alias": "Instance",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "instance",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "job",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "Matching Service",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "matchingService",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "eIDAS Enabled",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "eidasEnabled",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short",
-          "valueMaps": [
-            {
-              "text": "Yes",
-              "value": "true"
-            },
-            {
-              "text": "No",
-              "value": "false"
-            }
-          ]
-        },
-        {
-          "alias": "Onboarding",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "onboarding",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short",
-          "valueMaps": [
-            {
-              "text": "Yes",
-              "value": "true"
-            },
-            {
-              "text": "No",
-              "value": "false"
-            }
-          ]
-        },
-        {
-          "alias": "Should Sign With SHA-1",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "shouldSignWithSha1",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short",
-          "valueMaps": [
-            {
-              "text": "Yes",
-              "value": "true"
-            },
-            {
-              "text": "No",
-              "value": "false"
-            }
-          ]
-        },
-        {
-          "alias": "Version Number",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "versionNumber",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Version Supported",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "versionSupported",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short",
-          "valueMaps": [
-            {
-              "text": "No",
-              "value": "false"
-            },
-            {
-              "text": "Yes",
-              "value": "true"
-            }
-          ]
-        },
-        {
-          "alias": "Status",
+          "alias": "Time Remaining",
           "colorMode": "cell",
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -775,42 +564,31 @@
             "rgba(50, 172, 45, 0.97)"
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 2,
+          "decimals": 0,
+          "mappingType": 1,
           "pattern": "Value",
-          "rangeMaps": [
-            {
-              "from": "0",
-              "text": "Unhealthy",
-              "to": "0.1"
-            },
-            {
-              "from": "0.1",
-              "text": "Some failures",
-              "to": "0.9"
-            },
-            {
-              "from": "0.9",
-              "text": "Healthy",
-              "to": "1"
-            }
-          ],
           "thresholds": [
-            "0.1",
-            "0.9"
+            "604800000",
+            "1209600000"
           ],
+          "type": "number",
+          "unit": "ms"
+        },
+        {
+          "alias": "Entity ID",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "entity_id",
+          "thresholds": [],
           "type": "string",
-          "unit": "short",
-          "valueMaps": [
-            {
-              "text": "Unhealthy",
-              "value": "0"
-            },
-            {
-              "text": "Healthy",
-              "value": "1"
-            }
-          ]
+          "unit": "short"
         },
         {
           "alias": "",
@@ -823,20 +601,20 @@
           "decimals": 2,
           "pattern": "/.*/",
           "thresholds": [],
-          "type": "string",
+          "type": "hidden",
           "unit": "short"
         }
       ],
       "targets": [
         {
-          "expr": "avg(verify_saml_soap_proxy_msa_health_status * on (instance, job, matchingService)\n(time() - verify_saml_soap_proxy_msa_health_status_last_updated/1000 <bool 120)) without (instance)",
+          "expr": "avg (label_replace(verify_config_certificate_expiry_date or verify_metadata_certificate_expiry, \"cn\", \"$1\", \"subject\", \".*CN=([0-9A-Za-z_ ().-]+).*\")) without(use, instance, subject, job, timestamp, key_name) - time()*1000",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "title": "Matching Service Health",
+      "title": "Certificate Expiries",
       "transform": "table",
       "type": "table"
     },
@@ -846,10 +624,10 @@
       "description": "Details about healthy matching services",
       "fontSize": "80%",
       "gridPos": {
-        "h": 8,
+        "h": 5,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 7
       },
       "id": 23,
       "links": [],
@@ -1126,14 +904,1152 @@
       "type": "table"
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$Prometheus",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 27,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "max(jvm_memory_bytes_used{area=\"heap\"}) without (instance)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "decbytes",
+          "label": "Heap Memory Used",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 2,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(io_dropwizard_jetty_MutableServletContextHandler_5xx_responses_total[1m])) without (instance)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "5xx responses",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "5xx responses per second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prod-cw",
+      "fill": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 25,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Config Task",
+          "dimensions": {
+            "ClusterName": "prod-config",
+            "ServiceName": "prod-config"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "A",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Config Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-config",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "B",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Egress Proxy Task",
+          "dimensions": {
+            "ClusterName": "prod-egress-proxy",
+            "ServiceName": "prod-egress-proxy"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "C",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Egress Proxy Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-egress-proxy",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "D",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Frontend Task",
+          "dimensions": {
+            "ClusterName": "prod-ingress",
+            "ServiceName": "prod-frontend-v2"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "E",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Analytics Task",
+          "dimensions": {
+            "ClusterName": "prod-ingress",
+            "ServiceName": "prod-analytics"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "F",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Metadata Task",
+          "dimensions": {
+            "ClusterName": "prod-ingress",
+            "ServiceName": "prod-metadata"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "G",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Ingress Beat Exporter",
+          "dimensions": {
+            "ClusterName": "prod-ingress",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "H",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Policy Task",
+          "dimensions": {
+            "ClusterName": "prod-policy",
+            "ServiceName": "prod-policy"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "I",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Policy Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-policy",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "J",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Engine Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-engine",
+            "ServiceName": "prod-saml-engine"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "K",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Engine Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-engine",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "L",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Proxy Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-proxy",
+            "ServiceName": "prod-saml-proxy"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "M",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Proxy Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-proxy",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "N",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Soap Proxy Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-soap-proxy",
+            "ServiceName": "prod-saml-soap-proxy"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "O",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Soap Proxy Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-soap-proxy",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "P",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Static Ingress HTTPS Task",
+          "dimensions": {
+            "ClusterName": "prod-static-ingress",
+            "ServiceName": "prod-static-ingress-https"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "Q",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Static Ingress HTTP Task",
+          "dimensions": {
+            "ClusterName": "prod-static-ingress",
+            "ServiceName": "prod-static-ingress-http"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "R",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Static Ingress Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-static-ingress",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "MemoryUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "S",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Memory Utilisation Production",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "label": "Memory Utilisation",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 4,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total[1m])) without (instance)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "2xx responses",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "2xx responses per second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prod-cw",
+      "fill": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 29,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Config Task",
+          "dimensions": {
+            "ClusterName": "prod-config",
+            "ServiceName": "prod-config"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "A",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Config Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-config",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "B",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Egress Proxy Task",
+          "dimensions": {
+            "ClusterName": "prod-egress-proxy",
+            "ServiceName": "prod-egress-proxy"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "C",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Egress Proxy Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-egress-proxy",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "D",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Frontend Task",
+          "dimensions": {
+            "ClusterName": "prod-ingress",
+            "ServiceName": "prod-frontend-v2"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "E",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Analytics Task",
+          "dimensions": {
+            "ClusterName": "prod-ingress",
+            "ServiceName": "prod-analytics"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "F",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Metadata Task",
+          "dimensions": {
+            "ClusterName": "prod-ingress",
+            "ServiceName": "prod-metadata"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "G",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Ingress Beat Exporter",
+          "dimensions": {
+            "ClusterName": "prod-ingress",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "H",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Policy Task",
+          "dimensions": {
+            "ClusterName": "prod-policy",
+            "ServiceName": "prod-policy"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "I",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Policy Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-policy",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "J",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Engine Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-engine",
+            "ServiceName": "prod-saml-engine"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "K",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Engine Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-engine",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "L",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Proxy Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-proxy",
+            "ServiceName": "prod-saml-proxy"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "M",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Proxy Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-proxy",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "N",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Soap Proxy Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-soap-proxy",
+            "ServiceName": "prod-saml-soap-proxy"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "O",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "SAML Soap Proxy Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-saml-soap-proxy",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "P",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Static Ingress HTTPS Task",
+          "dimensions": {
+            "ClusterName": "prod-static-ingress",
+            "ServiceName": "prod-static-ingress-https"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "Q",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Static Ingress HTTP Task",
+          "dimensions": {
+            "ClusterName": "prod-static-ingress",
+            "ServiceName": "prod-static-ingress-http"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "R",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        },
+        {
+          "alias": "Static Ingress Beat Exporter Task",
+          "dimensions": {
+            "ClusterName": "prod-static-ingress",
+            "ServiceName": "prod-beat-exporter"
+          },
+          "expression": "",
+          "highResolution": false,
+          "id": "",
+          "metricName": "CPUUtilization",
+          "namespace": "AWS/ECS",
+          "period": "",
+          "refId": "S",
+          "region": "eu-west-2",
+          "returnData": false,
+          "statistics": [
+            "Maximum"
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CPU Utilisation Production",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "label": "CPU Utilisation",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "columns": [],
       "datasource": "$Prometheus",
       "fontSize": "100%",
       "gridPos": {
-        "h": 11,
+        "h": 10,
         "w": 12,
-        "x": 0,
-        "y": 20
+        "x": 12,
+        "y": 24
       },
       "hideTimeOverride": false,
       "id": 8,
@@ -1268,187 +2184,12 @@
       "title": "EC2 Memory Free Space",
       "transform": "table",
       "type": "table"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 11,
-        "w": 12,
-        "x": 12,
-        "y": 20
-      },
-      "id": 2,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "hideEmpty": false,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(io_dropwizard_jetty_MutableServletContextHandler_5xx_responses_total[1m])) without (instance)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{job}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "5xx responses",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "5xx responses per second rate measured over the last 1 minute",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 11,
-        "w": 12,
-        "x": 12,
-        "y": 31
-      },
-      "id": 4,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total[1m])) without (instance)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{job}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "2xx responses",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "2xx responses per second rate measured over the last 1 minute",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     }
   ],
-  "refresh": "30s",
+  "refresh": "1m",
   "schemaVersion": 18,
   "style": "dark",
-  "tags": [
-    "verify"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
@@ -1517,5 +2258,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 78
+  "version": 88
 }
