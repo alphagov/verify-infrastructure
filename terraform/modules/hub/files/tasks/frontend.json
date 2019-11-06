@@ -89,7 +89,7 @@
       "Value": "false"
     }, {
       "Name": "LOG_LEVEL",
-      "Value": "warn"
+      "Value": "${log_level}"
     }, {
       "Name": "RULES_DIRECTORY",
       "Value": "/verify-frontend/federation/configuration/idp-rules"

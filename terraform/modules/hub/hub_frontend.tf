@@ -69,6 +69,7 @@ data "template_file" "frontend_task_def" {
     analytics_endpoint        = var.analytics_endpoint
     cross_gov_ga_tracker_id   = var.cross_gov_ga_tracker_id
     cross_gov_ga_domain_names = var.cross_gov_ga_domain_names
+    log_level                 = var.log_level
   }
 }
 
