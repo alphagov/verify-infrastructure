@@ -194,6 +194,7 @@ data "aws_iam_policy_document" "access_config_metadata" {
     actions = [
       "s3:GetObject",
       "s3:PutObject",
+      "s3:PutObjectAcl",
       "s3:DeleteObject",
       "s3:ListBucket"
     ]
