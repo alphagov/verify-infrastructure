@@ -13,6 +13,11 @@
       "entryPoint": [
         "bundle",
         "exec",
+        "rake",
+        "assets:precompile",
+        "&&",
+        "bundle",
+        "exec",
         "puma",
         "-p",
         "8080",
