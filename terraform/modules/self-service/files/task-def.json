@@ -55,6 +55,10 @@
         {
           "name": "HUB_ENVIRONMENTS",
           "value": "${hub_environments}"
+        },
+        {
+          "name": "HUB_CONFIG_HOST",
+          "value": "${hub_config_host}"
         }
       ],
       "secrets": [
