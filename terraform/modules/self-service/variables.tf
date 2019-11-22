@@ -64,6 +64,11 @@ variable "hub_environments" {
   default     = ""
 }
 
+variable "hub_host" {
+  description = "The host for the Verify hub"
+  default     = "signin.service.gov.uk"
+}
+
 variable "additional_buckets" {
   description = "Additional bucket ARNs which the app will publish to"
   type        = "list"
