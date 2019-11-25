@@ -18,6 +18,7 @@ locals  {
     sentry_dsn            = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/sentry-dsn"
     hub_environments      = var.hub_environments
     hub_config_host       = "https://config.${local.hub_deployment}${var.hub_host}:443"
+    notify_key            = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/notify-key"
   }
 }
 
