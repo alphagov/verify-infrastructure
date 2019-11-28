@@ -162,6 +162,7 @@ resource "aws_iam_policy" "frontend_parameter_execution" {
       ],
       "Resource": [
         "arn:aws:ssm:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/frontend/*",
+        "arn:aws:ssm:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/self-service/authentication-header",
         "arn:aws:kms:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:alias/${var.deployment}-frontend"
       ]
     }]
