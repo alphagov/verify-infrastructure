@@ -99,6 +99,11 @@ variable "cross_gov_ga_domain_names" {
   default     = "www.gov.uk"
 }
 
+variable "publish_hub_config_enabled" {
+  description = "Enable endpoints to expose config service certificates"
+  default     = "false"
+}
+
 variable "log_level" {
   description = "Log level for Puma and Frontend applications"
   default     = "warn"

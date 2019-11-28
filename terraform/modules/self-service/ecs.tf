@@ -2,23 +2,24 @@ locals  {
   hub_deployment = "${var.deployment == "prod" ? "" : "${var.deployment}." }"
 
   task_vars = {
-    image_digest          = var.image_digest
-    aws_bucket            = aws_s3_bucket.config_metadata.bucket
-    region                = data.aws_region.region.name
-    rails_secret_key_base = aws_ssm_parameter.rails_secret_key_base.arn
-    database_username     = var.db_username
-    database_password_arn = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/db-master-password"
-    database_host         = aws_db_instance.self_service.address
-    database_name         = aws_db_instance.self_service.name
-    db_command            = var.db_command
-    cognito_client_id     = module.cognito.user_pool_client_id
-    cognito_user_pool_id  = module.cognito.user_pool_id
-    asset_host            = var.asset_host
-    asset_prefix          = "${element(split(":", var.image_digest),1)}/assets/"
-    sentry_dsn            = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/sentry-dsn"
-    hub_environments      = var.hub_environments
-    hub_config_host       = "https://config.${local.hub_deployment}${var.hub_host}:443"
-    notify_key            = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/notify-key"
+    image_digest                       = var.image_digest
+    aws_bucket                         = aws_s3_bucket.config_metadata.bucket
+    region                             = data.aws_region.region.name
+    rails_secret_key_base              = aws_ssm_parameter.rails_secret_key_base.arn
+    database_username                  = var.db_username
+    database_password_arn              = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/db-master-password"
+    database_host                      = aws_db_instance.self_service.address
+    database_name                      = aws_db_instance.self_service.name
+    db_command                         = var.db_command
+    cognito_client_id                  = module.cognito.user_pool_client_id
+    cognito_user_pool_id               = module.cognito.user_pool_id
+    asset_host                         = var.asset_host
+    asset_prefix                       = "${element(split(":", var.image_digest),1)}/assets/"
+    sentry_dsn                         = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/sentry-dsn"
+    hub_environments                   = var.hub_environments
+    hub_config_host                    = "https://config.${local.hub_deployment}${var.hub_host}:443"
+    notify_key                         = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/notify-key"
+    self_service_authentication_header = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/authentication-header"
   }
 }
 

@@ -55,6 +55,9 @@
       }, {
         "name": "ZENDESK_TOKEN",
         "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/frontend/zendesk-token"
+      }, {
+        "name": "SELF_SERVICE_AUTHENTICATION_HEADER",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/self-service/authentication-header"
       }
     ],
     "environment": [{
@@ -144,6 +147,9 @@
     }, {
       "Name": "CROSS_GOV_GOOGLE_ANALYTICS_DOMAIN_LIST",
       "Value": "${cross_gov_ga_domain_names}"
+    }, {
+      "Name": "PUBLISH_HUB_CONFIG_ENABLED",
+      "Value": "${publish_hub_config_enabled}"
     }],
     "healthCheck" : {
       "Command": [ "CMD-SHELL", "curl -sfm10 http://localhost:8080/cookies || exit 1" ],

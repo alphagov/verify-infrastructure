@@ -77,6 +77,10 @@
         {
           "name": "SENTRY_DSN",
           "valueFrom": "${sentry_dsn}"
+        },
+        {
+          "name": "SELF_SERVICE_AUTHENTICATION_HEADER",
+          "valueFrom": "${self_service_authentication_header}"
         }
       ],
       "logConfiguration": {
