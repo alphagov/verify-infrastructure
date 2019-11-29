@@ -63,6 +63,10 @@
         {
           "name": "NOTIFY_KEY",
           "value": "${notify_key}"
+        },
+        {
+          "name": "TEST_NOTIFY_KEY",
+          "value": "${test_notify_key}"
         }
       ],
       "secrets": [
