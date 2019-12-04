@@ -89,7 +89,7 @@
         },
         {
           "name": "NOTIFY_KEY",
-          "value": "${notify_key}"
+          "valueFrom": "${notify_key}"
         }
       ],
       "logConfiguration": {
