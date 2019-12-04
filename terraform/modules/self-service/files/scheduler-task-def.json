@@ -1,0 +1,104 @@
+[
+    {
+      "essential": true,
+      "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-self-service@${image_digest}",
+      "memory": 1024,
+      "name": "self-service",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080
+        }
+      ],
+      "entryPoint": [
+        "bundle",
+        "exec",
+        "rake",
+        "send_cert_expiry_reminder_emails"
+      ],
+      "environment": [
+        {
+          "name": "RAILS_ENV",
+          "value": "production"
+        },
+        {
+          "name": "DISABLE_COGNITO_SEEDING",
+          "value": "true"
+        },
+        {
+          "name": "DISABLE_INTEGRITY_CHECKER",
+          "value": "true"
+        },
+        {
+          "name": "AWS_COGNITO_CLIENT_ID",
+          "value": "${cognito_client_id}"
+        },
+        {
+          "name": "AWS_COGNITO_USER_POOL_ID",
+          "value": "${cognito_user_pool_id}"
+        },
+        {
+          "name": "AWS_REGION",
+          "value": "${region}"
+        },
+        {
+          "name": "AWS_COGNITO_CLIENT_ID",
+          "value": "${cognito_client_id}"
+        },
+        {
+          "name": "DATABASE_HOST",
+          "value": "${database_host}"
+        },
+        {
+          "name": "DATABASE_NAME",
+          "value": "${database_name}"
+        },
+        {
+          "name": "DATABASE_USERNAME",
+          "value": "${database_username}"
+        },
+        {
+          "name": "ASSET_HOST",
+          "value": "${asset_host}"
+        },
+        {
+          "name": "ASSET_PREFIX",
+          "value": "${asset_prefix}"
+        },
+        {
+          "name": "HUB_ENVIRONMENTS",
+          "value": "${hub_environments}"
+        },
+        {
+          "name": "HUB_CONFIG_HOST",
+          "value": "${hub_config_host}"
+        },
+        {
+          "name": "NOTIFY_KEY",
+          "value": "${notify_key}"
+        },
+        {
+          "name": "APP_URL",
+          "value": "${domain}"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "SECRET_KEY_BASE",
+          "valueFrom": "${rails_secret_key_base}"
+        },
+        {
+          "name": "DATABASE_PASSWORD",
+          "valueFrom": "${database_password_arn}"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "self-service",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "self-service-scheduler"
+        }
+      }
+    }
+  ]

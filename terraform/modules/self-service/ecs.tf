@@ -40,6 +40,12 @@ data "template_file" "migrations_task_def" {
   vars = local.task_vars
 }
 
+data "template_file" "scheduler_task_def" {
+  template = file("${path.module}/files/scheduler-task-def.json")
+
+  vars = local.task_vars
+}
+
 resource "aws_ecs_task_definition" "task_def" {
   family                = local.service
   container_definitions = data.template_file.task_def.rendered
@@ -56,6 +62,19 @@ resource "aws_ecs_task_definition" "task_def" {
 resource "aws_ecs_task_definition" "migrations_task_def" {
   family                = "${local.service}-migrations"
   container_definitions = data.template_file.migrations_task_def.rendered
+  network_mode          = "awsvpc"
+  execution_role_arn    = aws_iam_role.self_service_execution.arn
+  task_role_arn         = aws_iam_role.self_service_task.arn
+
+  cpu    = 1024
+  memory = 2048
+
+  requires_compatibilities = ["FARGATE"]
+}
+
+resource "aws_ecs_task_definition" "scheduler_task_def" {
+  family                = "${local.service}-scheduler"
+  container_definitions = data.template_file.scheduler_task_def.rendered
   network_mode          = "awsvpc"
   execution_role_arn    = aws_iam_role.self_service_execution.arn
   task_role_arn         = aws_iam_role.self_service_task.arn
