@@ -20,6 +20,7 @@ locals  {
     hub_config_host                    = "https://config.${local.hub_deployment}${var.hub_host}:443"
     notify_key                         = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/notify-key"
     self_service_authentication_header = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/authentication-header"
+    domain                             = var.domain
   }
 }
 
