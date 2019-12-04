@@ -61,10 +61,6 @@
           "value": "${hub_config_host}"
         },
         {
-          "name": "NOTIFY_KEY",
-          "value": "${notify_key}"
-        },
-        {
           "name": "APP_URL",
           "value": "${domain}"
         }
@@ -85,6 +81,10 @@
         {
           "name": "SELF_SERVICE_AUTHENTICATION_HEADER",
           "valueFrom": "${self_service_authentication_header}"
+        },
+        {
+          "name": "NOTIFY_KEY",
+          "value": "${notify_key}"
         }
       ],
       "logConfiguration": {
