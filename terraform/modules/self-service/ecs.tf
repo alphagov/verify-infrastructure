@@ -24,6 +24,13 @@ locals  {
   }
 }
 
+resource "aws_iam_role_policy" "scheduled_task_cloudwatch_policy" {
+  name   = "${local.service}-${var.deployment}-st-cloudwatch-policy"
+  role   = "${aws_iam_role."self_service_scheduled_task_cloudwatch.id}"
+  policy = "${data.template_file.scheduled_task_cloudwatch_policy.rendered}"
+}
+
+
 resource "aws_ecs_cluster" "cluster" {
   name = local.service
 }
