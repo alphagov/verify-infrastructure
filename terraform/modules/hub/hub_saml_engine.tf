@@ -43,16 +43,17 @@ data "template_file" "saml_engine_task_def" {
   template = file("${path.module}/files/tasks/hub-saml-engine.json")
 
   vars = {
-    account_id             = data.aws_caller_identity.account.account_id
-    deployment             = var.deployment
-    domain                 = local.root_domain
-    image_identifier       = "${local.tools_account_ecr_url_prefix}-verify-saml-engine@${var.hub_saml_engine_image_digest}"
-    nginx_image_identifier = local.nginx_image_identifier
-    region                 = data.aws_region.region.id
-    location_blocks_base64 = local.nginx_saml_engine_location_blocks_base64
-    redis_host             = "rediss://${aws_elasticache_replication_group.saml_engine_replay_cache.primary_endpoint_address}:6379"
-    splunk_url             = var.splunk_url
-    rp_truststore_enabled  = var.rp_truststore_enabled
+    account_id                       = data.aws_caller_identity.account.account_id
+    deployment                       = var.deployment
+    domain                           = local.root_domain
+    image_identifier                 = "${local.tools_account_ecr_url_prefix}-verify-saml-engine@${var.hub_saml_engine_image_digest}"
+    nginx_image_identifier           = local.nginx_image_identifier
+    region                           = data.aws_region.region.id
+    location_blocks_base64           = local.nginx_saml_engine_location_blocks_base64
+    redis_host                       = "rediss://${aws_elasticache_replication_group.saml_engine_replay_cache.primary_endpoint_address}:6379"
+    splunk_url                       = var.splunk_url
+    rp_truststore_enabled            = var.rp_truststore_enabled
+    certificates_config_cache_expiry = var.certificates_config_cache_expiry
   }
 }
 

@@ -104,6 +104,11 @@ variable "publish_hub_config_enabled" {
   default     = "false"
 }
 
+variable "certificates_config_cache_expiry" {
+  description = "Sets the expiry time of cache for certificates in saml-proxy, saml-engine and saml-soap-proxy"
+  default     = "5m"
+}
+
 variable "log_level" {
   description = "Log level for Puma and Frontend applications"
   default     = "warn"

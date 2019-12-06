@@ -60,15 +60,16 @@ data "template_file" "saml_proxy_task_def" {
   template = file("${path.module}/files/tasks/hub-saml-proxy.json")
 
   vars = {
-    image_identifier              = "${local.tools_account_ecr_url_prefix}-verify-saml-proxy@${var.hub_saml_proxy_image_digest}"
-    nginx_image_identifier        = local.nginx_image_identifier
-    domain                        = local.root_domain
-    deployment                    = var.deployment
-    location_blocks_base64        = local.nginx_saml_proxy_location_blocks_base64
-    region                        = data.aws_region.region.id
-    account_id                    = data.aws_caller_identity.account.account_id
-    event_emitter_api_gateway_url = var.event_emitter_api_gateway_url
-    rp_truststore_enabled         = var.rp_truststore_enabled
+    image_identifier                 = "${local.tools_account_ecr_url_prefix}-verify-saml-proxy@${var.hub_saml_proxy_image_digest}"
+    nginx_image_identifier           = local.nginx_image_identifier
+    domain                           = local.root_domain
+    deployment                       = var.deployment
+    location_blocks_base64           = local.nginx_saml_proxy_location_blocks_base64
+    region                           = data.aws_region.region.id
+    account_id                       = data.aws_caller_identity.account.account_id
+    event_emitter_api_gateway_url    = var.event_emitter_api_gateway_url
+    rp_truststore_enabled            = var.rp_truststore_enabled
+    certificates_config_cache_expiry = var.certificates_config_cache_expiry
   }
 }
 

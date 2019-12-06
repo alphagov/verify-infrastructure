@@ -80,6 +80,10 @@
       {
         "Name": "RP_TRUSTSTORE_ENABLED",
         "Value": "${rp_truststore_enabled}"
+      },
+      {
+        "Name": "CERTIFICATES_CONFIG_CACHE_EXPIRY",
+        "Value": "${certificates_config_cache_expiry}"
       }
     ],
     "healthCheck" : {
