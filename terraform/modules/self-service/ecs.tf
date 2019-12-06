@@ -129,6 +129,24 @@ resource "aws_ecs_service" "migrations_service" {
   }
 }
 
+resource "aws_ecs_service" "scheduler_service" {
+  name            = "${local.service}-scheduler"
+  task_definition = aws_ecs_task_definition.scheduler_task_def.arn
+  cluster         = aws_ecs_cluster.cluster.id
+  desired_count   = 0
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    security_groups = [
+      aws_security_group.egress_over_https.id,
+      data.terraform_remote_state.hub.outputs.can_connect_to_container_vpc_endpoint,
+      aws_security_group.egress_to_db.id
+    ]
+
+    subnets = data.terraform_remote_state.hub.outputs.internal_subnet_ids
+  }
+}
+
 resource "random_string" "rails_secret_key_base" {
   length  = 128
   special = false

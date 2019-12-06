@@ -18,5 +18,15 @@ resource "aws_cloudwatch_event_target" "scheduler_target" {
   ecs_target {
     task_count          = 1
     task_definition_arn = aws_ecs_task_definition.scheduler_task_def.arn
+    launch_type         = "FARGATE"
+    network_configuration {
+      security_groups = [
+        aws_security_group.egress_over_https.id,
+        data.terraform_remote_state.hub.outputs.can_connect_to_container_vpc_endpoint,
+        aws_security_group.egress_to_db.id
+      ]
+
+      subnets = data.terraform_remote_state.hub.outputs.internal_subnet_ids
+    }
   }
 }
