@@ -3,7 +3,7 @@
       "essential": true,
       "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-self-service@${image_digest}",
       "memory": 1024,
-      "name": "self-service",
+      "name": "self-service-scheduler",
       "portMappings": [
         {
           "containerPort": 8080,
