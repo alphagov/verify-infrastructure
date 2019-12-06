@@ -22,6 +22,54 @@ resource "aws_iam_role" "self_service_execution" {
   EOF
 }
 
+resource "aws_iam_role" "self_service_scheduled_task_cloudwatch" {
+  name               = "${local.service}-${var.deployment}-st-cloudwatch-role"
+  assume_role_policy = <<-EOF
+    {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": "sts:AssumeRole",
+        "Principal": {
+          "Service": "events.amazonaws.com"
+        },
+        "Effect": "Allow",
+        "Sid": ""
+      }
+    ]
+  }
+  EOF
+}
+
+resource "aws_iam_role_policy" "self_service_scheduled_task_cloudwatch_policy" {
+  name   = "${local.service}-${var.deployment}-st-cloudwatch-policy"
+  role   = aws_iam_role.self_service_scheduled_task_cloudwatch.id
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "ecs:RunTask"
+        ],
+        "Resource": [
+          "*"
+        ]
+      },
+      {
+        "Effect": "Allow",
+        "Action": "iam:PassRole",
+        "Resource": [
+          "${aws_iam_role.self_service_execution.arn}"
+        ]
+      }
+    ]
+  }
+  EOF
+}
+
+
 resource "aws_iam_policy" "can_write_to_logs" {
   name = "${local.service}-can-write-to-logs"
 
