@@ -61,7 +61,7 @@ resource "aws_iam_role_policy" "self_service_scheduled_task_cloudwatch_policy" {
         "Effect": "Allow",
         "Action": "iam:PassRole",
         "Resource": [
-          "${aws_iam_role.self_service_execution.arn}"
+          "${aws_iam_role.self_service_task.arn}"
         ]
       }
     ]
