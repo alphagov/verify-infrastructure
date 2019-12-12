@@ -69,6 +69,10 @@ variable "hub_host" {
   default     = "signin.service.gov.uk"
 }
 
+variable "hub_environments_legacy" {
+  description = "JSON string of hub environments and the config metadata buckets"
+}
+
 variable "additional_buckets" {
   description = "Additional bucket ARNs which the app will publish to"
   type        = "list"

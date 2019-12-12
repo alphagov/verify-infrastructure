@@ -76,6 +76,10 @@
         {
           "name": "APP_URL",
           "value": "${domain}"
+        },
+        {
+          "name": "HUB_ENVIRONMENTS_LEGACY",
+          "value": "${hub_environments_legacy}"
         }
       ],
       "secrets": [
