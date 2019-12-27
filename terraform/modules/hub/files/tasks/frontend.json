@@ -100,9 +100,6 @@
       "Name": "RULES_DIRECTORY_VARIANT",
       "Value": "/verify-frontend/federation/configuration/idp-rules-variant"
     }, {
-      "Name": "RULES_B_DIRECTORY",
-      "Value": "/verify-frontend/federation/configuration/idp-rules-variant-b"
-    }, {
       "Name": "RULES_C_DIRECTORY",
       "Value": "/verify-frontend/federation/configuration/idp-rules-variant-c"
     }, {
@@ -123,9 +120,6 @@
     }, {
       "Name": "SEGMENT_DEFINITIONS",
       "Value": "/verify-frontend/federation/configuration/segment_definitions.yml"
-    }, {
-      "Name": "SEGMENT_DEFINITIONS_VARIANT_B",
-      "Value": "/verify-frontend/federation/configuration/segment_definitions_variant_b.yml"
     }, {
       "Name": "SEGMENT_DEFINITIONS_VARIANT_C",
       "Value": "/verify-frontend/federation/configuration/segment_definitions_variant_c.yml"
