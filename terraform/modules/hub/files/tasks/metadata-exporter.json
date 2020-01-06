@@ -16,6 +16,9 @@
       "-c",
       "bundle exec bin/prometheus-metadata-exporter -m https://${signin_domain}/SAML2/metadata/federation -p 9199 --cas /tmp/cas/${deployment}"
     ],
-    "environment": []
+    "environment": [{
+      "Name": "APP_ENV",
+      "Value": "${environment}"
+    }]
   }
 ]

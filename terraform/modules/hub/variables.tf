@@ -114,6 +114,11 @@ variable "log_level" {
   default     = "warn"
 }
 
+variable "metadata_exporter_environment" {
+  description = "Metadata Exporter environment"
+  default     = "development"
+}
+
 variable "hub_config_image_digest" {}
 variable "hub_policy_image_digest" {}
 variable "hub_saml_proxy_image_digest" {}
