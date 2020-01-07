@@ -2,7 +2,7 @@
   {
     "name": "static-ingress",
     "image": "${image_identifier}",
-    "cpu": 0,
+    "cpu": ${allocated_cpu},
     "memory": ${allocated_memory},
     "essential": true,
     "portMappings": [
