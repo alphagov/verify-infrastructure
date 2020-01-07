@@ -20,6 +20,8 @@ resource "aws_ecs_task_definition" "cloudwatch_exporter" {
   family                = "${var.deployment}-cloudwatch-exporter"
   container_definitions = data.template_file.cloudwatch_exporter_task_def.rendered
   execution_role_arn    = module.cloudwatch_exporter_ecs_roles.execution_role_arn
+  cpu                   = 462
+  memory                = 1024
 }
 
 resource "aws_ecs_service" "cloudwatch_exporter" {
