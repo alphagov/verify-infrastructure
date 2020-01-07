@@ -2,7 +2,7 @@
   {
     "name": "beat-exporter",
     "image": "${image_identifier}",
-    "cpu": 100,
+    "cpu": 0,
     "memory": 64,
     "essential": true,
     "portMappings": [

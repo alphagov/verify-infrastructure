@@ -21,8 +21,6 @@ resource "aws_ecs_task_definition" "cluster" {
   execution_role_arn    = module.cluster_ecs_roles.execution_role_arn
   task_role_arn         = module.cluster_ecs_roles.task_role_arn
   network_mode          = "bridge"
-  cpu                   = var.cpu
-  memory                = var.memory
 }
 
 output "task_role_name" {

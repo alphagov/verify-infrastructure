@@ -453,8 +453,6 @@ resource "aws_ecs_task_definition" "prometheus" {
   container_definitions = element(data.template_file.prometheus_task_def.*.rendered, count.index)
   execution_role_arn    = module.prometheus_ecs_roles.execution_role_arn
   network_mode          = "host"
-  cpu                   = 1024
-  memory                = 3500
 
   volume {
     name      = "tsdb"

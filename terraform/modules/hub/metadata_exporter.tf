@@ -22,8 +22,6 @@ resource "aws_ecs_task_definition" "metadata_exporter" {
   family                = "${var.deployment}-metadata-exporter"
   container_definitions = data.template_file.metadata_exporter_task_def.rendered
   execution_role_arn    = module.metadata_exporter_ecs_roles.execution_role_arn
-  cpu                   = 462
-  memory                = 1024
 }
 
 resource "aws_ecs_service" "metadata_exporter" {
