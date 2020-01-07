@@ -49,8 +49,6 @@ resource "aws_ecs_task_definition" "analytics" {
   container_definitions = data.template_file.analytics_task_def.rendered
   network_mode          = "awsvpc"
   execution_role_arn    = module.analytics_ecs_roles.execution_role_arn
-  cpu                   = 924
-  memory                = 250
 }
 
 resource "aws_security_group_rule" "analytics_task_egress_to_internet_over_https" {

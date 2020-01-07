@@ -2,7 +2,7 @@
   {
     "name": "cloudwatch-exporter",
     "image": "${image_identifier}",
-    "cpu": 462,
+    "cpu": 0,
     "memory": 1024,
     "essential": true,
     "portMappings": [

@@ -95,13 +95,6 @@ module "static_ingress_can_connect_to_ingress_https" {
   port = 443
 }
 
-locals {
-  allocated_cpu_for_http     = 924
-  allocated_cpu_for_https    = 1024
-  allocated_memory_for_http  = 250
-  allocated_memory_for_https = 3000
-}
-
 data "template_file" "static_ingress_http_task_def" {
   template = file("${path.module}/files/tasks/static-ingress.json")
 
@@ -110,8 +103,7 @@ data "template_file" "static_ingress_http_task_def" {
     backend          = var.signin_domain
     bind_port        = 80
     backend_port     = 80
-    allocated_cpu    = local.allocated_cpu_for_http
-    allocated_memory = local.allocated_memory_for_http
+    allocated_memory = 250
   }
 }
 
@@ -123,8 +115,7 @@ data "template_file" "static_ingress_https_task_def" {
     backend          = var.signin_domain
     bind_port        = 443
     backend_port     = 443
-    allocated_cpu    = local.allocated_cpu_for_https
-    allocated_memory = local.allocated_memory_for_https
+    allocated_memory = 3000
   }
 }
 
@@ -142,16 +133,12 @@ resource "aws_ecs_task_definition" "static_ingress_http" {
   family                = "${var.deployment}-static-ingress-http"
   container_definitions = data.template_file.static_ingress_http_task_def.rendered
   execution_role_arn    = module.static_ingress_ecs_roles.execution_role_arn
-  cpu                   = local.allocated_cpu_for_http
-  memory                = local.allocated_memory_for_http
 }
 
 resource "aws_ecs_task_definition" "static_ingress_https" {
   family                = "${var.deployment}-static-ingress-https"
   container_definitions = data.template_file.static_ingress_https_task_def.rendered
   execution_role_arn    = module.static_ingress_ecs_roles.execution_role_arn
-  cpu                   = local.allocated_cpu_for_https
-  memory                = local.allocated_memory_for_https
 }
 
 resource "aws_ecs_cluster" "static-ingress" {

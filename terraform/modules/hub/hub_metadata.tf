@@ -32,8 +32,6 @@ resource "aws_ecs_task_definition" "metadata" {
   container_definitions = data.template_file.metadata_task_def.rendered
   network_mode          = "awsvpc"
   execution_role_arn    = module.metadata_ecs_roles.execution_role_arn
-  cpu                   = 1024
-  memory                = 250
 }
 
 resource "aws_ecs_service" "metadata" {

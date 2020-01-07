@@ -66,8 +66,6 @@ module "saml_engine" {
   vpc_id                     = aws_vpc.hub.id
   lb_subnets                 = aws_subnet.internal.*.id
   task_definition            = data.template_file.saml_engine_task_def.rendered
-  cpu                        = 1948
-  memory                     = 3750
   container_name             = "nginx"
   container_port             = "8443"
   number_of_tasks            = var.number_of_apps

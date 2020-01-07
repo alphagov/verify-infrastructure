@@ -2,7 +2,7 @@
   {
     "name": "nginx",
     "image": "${nginx_image_identifier}",
-    "cpu": 924,
+    "cpu": 0,
     "memory": 250,
     "essential": true,
     "portMappings": [
@@ -27,7 +27,7 @@
   {
     "name": "frontend",
     "image": "${image_identifier}",
-    "cpu": 1024,
+    "cpu": 0,
     "memory": 3000,
     "essential": true,
     "portMappings": [

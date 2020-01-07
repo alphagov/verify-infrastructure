@@ -4,8 +4,6 @@ variable "container_port" {}
 variable "deployment" {}
 variable "domain" {}
 variable "task_definition" {}
-variable "cpu" {}
-variable "memory" {}
 variable "vpc_id" {}
 variable "tools_account_id" {}
 variable "instance_security_group_id" {}
