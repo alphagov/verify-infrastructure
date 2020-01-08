@@ -92,6 +92,11 @@ resource "aws_ecs_task_definition" "frontend" {
   container_definitions = data.template_file.frontend_task_def.rendered
   network_mode          = "awsvpc"
   execution_role_arn    = module.frontend_ecs_roles.execution_role_arn
+
+  placement_constraints {
+    type = "memberOf",
+    expression = "not(task:group == service:${aws_ecs_service.analytics.name}) and not(task:group == service:${aws_ecs_service.metadata.name})"
+  }
 }
 
 # This is called frontend_v2 because there was an old frontend service
