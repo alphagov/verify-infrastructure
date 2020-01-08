@@ -52,7 +52,7 @@ resource "aws_ecs_task_definition" "analytics" {
 
   placement_constraints {
     type       = "memberOf"
-    expression = "not(task:group == service:${aws_ecs_service.frontend_v2.name})"
+    expression = "not(task:group == service:${var.deployment}-frontend-v2)"
   }
 }
 
