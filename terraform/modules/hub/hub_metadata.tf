@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "metadata" {
   execution_role_arn    = module.metadata_ecs_roles.execution_role_arn
 
   placement_constraints {
-    type = "memberOf",
+    type       = "memberOf"
     expression = "not(task:group == service:${aws_ecs_service.frontend_v2.name})"
   }
 }
