@@ -32,6 +32,11 @@ resource "aws_ecs_task_definition" "metadata" {
   container_definitions = data.template_file.metadata_task_def.rendered
   network_mode          = "awsvpc"
   execution_role_arn    = module.metadata_ecs_roles.execution_role_arn
+
+  placement_constraints {
+    type = "memberOf",
+    expression = "not(task:group == service:${aws_ecs_service.frontend_v2.name})"
+  }
 }
 
 resource "aws_ecs_service" "metadata" {

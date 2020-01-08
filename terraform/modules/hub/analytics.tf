@@ -49,6 +49,11 @@ resource "aws_ecs_task_definition" "analytics" {
   container_definitions = data.template_file.analytics_task_def.rendered
   network_mode          = "awsvpc"
   execution_role_arn    = module.analytics_ecs_roles.execution_role_arn
+
+  placement_constraints {
+    type = "memberOf",
+    expression = "not(task:group == service:${aws_ecs_service.frontend_v2.name})"
+  }
 }
 
 resource "aws_security_group_rule" "analytics_task_egress_to_internet_over_https" {
