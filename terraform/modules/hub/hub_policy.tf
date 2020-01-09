@@ -71,6 +71,7 @@ data "template_file" "policy_task_def" {
     account_id                    = data.aws_caller_identity.account.account_id
     event_emitter_api_gateway_url = var.event_emitter_api_gateway_url
     java_app_memory               = var.java_app_memory
+    jvm_options                   = var.jvm_options
 
     redis_host = "rediss://${
       aws_elasticache_replication_group.policy_session_store.primary_endpoint_address

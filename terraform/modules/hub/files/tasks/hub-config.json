@@ -67,7 +67,7 @@
       },
       {
         "Name": "JAVA_OPTS",
-        "Value": "-Dservice.name=config -Xms3000m -Xmx3200m -XX:+HeapDumpOnOutOfMemoryError -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5"
+        "Value": "-Dservice.name=config ${jvm_options} -XX:+HeapDumpOnOutOfMemoryError -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5"
       },
       {
         "Name": "SELF_SERVICE_ENABLED",
