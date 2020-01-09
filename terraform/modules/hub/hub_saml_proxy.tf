@@ -70,6 +70,7 @@ data "template_file" "saml_proxy_task_def" {
     event_emitter_api_gateway_url    = var.event_emitter_api_gateway_url
     rp_truststore_enabled            = var.rp_truststore_enabled
     certificates_config_cache_expiry = var.certificates_config_cache_expiry
+    jvm_options                      = var.jvm_options
   }
 }
 
