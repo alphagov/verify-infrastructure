@@ -10,6 +10,9 @@ variable "tools_account_id" {
   description = "AWS account id of the tools account, where docker images will be pulled from"
 }
 
+variable "jvm_options" {
+  default = "-Xms3000m -Xmx3200m"
+}
 variable "number_of_apps" {
   default = 2
 }
