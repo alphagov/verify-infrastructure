@@ -122,6 +122,10 @@ variable "metadata_exporter_environment" {
   default     = "development"
 }
 
+variable "java_app_memory" {
+  default = 3500
+}
+
 variable "hub_config_image_digest" {}
 variable "hub_policy_image_digest" {}
 variable "hub_saml_proxy_image_digest" {}

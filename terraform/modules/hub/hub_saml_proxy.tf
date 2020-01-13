@@ -71,6 +71,7 @@ data "template_file" "saml_proxy_task_def" {
     rp_truststore_enabled            = var.rp_truststore_enabled
     certificates_config_cache_expiry = var.certificates_config_cache_expiry
     jvm_options                      = var.jvm_options
+    java_app_memory                  = var.java_app_memory
   }
 }
 
