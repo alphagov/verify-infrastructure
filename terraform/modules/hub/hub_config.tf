@@ -76,6 +76,7 @@ data "template_file" "config_task_def" {
     services_metadata_bucket = local.services_metadata_bucket
     metadata_object_key      = local.metadata_object_key
     java_app_memory          = var.java_app_memory
+    jvm_options              = var.jvm_options
   }
 }
 

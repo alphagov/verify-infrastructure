@@ -56,6 +56,7 @@ data "template_file" "saml_engine_task_def" {
     rp_truststore_enabled            = var.rp_truststore_enabled
     certificates_config_cache_expiry = var.certificates_config_cache_expiry
     java_app_memory                  = var.java_app_memory
+    jvm_options                      = var.jvm_options
   }
 }
 
