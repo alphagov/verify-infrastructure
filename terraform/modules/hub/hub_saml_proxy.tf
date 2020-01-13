@@ -11,6 +11,7 @@ module "saml_proxy_ecs_asg" {
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
+  instance_type              = var.instance_type
 
   additional_instance_security_group_ids = [
     aws_security_group.scraped_by_prometheus.id,
