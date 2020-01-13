@@ -25,7 +25,7 @@ variable "additional_instance_role_policy_arns" {
 }
 
 variable "instance_type" {
-  default = "t3.medium"
+  default = "t3.large"
 }
 
 variable "use_egress_proxy" {
