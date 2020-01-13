@@ -74,6 +74,10 @@ variable "analytics_endpoint" {
   description = "Analytics endpoint"
 }
 
+variable "instance_type" {
+  default = "t3.medium"
+}
+
 variable "splunk_url" {
   description = "Splunk http event collector endpoint, used by saml-engine"
 }

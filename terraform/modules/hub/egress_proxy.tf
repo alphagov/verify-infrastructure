@@ -8,6 +8,7 @@ module "egress_proxy_ecs_asg" {
   instance_subnets    = aws_subnet.internal.*.id
   number_of_instances = var.number_of_apps
   domain              = local.root_domain
+  instance_type       = var.instance_type
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
@@ -55,11 +56,11 @@ locals {
 
 locals {
   egress_proxy_whitelist_list = [
-    "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com",                   # Apt
-    "security\\.ubuntu\\.com",                                    # Apt
-    "artifacts\\.elastic\\.co",                                   # Journalbeat
+    "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com",              # Apt
+    "security\\.ubuntu\\.com",                               # Apt
+    "artifacts\\.elastic\\.co",                              # Journalbeat
     replace(var.logit_elasticsearch_url, ".", "\\."),        # Logit
-    "sentry\\.tools\\.signin\\.service\\.gov\\.uk",               # Tools Sentry
+    "sentry\\.tools\\.signin\\.service\\.gov\\.uk",          # Tools Sentry
     replace(local.event_emitter_api_gateway[0], ".", "\\."), # API Gateway
     var.splunk_hostname,                                     # Splunk
   ]

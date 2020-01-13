@@ -297,6 +297,7 @@ module "ingress_ecs_asg" {
   instance_subnets    = aws_subnet.internal.*.id
   number_of_instances = var.number_of_apps * 2
   domain              = local.root_domain
+  instance_type       = var.instance_type
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
