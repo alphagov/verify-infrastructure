@@ -130,6 +130,46 @@ variable "java_app_memory" {
   default = 3500
 }
 
+variable "config_memory_hard_limit" {
+  default = 3500
+}
+
+variable "saml_proxy_memory_hard_limit" {
+  default = 3500
+}
+
+variable "policy_memory_hard_limit" {
+  default = 3500
+}
+
+variable "saml_engine_memory_hard_limit" {
+  default = 3500
+}
+
+variable "saml_soap_proxy_memory_hard_limit" {
+  default = 3500
+}
+
+variable "config_instance_type" {
+  default = "t3.medium"
+}
+
+variable "saml_proxy_instance_type" {
+  default = "t3.medium"
+}
+
+variable "policy_instance_type" {
+  default = "t3.medium"
+}
+
+variable "saml_engine_instance_type" {
+  default = "t3.medium"
+}
+
+variable "saml_soap_proxy_instance_type" {
+  default = "t3.medium"
+}
+
 variable "hub_config_image_digest" {}
 variable "hub_policy_image_digest" {}
 variable "hub_saml_proxy_image_digest" {}
