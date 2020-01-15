@@ -71,7 +71,7 @@ data "template_file" "saml_soap_proxy_task_def" {
     event_emitter_api_gateway_url    = var.event_emitter_api_gateway_url
     rp_truststore_enabled            = var.rp_truststore_enabled
     certificates_config_cache_expiry = var.certificates_config_cache_expiry
-    java_app_memory                  = var.java_app_memory
+    memory_hard_limit                = var.saml_soap_proxy_memory_hard_limit
     jvm_options                      = var.jvm_options
   }
 }

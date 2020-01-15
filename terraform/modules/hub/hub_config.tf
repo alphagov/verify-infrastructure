@@ -75,7 +75,7 @@ data "template_file" "config_task_def" {
     self_service_enabled     = var.self_service_enabled
     services_metadata_bucket = local.services_metadata_bucket
     metadata_object_key      = local.metadata_object_key
-    java_app_memory          = var.java_app_memory
+    memory_hard_limit        = var.config_memory_hard_limit
     jvm_options              = var.jvm_options
   }
 }
