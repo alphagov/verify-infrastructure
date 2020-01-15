@@ -10,7 +10,7 @@ module "saml_engine_ecs_asg" {
   use_egress_proxy    = true
   number_of_instances = var.number_of_apps
   domain              = local.root_domain
-  instance_type       = var.instance_type
+  instance_type       = var.saml_engine_instance_type
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id

@@ -8,7 +8,7 @@ module "saml_soap_proxy_ecs_asg" {
   instance_subnets    = aws_subnet.internal.*.id
   number_of_instances = var.number_of_apps
   domain              = local.root_domain
-  instance_type       = var.instance_type
+  instance_type       = var.saml_soap_proxy_instance_type
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
