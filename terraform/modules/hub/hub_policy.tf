@@ -9,7 +9,7 @@ module "policy_ecs_asg" {
 
   number_of_instances = var.number_of_apps
   domain              = local.root_domain
-  instance_type       = var.instance_type
+  instance_type       = var.policy_instance_type
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
@@ -70,7 +70,7 @@ data "template_file" "policy_task_def" {
     region                        = data.aws_region.region.id
     account_id                    = data.aws_caller_identity.account.account_id
     event_emitter_api_gateway_url = var.event_emitter_api_gateway_url
-    java_app_memory               = var.java_app_memory
+    memory_hard_limit             = var.policy_memory_hard_limit
     jvm_options                   = var.jvm_options
 
     redis_host = "rediss://${

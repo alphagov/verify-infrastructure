@@ -8,7 +8,7 @@ module "saml_soap_proxy_ecs_asg" {
   instance_subnets    = aws_subnet.internal.*.id
   number_of_instances = var.number_of_apps
   domain              = local.root_domain
-  instance_type       = var.instance_type
+  instance_type       = var.saml_soap_proxy_instance_type
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
@@ -71,7 +71,7 @@ data "template_file" "saml_soap_proxy_task_def" {
     event_emitter_api_gateway_url    = var.event_emitter_api_gateway_url
     rp_truststore_enabled            = var.rp_truststore_enabled
     certificates_config_cache_expiry = var.certificates_config_cache_expiry
-    java_app_memory                  = var.java_app_memory
+    memory_hard_limit                = var.saml_soap_proxy_memory_hard_limit
     jvm_options                      = var.jvm_options
   }
 }

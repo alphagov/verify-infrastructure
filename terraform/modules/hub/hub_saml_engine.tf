@@ -10,7 +10,7 @@ module "saml_engine_ecs_asg" {
   use_egress_proxy    = true
   number_of_instances = var.number_of_apps
   domain              = local.root_domain
-  instance_type       = var.instance_type
+  instance_type       = var.saml_engine_instance_type
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
@@ -55,7 +55,7 @@ data "template_file" "saml_engine_task_def" {
     splunk_url                       = var.splunk_url
     rp_truststore_enabled            = var.rp_truststore_enabled
     certificates_config_cache_expiry = var.certificates_config_cache_expiry
-    java_app_memory                  = var.java_app_memory
+    memory_hard_limit                = var.saml_engine_memory_hard_limit
     jvm_options                      = var.jvm_options
   }
 }

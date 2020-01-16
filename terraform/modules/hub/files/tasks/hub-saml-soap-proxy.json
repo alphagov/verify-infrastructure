@@ -29,7 +29,7 @@
     "name": "saml-soap-proxy",
     "image": "${image_identifier}",
     "cpu": 1024,
-    "memory": ${java_app_memory},
+    "memory": ${memory_hard_limit},
     "essential": true,
     "portMappings": [
       {

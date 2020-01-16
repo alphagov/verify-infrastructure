@@ -9,7 +9,7 @@ module "config_ecs_asg" {
 
   number_of_instances = var.number_of_apps
   domain              = local.root_domain
-  instance_type       = var.instance_type
+  instance_type       = var.config_instance_type
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
@@ -75,7 +75,7 @@ data "template_file" "config_task_def" {
     self_service_enabled     = var.self_service_enabled
     services_metadata_bucket = local.services_metadata_bucket
     metadata_object_key      = local.metadata_object_key
-    java_app_memory          = var.java_app_memory
+    memory_hard_limit        = var.config_memory_hard_limit
     jvm_options              = var.jvm_options
   }
 }

@@ -11,7 +11,7 @@ module "saml_proxy_ecs_asg" {
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
-  instance_type              = var.instance_type
+  instance_type              = var.saml_proxy_instance_type
 
   additional_instance_security_group_ids = [
     aws_security_group.scraped_by_prometheus.id,
@@ -72,7 +72,7 @@ data "template_file" "saml_proxy_task_def" {
     rp_truststore_enabled            = var.rp_truststore_enabled
     certificates_config_cache_expiry = var.certificates_config_cache_expiry
     jvm_options                      = var.jvm_options
-    java_app_memory                  = var.java_app_memory
+    memory_hard_limit                = var.saml_proxy_memory_hard_limit
   }
 }
 
