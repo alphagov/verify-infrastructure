@@ -10,9 +10,6 @@ variable "tools_account_id" {
   description = "AWS account id of the tools account, where docker images will be pulled from"
 }
 
-variable "jvm_options" {
-  default = "-Xms3000m -Xmx3200m"
-}
 variable "number_of_apps" {
   default = 2
 }
@@ -74,10 +71,6 @@ variable "analytics_endpoint" {
   description = "Analytics endpoint"
 }
 
-variable "instance_type" {
-  default = "t3.medium"
-}
-
 variable "splunk_url" {
   description = "Splunk http event collector endpoint, used by saml-engine"
 }
@@ -126,8 +119,8 @@ variable "metadata_exporter_environment" {
   default     = "development"
 }
 
-variable "java_app_memory" {
-  default = 3500
+variable "jvm_options" {
+  default = "-XX:InitialRAMPercentage=50 -XX:MaxRAMPercentage=80"
 }
 
 variable "config_memory_hard_limit" {
@@ -148,6 +141,10 @@ variable "saml_engine_memory_hard_limit" {
 
 variable "saml_soap_proxy_memory_hard_limit" {
   default = 3500
+}
+
+variable "instance_type" {
+  default = "t3.medium"
 }
 
 variable "config_instance_type" {
