@@ -3,6 +3,20 @@ set -ueo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
+function wait-for-lock() {
+	lock_file=$1
+	while fuser "${lock_file}" >/dev/null 2>&1 ; do
+		echo "Waiting for ${lock_file} to be released..."
+		sleep 3
+	done
+}
+
+function apt-get-wait() {
+	wait-for-lock /var/lib/dpkg/lock
+	wait-for-lock /var/lib/dpkg/lock-frontend
+	apt-get "$@"
+}
+
 CURL="curl"
 if [ -n "${egress_proxy_url_with_protocol}" ]; then
   CURL="curl --proxy ${egress_proxy_url_with_protocol}"
@@ -17,8 +31,8 @@ Acquire::http::Proxy "${egress_proxy_url_with_protocol}/";
 Acquire::https::Proxy "${egress_proxy_url_with_protocol}/";
 EOF
 fi
-apt-get update  --yes
-apt-get dist-upgrade --yes
+apt-get-wait update  --yes
+apt-get-wait dist-upgrade --yes
 
 # AWS SSM Agent
 # Installed by default on Ubuntu Bionic AMIs via Snap
@@ -59,7 +73,7 @@ systemctl restart systemd-journald
 
 # Use Amazon NTP
 echo 'Installing and configuring chrony'
-apt-get install --yes chrony
+apt-get-wait install --yes chrony
 sed '/pool/d' /etc/chrony/chrony.conf \
 | cat <(echo "server 169.254.169.123 prefer iburst") - > /tmp/chrony.conf
 echo "allow 127/8" >> /tmp/chrony.conf
@@ -69,7 +83,7 @@ systemctl restart chrony
 # Docker
 echo 'Installing and configuring docker'
 mkdir -p /etc/systemd/system/docker.service.d
-apt-get install --yes docker.io
+apt-get-wait install --yes docker.io
 cat <<EOF > /etc/systemd/system/docker.service.d/override.conf
 [Service]
 ExecStart=
@@ -136,7 +150,7 @@ systemctl enable --now journalbeat
 
 # ECS
 echo 'Installing awscli and iptables-persistent'
-apt-get install --yes awscli iptables-persistent
+apt-get-wait install --yes awscli iptables-persistent
 
 echo 'Adding networking rules for ECS metadata endpoints'
 sh -c "echo 'net.ipv4.conf.all.route_localnet = 1' >> /etc/sysctl.conf"
@@ -182,7 +196,7 @@ docker run \
   --env="ECS_LOGLEVEL=warn" \
   ${ecs_agent_image_identifier}
 
-apt-get install --yes prometheus-node-exporter
+apt-get-wait install --yes prometheus-node-exporter
 mkdir /etc/systemd/system/prometheus-node-exporter.service.d
 # Create an environment file for prometheus node exporter
 cat >  /etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env <<EOF
@@ -214,7 +228,7 @@ EOF
 
 chmod +x /usr/bin/instance-reboot-required-metric.sh
 
-apt-get install --yes moreutils
+apt-get-wait install --yes moreutils
 
 crontab - <<EOF
 $(crontab -l | grep -v 'no crontab')
