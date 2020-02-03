@@ -1,7 +1,8 @@
 resource "aws_db_instance" "self_service" {
-  name         = "selfservice"
-  engine       = "postgres"
-  storage_type = "gp2"
+  name           = "selfservice"
+  engine         = "postgres"
+  engine_version = "10.6"
+  storage_type   = "gp2"
 
   instance_class    = var.db_instance_class
   allocated_storage = var.db_allocated_storage
@@ -30,6 +31,8 @@ resource "aws_db_instance" "self_service" {
 
   iam_database_authentication_enabled = true
   apply_immediately                   = true
+
+  ca_cert_identifier = "rds-ca-2015"
 
   lifecycle {
     prevent_destroy = true
