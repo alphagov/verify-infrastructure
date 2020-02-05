@@ -5,8 +5,8 @@ export DEBIAN_FRONTEND=noninteractive
 
 function wait-for-lock() {
 	lock_file=$1
-	while fuser "${lock_file}" >/dev/null 2>&1 ; do
-		echo "Waiting for ${lock_file} to be released..."
+	while fuser "$lock_file" >/dev/null 2>&1 ; do
+		echo "Waiting for $lock_file to be released..."
 		sleep 3
 	done
 }
