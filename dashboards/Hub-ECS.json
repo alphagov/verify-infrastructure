@@ -2115,7 +2115,7 @@
           ]
         },
         {
-          "alias": "EC2 Memory Free (GB)",
+          "alias": "EC2 Memory Available (GB)",
           "colorMode": "value",
           "colors": [
             "#890f02",
@@ -2170,7 +2170,7 @@
       ],
       "targets": [
         {
-          "expr": "node_memory_MemFree / 1024 / 1024 / 1024",
+          "expr": "node_memory_MemAvailable / 1024 / 1024 / 1024",
           "format": "table",
           "instant": true,
           "interval": "",
