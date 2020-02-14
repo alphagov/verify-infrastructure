@@ -12,9 +12,22 @@ function wait-for-lock() {
 }
 
 function apt-get-wait() {
-	wait-for-lock /var/lib/dpkg/lock
-	wait-for-lock /var/lib/dpkg/lock-frontend
-	apt-get "$@"
+  status=1
+  for (( retry=0; retry<6 && status!=0; retry++ ))
+  do
+    if (( retry>0 ))
+    then
+      echo "Reattempting to execute apt-get $* $retry times."
+    fi;
+    wait-for-lock /var/lib/dpkg/lock
+    wait-for-lock /var/lib/dpkg/lock-frontend
+    apt-get "$@"
+    status=$?
+  done
+  if [ $status != 0 ]; then
+    echo "Failed to execute apt-get $*. Exiting the script."
+    exit 1;
+  fi
 }
 
 CURL="curl"
@@ -31,7 +44,7 @@ Acquire::http::Proxy "${egress_proxy_url_with_protocol}/";
 Acquire::https::Proxy "${egress_proxy_url_with_protocol}/";
 EOF
 fi
-apt-get-wait update  --yes
+apt-get-wait update --yes
 apt-get-wait dist-upgrade --yes
 
 # AWS SSM Agent
