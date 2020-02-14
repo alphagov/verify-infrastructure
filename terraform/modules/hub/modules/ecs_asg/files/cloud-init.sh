@@ -17,6 +17,9 @@ function apt-get-wait() {
   do
     if (( retry>0 ))
     then
+      echo "Identifying who owns the lock and/or lock-frontend."
+      lsof /var/lib/dpkg/lock
+      lsof /var/lib/dpkg/lock-frontend
       echo "Reattempting to execute apt-get $* $retry times."
     fi;
     wait-for-lock /var/lib/dpkg/lock
