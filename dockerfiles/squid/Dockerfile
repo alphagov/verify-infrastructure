@@ -1,6 +1,6 @@
 FROM alpine:3.8
 
-RUN apk add --no-cache squid=3.5.27-r2
+RUN apk add --no-cache squid=3.5.27-r3
 
 RUN    touch /etc/squid/squid.conf \
     && chown squid /etc/squid/squid.conf
