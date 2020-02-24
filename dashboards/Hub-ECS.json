@@ -892,7 +892,7 @@
       ],
       "targets": [
         {
-          "expr": "avg without (instance)(verify_saml_soap_proxy_msa_info\nand on (instance, job)\nverify_saml_soap_proxy_msa_health_status == 1)\n",
+          "expr": "avg without (instance)(verify_saml_soap_proxy_msa_health_status\nand on (instance, job)\nverify_saml_soap_proxy_msa_info)\n",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
