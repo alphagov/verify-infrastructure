@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1582893771373,
+  "iteration": 1582896479186,
   "links": [],
   "panels": [
     {
@@ -950,7 +950,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "",
+      "title": "Java Heap Memory Used",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2258,5 +2258,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 90
+  "version": 92
 }
