@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1572866598377,
+  "iteration": 1582896479186,
   "links": [],
   "panels": [
     {
@@ -191,7 +191,7 @@
       "colorValue": false,
       "colors": [
         "#299c46",
-        "#e24d42",
+        "#C4162A",
         "#d44a3a"
       ],
       "datasource": "$Prometheus",
@@ -256,7 +256,7 @@
           "refId": "A"
         }
       ],
-      "thresholds": "1,2",
+      "thresholds": "1",
       "title": "0 - 7 days",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -271,7 +271,7 @@
       "colorValue": false,
       "colors": [
         "#299c46",
-        "#c15c17",
+        "#C4162A",
         "#c15c17"
       ],
       "datasource": "$Prometheus",
@@ -336,7 +336,7 @@
           "refId": "A"
         }
       ],
-      "thresholds": "0.5,0.5",
+      "thresholds": "1",
       "title": "7 - 14 days",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -345,13 +345,13 @@
     },
     {
       "cacheTimeout": null,
-      "colorBackground": false,
+      "colorBackground": true,
       "colorPostfix": false,
       "colorPrefix": false,
       "colorValue": false,
       "colors": [
         "#299c46",
-        "#629e51",
+        "#FA6400",
         "#629e51"
       ],
       "datasource": "$Prometheus",
@@ -416,7 +416,7 @@
           "refId": "A"
         }
       ],
-      "thresholds": "",
+      "thresholds": "1",
       "title": "14 - 30 days",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -568,8 +568,8 @@
           "mappingType": 1,
           "pattern": "Value",
           "thresholds": [
-            "604800000",
-            "1209600000"
+            "1209600000",
+            "2592000000"
           ],
           "type": "number",
           "unit": "ms"
@@ -950,7 +950,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "",
+      "title": "Java Heap Memory Used",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2227,7 +2227,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {
@@ -2258,5 +2258,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 88
+  "version": 92
 }
