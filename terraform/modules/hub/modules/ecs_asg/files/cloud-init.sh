@@ -195,7 +195,7 @@ docker run \
   --volume=/lib64:/lib64 \
   --volume=/lib:/lib \
   --volume=/proc:/host/proc \
-  --volume=/sbin:/sbin \
+  --volume=/sbin:/host/sbin \
   --volume=/sys/fs/cgroup:/sys/fs/cgroup \
   --volume=/usr/lib:/usr/lib \
   --volume=/var/lib/ecs/data:/data \
