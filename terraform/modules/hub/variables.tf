@@ -14,6 +14,10 @@ variable "number_of_apps" {
   default = 2
 }
 
+variable "number_of_prometheus_apps" {
+  default = 3
+}
+
 variable "publically_accessible_from_cidrs" {
   type = "list"
 }
