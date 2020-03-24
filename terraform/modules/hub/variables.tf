@@ -171,6 +171,11 @@ variable "saml_soap_proxy_instance_type" {
   default = "t3.medium"
 }
 
+variable "throttling_enabled" {
+  description = "Toggles the throttling of IDP traffic on frontend"
+  default     = "false"
+}
+
 variable "hub_config_image_digest" {}
 variable "hub_policy_image_digest" {}
 variable "hub_saml_proxy_image_digest" {}

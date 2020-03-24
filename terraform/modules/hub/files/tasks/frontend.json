@@ -159,6 +159,12 @@
     }, {
       "Name": "PUBLISH_HUB_CONFIG_ENABLED",
       "Value": "${publish_hub_config_enabled}"
+    }, {
+      "Name": "THROTTLING_ENABLED",
+      "Value": "${throttling_enabled}"
+    }, {
+      "Name": "THROTTLING_FILE",
+      "Value": "/verify-frontend/federation/configuration/throttling.yml"
     }],
     "healthCheck" : {
       "Command": [ "CMD-SHELL", "curl -sfm10 http://localhost:8080/cookies || exit 1" ],
