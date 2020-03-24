@@ -1,0 +1,177 @@
+[
+  {
+    "name": "nginx",
+    "image": "${nginx_image_identifier}",
+    "cpu": 1024,
+    "memory": 1024,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8443,
+        "hostPort": 8443
+      }
+    ],
+    "environment": [
+      {
+        "Name": "LOCATION_BLOCKS",
+        "Value": "${location_blocks_base64}"
+      }
+    ],
+    "dependsOn": [
+      {
+        "containerName": "frontend",
+        "condition": "HEALTHY"
+      }
+    ]
+  },
+  {
+    "name": "frontend",
+    "image": "${image_identifier}",
+    "cpu": 2424,
+    "memory": 14066,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ],
+    "entryPoint": [
+      "bundle",
+      "exec",
+      "puma",
+      "-p",
+      "8080",
+      "-b",
+      "tcp://0.0.0.0"
+    ],
+    "secrets": [
+      {
+        "name": "SECRET_KEY_BASE",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/frontend/secret-key-base"
+      }, {
+        "name": "SENTRY_DSN",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/frontend/sentry-dsn"
+      }, {
+        "name": "ZENDESK_TOKEN",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/frontend/zendesk-token"
+      }, {
+        "name": "SELF_SERVICE_AUTHENTICATION_HEADER",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/self-service/authentication-header"
+      }
+    ],
+    "environment": [{
+      "Name": "SESSION_COOKIE_DURATION_IN_HOURS",
+      "Value": "2"
+    }, {
+      "Name": "CONFIG_API_HOST",
+      "Value": "https://config.${domain}:443"
+    }, {
+      "Name": "POLICY_HOST",
+      "Value": "https://policy.${domain}:443"
+    }, {
+      "Name": "CYCLE_3_DISPLAY_LOCALES",
+      "Value": "/verify-frontend/federation/configuration/display-locales/cycle_3"
+    }, {
+      "Name": "IDP_DISPLAY_LOCALES",
+      "Value": "/verify-frontend/federation/configuration/display-locales/idps"
+    }, {
+      "Name": "COUNTRY_DISPLAY_LOCALES",
+      "Value": "/verify-frontend/federation/configuration/display-locales/countries"
+    }, {
+      "Name": "EIDAS_SCHEMES_DIRECTORY",
+      "Value": "/verify-frontend/federation/configuration/eidas/schemes"
+    }, {
+      "Name": "ZDD_LATCH",
+      "Value": ".service_unavailable"
+    }, {
+      "Name": "POLLING_WAIT_TIME",
+      "Value": "2"
+    }, {
+      "Name": "METRICS_ENABLED",
+      "Value": "false"
+    }, {
+      "Name": "LOG_LEVEL",
+      "Value": "${log_level}"
+    }, {
+      "Name": "RULES_DIRECTORY",
+      "Value": "/verify-frontend/federation/configuration/idp-rules"
+    }, {
+      "Name": "RULES_DIRECTORY_VARIANT",
+      "Value": "/verify-frontend/federation/configuration/idp-rules-variant"
+    }, {
+      "Name": "RULES_C_DIRECTORY",
+      "Value": "/verify-frontend/federation/configuration/idp-rules-variant-c"
+    }, {
+      "Name": "RP_CONFIG",
+      "Value": "/verify-frontend/federation/configuration/relying_parties.yml"
+    }, {
+      "Name": "IDP_CONFIG",
+      "Value": "/verify-frontend/federation/configuration/identity_providers.yml"
+    }, {
+      "Name": "CYCLE_THREE_ATTRIBUTES_DIRECTORY",
+      "Value": "/verify-frontend/federation/configuration/cycle-three-attributes"
+    }, {
+      "Name": "AB_TEST_FILE",
+      "Value": "/verify-frontend/federation/configuration/ab_test/${ab_test_file}"
+    }, {
+      "Name": "ABC_VARIANTS_CONFIG",
+      "Value": "/verify-frontend/federation/configuration/special-cases/abc-variants.yml"
+    }, {
+      "Name": "SEGMENT_DEFINITIONS",
+      "Value": "/verify-frontend/federation/configuration/segment_definitions.yml"
+    }, {
+      "Name": "SEGMENT_DEFINITIONS_VARIANT_C",
+      "Value": "/verify-frontend/federation/configuration/segment_definitions_variant_c.yml"
+    }, {
+      "Name": "PUBLIC_PIWIK_HOST",
+      "Value": "https://www.${domain}:443/analytics"
+    }, {
+      "Name": "INTERNAL_PIWIK_HOST",
+      "Value": "${analytics_endpoint}:443/piwik.php"
+    }, {
+      "Name": "PIWIK_SITE_ID",
+      "Value": "${matomo_site_id}"
+    }, {
+      "Name": "ZENDESK_URL",
+      "Value": "${zendesk_url}"
+    }, {
+      "Name": "ZENDESK_USERNAME",
+      "Value": "${zendesk_username}"
+    }, {
+      "Name": "SAML_PROXY_HOST",
+      "Value": "https://saml-proxy.${domain}:443"
+    }, {
+      "Name": "VERIFY_PRODUCT_PAGE",
+      "Value": "https://govuk-verify.cloudapps.digital/"
+    }, {
+      "Name": "RAILS_ENV",
+      "Value": "production"
+    }, {
+      "Name": "RAILS_LOG_TO_STDOUT",
+      "Value": "true"
+    }, {
+      "Name": "CROSS_GOV_GOOGLE_ANALYTICS_TRACKER_ID",
+      "Value": "${cross_gov_ga_tracker_id}"
+    }, {
+      "Name": "CROSS_GOV_GOOGLE_ANALYTICS_DOMAIN_LIST",
+      "Value": "${cross_gov_ga_domain_names}"
+    }, {
+      "Name": "PUBLISH_HUB_CONFIG_ENABLED",
+      "Value": "${publish_hub_config_enabled}"
+    }, {
+      "Name": "THROTTLING_ENABLED",
+      "Value": "${throttling_enabled}"
+    }, {
+      "Name": "THROTTLING_FILE",
+      "Value": "/verify-frontend/federation/configuration/throttling.yml"
+    }],
+    "healthCheck" : {
+      "Command": [ "CMD-SHELL", "curl -sfm10 http://localhost:8080/cookies || exit 1" ],
+      "Interval": 10,
+      "Retries": 3,
+      "StartPeriod": 10,
+      "Timeout": 5
+    }
+  }
+]

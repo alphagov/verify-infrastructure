@@ -56,7 +56,7 @@ locals {
 }
 
 data "template_file" "frontend_task_def" {
-  template = file("${path.module}/files/tasks/frontend.json")
+  template = var.ingress_instance_type == "t3.xlarge" ? file("${path.module}/files/tasks/frontend_xlarge.json") : file("${path.module}/files/tasks/frontend.json")
 
   vars = {
     account_id                 = data.aws_caller_identity.account.account_id
