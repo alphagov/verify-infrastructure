@@ -336,7 +336,7 @@ data "template_file" "prometheus_cloud_init" {
 }
 
 resource "aws_instance" "prometheus" {
-  count = var.number_of_apps
+  count = var.number_of_prometheus_apps
 
   ami                  = data.aws_ami.ubuntu_bionic.id
   instance_type        = "t3.large"
@@ -362,7 +362,7 @@ resource "aws_instance" "prometheus" {
 }
 
 resource "aws_ebs_volume" "prometheus" {
-  count = var.number_of_apps
+  count = var.number_of_prometheus_apps
 
   size      = 100
   encrypted = true
@@ -378,7 +378,7 @@ resource "aws_ebs_volume" "prometheus" {
 }
 
 resource "aws_volume_attachment" "prometheus_prometheus" {
-  count = var.number_of_apps
+  count = var.number_of_prometheus_apps
 
   device_name = "/dev/xvdp"
   volume_id   = element(aws_ebs_volume.prometheus.*.id, count.index)
@@ -386,7 +386,7 @@ resource "aws_volume_attachment" "prometheus_prometheus" {
 }
 
 resource "aws_lb_target_group" "prometheus" {
-  count = var.number_of_apps
+  count = var.number_of_prometheus_apps
 
   name     = "${var.deployment}-prometheus-${count.index}"
   port     = 9090
@@ -402,7 +402,7 @@ resource "aws_lb_target_group" "prometheus" {
 }
 
 resource "aws_lb_target_group_attachment" "prometheus" {
-  count = var.number_of_apps
+  count = var.number_of_prometheus_apps
 
   target_group_arn = element(aws_lb_target_group.prometheus.*.arn, count.index)
   target_id        = element(aws_instance.prometheus.*.id, count.index)
@@ -410,7 +410,7 @@ resource "aws_lb_target_group_attachment" "prometheus" {
 }
 
 resource "aws_lb_listener_rule" "prometheus_https" {
-  count        = var.number_of_apps
+  count        = var.number_of_prometheus_apps
   listener_arn = aws_lb_listener.mgmt_https.arn
   priority     = 100 + count.index
 
@@ -436,7 +436,7 @@ module "prometheus_ecs_roles" {
 }
 
 data "template_file" "prometheus_task_def" {
-  count    = var.number_of_apps
+  count    = var.number_of_prometheus_apps
   template = file("${path.module}/files/tasks/prometheus.json")
 
   vars = {
@@ -448,7 +448,7 @@ data "template_file" "prometheus_task_def" {
 }
 
 resource "aws_ecs_task_definition" "prometheus" {
-  count                 = var.number_of_apps
+  count                 = var.number_of_prometheus_apps
   family                = "${var.deployment}-prometheus-${count.index + 1}"
   container_definitions = element(data.template_file.prometheus_task_def.*.rendered, count.index)
   execution_role_arn    = module.prometheus_ecs_roles.execution_role_arn
@@ -466,7 +466,7 @@ resource "aws_ecs_task_definition" "prometheus" {
 }
 
 resource "aws_ecs_service" "prometheus" {
-  count               = var.number_of_apps
+  count               = var.number_of_prometheus_apps
   name                = "${var.deployment}-prometheus-${count.index + 1}"
   cluster             = aws_ecs_cluster.prometheus.id
   task_definition     = element(aws_ecs_task_definition.prometheus.*.arn, count.index)
