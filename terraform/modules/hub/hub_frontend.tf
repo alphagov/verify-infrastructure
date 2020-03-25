@@ -126,11 +126,6 @@ resource "aws_ecs_service" "frontend_v2" {
     registry_arn = aws_service_discovery_service.frontend.arn
     port         = 8443
   }
-
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "instanceId"
-  }
 }
 
 module "frontend_can_connect_to_config" {

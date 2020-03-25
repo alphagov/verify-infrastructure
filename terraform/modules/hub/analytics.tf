@@ -84,9 +84,4 @@ resource "aws_ecs_service" "analytics" {
       aws_security_group.can_connect_to_container_vpc_endpoint.id,
     ]
   }
-
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "instanceId"
-  }
 }
