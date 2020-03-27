@@ -166,5 +166,13 @@ groups:
     for: 20m
     expr: |
       rate(journalbeat_libbeat_output_events{type="acked"}[1m]) == 0
-
-
+  - alert: HighIngressCPU
+    labels: *infraticket
+    annotations:
+      message: |
+        We're seeing elevated CPU utilisation on the ingress nodes.
+    expr: |
+      avg (irate(node_cpu{job="ingress_node", mode="idle"}[5m]))
+      without(cpu, instance)
+      < 0.3
+    for: 10m
