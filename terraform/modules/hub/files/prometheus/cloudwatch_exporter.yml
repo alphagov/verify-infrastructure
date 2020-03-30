@@ -30,3 +30,12 @@ metrics:
     LoadBalancer:
       - 'app/.*-ingress.*'
   aws_statistics: [Sum]
+- aws_namespace: AWS/ECS
+  aws_metric_name: CPUUtilization
+  aws_dimensions: [ServiceName, ClusterName]
+  aws_dimension_select:
+    ServiceName:
+      - prod-frontend-v2
+    ClusterName:
+      - prod-ingress
+  aws_statistics: [Average]
