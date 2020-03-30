@@ -11,7 +11,7 @@ function wait-for-lock() {
 	done
 }
 
-function apt-get-wait() {
+function check-dpkg-lock-before-use() {
   status=1
   for (( retry=0; retry<6 && status!=0; retry++ ))
   do
@@ -20,15 +20,15 @@ function apt-get-wait() {
       echo "Identifying who owns the lock and/or lock-frontend."
       lsof /var/lib/dpkg/lock
       lsof /var/lib/dpkg/lock-frontend
-      echo "Reattempting to execute apt-get $* $retry times."
+      echo "Reattempting to execute $* $retry times."
     fi;
     wait-for-lock /var/lib/dpkg/lock
     wait-for-lock /var/lib/dpkg/lock-frontend
-    apt-get "$@"
+    $*
     status=$?
   done
   if [ $status != 0 ]; then
-    echo "Failed to execute apt-get $*. Exiting the script."
+    echo "Failed to execute $*. Exiting the script."
     exit 1;
   fi
 }
@@ -47,8 +47,8 @@ Acquire::http::Proxy "${egress_proxy_url_with_protocol}/";
 Acquire::https::Proxy "${egress_proxy_url_with_protocol}/";
 EOF
 fi
-apt-get-wait update --yes
-apt-get-wait dist-upgrade --yes
+check-dpkg-lock-before-use "apt-get update --yes"
+check-dpkg-lock-before-use "apt-get dist-upgrade --yes"
 
 # AWS SSM Agent
 # Installed by default on Ubuntu Bionic AMIs via Snap
@@ -89,7 +89,7 @@ systemctl restart systemd-journald
 
 # Use Amazon NTP
 echo 'Installing and configuring chrony'
-apt-get-wait install --yes chrony
+check-dpkg-lock-before-use "apt-get install --yes chrony"
 sed '/pool/d' /etc/chrony/chrony.conf \
 | cat <(echo "server 169.254.169.123 prefer iburst") - > /tmp/chrony.conf
 echo "allow 127/8" >> /tmp/chrony.conf
@@ -99,7 +99,7 @@ systemctl restart chrony
 # Docker
 echo 'Installing and configuring docker'
 mkdir -p /etc/systemd/system/docker.service.d
-apt-get-wait install --yes docker.io
+check-dpkg-lock-before-use "apt-get install --yes docker.io"
 cat <<EOF > /etc/systemd/system/docker.service.d/override.conf
 [Service]
 ExecStart=
@@ -127,7 +127,7 @@ $CURL --silent --fail \
       "https://$elastic_beats/journalbeat/journalbeat-oss-6.8.3-amd64.deb"
 
 sha512sum -c journalbeat-oss-6.8.3-amd64.deb.sha512
-dpkg -i journalbeat-oss-6.8.3-amd64.deb
+check-dpkg-lock-before-use "dpkg -i journalbeat-oss-6.8.3-amd64.deb"
 )
 
 cat <<EOF > /etc/journalbeat/journalbeat.yml
@@ -166,7 +166,7 @@ systemctl enable --now journalbeat
 
 # ECS
 echo 'Installing awscli and iptables-persistent'
-apt-get-wait install --yes awscli iptables-persistent
+check-dpkg-lock-before-use "apt-get install --yes awscli iptables-persistent"
 
 echo 'Adding networking rules for ECS metadata endpoints'
 sh -c "echo 'net.ipv4.conf.all.route_localnet = 1' >> /etc/sysctl.conf"
@@ -212,7 +212,7 @@ docker run \
   --env="ECS_LOGLEVEL=warn" \
   ${ecs_agent_image_identifier}
 
-apt-get-wait install --yes prometheus-node-exporter
+check-dpkg-lock-before-use "apt-get install --yes prometheus-node-exporter"
 mkdir /etc/systemd/system/prometheus-node-exporter.service.d
 # Create an environment file for prometheus node exporter
 cat >  /etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env <<EOF
@@ -244,7 +244,7 @@ EOF
 
 chmod +x /usr/bin/instance-reboot-required-metric.sh
 
-apt-get-wait install --yes moreutils
+check-dpkg-lock-before-use "apt-get install --yes moreutils"
 
 crontab - <<EOF
 $(crontab -l | grep -v 'no crontab')
