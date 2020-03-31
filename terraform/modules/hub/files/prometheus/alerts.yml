@@ -166,5 +166,13 @@ groups:
     for: 20m
     expr: |
       rate(journalbeat_libbeat_output_events{type="acked"}[1m]) == 0
+  - alert: HighIngressCPU
+    labels: *infraticket
+    annotations:
+      message: |
+        We're seeing elevated CPU utilisation on the ingress nodes.
+    expr: |
+      aws_ecs_cpuutilization_average{cluster_name="prod-ingress", service_name="prod-frontend-v2"} > 80
+    for: 5m
 
 
