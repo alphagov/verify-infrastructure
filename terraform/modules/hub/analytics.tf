@@ -16,6 +16,9 @@ locals {
   location /analytics {
     proxy_set_header X-Forwarded-For $http_x_forwarded_for;
     proxy_pass $analytics/matomo.php?$args;
+    proxy_connect_timeout 300s;
+    proxy_send_timeout 300s;
+    proxy_read_timeout 300s;
   }
 
   location /healthcheck {
