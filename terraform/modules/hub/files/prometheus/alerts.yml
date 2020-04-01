@@ -180,7 +180,6 @@ groups:
       message: |
         The frontend ALB is having difficulty connecting to the service in ECS.
     expr: |
-      aws_applicationelb_targetconnectionerrorcount_sum{load_balancer =~ "app/prod-ingress/.*"} > 0
+      aws_applicationelb_targetconnectionerrorcount_sum{load_balancer =~ "app/.*-ingress/.*", target_group =~ "targetgroup/.*-ingress-frontend/.*"} > 0
     for: 5m
-
 
