@@ -30,6 +30,13 @@ metrics:
     LoadBalancer:
       - 'app/.*-ingress.*'
   aws_statistics: [Sum]
+- aws_namespace: AWS/ApplicationELB
+  aws_metric_name: TargetConnectionErrorCount
+  aws_dimensions: [TargetGroup, LoadBalancer]
+  aws_dimension_select_regex:
+    LoadBalancer:
+      - 'app/.*-ingress.*'
+  aws_statistics: [Sum]
 - aws_namespace: AWS/ECS
   aws_metric_name: CPUUtilization
   aws_dimensions: [ServiceName, ClusterName]
