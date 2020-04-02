@@ -18,6 +18,10 @@ variable "number_of_prometheus_apps" {
   default = 3
 }
 
+variable "prometheus_volume_size" {
+  default = 100
+}
+
 variable "publically_accessible_from_cidrs" {
   type = "list"
 }
