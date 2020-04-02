@@ -61,8 +61,8 @@
       }
     ],
     "environment": [{
-      "Name": "SESSION_COOKIE_DURATION_IN_HOURS",
-      "Value": "2"
+      "Name": "SESSION_COOKIE_DURATION_IN_MINUTES",
+      "Value": "90"
     }, {
       "Name": "CONFIG_API_HOST",
       "Value": "https://config.${domain}:443"
