@@ -8,4 +8,4 @@ set -ueo pipefail
 
 envsubst > /tmp/haproxy.cfg < /tmp/haproxy.cfg.tpl
 
-haproxy -f /tmp/haproxy.cfg
+exec haproxy -f /tmp/haproxy.cfg

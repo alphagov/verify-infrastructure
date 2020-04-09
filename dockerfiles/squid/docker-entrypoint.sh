@@ -38,4 +38,4 @@ cache deny all
 EOF
 
 # squid -N => no daemon mode
-squid -N
+exec squid -N

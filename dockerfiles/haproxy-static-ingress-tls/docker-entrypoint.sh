@@ -22,4 +22,4 @@ cat /tmp/tls/key.pem /tmp/tls/cert.pem > /tmp/tls/chain.pem
 
 echo /tmp/tls/chain.pem
 
-haproxy -f /tmp/haproxy.cfg
+exec haproxy -f /tmp/haproxy.cfg
