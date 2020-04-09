@@ -332,6 +332,7 @@ data "template_file" "prometheus_cloud_init" {
     cluster                    = aws_ecs_cluster.prometheus.name
     ecs_agent_image_identifier = local.ecs_agent_image_identifier
     tools_account_id           = var.tools_account_id
+    data_volume_size           = var.prometheus_volume_size
   }
 }
 
@@ -364,7 +365,7 @@ resource "aws_instance" "prometheus" {
 resource "aws_ebs_volume" "prometheus" {
   count = var.number_of_prometheus_apps
 
-  size      = 100
+  size      = var.prometheus_volume_size
   encrypted = true
 
   availability_zone = element(
