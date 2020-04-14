@@ -95,6 +95,10 @@ resource "aws_cognito_user_pool" "user_pool" {
     sns_caller_arn = aws_iam_role.cognito_sns_role.arn
   }
 
+  software_token_mfa_configuration {
+    enabled = true
+  }
+
   username_attributes = [
     "email",
   ]
