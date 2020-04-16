@@ -290,14 +290,15 @@ resource "aws_route53_record" "ingress_www" {
 module "ingress_ecs_asg" {
   source = "./modules/ecs_asg"
 
-  ami_id              = data.aws_ami.ubuntu_bionic.id
-  deployment          = var.deployment
-  cluster             = "ingress"
-  vpc_id              = aws_vpc.hub.id
-  instance_subnets    = aws_subnet.internal.*.id
-  number_of_instances = var.number_of_apps * 2
-  domain              = local.root_domain
-  instance_type       = var.ingress_instance_type
+  ami_id           = data.aws_ami.ubuntu_bionic.id
+  deployment       = var.deployment
+  cluster          = "ingress"
+  vpc_id           = aws_vpc.hub.id
+  instance_subnets = aws_subnet.internal.*.id
+  min_size         = var.number_of_apps * 2
+  max_size         = var.number_of_apps * 2
+  domain           = local.root_domain
+  instance_type    = var.ingress_instance_type
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
