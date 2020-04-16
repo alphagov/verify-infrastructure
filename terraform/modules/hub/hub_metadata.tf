@@ -38,6 +38,7 @@ resource "aws_ecs_service" "metadata" {
   name            = "${var.deployment}-metadata"
   cluster         = aws_ecs_cluster.ingress.id
   task_definition = aws_ecs_task_definition.metadata.arn
+  iam_role        = aws_iam_role.ecs_service_role.arn
 
   desired_count                      = var.number_of_apps
   deployment_minimum_healthy_percent = 50
