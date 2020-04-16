@@ -197,10 +197,6 @@ resource "aws_cognito_user_pool" "user_pool" {
     prevent_destroy = true
   }
 
-  provisioner "local-exec" {
-    command = "aws cognito-idp set-user-pool-mfa-config --user-pool-id ${aws_cognito_user_pool.user_pool.id} --software-token-mfa-configuration Enabled=true --mfa-configuration ON"
-  }
-
 }
 
 resource "aws_cognito_user_pool_client" "client" {
