@@ -296,7 +296,7 @@ module "ingress_ecs_asg" {
   vpc_id           = aws_vpc.hub.id
   instance_subnets = aws_subnet.internal.*.id
   min_size         = var.number_of_apps * 2
-  max_size         = var.number_of_apps * 2
+  max_size         = var.number_of_apps * 10
   domain           = local.root_domain
   instance_type    = var.ingress_instance_type
 
@@ -313,6 +313,25 @@ module "ingress_ecs_asg" {
   logit_elasticsearch_url = var.logit_elasticsearch_url
 }
 
+resource "aws_ecs_capacity_provider" "ingress" {
+  name = module.ingress_ecs_asg.name
+
+  auto_scaling_group_provider {
+    auto_scaling_group_arn         = module.ingress_ecs_asg.arn
+    managed_termination_protection = "ENABLED"
+
+    managed_scaling {
+      maximum_scaling_step_size = 6
+      minimum_scaling_step_size = 1
+      status                    = "ENABLED"
+      target_capacity           = var.number_of_apps * 2
+    }
+  }
+}
+
 resource "aws_ecs_cluster" "ingress" {
   name = "${var.deployment}-ingress"
+  capacity_providers = [
+    aws_ecs_capacity_provider.ingress.name,
+  ]
 }
