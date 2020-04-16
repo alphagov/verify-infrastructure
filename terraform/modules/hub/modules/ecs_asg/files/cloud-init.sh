@@ -153,22 +153,48 @@ iptables -t nat -A PREROUTING -p tcp -d 169.254.170.2 --dport 80 -j DNAT --to-de
 iptables -t nat -A OUTPUT -d 169.254.170.2 -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 51679
 iptables-save > /etc/iptables/rules.v4
 
+# Have systemd manage the ecs agent
+# We have occasionally seen issues where docker gets into a bad
+# state. The working hypothesis is that the ecs agent starts
+# executing tasks, which include port mappings. When the reboot
+# happens at the end of this script it occasionally doesn't tidy
+# and recover. So, don't run ECS until after the reboot that we
+# know is coming.
+cat > /root/pull-ecs-image.sh <<'EOF'
+#!/usr/bin/env bash
+
+set -euo pipefail
+
 eval $(aws ecr get-login                                          \
            --no-include-email                                     \
            --region eu-west-2                                     \
            --endpoint-url https://api.ecr.eu-west-2.amazonaws.com \
-           --registry-ids ${tools_account_id}\
+           --registry-ids ${tools_account_id} \
       )
 
-echo 'Running ECS using Docker'
-mkdir -p /etc/ecs
-mkdir -p /var/lib/ecs/data
-docker run \
+docker pull ${ecs_agent_image_identifier}
+EOF
+chmod 0700 /root/pull-ecs-image.sh
+
+cat > /etc/systemd/system/ecs.service <<'EOF'
+[Unit]
+Description=Elastic Container Service agent
+After=docker.service
+Wants=docker.service
+BindsTo=docker.service
+
+[Service]
+TimeoutSec=0
+RestartSec=2
+Restart=always
+
+ExecStartPre=/bin/mkdir -p /etc/ecs
+ExecStartPre=/bin/mkdir -p /var/lib/ecs/data
+ExecStartPre=/root/pull-ecs-image.sh
+ExecStart=/usr/bin/docker run \
   --init \
   --privileged \
   --name ecs-agent \
-  --detach=true \
-  --restart=always \
   --volume=/etc/ecs:/etc/ecs \
   --volume=/lib64:/lib64 \
   --volume=/lib:/lib \
@@ -189,6 +215,15 @@ docker run \
   --env='ECS_AVAILABLE_LOGGING_DRIVERS=["journald"]' \
   --env="ECS_LOGLEVEL=warn" \
   ${ecs_agent_image_identifier}
+
+ExecStop=/usr/bin/docker stop -t 120 ecs-agent
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable ecs
 
 run-until-success "apt-get install --yes prometheus-node-exporter"
 mkdir /etc/systemd/system/prometheus-node-exporter.service.d
