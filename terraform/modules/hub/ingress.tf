@@ -317,7 +317,8 @@ resource "aws_ecs_capacity_provider" "ingress" {
   name = module.ingress_ecs_asg.name
 
   auto_scaling_group_provider {
-    auto_scaling_group_arn = module.ingress_ecs_asg.arn
+    auto_scaling_group_arn         = module.ingress_ecs_asg.arn
+    managed_termination_protection = "ENABLED"
 
     managed_scaling {
       maximum_scaling_step_size = 6
