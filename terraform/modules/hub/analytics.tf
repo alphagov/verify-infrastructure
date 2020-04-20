@@ -68,7 +68,6 @@ resource "aws_ecs_service" "analytics" {
   name            = "${var.deployment}-analytics"
   cluster         = aws_ecs_cluster.ingress.id
   task_definition = aws_ecs_task_definition.analytics.arn
-  iam_role        = aws_iam_role.ecs_service_role.arn
 
   desired_count                      = var.number_of_apps
   deployment_minimum_healthy_percent = 50
