@@ -14,18 +14,6 @@ variable "number_of_apps" {
   default = 2
 }
 
-variable "number_of_frontend_apps" {
-  default = 2
-}
-
-variable "number_of_metadata_apps" {
-  default = 2
-}
-
-variable "number_of_analytics_apps" {
-  default = 2
-}
-
 variable "number_of_prometheus_apps" {
   default = 3
 }

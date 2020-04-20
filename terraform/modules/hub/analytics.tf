@@ -70,7 +70,7 @@ resource "aws_ecs_service" "analytics" {
   task_definition = aws_ecs_task_definition.analytics.arn
   iam_role        = aws_iam_role.ecs_service_role.arn
 
-  desired_count                      = var.number_of_analytics_apps
+  desired_count                      = var.number_of_apps
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 

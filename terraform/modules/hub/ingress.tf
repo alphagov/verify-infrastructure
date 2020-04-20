@@ -295,8 +295,8 @@ module "ingress_ecs_asg" {
   cluster          = "ingress"
   vpc_id           = aws_vpc.hub.id
   instance_subnets = aws_subnet.internal.*.id
-  min_size         = 2
-  max_size         = 20
+  min_size         = var.number_of_apps * 2
+  max_size         = var.number_of_apps * 10
   domain           = local.root_domain
   instance_type    = var.ingress_instance_type
 
