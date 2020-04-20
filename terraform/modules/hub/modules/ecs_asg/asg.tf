@@ -52,8 +52,9 @@ resource "aws_launch_configuration" "cluster" {
 resource "aws_autoscaling_group" "cluster" {
   name                 = local.identifier
   launch_configuration = aws_launch_configuration.cluster.name
-  min_size             = var.min_size
-  max_size             = var.max_size
+  min_size             = var.number_of_instances
+  max_size             = var.number_of_instances
+  desired_capacity     = var.number_of_instances
   vpc_zone_identifier  = var.instance_subnets
 
   tag {

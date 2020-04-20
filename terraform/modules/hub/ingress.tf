@@ -290,15 +290,14 @@ resource "aws_route53_record" "ingress_www" {
 module "ingress_ecs_asg" {
   source = "./modules/ecs_asg"
 
-  ami_id           = data.aws_ami.ubuntu_bionic.id
-  deployment       = var.deployment
-  cluster          = "ingress"
-  vpc_id           = aws_vpc.hub.id
-  instance_subnets = aws_subnet.internal.*.id
-  min_size         = 2
-  max_size         = 20
-  domain           = local.root_domain
-  instance_type    = var.ingress_instance_type
+  ami_id              = data.aws_ami.ubuntu_bionic.id
+  deployment          = var.deployment
+  cluster             = "ingress"
+  vpc_id              = aws_vpc.hub.id
+  instance_subnets    = aws_subnet.internal.*.id
+  number_of_instances = var.number_of_apps * 2
+  domain              = local.root_domain
+  instance_type       = var.ingress_instance_type
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
@@ -313,24 +312,6 @@ module "ingress_ecs_asg" {
   logit_elasticsearch_url = var.logit_elasticsearch_url
 }
 
-resource "aws_ecs_capacity_provider" "ingress" {
-  name = module.ingress_ecs_asg.name
-
-  auto_scaling_group_provider {
-    auto_scaling_group_arn = module.ingress_ecs_asg.arn
-
-    managed_scaling {
-      maximum_scaling_step_size = 6
-      minimum_scaling_step_size = 1
-      status                    = "ENABLED"
-      target_capacity           = var.number_of_apps * 2
-    }
-  }
-}
-
 resource "aws_ecs_cluster" "ingress" {
   name = "${var.deployment}-ingress"
-  capacity_providers = [
-    aws_ecs_capacity_provider.ingress.name,
-  ]
 }

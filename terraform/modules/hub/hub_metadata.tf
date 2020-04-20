@@ -39,7 +39,7 @@ resource "aws_ecs_service" "metadata" {
   cluster         = aws_ecs_cluster.ingress.id
   task_definition = aws_ecs_task_definition.metadata.arn
 
-  desired_count                      = var.number_of_metadata_apps
+  desired_count                      = var.number_of_apps
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 
@@ -55,10 +55,5 @@ resource "aws_ecs_service" "metadata" {
       aws_security_group.metadata_task.id,
       aws_security_group.can_connect_to_container_vpc_endpoint.id,
     ]
-  }
-
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "instanceId"
   }
 }

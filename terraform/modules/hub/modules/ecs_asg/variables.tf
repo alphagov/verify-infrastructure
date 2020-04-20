@@ -12,11 +12,7 @@ locals {
   identifier = "${var.deployment}-${var.cluster}"
 }
 
-variable "min_size" {
-  default = 2
-}
-
-variable "max_size" {
+variable "number_of_instances" {
   default = 2
 }
 
