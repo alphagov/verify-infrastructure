@@ -1,14 +1,13 @@
 module "saml_proxy_ecs_asg" {
   source = "./modules/ecs_asg"
 
-  ami_id           = data.aws_ami.ubuntu_bionic.id
-  deployment       = var.deployment
-  cluster          = "saml-proxy"
-  vpc_id           = aws_vpc.hub.id
-  instance_subnets = aws_subnet.internal.*.id
-  min_size         = var.number_of_apps
-  max_size         = var.number_of_apps
-  domain           = local.root_domain
+  ami_id              = data.aws_ami.ubuntu_bionic.id
+  deployment          = var.deployment
+  cluster             = "saml-proxy"
+  vpc_id              = aws_vpc.hub.id
+  instance_subnets    = aws_subnet.internal.*.id
+  number_of_instances = var.number_of_apps
+  domain              = local.root_domain
 
   ecs_agent_image_identifier = local.ecs_agent_image_identifier
   tools_account_id           = var.tools_account_id
