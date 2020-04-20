@@ -102,6 +102,7 @@ resource "aws_ecs_service" "frontend_v2" {
   name            = "${var.deployment}-frontend-v2"
   cluster         = aws_ecs_cluster.ingress.id
   task_definition = aws_ecs_task_definition.frontend.arn
+  iam_role        = aws_iam_role.ecs_service_role.arn
 
   desired_count                      = var.number_of_frontend_apps
   deployment_minimum_healthy_percent = 50
