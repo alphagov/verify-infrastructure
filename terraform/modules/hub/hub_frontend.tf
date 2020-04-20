@@ -102,8 +102,9 @@ resource "aws_ecs_service" "frontend_v2" {
   name            = "${var.deployment}-frontend-v2"
   cluster         = aws_ecs_cluster.ingress.id
   task_definition = aws_ecs_task_definition.frontend.arn
+  iam_role        = aws_iam_role.ecs_service_role.arn
 
-  desired_count                      = var.number_of_apps
+  desired_count                      = var.number_of_frontend_apps
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 
@@ -125,6 +126,11 @@ resource "aws_ecs_service" "frontend_v2" {
   service_registries {
     registry_arn = aws_service_discovery_service.frontend.arn
     port         = 8443
+  }
+
+  ordered_placement_strategy {
+    type  = "spread"
+    field = "instanceId"
   }
 }
 

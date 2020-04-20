@@ -68,8 +68,9 @@ resource "aws_ecs_service" "analytics" {
   name            = "${var.deployment}-analytics"
   cluster         = aws_ecs_cluster.ingress.id
   task_definition = aws_ecs_task_definition.analytics.arn
+  iam_role        = aws_iam_role.ecs_service_role.arn
 
-  desired_count                      = var.number_of_apps
+  desired_count                      = var.number_of_analytics_apps
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 
@@ -86,5 +87,10 @@ resource "aws_ecs_service" "analytics" {
       aws_security_group.analytics_task.id,
       aws_security_group.can_connect_to_container_vpc_endpoint.id,
     ]
+  }
+
+  ordered_placement_strategy {
+    type  = "spread"
+    field = "instanceId"
   }
 }
