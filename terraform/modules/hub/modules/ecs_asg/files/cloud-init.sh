@@ -191,7 +191,9 @@ Restart=always
 ExecStartPre=/bin/mkdir -p /etc/ecs
 ExecStartPre=/bin/mkdir -p /var/lib/ecs/data
 ExecStartPre=/root/pull-ecs-image.sh
+ExecStartPre=-/usr/bin/docker rm --force ecs-agent
 ExecStart=/usr/bin/docker run \
+  --rm \
   --init \
   --privileged \
   --name ecs-agent \
