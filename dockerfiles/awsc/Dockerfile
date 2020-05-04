@@ -5,4 +5,7 @@ ENV GO111MODULE  on
 
 RUN go get github.com/alphagov/awsc@$AWSC_VERSION
 
+RUN apt-get update  --yes && \
+    apt-get install --yes awscli jq
+
 ENTRYPOINT ["bash"]
