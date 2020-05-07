@@ -1,9 +1,10 @@
-FROM alpine:3.8
+FROM alpine:3.11
 
-RUN apk add --no-cache squid=3.5.27-r4
+RUN apk add --no-cache squid=4.10-r0
 
 RUN    touch /etc/squid/squid.conf \
-    && chown squid /etc/squid/squid.conf
+    && mkdir -p /squid \
+    && chown -R squid /etc/squid/squid.conf /squid
 
 EXPOSE 8080
 
