@@ -126,3 +126,31 @@ module "config" {
   instance_security_group_id = module.config_ecs_asg.instance_sg_id
   certificate_arn            = var.wildcard_cert_arn
 }
+
+resource "aws_iam_role_policy_attachment" "config_task_can_read_metadata_bucket" {
+  role       = module.config-fargate.task_role_name
+  policy_arn = aws_iam_policy.can_read_config_metadata_bucket.arn
+}
+
+module "config-fargate" {
+  source = "./modules/ecs_fargate_app"
+
+  deployment                 = var.deployment
+  cluster                    = "config"
+  domain                     = local.root_domain
+  vpc_id                     = aws_vpc.hub.id
+  lb_subnets                 = aws_subnet.internal.*.id
+  task_definition            = data.template_file.config_task_def.rendered
+  container_name             = "nginx"
+  container_port             = "8443"
+  number_of_tasks            = var.number_of_apps
+  health_check_path          = "/service-status"
+  tools_account_id           = var.tools_account_id
+  image_name                 = "verify-config"
+  instance_security_group_id = module.config_ecs_asg.instance_sg_id
+  certificate_arn            = var.wildcard_cert_arn
+  ecs_cluster_id             = aws_ecs_cluster.fargate-ecs-cluster.id
+  cpu                        = 2048
+  # for a CPU of 2048 we need to set a RAM value between 4096 and 16384 (inclusive) that is a multiple of 1024.
+  memory                     = ceil(max(var.config_memory_hard_limit + 250, 4096) / 1024) * 1024
+}

@@ -126,6 +126,13 @@ module "saml_proxy_can_connect_to_config" {
   destination_sg_id = module.config.lb_sg_id
 }
 
+module "saml_proxy_can_connect_to_config_fargate" {
+  source = "./modules/microservice_connection"
+
+  source_sg_id      = module.saml_proxy_ecs_asg.instance_sg_id
+  destination_sg_id = module.config-fargate.lb_sg_id
+}
+
 module "saml_proxy_can_connect_to_policy" {
   source = "./modules/microservice_connection"
 
