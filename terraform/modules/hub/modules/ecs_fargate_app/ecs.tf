@@ -2,12 +2,12 @@ module "cluster_ecs_roles" {
   source = "../ecs_iam_role_pair"
 
   deployment       = var.deployment
-  service_name     = var.cluster
+  service_name     = var.app
   tools_account_id = var.tools_account_id
   image_name       = var.image_name
 }
 
-resource "aws_ecs_task_definition" "cluster" {
+resource "aws_ecs_task_definition" "app" {
   family                   = local.identifier
   container_definitions    = var.task_definition
   execution_role_arn       = module.cluster_ecs_roles.execution_role_arn
@@ -22,10 +22,10 @@ output "task_role_name" {
   value = module.cluster_ecs_roles.task_role_name
 }
 
-resource "aws_ecs_service" "cluster" {
+resource "aws_ecs_service" "app" {
   name            = local.identifier
   cluster         = var.ecs_cluster_id
-  task_definition = aws_ecs_task_definition.cluster.arn
+  task_definition = aws_ecs_task_definition.app.arn
 
   desired_count                      = var.number_of_tasks
   deployment_minimum_healthy_percent = var.deployment_min_healthy_percent

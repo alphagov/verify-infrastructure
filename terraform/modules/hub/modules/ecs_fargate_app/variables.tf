@@ -1,4 +1,4 @@
-variable "cluster" {}
+variable "app" {}
 variable "container_name" {}
 variable "container_port" {}
 variable "deployment" {}
@@ -18,7 +18,7 @@ variable "lb_subnets" {
 }
 
 locals {
-  identifier = "${var.deployment}-${var.cluster}"
+  identifier = "${var.deployment}-${var.app}"
 }
 
 variable "number_of_tasks" {

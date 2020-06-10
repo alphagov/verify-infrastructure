@@ -1,4 +1,4 @@
-resource "aws_lb" "cluster" {
+resource "aws_lb" "app" {
   load_balancer_type = "application"
 
   name            = local.identifier
@@ -29,12 +29,12 @@ resource "aws_lb_target_group" "task" {
   }
 
   depends_on = [
-    "aws_lb.cluster",
+    "aws_lb.app",
   ]
 }
 
 resource "aws_lb_listener" "cluster_http" {
-  load_balancer_arn = aws_lb.cluster.arn
+  load_balancer_arn = aws_lb.app.arn
   port              = "80"
   protocol          = "HTTP"
 
@@ -50,7 +50,7 @@ resource "aws_lb_listener" "cluster_http" {
 }
 
 resource "aws_lb_listener" "cluster_https" {
-  load_balancer_arn = aws_lb.cluster.arn
+  load_balancer_arn = aws_lb.app.arn
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS-1-1-2017-01"

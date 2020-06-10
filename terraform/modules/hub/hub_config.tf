@@ -136,7 +136,7 @@ module "config-fargate" {
   source = "./modules/ecs_fargate_app"
 
   deployment                 = var.deployment
-  cluster                    = "config"
+  app                        = "config"
   domain                     = local.root_domain
   vpc_id                     = aws_vpc.hub.id
   lb_subnets                 = aws_subnet.internal.*.id
