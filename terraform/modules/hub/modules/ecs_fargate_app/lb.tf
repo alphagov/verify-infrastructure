@@ -33,7 +33,7 @@ resource "aws_lb_target_group" "task" {
   ]
 }
 
-resource "aws_lb_listener" "cluster_http" {
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.app.arn
   port              = "80"
   protocol          = "HTTP"
@@ -49,7 +49,7 @@ resource "aws_lb_listener" "cluster_http" {
   }
 }
 
-resource "aws_lb_listener" "cluster_https" {
+resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.app.arn
   port              = "443"
   protocol          = "HTTPS"

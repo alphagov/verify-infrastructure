@@ -1,4 +1,4 @@
-module "cluster_ecs_roles" {
+module "ecs_roles" {
   source = "../ecs_iam_role_pair"
 
   deployment       = var.deployment
@@ -10,8 +10,8 @@ module "cluster_ecs_roles" {
 resource "aws_ecs_task_definition" "app" {
   family                   = local.identifier
   container_definitions    = var.task_definition
-  execution_role_arn       = module.cluster_ecs_roles.execution_role_arn
-  task_role_arn            = module.cluster_ecs_roles.task_role_arn
+  execution_role_arn       = module.ecs_roles.execution_role_arn
+  task_role_arn            = module.ecs_roles.task_role_arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.cpu
@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "app" {
 }
 
 output "task_role_name" {
-  value = module.cluster_ecs_roles.task_role_name
+  value = module.ecs_roles.task_role_name
 }
 
 resource "aws_ecs_service" "app" {
