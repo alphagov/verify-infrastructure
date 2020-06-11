@@ -33,8 +33,8 @@ resource "aws_security_group_rule" "lb_egress_to_task" {
 }
 
 resource "aws_security_group" "task" {
-  name        = "${local.identifier}-instance"
-  description = "${local.identifier}-instance"
+  name        = "${local.identifier}-task"
+  description = "${local.identifier}-task"
   vpc_id      = var.vpc_id
 }
 
