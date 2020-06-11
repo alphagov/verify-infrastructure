@@ -2,7 +2,7 @@ module "ecs_roles" {
   source = "../ecs_iam_role_pair"
 
   deployment       = var.deployment
-  service_name     = var.app
+  service_name     = "${var.app}-fargate"
   tools_account_id = var.tools_account_id
   image_name       = var.image_name
 }

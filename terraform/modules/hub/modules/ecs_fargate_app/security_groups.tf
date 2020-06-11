@@ -1,6 +1,6 @@
 resource "aws_security_group" "lb" {
-  name        = "${local.identifier}-lb"
-  description = "${local.identifier}-lb"
+  name        = "${local.identifier}-fargate-lb"
+  description = "${local.identifier}-fargate-lb"
 
   vpc_id = var.vpc_id
 }
