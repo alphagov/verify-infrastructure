@@ -1,0 +1,92 @@
+[
+  {
+    "name": "nginx",
+    "image": "${nginx_image_identifier}",
+    "cpu": 896,
+    "memory": 250,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8443,
+        "hostPort": 8443
+      }
+    ],
+    "environment": [
+      {
+        "Name": "LOCATION_BLOCKS",
+        "Value": "${location_blocks_base64}"
+      }
+    ],
+    "dependsOn": [
+      {
+        "containerName": "config",
+        "condition": "HEALTHY"
+      }
+    ]
+  },
+  {
+    "name": "config",
+    "image": "${image_identifier}",
+    "cpu": 1024,
+    "memory": ${memory_hard_limit},
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ],
+    "entryPoint": [
+      "/verify-hub/bin/config",
+      "server",
+      "/tmp/config.yml"
+    ],
+    "secrets": [
+      {
+        "name": "SENTRY_DSN",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/ecs-app-shared/sentry-dsn"
+      }
+    ],
+    "environment": [
+      {
+        "Name": "CONFIG_DATA_PATH",
+        "Value": "/tmp/federation/configuration/config-service-data/${deployment}"
+      },
+      {
+        "Name": "RP_TRUSTSTORE_PASSWORD",
+        "Value": "${truststore_password}"
+      },
+      {
+        "Name": "CLIENT_TRUSTSTORE_PASSWORD",
+        "Value": "${truststore_password}"
+      },
+      {
+        "Name": "DEPLOYMENT",
+        "Value": "${deployment}"
+      },
+      {
+        "Name": "JAVA_OPTS",
+        "Value": "-Dservice.name=config ${jvm_options} -XX:+HeapDumpOnOutOfMemoryError -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5"
+      },
+      {
+        "Name": "SELF_SERVICE_ENABLED",
+        "Value": "${self_service_enabled}"
+      },
+      {
+        "Name": "SERVICES_METADATA_BUCKET",
+        "Value": "${services_metadata_bucket}"
+      },
+      {
+        "Name": "METADATA_OBJECT_KEY",
+        "Value": "${metadata_object_key}"
+      }
+    ],
+    "healthCheck" : {
+      "Command": [ "CMD-SHELL", "curl -f http://localhost:8080/service-status || exit 1" ],
+      "Interval": 10,
+      "Retries": 3,
+      "StartPeriod": 10,
+      "Timeout": 5
+    }
+  }
+]
