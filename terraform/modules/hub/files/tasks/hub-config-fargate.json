@@ -94,7 +94,7 @@
         "awslogs-group": "${deployment}-hub",
         "awslogs-region": "${region}",
         "awslogs-stream-prefix": "config",
-        "awslogs-create-group": true
+        "awslogs-create-group": "true"
       }
     }
   }
