@@ -55,9 +55,21 @@ locals {
   }
   LOCATIONS
 
-  nginx_config_location_blocks_base64 = base64encode(local.config_location_blocks)
-  services_metadata_bucket            = "govukverify-self-service-${var.deployment}-config-metadata"
-  metadata_object_key                 = "verify_services_metadata.json"
+  config_location_blocks_fargate = <<-LOCATIONS
+  location = /prometheus/metrics {
+    proxy_pass http://localhost:8081;
+    proxy_set_header Host config.${local.root_domain};
+  }
+  location / {
+    proxy_pass http://localhost:8080;
+    proxy_set_header Host config.${local.root_domain};
+  }
+  LOCATIONS
+
+  nginx_config_location_blocks_base64         = base64encode(local.config_location_blocks)
+  nginx_config_location_blocks_fargate_base64 = base64encode(local.config_location_blocks_fargate)
+  services_metadata_bucket                    = "govukverify-self-service-${var.deployment}-config-metadata"
+  metadata_object_key                         = "verify_services_metadata.json"
 }
 
 data "template_file" "config_task_def" {
@@ -70,6 +82,26 @@ data "template_file" "config_task_def" {
     deployment               = var.deployment
     truststore_password      = var.truststore_password
     location_blocks_base64   = local.nginx_config_location_blocks_base64
+    region                   = data.aws_region.region.id
+    account_id               = data.aws_caller_identity.account.account_id
+    self_service_enabled     = var.self_service_enabled
+    services_metadata_bucket = local.services_metadata_bucket
+    metadata_object_key      = local.metadata_object_key
+    memory_hard_limit        = var.config_memory_hard_limit
+    jvm_options              = var.jvm_options
+  }
+}
+
+data "template_file" "config_task_def_fargate" {
+  template = file("${path.module}/files/tasks/hub-config-fargate.json")
+
+  vars = {
+    image_identifier         = "${local.tools_account_ecr_url_prefix}-verify-config@${var.hub_config_image_digest}"
+    nginx_image_identifier   = local.nginx_image_identifier
+    domain                   = local.root_domain
+    deployment               = var.deployment
+    truststore_password      = var.truststore_password
+    location_blocks_base64   = local.nginx_config_location_blocks_fargate_base64
     region                   = data.aws_region.region.id
     account_id               = data.aws_caller_identity.account.account_id
     self_service_enabled     = var.self_service_enabled
@@ -140,7 +172,7 @@ module "config-fargate" {
   domain                     = local.root_domain
   vpc_id                     = aws_vpc.hub.id
   lb_subnets                 = aws_subnet.internal.*.id
-  task_definition            = data.template_file.config_task_def.rendered
+  task_definition            = data.template_file.config_task_def_fargate.rendered
   container_name             = "nginx"
   container_port             = "8443"
   number_of_tasks            = var.number_of_apps
