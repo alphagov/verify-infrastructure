@@ -184,5 +184,30 @@ module "config-fargate" {
   ecs_cluster_id             = aws_ecs_cluster.fargate-ecs-cluster.id
   cpu                        = 2048
   # for a CPU of 2048 we need to set a RAM value between 4096 and 16384 (inclusive) that is a multiple of 1024.
-  memory                     = ceil(max(var.config_memory_hard_limit + 250, 4096) / 1024) * 1024
+  memory  = ceil(max(var.config_memory_hard_limit + 250, 4096) / 1024) * 1024
+  subnets = aws_subnet.internal.*.id
+  additional_task_security_group_ids = [
+    aws_security_group.scraped_by_prometheus.id,
+    aws_security_group.can_connect_to_container_vpc_endpoint.id,
+  ]
+}
+
+resource "aws_security_group_rule" "config_task_egress_to_internet_over_http" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 80
+  to_port   = 80
+
+  security_group_id = module.config-fargate.task_sg_id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "config_task_egress_to_internet_over_https" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = module.config-fargate.task_sg_id
+  cidr_blocks       = ["0.0.0.0/0"]
 }

@@ -38,4 +38,12 @@ resource "aws_ecs_service" "app" {
     container_name   = var.container_name
     container_port   = var.container_port
   }
+
+  network_configuration {
+    subnets         = var.subnets
+    security_groups = concat(
+      var.additional_task_security_group_ids,
+      [aws_security_group.task.id],
+    )
+  }
 }

@@ -64,3 +64,11 @@ variable "cpu" {
 variable "memory" {
   type = number
 }
+
+variable "subnets" {
+  type = list(string)
+}
+
+variable "additional_task_security_group_ids" {
+  type = list(string)
+}
