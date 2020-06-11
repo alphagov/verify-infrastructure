@@ -15,7 +15,7 @@ resource "aws_lb_target_group" "task" {
   name                 = "${local.identifier}-fargate-task"
   port                 = "8443"
   protocol             = "HTTPS"
-  target_type          = "instance"
+  target_type          = "ip"
   vpc_id               = var.vpc_id
   deregistration_delay = 15
   slow_start           = 30
