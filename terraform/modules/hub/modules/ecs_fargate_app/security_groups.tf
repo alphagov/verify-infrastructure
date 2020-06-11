@@ -31,3 +31,13 @@ resource "aws_security_group_rule" "lb_egress_to_task" {
   source_security_group_id = var.instance_security_group_id
   security_group_id        = aws_security_group.lb.id
 }
+
+resource "aws_security_group" "task" {
+  name        = "${local.identifier}-instance"
+  description = "${local.identifier}-instance"
+  vpc_id      = var.vpc_id
+}
+
+output "task_sg_id" {
+  value = aws_security_group.task.id
+}
