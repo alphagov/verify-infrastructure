@@ -87,6 +87,15 @@
       "Retries": 3,
       "StartPeriod": 10,
       "Timeout": 5
+    },
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${deployment}-hub",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "config",
+        "awslogs-create-group": true
+      }
     }
   }
 ]
