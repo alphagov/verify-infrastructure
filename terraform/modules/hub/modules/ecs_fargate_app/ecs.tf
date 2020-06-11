@@ -22,8 +22,8 @@ output "task_role_name" {
   value = module.ecs_roles.task_role_name
 }
 
-resource "aws_iam_policy" "execution" {
-  name = "${local.identifier}-execution"
+resource "aws_iam_policy" "execution_logs" {
+  name = "${local.identifier}-execution-logs"
 
   policy = <<-EOF
   {
@@ -43,7 +43,7 @@ resource "aws_iam_policy" "execution" {
 
 resource "aws_iam_role_policy_attachment" "execution_can_write_logs" {
   role       = module.ecs_roles.execution_role_name
-  policy_arn = aws_iam_policy.execution.arn
+  policy_arn = aws_iam_policy.execution_logs.arn
 }
 
 resource "aws_ecs_service" "app" {
