@@ -22,7 +22,16 @@
         "containerName": "config",
         "condition": "HEALTHY"
       }
-    ]
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${deployment}-hub",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "config-nginx",
+        "awslogs-create-group": "true"
+      }
+    }
   },
   {
     "name": "config",
