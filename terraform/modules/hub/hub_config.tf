@@ -179,7 +179,6 @@ module "config-fargate" {
   health_check_path          = "/service-status"
   tools_account_id           = var.tools_account_id
   image_name                 = "verify-config"
-  instance_security_group_id = module.config_ecs_asg.instance_sg_id
   certificate_arn            = var.wildcard_cert_arn
   ecs_cluster_id             = aws_ecs_cluster.fargate-ecs-cluster.id
   cpu                        = 2048
