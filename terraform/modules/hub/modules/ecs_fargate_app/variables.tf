@@ -6,7 +6,6 @@ variable "domain" {}
 variable "task_definition" {}
 variable "vpc_id" {}
 variable "tools_account_id" {}
-variable "instance_security_group_id" {}
 variable "certificate_arn" {}
 
 variable "image_name" {
