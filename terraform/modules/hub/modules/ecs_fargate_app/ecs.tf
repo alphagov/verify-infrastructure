@@ -50,7 +50,7 @@ resource "aws_iam_policy" "execution_logs" {
           "ecr:BatchGetImage"
         ],
         "Resource": [
-          "arn:aws:ecr:eu-west-2:906394416424:repository/aws-for-fluent-bit",
+          "arn:aws:ecr:eu-west-2:906394416424:repository/aws-for-fluent-bit"
         ]
       }
     ]
