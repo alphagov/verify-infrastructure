@@ -1,5 +1,23 @@
 [
   {
+    "essential": true,
+    "image": "906394416424.dkr.ecr.eu-west-2.amazonaws.com/aws-for-fluent-bit:latest",
+    "name": "log_router",
+    "firelensConfiguration": {
+      "type": "fluentbit"
+    },
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${deployment}-hub",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "config-firelens",
+        "awslogs-create-group": "true"
+      }
+    },
+    "memoryReservation": 50
+  },
+  {
     "name": "nginx",
     "image": "${nginx_image_identifier}",
     "cpu": 896,
@@ -24,12 +42,13 @@
       }
     ],
     "logConfiguration": {
-      "logDriver": "awslogs",
+      "logDriver": "awsfirelens",
       "options": {
-        "awslogs-group": "${deployment}-hub",
-        "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "config-nginx",
-        "awslogs-create-group": "true"
+        "Name": "es",
+        "Host": "${logit_elasticsearch_url}",
+        "Port": "443",
+        "Path": "/_bulk?apikey=${logit_api_key}",
+        "tls": "on"
       }
     }
   },
@@ -98,12 +117,13 @@
       "Timeout": 5
     },
     "logConfiguration": {
-      "logDriver": "awslogs",
+      "logDriver": "awsfirelens",
       "options": {
-        "awslogs-group": "${deployment}-hub",
-        "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "config",
-        "awslogs-create-group": "true"
+        "Name": "es",
+        "Host": "${logit_elasticsearch_url}",
+        "Port": "443",
+        "Path": "/_bulk?apikey=${logit_api_key}",
+        "tls": "on"
       }
     }
   }

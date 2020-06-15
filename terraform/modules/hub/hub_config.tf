@@ -109,6 +109,8 @@ data "template_file" "config_task_def_fargate" {
     metadata_object_key      = local.metadata_object_key
     memory_hard_limit        = var.config_memory_hard_limit
     jvm_options              = var.jvm_options
+    logit_elasticsearch_url  = var.logit_elasticsearch_url
+    logit_api_key            = var.logit_api_key
   }
 }
 
@@ -183,7 +185,7 @@ module "config-fargate" {
   ecs_cluster_id             = aws_ecs_cluster.fargate-ecs-cluster.id
   cpu                        = 2048
   # for a CPU of 2048 we need to set a RAM value between 4096 and 16384 (inclusive) that is a multiple of 1024.
-  memory  = ceil(max(var.config_memory_hard_limit + 250, 4096) / 1024) * 1024
+  memory  = ceil(max(var.config_memory_hard_limit + 250 + 50, 4096) / 1024) * 1024
   subnets = aws_subnet.internal.*.id
   additional_task_security_group_ids = [
     aws_security_group.scraped_by_prometheus.id,
