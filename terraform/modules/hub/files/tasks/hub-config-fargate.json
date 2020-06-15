@@ -47,7 +47,7 @@
         "Name": "es",
         "Host": "${logit_elasticsearch_url}",
         "Port": "443",
-        "Path": "/_bulk?apikey=${logit_api_key}",
+        "Path": "/_bulk?apikey=${logit_api_key}#",
         "tls": "on"
       }
     }
@@ -122,7 +122,7 @@
         "Name": "es",
         "Host": "${logit_elasticsearch_url}",
         "Port": "443",
-        "Path": "/_bulk?apikey=${logit_api_key}",
+        "Path": "/_bulk?apikey=${logit_api_key}#",
         "tls": "on"
       }
     }
