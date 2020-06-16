@@ -50,6 +50,8 @@
       "options": {
         "Name": "es",
         "Host": "${logit_elasticsearch_url}",
+        "Logstash_Format": "True",
+        "Logstash_Prefix": "fluentbit",
         "Port": "443",
         "Path": "/_bulk?apikey=${logit_api_key}#",
         "tls": "on"
