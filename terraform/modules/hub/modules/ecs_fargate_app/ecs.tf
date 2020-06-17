@@ -8,7 +8,7 @@ module "ecs_roles" {
 }
 
 resource "aws_ecs_task_definition" "app" {
-  family                   = local.identifier
+  family                   = "${local.identifier}-fargate"
   container_definitions    = var.task_definition
   execution_role_arn       = module.ecs_roles.execution_role_arn
   task_role_arn            = module.ecs_roles.task_role_arn
