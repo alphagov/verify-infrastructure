@@ -58,6 +58,10 @@ variable "logit_elasticsearch_url" {
   description = "URL for logit.io elasticsearch, format: $guid-es.logit.io"
 }
 
+variable "cls_destination_arn" {
+  description = "ARN of the CSLS destination to send logs to"
+}
+
 variable "event_emitter_api_gateway_url" {
   description = "URL for Event Emitter API Gateway"
 }
