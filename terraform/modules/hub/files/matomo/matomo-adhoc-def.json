@@ -1,0 +1,14 @@
+[
+  {
+    "cpu": 512,
+    "memory": 512,
+    "essential": true,
+    "image": "${image_and_tag}",
+    "name": "matomo-adhoc",
+    "entryPoint": [
+      "/bin/sh",
+      "-c",
+      "tail -f /dev/null"
+    ]
+  }
+]

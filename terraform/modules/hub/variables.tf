@@ -79,6 +79,10 @@ variable "matomo_site_id" {
   default     = 1
 }
 
+variable "matomo_salt" {
+  description = "Secret salt for matomo cookies and fingerprinting hashes"
+}
+
 variable "analytics_endpoint" {
   description = "Analytics endpoint"
 }
@@ -205,3 +209,4 @@ variable "cloudwatch_exporter_image_digest" {}
 variable "squid_image_digest" {}
 variable "metadate_exporter_image_digest" {}
 variable "prometheus_image_digest" {}
+variable "matomo_image_digest" {}
