@@ -14,15 +14,6 @@
     "environment": [{
       "Name": "DEPLOYMENT",
       "Value": "${deployment}"
-    }],
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "${deployment}-hub",
-        "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "metadata-nginx",
-        "awslogs-create-group": "true"
-      }
-    }
+    }]
   }
 ]

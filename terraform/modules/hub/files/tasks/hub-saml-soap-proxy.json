@@ -23,16 +23,7 @@
         "containerName": "saml-soap-proxy",
         "condition": "HEALTHY"
       }
-    ],
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "${deployment}-hub",
-        "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "saml-soap-proxy-nginx",
-        "awslogs-create-group": "true"
-      }
-    }
+    ]
   },
   {
     "name": "saml-soap-proxy",
@@ -101,15 +92,6 @@
       "Retries": 3,
       "StartPeriod": 10,
       "Timeout": 5
-    },
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "${deployment}-hub",
-        "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "saml-soap-proxy",
-        "awslogs-create-group": "true"
-      }
     }
   }
 ]
