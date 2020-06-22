@@ -35,6 +35,15 @@
         "namespace": "net.ipv4.ip_unprivileged_port_start",
         "value": "0"
       }
-    ]
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${deployment}-hub",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "static-ingress-${bind_port}",
+        "awslogs-create-group": "true"
+      }
+    }
   }
 ]
