@@ -194,6 +194,16 @@ echo 'Running ECS using Docker'
 mkdir -p /etc/ecs
 mkdir -p /var/lib/ecs/data
 
+echo 'Installing iptables-persistent'
+run-until-success "apt-get install --yes iptables-persistent"
+
+echo 'Adding networking rules for ECS metadata endpoints'
+sh -c "echo 'net.ipv4.conf.all.route_localnet = 1' >> /etc/sysctl.conf"
+sysctl -p /etc/sysctl.conf
+iptables -t nat -A PREROUTING -p tcp -d 169.254.170.2 --dport 80 -j DNAT --to-destination 127.0.0.1:51679
+iptables -t nat -A OUTPUT -d 169.254.170.2 -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 51679
+iptables-save > /etc/iptables/rules.v4
+
 eval $(aws ecr get-login                                          \
            --no-include-email                                     \
            --region eu-west-2                                     \
@@ -225,6 +235,7 @@ docker run \
   --env=ECS_ENABLE_TASK_IAM_ROLE=true \
   --env=ECS_ENABLE_TASK_IAM_ROLE_NETWORK_HOST=true \
   --env='ECS_AVAILABLE_LOGGING_DRIVERS=["journald", "awslogs"]' \
+  --env='ECS_ENABLE_AWSLOGS_EXECUTIONROLE_OVERRIDE=true' \
   --env="ECS_LOGLEVEL=warn" \
   ${ecs_agent_image_identifier}
 
