@@ -22,6 +22,32 @@ output "task_role_name" {
   value = module.ecs_roles.task_role_name
 }
 
+resource "aws_iam_policy" "execution_logs" {
+  name = "${local.identifier}-execution-logs"
+
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:CreateLogGroup"
+        ],
+        "Resource": "*"
+      }
+    ]
+  }
+  EOF
+}
+
+resource "aws_iam_role_policy_attachment" "execution_can_write_logs" {
+  role       = module.ecs_roles.execution_role_name
+  policy_arn = aws_iam_policy.execution_logs.arn
+}
+
 resource "aws_ecs_service" "app" {
   name            = local.identifier
   cluster         = var.ecs_cluster_id
