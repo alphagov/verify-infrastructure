@@ -217,6 +217,7 @@ ExecStart=/usr/bin/docker run \
   --env='ECS_AVAILABLE_LOGGING_DRIVERS=["journald", "awslogs"]' \
   --env='ECS_ENABLE_AWSLOGS_EXECUTIONROLE_OVERRIDE=true' \
   --env="ECS_LOGLEVEL=warn" \
+  ${ecs_agent_proxy_config} \
   ${ecs_agent_image_identifier}
 
 ExecStop=/usr/bin/docker stop -t 120 ecs-agent
