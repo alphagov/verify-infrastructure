@@ -189,6 +189,14 @@ $(crontab -l | grep -v 'no crontab')
 */5 * * * * /usr/bin/instance-reboot-required-metric.sh | sponge /var/lib/prometheus/node-exporter/reboot-required.prom
 EOF
 
+function run-until-success() {
+  until $*
+  do
+    echo "Executing $* failed. Sleeping..."
+    sleep 5
+  done
+}
+
 # ECS
 echo 'Running ECS using Docker'
 mkdir -p /etc/ecs
