@@ -66,6 +66,14 @@ resource "aws_iam_policy" "execution" {
         "arn:aws:ssm:eu-west-2:${local.account_id}:parameter/${var.deployment}/${var.service_name}/*",
         "arn:aws:ssm:eu-west-2:${local.account_id}:parameter/${var.deployment}/ecs-app-shared/*"
       ]
+    }, {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:CreateLogGroup"
+      ],
+      "Resource": "*"
     }]
   }
   EOF

@@ -75,6 +75,8 @@ data "template_file" "egress_proxy_task_def" {
   vars = {
     whitelist_base64 = base64encode(local.egress_proxy_whitelist)
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-squid@${var.squid_image_digest}"
+    deployment       = var.deployment
+    region           = data.aws_region.region.id
   }
 }
 
