@@ -12,6 +12,12 @@ locals {
     ? "proxy_url: ${local.egress_proxy_url_with_protocol}"
     : ""
   }"
+
+  ecs_agent_proxy_config = "${
+    var.use_egress_proxy
+    ? "--env=HTTP_PROXY=${local.egress_proxy_url_with_protocol} --env=NO_PROXY=169.254.169.254,169.254.170.2,/var/run/docker.sock"
+    : ""
+  }"
 }
 
 data "template_file" "cloud_init" {
@@ -24,6 +30,7 @@ data "template_file" "cloud_init" {
     logit_elasticsearch_url          = var.logit_elasticsearch_url
     logit_api_key                    = var.logit_api_key
     ecs_agent_image_identifier       = var.ecs_agent_image_identifier
+    ecs_agent_proxy_config           = local.ecs_agent_proxy_config
     tools_account_id                 = var.tools_account_id
   }
 }

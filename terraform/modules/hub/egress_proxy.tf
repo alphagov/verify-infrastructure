@@ -63,7 +63,7 @@ locals {
     "sentry\\.tools\\.signin\\.service\\.gov\\.uk",          # Tools Sentry
     replace(local.event_emitter_api_gateway[0], ".", "\\."), # API Gateway
     var.splunk_hostname,                                     # Splunk
-    "logs.${data.aws_region.region.id}.amazonaws.com",       # CloudWatch, for shipping logs to Splunk via CSLS
+    "logs\\.${data.aws_region.region.id}\\.amazonaws\\.com", # CloudWatch, for shipping logs to Splunk via CSLS
   ]
 
   egress_proxy_whitelist = join(" ", local.egress_proxy_whitelist_list)
