@@ -13,8 +13,6 @@ data "template_file" "cloudwatch_exporter_task_def" {
   vars = {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-cloudwatch-exporter@${var.cloudwatch_exporter_image_digest}"
     config_base64    = base64encode(file("${path.module}/files/prometheus/cloudwatch_exporter.yml"))
-    deployment       = var.deployment
-    region           = data.aws_region.region.id
   }
 }
 

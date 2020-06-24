@@ -36,8 +36,6 @@ data "template_file" "analytics_task_def" {
   vars = {
     nginx_image_identifier = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls@${var.nginx_image_digest}"
     location_blocks_base64 = local.nginx_analytics_location_blocks_base64
-    deployment             = var.deployment
-    region                 = data.aws_region.region.id
   }
 }
 

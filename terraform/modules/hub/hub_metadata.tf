@@ -14,7 +14,6 @@ data "template_file" "metadata_task_def" {
 
   vars = {
     deployment       = var.deployment
-    region           = data.aws_region.region.id
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-metadata@${var.hub_metadata_image_digest}"
   }
 }
