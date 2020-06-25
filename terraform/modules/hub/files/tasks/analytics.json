@@ -16,6 +16,15 @@
         "Name": "LOCATION_BLOCKS",
         "Value": "${location_blocks_base64}"
       }
-    ]
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${deployment}-hub",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "analytics-nginx",
+        "awslogs-create-group": "true"
+      }
+    }
   }
 ]
