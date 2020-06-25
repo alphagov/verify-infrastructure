@@ -14,7 +14,6 @@ data "template_file" "metadata_exporter_task_def" {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-metadata-exporter@${var.metadate_exporter_image_digest}"
     signin_domain    = var.signin_domain
     deployment       = var.deployment
-    region           = data.aws_region.region.id
     environment      = var.metadata_exporter_environment
   }
 }
