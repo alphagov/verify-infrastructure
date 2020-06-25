@@ -113,8 +113,6 @@ data "template_file" "static_ingress_http_task_def" {
     backend_port     = 80
     allocated_cpu    = local.allocated_cpu_for_http
     allocated_memory = local.allocated_memory_for_http
-    deployment       = var.deployment
-    region           = data.aws_region.region.id
   }
 }
 
@@ -128,8 +126,6 @@ data "template_file" "static_ingress_https_task_def" {
     backend_port     = 443
     allocated_cpu    = local.allocated_cpu_for_https
     allocated_memory = local.allocated_memory_for_https
-    deployment       = var.deployment
-    region           = data.aws_region.region.id
   }
 }
 
