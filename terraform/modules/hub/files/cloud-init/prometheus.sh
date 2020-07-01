@@ -8,7 +8,7 @@ apt-get update  --yes
 apt-get upgrade --yes
 
 # AWS SSM Agent
-# Installed by default on Ubuntu Bionic AMIs via Snap
+# Installed by default on Ubuntu Focal AMIs via Snap
 echo 'Configuring AWS SSM'
 mkdir -p /etc/amazon/ssm
 cat <<EOF > /etc/amazon/ssm/seelog.xml
