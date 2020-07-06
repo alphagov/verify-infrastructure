@@ -339,7 +339,7 @@ data "template_file" "prometheus_cloud_init" {
 resource "aws_instance" "prometheus" {
   count = var.number_of_prometheus_apps
 
-  ami                  = data.aws_ami.ubuntu_bionic.id
+  ami                  = data.aws_ami.ubuntu_focal.id
   instance_type        = "t3.large"
   subnet_id            = element(aws_subnet.internal.*.id, count.index)
   iam_instance_profile = aws_iam_instance_profile.prometheus.name
