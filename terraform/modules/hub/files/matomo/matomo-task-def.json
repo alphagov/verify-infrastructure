@@ -44,7 +44,7 @@
     "cpu": 1024,
     "memory": 1024,
     "essential": true,
-    "image": "753415395406.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-nginx-tls:latest",
+    "image": "${nginx_image_identifier}",
     "name": "matomo-nginx",
     "portMappings": [
       {

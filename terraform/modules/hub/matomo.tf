@@ -92,6 +92,7 @@ data "template_file" "matomo_task_def" {
   template = file("${path.module}/files/matomo/matomo-task-def.json")
 
   vars = {
+    nginx_image_identifier          = "${local.tools_account_ecr_url_prefix}-verify-nginx-tls@${var.nginx_image_digest}"
     matomo_config_file_part_one_arn = aws_ssm_parameter.matomo_config_file_part_one.arn
     matomo_config_file_part_two_arn = aws_ssm_parameter.matomo_config_file_part_two.arn
     volume_name                     = local.volume_name
