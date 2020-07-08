@@ -3,7 +3,8 @@ resource "aws_ecs_cluster" "fargate-ecs-cluster" {
 }
 
 resource "aws_cloudwatch_log_group" "fargate-logs" {
-  name = "${var.deployment}-hub"
+  name              = "${var.deployment}-hub"
+  retention_in_days = 7
 }
 resource "aws_cloudwatch_log_subscription_filter" "csls-subscription" {
   name            = "${var.deployment}-hub-csls"
