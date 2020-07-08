@@ -438,7 +438,7 @@ resource "aws_cloudwatch_event_rule" "every_hour" {
   schedule_expression = "rate(1 hour)"
 }
 
-data "template_file" "matomo_config_part_one_file" {
+data "template_file" "matomo_config_file_part_one" {
   template = file("${path.module}/files/matomo/matomo-config-file-part-one.ini.php")
 
   vars = {
@@ -454,7 +454,7 @@ resource "aws_ssm_parameter" "matomo_config_file_part_one" {
   description = "Base64 encoded config file part one for Matomo"
   type        = "SecureString"
   key_id      = aws_kms_key.matomo.arn
-  value       = base64encode(data.template_file.matomo_config_part_one_file.rendered)
+  value       = base64encode(data.template_file.matomo_config_file_part_one.rendered)
 }
 
 resource "aws_ssm_parameter" "matomo_config_file_part_two" {
