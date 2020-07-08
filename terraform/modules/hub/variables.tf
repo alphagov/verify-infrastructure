@@ -83,6 +83,10 @@ variable "matomo_salt" {
   description = "Secret salt for matomo cookies and fingerprinting hashes"
 }
 
+variable "matomo_archiving_cronitor_url" {
+  description = "cronitor url for reporting matomo archiving failure"
+}
+
 variable "analytics_endpoint" {
   description = "Analytics endpoint"
 }

@@ -18,7 +18,7 @@
     "entryPoint": [
       "/bin/sh",
       "-c",
-      "curl -sf -m 10 'https://cronitor.link/VzIG7W/run'; echo \"$MATOMO_CONFIG_FILE_PART_ONE\" | base64 -d > /usr/src/matomo/config/config.ini.php;echo \"$MATOMO_CONFIG_FILE_PART_TWO\" | base64 -d >> /usr/src/matomo/config/config.ini.php;/usr/local/bin/php /usr/src/matomo/console core:archive && curl -sf -m 10 'https://cronitor.link/VzIG7W/complete'"
+      "curl -sf -m 10 '${cronitor_url}/run'; echo \"$MATOMO_CONFIG_FILE_PART_ONE\" | base64 -d > /usr/src/matomo/config/config.ini.php;echo \"$MATOMO_CONFIG_FILE_PART_TWO\" | base64 -d >> /usr/src/matomo/config/config.ini.php;/usr/local/bin/php /usr/src/matomo/console core:archive && curl -sf -m 10 '${cronitor_url}/complete'"
     ],
     "logConfiguration": {
       "logDriver": "awslogs",

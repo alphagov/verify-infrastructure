@@ -123,6 +123,7 @@ data "template_file" "matomo_archiving_task_def" {
     matomo_config_file_part_one_arn = aws_ssm_parameter.matomo_config_file_part_one.arn
     matomo_config_file_part_two_arn = aws_ssm_parameter.matomo_config_file_part_two.arn
     image_and_tag                   = "${local.tools_account_ecr_url_prefix}-verify-matomo@${var.matomo_image_digest}"
+    cronitor_url                    = var.matomo_archiving_cronitor_url
   }
 }
 
