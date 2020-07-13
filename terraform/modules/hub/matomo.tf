@@ -518,7 +518,7 @@ resource "aws_db_instance" "matomo" {
 
   # 8x vCPU, 25.5x ECU, 32GiB RAM
   # more here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html
-  instance_class = "db.m4.2xlarge"
+  instance_class = var.matomo_db_instance_class
 }
 
 resource "aws_security_group" "matomo_db" {

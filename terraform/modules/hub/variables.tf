@@ -83,6 +83,11 @@ variable "matomo_salt" {
   description = "Secret salt for matomo cookies and fingerprinting hashes"
 }
 
+variable "matomo_db_instance_class" {
+  description = "EC2 instance class for matomo"
+  default     = "db.m5.large"
+}
+
 variable "matomo_archiving_cronitor_url" {
   description = "cronitor url for reporting matomo archiving failure"
 }
