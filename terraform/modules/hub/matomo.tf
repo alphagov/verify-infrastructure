@@ -29,35 +29,14 @@ resource "aws_kms_key" "matomo" {
   description = "used to encrypt secrets in parameter store for matomo"
 }
 
-# resource "aws_kms_alias" "matomo" {
-#   name          = "alias/platform-web"
-#   target_key_id = aws_kms_key.matomo_web.key_id
-# }
-
 resource "aws_lb" "matomo" {
-  name               = "matomo" ## TODO: namespace
+  name               = "matomo"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.matomo_lb.id]
   subnets            = aws_subnet.ingress.*.id
   idle_timeout       = 300
 }
-
-# resource "aws_lb_listener" "matomo_http" {
-#   load_balancer_arn = aws_lb.matomo.arn
-#   port              = "80"
-#   protocol          = "HTTP"
-
-#   default_action {
-#     type = "redirect"
-
-#     redirect {
-#       port        = "443"
-#       protocol    = "HTTPS"
-#       status_code = "HTTP_301"
-#     }
-#   }
-# }
 
 resource "aws_lb_listener" "matomo_https" {
   load_balancer_arn = aws_lb.matomo.arn
@@ -137,26 +116,8 @@ resource "aws_ecs_task_definition" "matomo_archiving_task_def" {
   memory                   = 2048
 }
 
-data "template_file" "matomo_adhoc_task_def" {
-  template = file("${path.module}/files/matomo/matomo-adhoc-def.json")
-
-  vars = {
-    image_and_tag = "mysql:5"
-  }
-}
-
-resource "aws_ecs_task_definition" "matomo_adhoc_task_def" {
-  family                   = "matomo-adhoc" ## TODO: namespacing?
-  container_definitions    = data.template_file.matomo_adhoc_task_def.rendered
-  network_mode             = "awsvpc"
-  execution_role_arn       = aws_iam_role.matomo_execution.arn
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = 512
-  memory                   = 2048
-}
-
 resource "aws_lb_target_group" "matomo" {
-  name                 = "matomo" ##TODO: namespace?
+  name                 = "matomo"
   port                 = 8443
   protocol             = "HTTPS"
   vpc_id               = aws_vpc.hub.id
@@ -203,7 +164,7 @@ resource "aws_security_group_rule" "matomo_lb_ingress_443_gds" {
 }
 
 resource "aws_security_group" "matomo" {
-  name        = "matomo-common" # Namespace later???
+  name        = "matomo-common"
   description = "Common security group for matomo instances"
   vpc_id      = aws_vpc.hub.id
 }
@@ -293,7 +254,7 @@ EOF
 }
 
 resource "aws_cloudwatch_log_group" "matomo" {
-  name = "matomo" #Namespaced???
+  name = "matomo"
 }
 
 resource "aws_iam_policy" "matomo_web_secrets" {
@@ -516,8 +477,6 @@ resource "aws_db_instance" "matomo" {
 
   ca_cert_identifier = "rds-ca-2019"
 
-  # 8x vCPU, 25.5x ECU, 32GiB RAM
-  # more here: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html
   instance_class = var.matomo_db_instance_class
 }
 
