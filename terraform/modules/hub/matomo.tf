@@ -87,8 +87,8 @@ resource "aws_ecs_task_definition" "matomo_task_def" {
   network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.matomo_execution.arn
   requires_compatibilities = ["FARGATE"]
-  cpu                      = 512
-  memory                   = 2048
+  cpu                      = 4096
+  memory                   = 8192
 
   volume {
     name = local.volume_name
