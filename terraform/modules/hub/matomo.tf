@@ -212,7 +212,7 @@ resource "aws_ecs_service" "matomo" {
   name            = "matomo"
   cluster         = aws_ecs_cluster.fargate-ecs-cluster.id
   task_definition = aws_ecs_task_definition.matomo_task_def.arn
-  desired_count   = 3
+  desired_count   = var.matomo_desired_count
   launch_type     = "FARGATE"
 
   deployment_maximum_percent         = 100
