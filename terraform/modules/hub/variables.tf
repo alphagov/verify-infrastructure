@@ -92,6 +92,11 @@ variable "matomo_archiving_cronitor_url" {
   description = "cronitor url for reporting matomo archiving failure"
 }
 
+variable "matomo_desired_count" {
+  description = "number of matomo instances"
+  default     = 1
+}
+
 variable "analytics_endpoint" {
   description = "Analytics endpoint"
 }
