@@ -228,6 +228,7 @@ resource "aws_ecs_service" "matomo" {
     security_groups = [
       aws_security_group.matomo_lb.id,
       aws_security_group.matomo.id,
+      aws_security_group.can_connect_to_container_vpc_endpoint.id,
     ]
 
     subnets = aws_subnet.internal.*.id
