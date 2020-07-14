@@ -1,0 +1,80 @@
+[
+  {
+    "cpu": 3072,
+    "memory": 12288,
+    "essential": true,
+    "image": "${image_and_tag}",
+    "name": "matomo",
+    "portMappings": [
+      {
+        "containerPort": 9000,
+        "hostPort": 9000
+      }
+    ],
+    "secrets": [
+      {
+        "name": "MATOMO_CONFIG_FILE_PART_ONE",
+        "valueFrom": "${matomo_config_file_part_one_arn}"
+      },
+      {
+        "name": "MATOMO_CONFIG_FILE_PART_TWO",
+        "valueFrom": "${matomo_config_file_part_two_arn}"
+      }
+    ],
+    "mountPoints": [
+      {
+        "sourceVolume": "${volume_name}",
+        "containerPath": "/var/www/html"
+      }
+    ],
+    "entryPoint": [
+      "/bin/sh",
+      "-c",
+      "mkdir -p /var/www/html/config; echo \"$MATOMO_CONFIG_FILE_PART_ONE\" | base64 -d > /var/www/html/config/config.ini.php; echo \"$MATOMO_CONFIG_FILE_PART_TWO\" | base64 -d >> /var/www/html/config/config.ini.php; /entrypoint.sh php-fpm"
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "matomo",
+        "awslogs-region": "eu-west-2",
+        "awslogs-stream-prefix": "matomo"
+      }
+    }
+  }, {
+    "cpu": 1024,
+    "memory": 1024,
+    "essential": true,
+    "image": "${nginx_image_identifier}",
+    "name": "matomo-nginx",
+    "portMappings": [
+      {
+        "containerPort": 8443,
+        "hostPort": 8443
+      }
+    ],
+    "environment": [
+      {
+        "Name": "LOCATION_BLOCKS",
+        "Value": "${location_blocks_base64}"
+      },
+      {
+        "Name": "LOG_FORMAT",
+        "Value": "${log_format_base64}"
+      }
+    ],
+    "mountPoints": [
+      {
+        "sourceVolume": "${volume_name}",
+        "containerPath": "/var/www/html"
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "matomo",
+        "awslogs-region": "eu-west-2",
+        "awslogs-stream-prefix": "matomo-nginx"
+      }
+    }
+  }
+]

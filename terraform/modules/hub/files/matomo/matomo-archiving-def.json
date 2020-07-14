@@ -1,0 +1,32 @@
+[
+  {
+    "cpu": 512,
+    "memory": 2048,
+    "essential": true,
+    "image": "${image_and_tag}",
+    "name": "matomo-archive",
+    "secrets": [
+      {
+        "name": "MATOMO_CONFIG_FILE_PART_ONE",
+        "valueFrom": "${matomo_config_file_part_one_arn}"
+      },
+      {
+        "name": "MATOMO_CONFIG_FILE_PART_TWO",
+        "valueFrom": "${matomo_config_file_part_two_arn}"
+      }
+    ],
+    "entryPoint": [
+      "/bin/sh",
+      "-c",
+      "curl -sf -m 10 '${cronitor_url}/run'; echo \"$MATOMO_CONFIG_FILE_PART_ONE\" | base64 -d > /usr/src/matomo/config/config.ini.php;echo \"$MATOMO_CONFIG_FILE_PART_TWO\" | base64 -d >> /usr/src/matomo/config/config.ini.php;/usr/local/bin/php /usr/src/matomo/console core:archive && curl -sf -m 10 '${cronitor_url}/complete'"
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "matomo",
+        "awslogs-region": "eu-west-2",
+        "awslogs-stream-prefix": "matomo-archive"
+      }
+    }
+  }
+]
