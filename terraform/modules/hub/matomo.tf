@@ -56,7 +56,7 @@ resource "aws_lb_listener" "matomo_https" {
 }
 
 resource "aws_route53_record" "matomo" {
-  zone_id = aws_route53_zone.ingress_www.id
+  zone_id = aws_route53_zone.mgmt_domain.zone_id
   name    = "analytics.${local.mgmt_domain}"
   type    = "A"
 
