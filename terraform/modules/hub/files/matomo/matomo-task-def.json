@@ -1,7 +1,7 @@
 [
   {
     "cpu": 3072,
-    "memory": 12288,
+    "memory": 7168,
     "essential": true,
     "image": "${image_and_tag}",
     "name": "matomo",
