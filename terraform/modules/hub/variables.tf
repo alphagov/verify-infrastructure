@@ -94,7 +94,7 @@ variable "matomo_archiving_cronitor_url" {
 
 variable "matomo_desired_count" {
   description = "number of matomo instances"
-  default     = 1
+  default     = 2
 }
 
 variable "analytics_endpoint" {
