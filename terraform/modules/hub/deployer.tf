@@ -9,7 +9,10 @@ resource "aws_iam_role" "deployer" {
       {
         "Action": "sts:AssumeRole",
         "Principal": {
-          "AWS": "arn:aws:iam::${var.tools_account_id}:role/concourse-worker"
+          "AWS": [
+            "arn:aws:iam::${var.tools_account_id}:role/concourse-worker",
+            "arn:aws:iam::047969882937:role/cd-verify-concourse-worker"
+          ]
         },
         "Effect": "Allow"
       }
