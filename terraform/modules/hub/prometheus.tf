@@ -445,6 +445,8 @@ data "template_file" "prometheus_task_def" {
     config_base64    = base64encode(data.template_file.prometheus_config.rendered)
     alerts_base64    = base64encode(file("${path.module}/files/prometheus/alerts.yml"))
     external_url     = "https://prom-${count.index + 1}.${local.mgmt_domain}"
+    deployment       = var.deployment
+    region           = data.aws_region.region.id
   }
 }
 
