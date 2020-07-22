@@ -79,24 +79,6 @@ variable "matomo_site_id" {
   default     = 1
 }
 
-variable "matomo_salt" {
-  description = "Secret salt for matomo cookies and fingerprinting hashes"
-}
-
-variable "matomo_db_instance_class" {
-  description = "EC2 instance class for matomo"
-  default     = "db.m5.large"
-}
-
-variable "matomo_archiving_cronitor_url" {
-  description = "cronitor url for reporting matomo archiving failure"
-}
-
-variable "matomo_desired_count" {
-  description = "number of matomo instances"
-  default     = 2
-}
-
 variable "analytics_endpoint" {
   description = "Analytics endpoint"
 }
@@ -223,4 +205,3 @@ variable "cloudwatch_exporter_image_digest" {}
 variable "squid_image_digest" {}
 variable "metadate_exporter_image_digest" {}
 variable "prometheus_image_digest" {}
-variable "matomo_image_digest" {}
