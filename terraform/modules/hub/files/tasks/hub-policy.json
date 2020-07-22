@@ -89,6 +89,10 @@
       {
         "Name": "JAVA_OPTS",
         "Value": "-Dservice.name=policy ${jvm_options} -XX:+HeapDumpOnOutOfMemoryError -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5"
+      },
+      {
+        "Name": "LOG_LEVEL",
+        "Value": "${log_level}"
       }
     ],
     "healthCheck" : {

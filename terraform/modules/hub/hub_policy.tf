@@ -76,6 +76,7 @@ data "template_file" "policy_task_def" {
     redis_host = "rediss://${
       aws_elasticache_replication_group.policy_session_store.primary_endpoint_address
     }:6379"
+    log_level                     = var.hub_policy_log_level
   }
 }
 

@@ -73,6 +73,7 @@ data "template_file" "saml_proxy_task_def" {
     certificates_config_cache_expiry = var.certificates_config_cache_expiry
     jvm_options                      = var.jvm_options
     memory_hard_limit                = var.saml_proxy_memory_hard_limit
+    log_level                        = var.hub_saml_proxy_log_level
   }
 }
 

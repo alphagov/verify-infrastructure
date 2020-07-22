@@ -74,7 +74,7 @@ data "template_file" "frontend_task_def" {
     cross_gov_ga_tracker_id    = var.cross_gov_ga_tracker_id
     cross_gov_ga_domain_names  = var.cross_gov_ga_domain_names
     publish_hub_config_enabled = var.publish_hub_config_enabled
-    log_level                  = var.log_level
+    log_level                  = var.hub_frontend_log_level
     throttling_enabled         = var.throttling_enabled
   }
 }

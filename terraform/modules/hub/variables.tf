@@ -121,9 +121,29 @@ variable "certificates_config_cache_expiry" {
   default     = "1m"
 }
 
-variable "log_level" {
+variable "hub_frontend_log_level" {
   description = "Log level for Puma and Frontend applications"
   default     = "warn"
+}
+
+variable "hub_config_log_level" {
+  default = "INFO"
+}
+
+variable "hub_policy_log_level" {
+  default = "INFO"
+}
+
+variable "hub_saml_proxy_log_level" {
+  default = "INFO"
+}
+
+variable "hub_saml_soap_proxy_log_level" {
+  default = "INFO"
+}
+
+variable "hub_saml_engine_log_level" {
+  default = "INFO"
 }
 
 variable "metadata_exporter_environment" {
