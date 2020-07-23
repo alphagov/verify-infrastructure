@@ -3,9 +3,17 @@ set -ueo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
+function run-until-success() {
+  until $*
+  do
+    echo "Executing $* failed. Sleeping..."
+    sleep 5
+  done
+}
+
 # Apt
-apt-get update  --yes
-apt-get upgrade --yes
+run-until-success apt-get update  --yes
+run-until-success apt-get upgrade --yes
 
 # AWS SSM Agent
 # Installed by default on Ubuntu Focal AMIs via Snap
@@ -46,7 +54,7 @@ systemctl restart systemd-journald
 
 # Use Amazon NTP
 echo 'Installing and configuring chrony'
-apt-get install --yes chrony
+run-until-success apt-get install --yes chrony
 sed '/pool/d' /etc/chrony/chrony.conf \
 | cat <(echo "server 169.254.169.123 prefer iburst") - > /tmp/chrony.conf
 echo "allow 127/8" >> /tmp/chrony.conf
@@ -56,7 +64,7 @@ systemctl restart chrony
 # Docker
 echo 'Installing and configuring docker'
 mkdir -p /etc/systemd/system/docker.service.d
-apt-get install --yes docker.io
+run-until-success apt-get install --yes docker.io
 cat <<EOF > /etc/systemd/system/docker.service.d/override.conf
 [Service]
 ExecStart=
@@ -114,7 +122,7 @@ sed -i -e 's/After=.*/& docker.service/' /lib/systemd/system/journalbeat.service
 systemctl enable --now journalbeat
 
 echo 'Installing prometheus node exporter'
-apt-get install --yes prometheus-node-exporter
+run-until-success apt-get install --yes prometheus-node-exporter
 mkdir /etc/systemd/system/prometheus-node-exporter.service.d
 # Create an environment file for prometheus node exporter
 cat >  /etc/systemd/system/prometheus-node-exporter.service.d/prometheus-node-exporter.env <<EOF
@@ -163,7 +171,7 @@ mkdir -p /srv/prometheus/metrics2
 chown -R nobody /srv/prometheus
 
 echo 'Installing awscli'
-apt-get install --yes awscli
+run-until-success apt-get install --yes awscli
 
 #Initialise a node_creation_time metric to enable the predict_linear function to handle new nodes
 echo "node_creation_time `date +%s`" > /var/lib/prometheus/node-exporter/node-creation-time.prom
@@ -182,7 +190,7 @@ EOF
 
 chmod +x /usr/bin/instance-reboot-required-metric.sh
 
-apt-get install --yes moreutils
+run-until-success apt-get install --yes moreutils
 
 crontab - <<EOF
 $(crontab -l | grep -v 'no crontab')
@@ -215,19 +223,50 @@ echo 'Adding networking rules for CVE-2020-8558'
 iptables -I INPUT --dst 127.0.0.0/8 ! --src 127.0.0.0/8 -m conntrack ! --ctstate RELATED,ESTABLISHED,DNAT -j DROP
 iptables-save > /etc/iptables/rules.v4
 
+# Have systemd manage the ecs agent
+# We have occasionally seen issues where docker gets into a bad
+# state. The working hypothesis is that the ecs agent starts
+# executing tasks, which include port mappings. When the reboot
+# happens at the end of this script it occasionally doesn't tidy
+# and recover. So, don't run ECS until after the reboot that we
+# know is coming.
+cat > /root/pull-ecs-image.sh <<'EOF'
+#!/usr/bin/env bash
+
+set -euo pipefail
+
 eval $(aws ecr get-login                                          \
            --no-include-email                                     \
            --region eu-west-2                                     \
            --endpoint-url https://api.ecr.eu-west-2.amazonaws.com \
-           --registry-ids ${tools_account_id}\
+           --registry-ids ${tools_account_id} \
       )
 
-docker run \
+docker pull ${ecs_agent_image_identifier}
+EOF
+chmod 0700 /root/pull-ecs-image.sh
+
+cat > /etc/systemd/system/ecs.service <<'EOF'
+[Unit]
+Description=Elastic Container Service agent
+After=docker.service
+Wants=docker.service
+BindsTo=docker.service
+
+[Service]
+TimeoutSec=0
+RestartSec=2
+Restart=always
+
+ExecStartPre=/bin/mkdir -p /etc/ecs
+ExecStartPre=/bin/mkdir -p /var/lib/ecs/data
+ExecStartPre=/root/pull-ecs-image.sh
+ExecStartPre=-/usr/bin/docker rm --force ecs-agent
+ExecStart=/usr/bin/docker run \
+  --rm \
   --init \
   --privileged \
   --name ecs-agent \
-  --detach=true \
-  --restart=always \
   --volume=/etc/ecs:/etc/ecs \
   --volume=/lib64:/lib64 \
   --volume=/lib:/lib \
@@ -249,5 +288,14 @@ docker run \
   --env='ECS_ENABLE_AWSLOGS_EXECUTIONROLE_OVERRIDE=true' \
   --env="ECS_LOGLEVEL=warn" \
   ${ecs_agent_image_identifier}
+
+ExecStop=/usr/bin/docker stop -t 120 ecs-agent
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable ecs
 
 reboot
