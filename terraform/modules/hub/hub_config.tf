@@ -89,6 +89,7 @@ data "template_file" "config_task_def" {
     metadata_object_key      = local.metadata_object_key
     memory_hard_limit        = var.config_memory_hard_limit
     jvm_options              = var.jvm_options
+    log_level                = var.hub_config_log_level
   }
 }
 
@@ -167,21 +168,21 @@ resource "aws_iam_role_policy_attachment" "config-fargate_task_can_read_metadata
 module "config-fargate" {
   source = "./modules/ecs_fargate_app"
 
-  deployment                 = var.deployment
-  app                        = "config"
-  domain                     = local.root_domain
-  vpc_id                     = aws_vpc.hub.id
-  lb_subnets                 = aws_subnet.internal.*.id
-  task_definition            = data.template_file.config_task_def_fargate.rendered
-  container_name             = "nginx"
-  container_port             = "8443"
-  number_of_tasks            = var.number_of_apps
-  health_check_path          = "/service-status"
-  tools_account_id           = var.tools_account_id
-  image_name                 = "verify-config"
-  certificate_arn            = var.wildcard_cert_arn
-  ecs_cluster_id             = aws_ecs_cluster.fargate-ecs-cluster.id
-  cpu                        = 2048
+  deployment        = var.deployment
+  app               = "config"
+  domain            = local.root_domain
+  vpc_id            = aws_vpc.hub.id
+  lb_subnets        = aws_subnet.internal.*.id
+  task_definition   = data.template_file.config_task_def_fargate.rendered
+  container_name    = "nginx"
+  container_port    = "8443"
+  number_of_tasks   = var.number_of_apps
+  health_check_path = "/service-status"
+  tools_account_id  = var.tools_account_id
+  image_name        = "verify-config"
+  certificate_arn   = var.wildcard_cert_arn
+  ecs_cluster_id    = aws_ecs_cluster.fargate-ecs-cluster.id
+  cpu               = 2048
   # for a CPU of 2048 we need to set a RAM value between 4096 and 16384 (inclusive) that is a multiple of 1024.
   memory  = ceil(max(var.config_memory_hard_limit + 250, 4096) / 1024) * 1024
   subnets = aws_subnet.internal.*.id

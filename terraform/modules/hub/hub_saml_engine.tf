@@ -57,6 +57,7 @@ data "template_file" "saml_engine_task_def" {
     certificates_config_cache_expiry = var.certificates_config_cache_expiry
     memory_hard_limit                = var.saml_engine_memory_hard_limit
     jvm_options                      = var.jvm_options
+    log_level                        = var.hub_saml_engine_log_level
   }
 }
 

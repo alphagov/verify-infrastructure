@@ -105,6 +105,10 @@
       {
         "Name": "CERTIFICATES_CONFIG_CACHE_EXPIRY",
         "Value": "${certificates_config_cache_expiry}"
+      },
+      {
+        "Name": "LOG_LEVEL",
+        "Value": "${log_level}"
       }
     ],
     "healthCheck" : {
