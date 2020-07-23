@@ -42,19 +42,22 @@ cf add-network-policy "test-rp-$ENVIRONMENT" --destination-app "test-rp-msa-$ENV
 # Allow MSA to access local matching service in test-rp
 cf add-network-policy "test-rp-msa-$ENVIRONMENT" --destination-app "test-rp-$ENVIRONMENT" --protocol tcp --port 8080
 
-git clone https://github.com/alphagov/re-paas-ip-safelist-service
-cd re-paas-ip-safelist-service
+git clone https://github.com/alphagov/paas-ip-authentication-route-service
+cd paas-ip-authentication-route-service
 # The templating in re-paas-ip-safelist-service doesn't really work for us so let's override it
 cat << MANIFEST > manifest.yml
 applications:
   - name: ((app))-ip-safelist-service
+    instances: 2
+    memory: 256M
     routes:
       - route: ((app))-ip-safelist-service.cloudapps.digital
     buildpacks:
-      - staticfile_buildpack
-    instances: 1
-    memory: 256M
+      - nginx_buildpack
+    health-check-type: http
+    health-check-http-endpoint: /_route-service-health
     env:
+      APP_NAME: ((app))-ip-safelist-service
       ALLOWED_IPS: ((allowed_ips))
 MANIFEST
 
