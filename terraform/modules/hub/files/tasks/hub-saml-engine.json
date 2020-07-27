@@ -84,7 +84,7 @@
       },
       {
         "Name": "JAVA_OPTS",
-        "Value": "-Dservice.name=config ${jvm_options} -XX:+HeapDumpOnOutOfMemoryError -Dhttp.proxyHost=\"egress-proxy.${domain}\" -Dhttp.proxyPort=\"8080\" -Dhttps.proxyHost=\"egress-proxy.${domain}\" -Dhttps.proxyPort=\"8080\" -Dhttp.nonProxyHosts=\"www.${domain}|config.${domain}|policy.${domain}|saml-soap-proxy.${domain}|saml-soap-proxy.${domain}\" -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5"
+        "Value": "-Dservice.name=config ${jvm_options} -XX:+HeapDumpOnOutOfMemoryError -Dhttp.proxyHost=\"egress-proxy.${domain}\" -Dhttp.proxyPort=\"8080\" -Dhttps.proxyHost=\"egress-proxy.${domain}\" -Dhttps.proxyPort=\"8080\" -Dhttp.nonProxyHosts=\"www.${domain}|config.${domain}|config-fargate.${domain}|policy.${domain}|saml-soap-proxy.${domain}|saml-soap-proxy.${domain}\" -Dnetworkaddress.cache.ttl=5 -Dnetworkaddress.cache.negative.ttl=5"
       },
       {
         "Name": "REDIS_HOST",
