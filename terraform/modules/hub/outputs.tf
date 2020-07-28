@@ -14,10 +14,6 @@ output "public_subnet_ids" {
   value = aws_subnet.ingress.*.id
 }
 
-output "config_lb_sg_id" {
-  value = module.config.lb_sg_id
-}
-
 output "config_fargate_lb_sg_id" {
   value = module.config-fargate.lb_sg_id
 }

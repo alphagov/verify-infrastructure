@@ -120,13 +120,6 @@ resource "aws_iam_role_policy_attachment" "saml_proxy_parameter_execution" {
   policy_arn = aws_iam_policy.saml_proxy_parameter_execution.arn
 }
 
-module "saml_proxy_can_connect_to_config" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = module.saml_proxy_ecs_asg.instance_sg_id
-  destination_sg_id = module.config.lb_sg_id
-}
-
 module "saml_proxy_can_connect_to_config_fargate" {
   source = "./modules/microservice_connection"
 
