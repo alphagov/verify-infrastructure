@@ -59,19 +59,6 @@ resource "aws_security_group" "egress_over_https" {
   }
 }
 
-resource "aws_security_group_rule" "self_service_ingress_to_config_lb" {
-  type     = "ingress"
-  protocol = "tcp"
-
-  from_port = 443
-  to_port   = 443
-
-  security_group_id        = data.terraform_remote_state.hub.outputs.config_lb_sg_id
-  source_security_group_id = aws_security_group.egress_over_https.id
-
-  description = "Allows traffic from self-service app to config"
-}
-
 resource "aws_security_group_rule" "self_service_ingress_to_config_fargate_lb" {
   type     = "ingress"
   protocol = "tcp"

@@ -97,7 +97,7 @@ module "prometheus_can_talk_to_config" {
   source = "./modules/microservice_connection"
 
   source_sg_id      = aws_security_group.prometheus.id
-  destination_sg_id = module.config_ecs_asg.instance_sg_id
+  destination_sg_id = module.config-fargate.task_sg_id
 
   port = 8443
 }
