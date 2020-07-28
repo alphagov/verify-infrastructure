@@ -1115,7 +1115,7 @@
         {
           "alias": "Config Task",
           "dimensions": {
-            "ClusterName": "prod-config",
+            "ClusterName": "prod",
             "ServiceName": "prod-config"
           },
           "expression": "",
@@ -1125,25 +1125,6 @@
           "namespace": "AWS/ECS",
           "period": "",
           "refId": "A",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
-        },
-        {
-          "alias": "Config Beat Exporter Task",
-          "dimensions": {
-            "ClusterName": "prod-config",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "metricName": "MemoryUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "B",
           "region": "eu-west-2",
           "returnData": false,
           "statistics": [
