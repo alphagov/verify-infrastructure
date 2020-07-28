@@ -32,7 +32,6 @@ locals {
     "saml-proxy",
     "saml-engine",
     "policy",
-    "config",
     "saml-soap-proxy",
   ]
 }
