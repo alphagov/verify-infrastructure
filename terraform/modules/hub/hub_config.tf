@@ -32,6 +32,7 @@ data "template_file" "config_task_def_fargate" {
     metadata_object_key      = local.metadata_object_key
     memory_hard_limit        = var.config_memory_hard_limit
     jvm_options              = var.jvm_options
+    log_level                = var.hub_config_log_level
   }
 }
 
