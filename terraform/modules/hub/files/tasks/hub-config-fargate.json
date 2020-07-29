@@ -88,6 +88,10 @@
       {
         "Name": "METADATA_OBJECT_KEY",
         "Value": "${metadata_object_key}"
+      },
+      {
+        "Name": "LOG_LEVEL",
+        "Value": "${log_level}"
       }
     ],
     "healthCheck" : {
