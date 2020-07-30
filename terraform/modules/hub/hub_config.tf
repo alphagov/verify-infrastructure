@@ -44,7 +44,7 @@ resource "aws_iam_role_policy_attachment" "config-fargate_task_can_read_metadata
 }
 
 module "config-fargate" {
-  source = "./modules/ecs_fargate_app"
+  source = "git::https://github.com/alphagov/verify-infrastructure//terraform/modules/hub/modules/ecs_fargate_app?ref=b0682b601cc17013cff670223cb8cd75e9a54e65"
 
   deployment = var.deployment
   app        = "config"
