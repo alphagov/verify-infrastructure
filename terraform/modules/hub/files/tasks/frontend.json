@@ -74,7 +74,7 @@
       "Value": "90"
     }, {
       "Name": "CONFIG_API_HOST",
-      "Value": "https://config-fargate.${domain}:443"
+      "Value": "https://config-v2-fargate.${domain}:443"
     }, {
       "Name": "POLICY_HOST",
       "Value": "https://policy.${domain}:443"
