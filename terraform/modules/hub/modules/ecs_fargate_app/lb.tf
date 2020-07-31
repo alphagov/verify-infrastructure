@@ -12,7 +12,7 @@ resource "aws_lb" "app" {
 }
 
 resource "aws_lb_target_group" "task" {
-  name                 = "${local.identifier}-fargate-task"
+  name                 = "${local.identifier}-fargate"
   port                 = "8443"
   protocol             = "HTTPS"
   target_type          = "ip"
