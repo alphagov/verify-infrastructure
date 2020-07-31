@@ -31,6 +31,10 @@ resource "aws_lb_target_group" "task" {
   depends_on = [
     "aws_lb.app",
   ]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_lb_listener" "http" {
