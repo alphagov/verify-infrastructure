@@ -153,6 +153,11 @@ module "config_fargate_v2" {
   service_discovery_namespace_id = aws_service_discovery_private_dns_namespace.hub_apps.id
 }
 
+resource "aws_iam_role_policy_attachment" "config_fargate_v2_task_can_read_metadata_bucket" {
+  role       = module.config_fargate_v2.task_role_name
+  policy_arn = aws_iam_policy.can_read_config_metadata_bucket.arn
+}
+
 resource "aws_security_group_rule" "config_v2_task_egress_to_internet_over_http" {
   type      = "egress"
   protocol  = "tcp"
