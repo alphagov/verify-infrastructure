@@ -46,4 +46,9 @@ resource "aws_ecs_service" "app" {
       [aws_security_group.task.id],
     )
   }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.app.arn
+    port         = var.container_port
+  }
 }
