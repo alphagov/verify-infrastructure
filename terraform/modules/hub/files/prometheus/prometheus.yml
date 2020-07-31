@@ -109,6 +109,7 @@ scrape_configs:
       - names:
           - "${deployment}-config-v2-fargate.hub.local"
           - "${deployment}-saml-engine-fargate.hub.local"
+          - "${deployment}-saml-proxy-fargate.hub.local"
     relabel_configs:
       - source_labels: [__meta_dns_name]
         target_label: job

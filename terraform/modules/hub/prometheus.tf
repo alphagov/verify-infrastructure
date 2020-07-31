@@ -120,6 +120,15 @@ module "prometheus_can_talk_to_saml_proxy" {
   port = 8443
 }
 
+module "prometheus_can_talk_to_saml_proxy_fargate" {
+  source = "./modules/microservice_connection"
+
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = module.saml_proxy_fargate.task_sg_id
+
+  port = 8443
+}
+
 module "prometheus_can_talk_to_saml_soap_proxy" {
   source = "./modules/microservice_connection"
 
