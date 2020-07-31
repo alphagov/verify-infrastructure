@@ -102,6 +102,15 @@ module "prometheus_can_talk_to_config" {
   port = 8443
 }
 
+module "prometheus_can_talk_to_config_v2" {
+  source = "./modules/microservice_connection"
+
+  source_sg_id      = aws_security_group.prometheus.id
+  destination_sg_id = module.config_fargate_v2.task_sg_id
+
+  port = 8443
+}
+
 module "prometheus_can_talk_to_saml_engine" {
   source = "./modules/microservice_connection"
 
