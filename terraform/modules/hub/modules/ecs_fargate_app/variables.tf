@@ -71,3 +71,7 @@ variable "subnets" {
 variable "additional_task_security_group_ids" {
   type = list(string)
 }
+
+variable "service_discovery_namespace_id" {
+  type = string
+}
