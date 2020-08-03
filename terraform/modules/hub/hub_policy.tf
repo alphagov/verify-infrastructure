@@ -123,13 +123,6 @@ resource "aws_iam_role_policy_attachment" "policy_parameter_execution" {
   policy_arn = aws_iam_policy.policy_parameter_execution.arn
 }
 
-module "policy_can_connect_to_config_fargate" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = module.policy_ecs_asg.instance_sg_id
-  destination_sg_id = module.config-fargate.lb_sg_id
-}
-
 module "policy_can_connect_to_config_fargate_v2" {
   source = "./modules/microservice_connection"
 
