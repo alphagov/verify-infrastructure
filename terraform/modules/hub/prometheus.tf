@@ -93,11 +93,11 @@ module "prometheus_can_talk_to_policy" {
   port = 8443
 }
 
-module "prometheus_can_talk_to_config_v2" {
+module "prometheus_can_talk_to_hub_fargate_microservices" {
   source = "./modules/microservice_connection"
 
   source_sg_id      = aws_security_group.prometheus.id
-  destination_sg_id = module.config_fargate_v2.task_sg_id
+  destination_sg_id = aws_security_group.hub_fargate_microservice.id
 
   port = 8443
 }
