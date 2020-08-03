@@ -100,6 +100,24 @@ scrape_configs:
         action: keep
       - source_labels: [__meta_ec2_tag_Cluster]
         target_label: job
+  - job_name: fargate-apps
+    metrics_path: '/prometheus/metrics'
+    scheme: 'https'
+    tls_config:
+      insecure_skip_verify: true
+    dns_sd_configs:
+      - names:
+          - "${deployment}-config-v2-fargate.hub.local"
+    relabel_configs:
+      - source_labels: [__meta_dns_name]
+        target_label: job
+        regex: "^${deployment}-(.*)-fargate.hub.local$"
+      # special case to deal with `config-v2` so that it gets
+      # `job="config"` not `job="config-v2"`
+      - source_labels: [__meta_dns_name]
+        target_label: job
+        regex: "^${deployment}-config-v2-fargate.hub.local$"
+        replacement: config
   - job_name: cloudwatch_exporter
     scrape_interval: 60s
     metrics_path: '/metrics'
