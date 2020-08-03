@@ -207,6 +207,11 @@ resource "aws_iam_role_policy_attachment" "saml_engine_parameter_execution" {
   policy_arn = aws_iam_policy.saml_engine_parameter_execution.arn
 }
 
+resource "aws_iam_role_policy_attachment" "saml_engine_fargate_parameter_execution" {
+  role       = "${var.deployment}-saml-engine-fargate-execution"
+  policy_arn = aws_iam_policy.saml_engine_parameter_execution.arn
+}
+
 module "saml_engine_can_connect_to_saml_engine_redis" {
   source = "./modules/microservice_connection"
 
