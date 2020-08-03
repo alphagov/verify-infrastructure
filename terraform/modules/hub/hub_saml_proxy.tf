@@ -147,6 +147,7 @@ module "saml_proxy_fargate" {
   subnets = aws_subnet.internal.*.id
   additional_task_security_group_ids = [
     aws_security_group.can_connect_to_container_vpc_endpoint.id,
+    aws_security_group.hub_fargate_microservice.id,
   ]
   service_discovery_namespace_id = aws_service_discovery_private_dns_namespace.hub_apps.id
 }
