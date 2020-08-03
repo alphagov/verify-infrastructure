@@ -1,8 +1,8 @@
 resource "aws_lb" "self_service_edge" {
   load_balancer_type = "application"
 
-  name            = "${var.deployment}-${local.service}"
-  internal        = false
+  name     = "${var.deployment}-${local.service}"
+  internal = false
   security_groups = [
     aws_security_group.ingress.id,
     aws_security_group.egress.id
@@ -81,7 +81,8 @@ resource "aws_lb_listener_rule" "disable_health_check_from_public" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["/healthcheck"]
+    path_pattern {
+      values = ["/healthcheck"]
+    }
   }
 }

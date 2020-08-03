@@ -185,8 +185,9 @@ resource "aws_lb_listener_rule" "ingress_metadata_sp" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["/SAML2/metadata/sp"]
+    path_pattern {
+      values = ["/SAML2/metadata/sp"]
+    }
   }
 }
 
@@ -206,8 +207,9 @@ resource "aws_lb_listener_rule" "ingress_root" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["/"]
+    path_pattern {
+      values = ["/"]
+    }
   }
 }
 
@@ -221,8 +223,9 @@ resource "aws_lb_listener_rule" "ingress_metadata" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["/SAML2/metadata/*"]
+    path_pattern {
+      values = ["/SAML2/metadata/*"]
+    }
   }
 }
 
@@ -236,8 +239,9 @@ resource "aws_lb_listener_rule" "ingress_analytics" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["/analytics*"]
+    path_pattern {
+      values = ["/analytics*"]
+    }
   }
 }
 
@@ -258,8 +262,9 @@ resource "aws_lb_listener_rule" "ingress_metrics" {
   }
 
   condition {
-    field  = "path-pattern"
-    values = ["/metrics*"]
+    path_pattern {
+      values = ["/metrics*"]
+    }
   }
 }
 
