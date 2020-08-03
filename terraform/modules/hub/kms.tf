@@ -85,6 +85,7 @@ data "aws_iam_policy_document" "policy" {
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.account.account_id}:root",
         "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${var.deployment}-policy-execution",
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${module.policy_fargate.execution_role_name}",
       ]
     }
 
@@ -105,6 +106,8 @@ resource "aws_kms_key" "policy" {
   deletion_window_in_days = 7
 
   policy = data.aws_iam_policy_document.policy.json
+
+  depends_on = [module.policy_fargate.execution_role_name]
 }
 
 resource "aws_kms_alias" "policy" {

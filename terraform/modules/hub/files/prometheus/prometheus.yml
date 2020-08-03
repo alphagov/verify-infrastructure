@@ -108,6 +108,7 @@ scrape_configs:
     dns_sd_configs:
       - names:
           - "${deployment}-config-v2-fargate.hub.local"
+          - "${deployment}-policy-fargate.hub.local"
           - "${deployment}-saml-engine-fargate.hub.local"
           - "${deployment}-saml-proxy-fargate.hub.local"
           - "${deployment}-saml-soap-proxy-fargate.hub.local"

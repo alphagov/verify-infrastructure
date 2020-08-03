@@ -236,6 +236,20 @@ module "saml_soap_proxy_fargate_can_connect_to_policy" {
   destination_sg_id = module.policy.lb_sg_id
 }
 
+module "saml_soap_proxy_can_connect_to_policy_fargate" {
+  source = "./modules/microservice_connection"
+
+  source_sg_id      = module.saml_soap_proxy_ecs_asg.instance_sg_id
+  destination_sg_id = module.policy_fargate.lb_sg_id
+}
+
+module "saml_soap_proxy_fargate_can_connect_to_policy_fargate" {
+  source = "./modules/microservice_connection"
+
+  source_sg_id      = module.saml_soap_proxy_fargate.task_sg_id
+  destination_sg_id = module.policy_fargate.lb_sg_id
+}
+
 module "saml_soap_proxy_can_connect_to_saml_engine_fargate" {
   source = "./modules/microservice_connection"
 
