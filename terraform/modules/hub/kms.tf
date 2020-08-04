@@ -9,6 +9,7 @@ data "aws_iam_policy_document" "hub_key" {
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.account.account_id}:root",
         "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${var.deployment}-saml-engine-execution",
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${var.deployment}-saml-engine-fargate-execution",
       ]
     }
 
