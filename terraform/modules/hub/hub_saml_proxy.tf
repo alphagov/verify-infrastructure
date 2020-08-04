@@ -42,6 +42,26 @@ resource "aws_security_group_rule" "saml_proxy_instance_egress_to_internet_over_
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
+resource "aws_security_group_rule" "saml_proxy_task_egress_to_internet_over_http" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 80
+  to_port   = 80
+
+  security_group_id = module.saml_proxy_fargate.task_sg_id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "saml_proxy_task_egress_to_internet_over_https" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = module.saml_proxy_fargate.task_sg_id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 locals {
   saml_proxy_location_blocks = <<-LOCATIONS
   location = /prometheus/metrics {
