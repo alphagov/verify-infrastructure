@@ -149,7 +149,7 @@
       "Value": "${zendesk_username}"
     }, {
       "Name": "SAML_PROXY_HOST",
-      "Value": "https://saml-proxy.${domain}:443"
+      "Value": "https://saml-proxy-fargate.${domain}:443"
     }, {
       "Name": "VERIFY_PRODUCT_PAGE",
       "Value": "https://govuk-verify.cloudapps.digital/"
