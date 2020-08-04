@@ -180,7 +180,7 @@ resource "aws_iam_role_policy_attachment" "saml_proxy_parameter_execution" {
 }
 
 resource "aws_iam_role_policy_attachment" "saml_proxy_fargate_parameter_execution" {
-  role       = "${var.deployment}-saml-proxy-fargate-execution"
+  role       = module.saml_proxy_fargate.execution_role_name
   policy_arn = aws_iam_policy.saml_proxy_parameter_execution.arn
 }
 
