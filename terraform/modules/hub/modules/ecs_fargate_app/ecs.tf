@@ -22,10 +22,6 @@ output "task_role_name" {
   value = module.ecs_roles.task_role_name
 }
 
-output "execution_role_name" {
-  value = module.ecs_roles.execution_role_name
-}
-
 resource "aws_ecs_service" "app" {
   name            = local.identifier
   cluster         = var.ecs_cluster_id
@@ -44,7 +40,7 @@ resource "aws_ecs_service" "app" {
   }
 
   network_configuration {
-    subnets = var.subnets
+    subnets         = var.subnets
     security_groups = concat(
       var.additional_task_security_group_ids,
       [aws_security_group.task.id],
