@@ -149,6 +149,13 @@ module "frontend_can_connect_to_saml_proxy" {
   destination_sg_id = module.saml_proxy.lb_sg_id
 }
 
+module "frontend_can_connect_to_saml_proxy_fargate" {
+  source = "./modules/microservice_connection"
+
+  source_sg_id      = aws_security_group.frontend_task.id
+  destination_sg_id = module.saml_proxy_fargate.lb_sg_id
+}
+
 resource "aws_iam_policy" "frontend_parameter_execution" {
   name = "${var.deployment}-frontend-parameter-execution"
 
