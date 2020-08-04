@@ -42,7 +42,7 @@ resource "aws_security_group_rule" "saml_proxy_instance_egress_to_internet_over_
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group_rule" "saml_proxy_task_egress_to_internet_over_http" {
+resource "aws_security_group_rule" "saml_proxy_fargate_egress_to_internet_over_http" {
   type      = "egress"
   protocol  = "tcp"
   from_port = 80
@@ -52,7 +52,7 @@ resource "aws_security_group_rule" "saml_proxy_task_egress_to_internet_over_http
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group_rule" "saml_proxy_task_egress_to_internet_over_https" {
+resource "aws_security_group_rule" "saml_proxy_fargate_egress_to_internet_over_https" {
   type      = "egress"
   protocol  = "tcp"
   from_port = 443
