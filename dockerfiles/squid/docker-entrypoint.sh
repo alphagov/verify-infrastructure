@@ -1,12 +1,12 @@
 #!/usr/bin/env ash
 set -ueo pipefail
 
-whitelist="${WHITELIST:?WHITELIST not set}"
-whitelist="$(echo "$whitelist" | base64 -d)"
+allowlist="${ALLOWLIST:-${WHITELIST:?ALLOWLIST not set}}"
+allowlist="$(echo "$allowlist" | base64 -d)"
 
 all_acls=""
 
-for regex in $whitelist; do
+for regex in $allowlist; do
 all_acls="$(cat <<EOF
 $all_acls
 acl permitted_dest dstdom_regex ^${regex}$
