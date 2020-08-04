@@ -55,24 +55,20 @@ locals {
 }
 
 locals {
-  egress_proxy_whitelist_list = [
-    "eu-west-2\\.ec2\\.archive\\.ubuntu\\.com",              # Apt
-    "security\\.ubuntu\\.com",                               # Apt
-    "artifacts\\.elastic\\.co",                              # Journalbeat
-    replace(var.logit_elasticsearch_url, ".", "\\."),        # Logit
+  egress_proxy_allowlist_list = [
     "sentry\\.tools\\.signin\\.service\\.gov\\.uk",          # Tools Sentry
     replace(local.event_emitter_api_gateway[0], ".", "\\."), # API Gateway
     var.splunk_hostname,                                     # Splunk
   ]
 
-  egress_proxy_whitelist = join(" ", local.egress_proxy_whitelist_list)
+  egress_proxy_allowlist = join(" ", local.egress_proxy_allowlist_list)
 }
 
 data "template_file" "egress_proxy_task_def" {
   template = file("${path.module}/files/tasks/squid.json")
 
   vars = {
-    whitelist_base64 = base64encode(local.egress_proxy_whitelist)
+    allowlist_base64 = base64encode(local.egress_proxy_allowlist)
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-squid@${var.squid_image_digest}"
     deployment       = var.deployment
     region           = data.aws_region.region.id
