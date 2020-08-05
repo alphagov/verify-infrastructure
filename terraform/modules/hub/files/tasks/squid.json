@@ -12,8 +12,8 @@
       }
     ],
     "environment": [{
-      "Name": "WHITELIST",
-      "Value": "${whitelist_base64}"
+      "Name": "ALLOWLIST",
+      "Value": "${allowlist_base64}"
     }],
     "logConfiguration": {
       "logDriver": "awslogs",
