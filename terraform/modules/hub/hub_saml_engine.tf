@@ -133,6 +133,7 @@ module "saml_engine_fargate" {
   additional_task_security_group_ids = [
     aws_security_group.can_connect_to_container_vpc_endpoint.id,
     aws_security_group.hub_fargate_microservice.id,
+    aws_security_group.egress_via_proxy.id,
   ]
   service_discovery_namespace_id = aws_service_discovery_private_dns_namespace.hub_apps.id
 }
