@@ -123,7 +123,6 @@ data "aws_iam_policy_document" "saml_proxy" {
 
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.account.account_id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${var.deployment}-saml-proxy-execution",
         "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${module.saml_proxy_fargate.execution_role_name}",
       ]
     }
