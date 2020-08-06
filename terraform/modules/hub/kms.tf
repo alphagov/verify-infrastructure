@@ -161,6 +161,7 @@ data "aws_iam_policy_document" "saml_soap_proxy" {
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.account.account_id}:root",
         "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${var.deployment}-saml-soap-proxy-execution",
+        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${module.saml_soap_proxy_fargate.execution_role_name}",
       ]
     }
 
@@ -181,6 +182,10 @@ resource "aws_kms_key" "saml_soap_proxy" {
   deletion_window_in_days = 7
 
   policy = data.aws_iam_policy_document.saml_soap_proxy.json
+
+  depends_on = [
+    module.saml_soap_proxy_fargate.execution_role_name
+  ]
 }
 
 resource "aws_kms_alias" "saml_soap_proxy" {
