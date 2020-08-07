@@ -11,7 +11,7 @@
         "hostPort": 8443
       }
     ],
-    "links": ["saml-soap-proxy"],
+    ${optional_links}
     "environment": [
       {
         "Name": "LOCATION_BLOCKS",
