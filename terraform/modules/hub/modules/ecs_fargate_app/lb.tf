@@ -1,7 +1,7 @@
 resource "aws_lb" "app" {
   load_balancer_type = "application"
 
-  name            = "${local.identifier}-fargate"
+  name            = var.deployment != "integration" ? "${local.identifier}-fargate" : "${local.identifier}-fg"
   internal        = true
   security_groups = [aws_security_group.lb.id]
   subnets         = var.lb_subnets
@@ -12,7 +12,7 @@ resource "aws_lb" "app" {
 }
 
 resource "aws_lb_target_group" "task" {
-  name                 = "${local.identifier}-fargate"
+  name                 = var.deployment != "integration" ? "${local.identifier}-fargate" : "${local.identifier}-fg"
   port                 = "8443"
   protocol             = "HTTPS"
   target_type          = "ip"
