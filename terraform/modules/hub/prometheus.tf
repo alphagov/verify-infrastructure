@@ -84,15 +84,6 @@ module "prometheus_can_talk_to_frontend_task" {
   port = 8443
 }
 
-module "prometheus_can_talk_to_policy" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = aws_security_group.prometheus.id
-  destination_sg_id = module.policy_ecs_asg.instance_sg_id
-
-  port = 8443
-}
-
 module "prometheus_can_talk_to_hub_fargate_microservices" {
   source = "./modules/microservice_connection"
 

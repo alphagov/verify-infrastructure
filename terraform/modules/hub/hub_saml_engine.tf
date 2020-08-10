@@ -63,13 +63,6 @@ module "saml_engine_fargate_can_connect_to_config_fargate_v2" {
   destination_sg_id = module.config_fargate_v2.lb_sg_id
 }
 
-module "saml_engine_fargate_can_connect_to_policy" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = module.saml_engine_fargate.task_sg_id
-  destination_sg_id = module.policy.lb_sg_id
-}
-
 module "saml_engine_fargate_can_connect_to_policy_fargate" {
   source = "./modules/microservice_connection"
 
