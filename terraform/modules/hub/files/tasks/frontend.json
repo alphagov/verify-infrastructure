@@ -77,7 +77,7 @@
       "Value": "https://config-v2-fargate.${domain}:443"
     }, {
       "Name": "POLICY_HOST",
-      "Value": "https://policy.${domain}:443"
+      "Value": "https://policy-fargate.${domain}:443"
     }, {
       "Name": "CYCLE_3_DISPLAY_LOCALES",
       "Value": "/verify-frontend/federation/configuration/display-locales/cycle_3"
