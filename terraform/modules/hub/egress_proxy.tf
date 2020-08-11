@@ -28,6 +28,18 @@ resource "aws_security_group" "egress_via_proxy" {
   vpc_id = aws_vpc.hub.id
 }
 
+resource "aws_security_group_rule" "egress_to_proxy_task" {
+  type     = "egress"
+  protocol = "tcp"
+
+  from_port = 8080
+  to_port   = 8080
+
+  # source is destination for egress rules
+  source_security_group_id = aws_security_group.egress_proxy_task.id
+  security_group_id        = aws_security_group.egress_via_proxy.id
+}
+
 # Egress proxy instance has to be able to access the internet directly (HTTP)
 resource "aws_security_group_rule" "egress_proxy_instance_egress_to_internet_over_http" {
   type      = "egress"
@@ -47,6 +59,28 @@ resource "aws_security_group_rule" "egress_proxy_instance_egress_to_internet_ove
   to_port   = 443
 
   security_group_id = module.egress_proxy_ecs_asg.instance_sg_id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+# Egress proxy task has to be able to access the internet directly (HTTP)
+resource "aws_security_group_rule" "egress_proxy_task_egress_to_internet_over_http" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 80
+  to_port   = 80
+
+  security_group_id = aws_security_group.egress_proxy_task.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+# Egress proxy task has to be able to access the internet directly (HTTPS)
+resource "aws_security_group_rule" "egress_proxy_task_egress_to_internet_over_https" {
+  type      = "egress"
+  protocol  = "tcp"
+  from_port = 443
+  to_port   = 443
+
+  security_group_id = aws_security_group.egress_proxy_task.id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -131,6 +165,17 @@ resource "aws_security_group_rule" "egress_proxy_lb_egress_to_egress_proxy_insta
   security_group_id        = aws_security_group.egress_proxy_lb.id
 }
 
+resource "aws_security_group_rule" "egress_proxy_ingress_from_tasks" {
+  type     = "ingress"
+  protocol = "tcp"
+
+  from_port = 8080
+  to_port   = 8080
+
+  security_group_id        = aws_security_group.egress_proxy_task.id
+  source_security_group_id = aws_security_group.egress_via_proxy.id
+}
+
 resource "aws_security_group_rule" "egress_proxy_lb_ingress_from_egress_via_proxy_over_nonpriv_http" {
   type     = "ingress"
   protocol = "tcp"
@@ -161,6 +206,19 @@ resource "aws_ecs_task_definition" "egress_proxy" {
   execution_role_arn    = module.egress_proxy_ecs_roles.execution_role_arn
 }
 
+resource "aws_ecs_task_definition" "egress_proxy_fargate" {
+  family                = "${var.deployment}-egress-proxy-fargate"
+  container_definitions = data.template_file.egress_proxy_task_def.rendered
+  execution_role_arn    = module.egress_proxy_ecs_roles.execution_role_arn
+
+  task_role_arn            = module.egress_proxy_ecs_roles.task_role_arn
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+
+  cpu    = 1024
+  memory = 3072
+}
+
 resource "aws_ecs_service" "egress_proxy" {
   name            = "${var.deployment}-egress-proxy"
   cluster         = aws_ecs_cluster.egress_proxy.id
@@ -174,6 +232,58 @@ resource "aws_ecs_service" "egress_proxy" {
     elb_name       = aws_elb.egress_proxy.name
     container_name = "squid"
     container_port = "8080"
+  }
+}
+
+resource "aws_security_group" "egress_proxy_task" {
+  name        = "${var.deployment}-egress-proxy-task"
+  description = "${var.deployment}-egress-proxy-task"
+  vpc_id      = aws_vpc.hub.id
+}
+
+resource "aws_ecs_service" "egress_proxy_fargate" {
+  name            = "${var.deployment}-egress-proxy-fargate"
+  cluster         = aws_ecs_cluster.fargate-ecs-cluster.id
+  task_definition = aws_ecs_task_definition.egress_proxy_fargate.arn
+
+  desired_count                      = var.number_of_apps
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 100
+
+  launch_type = "FARGATE"
+
+  network_configuration {
+    subnets = aws_subnet.internal.*.id
+    security_groups = [
+      aws_security_group.egress_proxy_task.id,
+      aws_security_group.hub_fargate_microservice.id,
+      aws_security_group.can_connect_to_container_vpc_endpoint.id,
+    ]
+  }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.egress_proxy_fargate.arn
+  }
+}
+
+resource "aws_service_discovery_service" "egress_proxy_fargate" {
+  name = "${var.deployment}-egress-proxy"
+
+  description = "service discovery for ${var.deployment}-egress-proxy-fargate instances"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.hub_apps.id
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 2
   }
 }
 
