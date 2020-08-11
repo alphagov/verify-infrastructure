@@ -96,7 +96,7 @@ scrape_configs:
       - source_labels: [__meta_ec2_tag_Team]
         target_label: team
       - source_labels: [__meta_ec2_tag_Cluster]
-        regex: '(config|policy|saml-engine|saml-soap-proxy)'
+        regex: 'saml-soap-proxy'
         action: keep
       - source_labels: [__meta_ec2_tag_Cluster]
         target_label: job

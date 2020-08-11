@@ -84,7 +84,6 @@ data "aws_iam_policy_document" "policy" {
 
       identifiers = [
         "arn:aws:iam::${data.aws_caller_identity.account.account_id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${var.deployment}-policy-execution",
         "arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/${module.policy_fargate.execution_role_name}",
       ]
     }

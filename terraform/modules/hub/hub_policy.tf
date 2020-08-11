@@ -1,48 +1,3 @@
-module "policy_ecs_asg" {
-  source = "./modules/ecs_asg"
-
-  ami_id           = data.aws_ami.ubuntu_bionic.id
-  deployment       = var.deployment
-  cluster          = "policy"
-  vpc_id           = aws_vpc.hub.id
-  instance_subnets = aws_subnet.internal.*.id
-
-  number_of_instances = var.number_of_apps
-  domain              = local.root_domain
-  instance_type       = var.policy_instance_type
-
-  ecs_agent_image_identifier = local.ecs_agent_image_identifier
-  tools_account_id           = var.tools_account_id
-
-  additional_instance_security_group_ids = [
-    aws_security_group.scraped_by_prometheus.id,
-    aws_security_group.can_connect_to_container_vpc_endpoint.id,
-  ]
-
-  logit_api_key           = var.logit_api_key
-  logit_elasticsearch_url = var.logit_elasticsearch_url
-}
-
-resource "aws_security_group_rule" "policy_instance_egress_to_internet_over_http" {
-  type      = "egress"
-  protocol  = "tcp"
-  from_port = 80
-  to_port   = 80
-
-  security_group_id = module.policy_ecs_asg.instance_sg_id
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
-resource "aws_security_group_rule" "policy_instance_egress_to_internet_over_https" {
-  type      = "egress"
-  protocol  = "tcp"
-  from_port = 443
-  to_port   = 443
-
-  security_group_id = module.policy_ecs_asg.instance_sg_id
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
 resource "aws_security_group_rule" "policy_task_egress_to_internet_over_http" {
   type      = "egress"
   protocol  = "tcp"
@@ -64,19 +19,6 @@ resource "aws_security_group_rule" "policy_task_egress_to_internet_over_https" {
 }
 
 locals {
-  policy_location_blocks = <<-LOCATIONS
-  location = /prometheus/metrics {
-    proxy_pass http://policy:8081;
-    proxy_set_header Host policy.${local.root_domain};
-  }
-  location / {
-    proxy_pass http://policy:8080;
-    proxy_set_header Host policy.${local.root_domain};
-  }
-  LOCATIONS
-
-  nginx_policy_location_blocks_base64 = base64encode(local.policy_location_blocks)
-
   policy_fargate_location_blocks = <<-LOCATIONS
   location = /prometheus/metrics {
     proxy_pass http://localhost:8081;
@@ -89,48 +31,6 @@ locals {
   LOCATIONS
 }
 
-data "template_file" "policy_task_def" {
-  template = file("${path.module}/files/tasks/hub-policy.json")
-
-  vars = {
-    optional_links                = "\"links\": [\"policy\"],"
-    image_identifier              = "${local.tools_account_ecr_url_prefix}-verify-policy@${var.hub_policy_image_digest}"
-    nginx_image_identifier        = local.nginx_image_identifier
-    domain                        = local.root_domain
-    deployment                    = var.deployment
-    location_blocks_base64        = local.nginx_policy_location_blocks_base64
-    region                        = data.aws_region.region.id
-    account_id                    = data.aws_caller_identity.account.account_id
-    event_emitter_api_gateway_url = var.event_emitter_api_gateway_url
-    memory_hard_limit             = var.policy_memory_hard_limit
-    jvm_options                   = var.jvm_options
-
-    redis_host = "rediss://${
-      aws_elasticache_replication_group.policy_session_store.primary_endpoint_address
-    }:6379"
-    log_level = var.hub_policy_log_level
-  }
-}
-
-module "policy" {
-  source = "./modules/ecs_app"
-
-  deployment                 = var.deployment
-  cluster                    = "policy"
-  domain                     = local.root_domain
-  vpc_id                     = aws_vpc.hub.id
-  lb_subnets                 = aws_subnet.internal.*.id
-  task_definition            = data.template_file.policy_task_def.rendered
-  container_name             = "nginx"
-  container_port             = "8443"
-  number_of_tasks            = var.number_of_apps
-  health_check_path          = "/service-status"
-  tools_account_id           = var.tools_account_id
-  image_name                 = "verify-policy"
-  instance_security_group_id = module.policy_ecs_asg.instance_sg_id
-  certificate_arn            = var.wildcard_cert_arn
-}
-
 module "policy_fargate" {
   source = "./modules/ecs_fargate_app"
 
@@ -140,7 +40,6 @@ module "policy_fargate" {
   vpc_id     = aws_vpc.hub.id
   lb_subnets = aws_subnet.internal.*.id
   task_definition = templatefile("${path.module}/files/tasks/hub-policy.json", {
-    optional_links                = ""
     image_identifier              = "${local.tools_account_ecr_url_prefix}-verify-policy@${var.hub_policy_image_digest}"
     nginx_image_identifier        = local.nginx_image_identifier
     domain                        = local.root_domain
@@ -198,66 +97,11 @@ resource "aws_iam_policy" "policy_parameter_execution" {
   EOF
 }
 
-resource "aws_iam_role_policy_attachment" "policy_parameter_execution" {
-  role       = "${var.deployment}-policy-execution"
-  policy_arn = aws_iam_policy.policy_parameter_execution.arn
-}
-
 resource "aws_iam_role_policy_attachment" "policy_fargate_parameter_execution" {
   role       = module.policy_fargate.execution_role_name
   policy_arn = aws_iam_policy.policy_parameter_execution.arn
 
   depends_on = [module.policy_fargate.execution_role_name]
-}
-
-module "policy_can_connect_to_config_fargate_v2" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = module.policy_ecs_asg.instance_sg_id
-  destination_sg_id = module.config_fargate_v2.lb_sg_id
-}
-
-module "policy_can_connect_to_saml_engine_fargate" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = module.policy_ecs_asg.instance_sg_id
-  destination_sg_id = module.saml_engine_fargate.lb_sg_id
-}
-
-module "policy_can_connect_to_saml_proxy_fargate" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = module.policy_ecs_asg.instance_sg_id
-  destination_sg_id = module.saml_proxy_fargate.lb_sg_id
-}
-
-module "policy_can_connect_to_saml_soap_proxy" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = module.policy_ecs_asg.instance_sg_id
-  destination_sg_id = module.saml_soap_proxy.lb_sg_id
-}
-
-module "policy_can_connect_to_saml_soap_proxy_fargate" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = module.policy_ecs_asg.instance_sg_id
-  destination_sg_id = module.saml_soap_proxy_fargate.lb_sg_id
-}
-
-module "policy_can_connect_to_policy_redis" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = module.policy_ecs_asg.instance_sg_id
-  destination_sg_id = aws_security_group.policy_redis.id
-  port              = 6379
-}
-
-module "policy_can_connect_to_ingress_for_metadata" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = module.policy_ecs_asg.instance_sg_id
-  destination_sg_id = aws_security_group.ingress.id
 }
 
 module "policy_fargate_can_connect_to_config_fargate_v2" {
