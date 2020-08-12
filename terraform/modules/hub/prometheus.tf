@@ -93,15 +93,6 @@ module "prometheus_can_talk_to_hub_fargate_microservices" {
   port = 8443
 }
 
-module "prometheus_can_talk_to_saml_soap_proxy" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = aws_security_group.prometheus.id
-  destination_sg_id = module.saml_soap_proxy_ecs_asg.instance_sg_id
-
-  port = 8443
-}
-
 module "prometheus_can_talk_to_ingress_for_scraping_metadata" {
   source = "./modules/microservice_connection"
 
