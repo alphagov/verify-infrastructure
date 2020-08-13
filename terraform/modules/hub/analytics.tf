@@ -90,3 +90,65 @@ resource "aws_ecs_service" "analytics" {
     ]
   }
 }
+
+resource "aws_ecs_task_definition" "analytics_fargate" {
+  family                   = "${var.deployment}-analytics-fargate"
+  container_definitions    = data.template_file.analytics_task_def.rendered
+  execution_role_arn       = module.analytics_ecs_roles.execution_role_arn
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 256
+  memory                   = 512
+}
+
+resource "aws_ecs_service" "analytics_fargate" {
+  name            = "${var.deployment}-analytics"
+  cluster         = aws_ecs_cluster.fargate-ecs-cluster.id
+  task_definition = aws_ecs_task_definition.analytics_fargate.arn
+
+  desired_count                      = var.number_of_apps
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 100
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.ingress_analytics.arn
+    container_name   = "nginx"
+    container_port   = "8443"
+  }
+
+  network_configuration {
+    subnets = aws_subnet.internal.*.id
+
+    security_groups = [
+      aws_security_group.analytics_task.id,
+      aws_security_group.hub_fargate_microservice.id,
+      aws_security_group.can_connect_to_container_vpc_endpoint.id,
+    ]
+  }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.analytics_fargate.arn
+    port         = 8443
+  }
+}
+
+resource "aws_service_discovery_service" "analytics_fargate" {
+  name = "${var.deployment}-analytics"
+
+  description = "service discovery for ${var.deployment}-analytics-fargate instances"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.hub_apps.id
+
+    dns_records {
+      ttl  = 60
+      type = "SRV"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 2
+  }
+}
