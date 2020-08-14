@@ -1304,7 +1304,7 @@
         {
           "alias": "Metadata Task",
           "dimensions": {
-            "ClusterName": "prod-ingress",
+            "ClusterName": "prod",
             "ServiceName": "prod-metadata"
           },
           "expression": "",
@@ -1315,26 +1315,6 @@
           "namespace": "AWS/ECS",
           "period": "",
           "refId": "G",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
-        },
-        {
-          "alias": "Ingress Beat Exporter",
-          "dimensions": {
-            "ClusterName": "prod-ingress",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "matchExact": true,
-          "metricName": "MemoryUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "H",
           "region": "eu-west-2",
           "returnData": false,
           "statistics": [
@@ -1810,7 +1790,7 @@
         {
           "alias": "Metadata Task",
           "dimensions": {
-            "ClusterName": "prod-ingress",
+            "ClusterName": "prod",
             "ServiceName": "prod-metadata"
           },
           "expression": "",
@@ -1821,26 +1801,6 @@
           "namespace": "AWS/ECS",
           "period": "",
           "refId": "G",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
-        },
-        {
-          "alias": "Ingress Beat Exporter",
-          "dimensions": {
-            "ClusterName": "prod-ingress",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "matchExact": true,
-          "metricName": "CPUUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "H",
           "region": "eu-west-2",
           "returnData": false,
           "statistics": [
