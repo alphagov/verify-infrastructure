@@ -56,7 +56,7 @@ locals {
 }
 
 data "template_file" "frontend_task_def" {
-  template = var.ingress_instance_type == "t3.xlarge" ? file("${path.module}/files/tasks/frontend_xlarge.json") : file("${path.module}/files/tasks/frontend.json")
+  template = file("${path.module}/files/tasks/frontend.json")
 
   vars = {
     account_id                 = data.aws_caller_identity.account.account_id
@@ -76,6 +76,10 @@ data "template_file" "frontend_task_def" {
     publish_hub_config_enabled = var.publish_hub_config_enabled
     log_level                  = var.hub_frontend_log_level
     throttling_enabled         = var.throttling_enabled
+    nginx_cpu                  = var.ingress_instance_type == "t3.xlarge" ? 1024 : 256
+    nginx_memory               = var.ingress_instance_type == "t3.xlarge" ? 1024 : 256
+    frontend_cpu               = var.ingress_instance_type == "t3.xlarge" ? 1024 : 768
+    frontend_memory            = var.ingress_instance_type == "t3.xlarge" ? 14066 : 1792
   }
 }
 
@@ -114,10 +118,53 @@ resource "aws_ecs_service" "frontend_v2" {
   }
 
   network_configuration {
-    subnets = "${aws_subnet.internal.*.id}"
+    subnets = aws_subnet.internal.*.id
 
     security_groups = [
       aws_security_group.frontend_task.id,
+      aws_security_group.can_connect_to_container_vpc_endpoint.id,
+    ]
+  }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.frontend.arn
+    port         = 8443
+  }
+}
+
+resource "aws_ecs_task_definition" "frontend_fargate" {
+  family                   = "${var.deployment}-frontend-fargate"
+  container_definitions    = data.template_file.frontend_task_def.rendered
+  network_mode             = "awsvpc"
+  execution_role_arn       = module.frontend_ecs_roles.execution_role_arn
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = var.ingress_instance_type == "t3.xlarge" ? 2048 : 1024
+  memory                   = var.ingress_instance_type == "t3.xlarge" ? 16384 : 2048
+}
+
+resource "aws_ecs_service" "frontend_fargate" {
+  name            = "${var.deployment}-frontend"
+  cluster         = aws_ecs_cluster.fargate-ecs-cluster.id
+  task_definition = aws_ecs_task_definition.frontend_fargate.arn
+
+  desired_count                      = var.number_of_apps
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 100
+
+  launch_type = "FARGATE"
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.ingress_frontend.arn
+    container_name   = "nginx"
+    container_port   = "8443"
+  }
+
+  network_configuration {
+    subnets = aws_subnet.internal.*.id
+
+    security_groups = [
+      aws_security_group.frontend_task.id,
+      aws_security_group.hub_fargate_microservice.id,
       aws_security_group.can_connect_to_container_vpc_endpoint.id,
     ]
   }
