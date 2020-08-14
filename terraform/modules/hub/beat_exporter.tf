@@ -27,7 +27,6 @@ locals {
   clusters = [
     "prometheus",
     "egress-proxy",
-    "ingress",
     "static-ingress",
   ]
 }
