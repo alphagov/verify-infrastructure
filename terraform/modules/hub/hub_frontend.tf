@@ -94,8 +94,8 @@ resource "aws_ecs_task_definition" "frontend_fargate" {
   network_mode             = "awsvpc"
   execution_role_arn       = module.frontend_ecs_roles.execution_role_arn
   requires_compatibilities = ["FARGATE"]
-  cpu                      = var.ingress_instance_type == "t3.xlarge" ? 2048 : 1024
-  memory                   = var.ingress_instance_type == "t3.xlarge" ? 16384 : 2048
+  cpu                      = 1024
+  memory                   = 2048
 }
 
 resource "aws_ecs_service" "frontend_fargate" {
@@ -103,7 +103,7 @@ resource "aws_ecs_service" "frontend_fargate" {
   cluster         = aws_ecs_cluster.fargate-ecs-cluster.id
   task_definition = aws_ecs_task_definition.frontend_fargate.arn
 
-  desired_count                      = var.number_of_apps
+  desired_count                      = var.number_of_frontend_apps
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 
