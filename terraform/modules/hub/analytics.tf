@@ -1,6 +1,3 @@
-# analytics
-#
-# frontend applications are run on the ingress asg
 
 resource "aws_security_group" "analytics_task" {
   name        = "${var.deployment}-analytics-task"
