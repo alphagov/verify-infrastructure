@@ -14,6 +14,11 @@ variable "number_of_apps" {
   default = 2
 }
 
+variable "number_of_frontend_apps" {
+  type    = number
+  default = 2
+}
+
 variable "number_of_prometheus_apps" {
   default = 3
 }
