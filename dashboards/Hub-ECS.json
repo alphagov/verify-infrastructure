@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1596627403831,
+  "iteration": 1597418876862,
   "links": [],
   "panels": [
     {
@@ -578,7 +578,7 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 5,
+        "col": 4,
         "desc": false
       },
       "styles": [
@@ -1324,7 +1324,7 @@
         {
           "alias": "Policy Task",
           "dimensions": {
-            "ClusterName": "prod-policy",
+            "ClusterName": "prod",
             "ServiceName": "prod-policy"
           },
           "expression": "",
@@ -1335,26 +1335,6 @@
           "namespace": "AWS/ECS",
           "period": "",
           "refId": "I",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
-        },
-        {
-          "alias": "Policy Beat Exporter Task",
-          "dimensions": {
-            "ClusterName": "prod-policy",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "matchExact": true,
-          "metricName": "MemoryUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "J",
           "region": "eu-west-2",
           "returnData": false,
           "statistics": [
@@ -1404,7 +1384,7 @@
         {
           "alias": "SAML Soap Proxy Task",
           "dimensions": {
-            "ClusterName": "prod-saml-soap-proxy",
+            "ClusterName": "prod",
             "ServiceName": "prod-saml-soap-proxy"
           },
           "expression": "",
@@ -1415,26 +1395,6 @@
           "namespace": "AWS/ECS",
           "period": "",
           "refId": "O",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
-        },
-        {
-          "alias": "SAML Soap Proxy Beat Exporter Task",
-          "dimensions": {
-            "ClusterName": "prod-saml-soap-proxy",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "matchExact": true,
-          "metricName": "MemoryUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "P",
           "region": "eu-west-2",
           "returnData": false,
           "statistics": [
@@ -1810,7 +1770,7 @@
         {
           "alias": "Policy Task",
           "dimensions": {
-            "ClusterName": "prod-policy",
+            "ClusterName": "prod",
             "ServiceName": "prod-policy"
           },
           "expression": "",
@@ -1821,26 +1781,6 @@
           "namespace": "AWS/ECS",
           "period": "",
           "refId": "I",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
-        },
-        {
-          "alias": "Policy Beat Exporter Task",
-          "dimensions": {
-            "ClusterName": "prod-policy",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "matchExact": true,
-          "metricName": "CPUUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "J",
           "region": "eu-west-2",
           "returnData": false,
           "statistics": [
@@ -1890,7 +1830,7 @@
         {
           "alias": "SAML Soap Proxy Task",
           "dimensions": {
-            "ClusterName": "prod-saml-soap-proxy",
+            "ClusterName": "prod",
             "ServiceName": "prod-saml-soap-proxy"
           },
           "expression": "",
@@ -1901,26 +1841,6 @@
           "namespace": "AWS/ECS",
           "period": "",
           "refId": "O",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
-        },
-        {
-          "alias": "SAML Soap Proxy Beat Exporter Task",
-          "dimensions": {
-            "ClusterName": "prod-saml-soap-proxy",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "matchExact": true,
-          "metricName": "CPUUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "P",
           "region": "eu-west-2",
           "returnData": false,
           "statistics": [
@@ -2707,5 +2627,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 101
+  "version": 105
 }
