@@ -76,10 +76,6 @@ data "template_file" "frontend_task_def" {
     publish_hub_config_enabled = var.publish_hub_config_enabled
     log_level                  = var.hub_frontend_log_level
     throttling_enabled         = var.throttling_enabled
-    nginx_cpu                  = var.ingress_instance_type == "t3.xlarge" ? 1024 : 256
-    nginx_memory               = var.ingress_instance_type == "t3.xlarge" ? 1024 : 256
-    frontend_cpu               = var.ingress_instance_type == "t3.xlarge" ? 1024 : 768
-    frontend_memory            = var.ingress_instance_type == "t3.xlarge" ? 14066 : 1792
   }
 }
 
