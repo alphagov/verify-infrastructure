@@ -4,8 +4,6 @@
 #   - config
 #   - saml proxy
 #   - policy
-#
-# frontend applications are run on the ingress asg
 
 resource "aws_security_group" "frontend_task" {
   name        = "${var.deployment}-frontend-task"

@@ -1,6 +1,3 @@
-# metadata
-#
-# frontend applications are run on the ingress asg
 
 resource "aws_security_group" "metadata_task" {
   name        = "${var.deployment}-metadata-task"

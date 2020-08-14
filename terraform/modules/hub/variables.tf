@@ -184,10 +184,6 @@ variable "instance_type" {
   default = "t3.medium"
 }
 
-variable "ingress_instance_type" {
-  default = "t3.medium"
-}
-
 variable "config_instance_type" {
   default = "t3.medium"
 }
