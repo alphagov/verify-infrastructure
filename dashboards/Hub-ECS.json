@@ -1264,8 +1264,8 @@
         {
           "alias": "Frontend Task",
           "dimensions": {
-            "ClusterName": "prod-ingress",
-            "ServiceName": "prod-frontend-v2"
+            "ClusterName": "prod",
+            "ServiceName": "prod-frontend"
           },
           "expression": "",
           "highResolution": false,
@@ -1284,7 +1284,7 @@
         {
           "alias": "Analytics Task",
           "dimensions": {
-            "ClusterName": "prod-ingress",
+            "ClusterName": "prod",
             "ServiceName": "prod-analytics"
           },
           "expression": "",
@@ -1770,8 +1770,8 @@
         {
           "alias": "Frontend Task",
           "dimensions": {
-            "ClusterName": "prod-ingress",
-            "ServiceName": "prod-frontend-v2"
+            "ClusterName": "prod",
+            "ServiceName": "prod-frontend"
           },
           "expression": "",
           "highResolution": false,
@@ -1790,7 +1790,7 @@
         {
           "alias": "Analytics Task",
           "dimensions": {
-            "ClusterName": "prod-ingress",
+            "ClusterName": "prod",
             "ServiceName": "prod-analytics"
           },
           "expression": "",

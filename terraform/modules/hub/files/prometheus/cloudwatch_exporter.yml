@@ -42,7 +42,7 @@ metrics:
   aws_dimensions: [ServiceName, ClusterName]
   aws_dimension_select:
     ServiceName:
-      - prod-frontend-v2
+      - prod-frontend
     ClusterName:
-      - prod-ingress
+      - prod
   aws_statistics: [Average]
