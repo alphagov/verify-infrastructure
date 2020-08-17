@@ -7,12 +7,11 @@ global:
 alerting:
   alertmanagers:
   - scheme: https
-    tls_config:
-      server_name: alerts.monitoring.gds-reliability.engineering
-    dns_sd_configs:
-    - names: [ alerts.monitoring.gds-reliability.engineering ]
-      type: A
-      port: 443
+    static_configs:
+    - targets:
+      - alerts-eu-west-1a.monitoring.gds-reliability.engineering
+      - alerts-eu-west-1b.monitoring.gds-reliability.engineering
+      - alerts-eu-west-1c.monitoring.gds-reliability.engineering
 rule_files:
   - "alerts.yml"
 scrape_configs:
