@@ -76,51 +76,6 @@ systemctl stop docker
 systemctl daemon-reload
 systemctl enable --now docker
 
-# Journalbeat for log shipping
-echo 'Installing and configuring journalbeat'
-(
-elastic_beats="artifacts.elastic.co/downloads/beats"
-mkdir -p /tmp/journalbeat
-cd /tmp/journalbeat
-
-cat <<EOF > journalbeat-oss-6.8.3-amd64.deb.sha512
-685e571638a3422e8b1c6f6aa7c15db8bf8fa9b91ecfedb4ce7c26dedc418e90b558a37711af2a547cb5025de17361d2fed1042be2d0871d22ec78037f7225a6  journalbeat-oss-6.8.3-amd64.deb
-EOF
-
-curl --silent --fail \
-     -L -O \
-     "https://$elastic_beats/journalbeat/journalbeat-oss-6.8.3-amd64.deb"
-
-sha512sum -c journalbeat-oss-6.8.3-amd64.deb.sha512
-dpkg -i journalbeat-oss-6.8.3-amd64.deb
-)
-
-cat <<EOF > /etc/journalbeat/journalbeat.yml
-http.enabled: true
-
-journalbeat.inputs:
-- paths: []
-  seek: cursor
-
-logging.level: warning
-logging.to_files: false
-logging.to_syslog: true
-logging.json: true
-
-processors:
-- add_cloud_metadata: ~
-
-output.elasticsearch:
-  hosts: ["https://${logit_elasticsearch_url}:443"]
-  headers:
-    Apikey: ${logit_api_key}
-EOF
-# It seems that journalbeat is very unhappy if docker isn't running
-# when it starts, so let's update the systemd unit to reflect that
-sed -i -e 's/Wants=.*/& docker.service/' /lib/systemd/system/journalbeat.service
-sed -i -e 's/After=.*/& docker.service/' /lib/systemd/system/journalbeat.service
-systemctl enable --now journalbeat
-
 echo 'Installing prometheus node exporter'
 run-until-success apt-get install --yes prometheus-node-exporter
 mkdir /etc/systemd/system/prometheus-node-exporter.service.d
