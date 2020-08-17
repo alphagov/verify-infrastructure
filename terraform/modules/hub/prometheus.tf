@@ -295,6 +295,7 @@ data "template_file" "prometheus_cloud_init" {
     ecs_agent_image_identifier = local.ecs_agent_image_identifier
     tools_account_id           = var.tools_account_id
     data_volume_size           = var.prometheus_volume_size
+    cloudwatch_log_group       = aws_cloudwatch_log_group.fargate-logs.name
   }
 }
 
