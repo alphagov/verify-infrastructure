@@ -35,6 +35,8 @@ module "saml_engine_fargate" {
       memory_hard_limit                = var.saml_engine_memory_hard_limit
       jvm_options                      = var.jvm_options
       log_level                        = var.hub_saml_engine_log_level
+      egress_proxy_host                = "${aws_service_discovery_service.egress_proxy_fargate.name}.${aws_service_discovery_private_dns_namespace.hub_apps.name}"
+      egress_proxy_port                = "8080"
   })
   container_name    = "nginx"
   container_port    = "8443"
