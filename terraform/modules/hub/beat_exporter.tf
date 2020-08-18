@@ -25,7 +25,6 @@ resource "aws_ecs_task_definition" "beat_exporter" {
 locals {
   # FIXME is there a better way of doing this?
   clusters = [
-    "prometheus",
     "egress-proxy",
     "static-ingress",
   ]
