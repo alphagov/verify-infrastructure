@@ -189,10 +189,7 @@ resource "aws_iam_policy" "prometheus" {
           "logs:PutLogEvents"
         ],
         "Resource": [
-          "arn:aws:logs::${data.aws_caller_identity.account.account_id}:${var.deployment}-hub",
-          "arn:aws:logs::${data.aws_caller_identity.account.account_id}:${var.deployment}-hub:*",
-          "arn:aws:logs::${data.aws_caller_identity.account.account_id}:${var.deployment}-prometheus",
-          "arn:aws:logs::${data.aws_caller_identity.account.account_id}:${var.deployment}-prometheus:*"
+          "*"
         ]
       },
       {
