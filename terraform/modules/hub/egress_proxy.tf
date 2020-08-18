@@ -242,7 +242,7 @@ resource "aws_security_group" "egress_proxy_task" {
 }
 
 resource "aws_ecs_service" "egress_proxy_fargate" {
-  name            = "${var.deployment}-egress-proxy-fargate"
+  name            = "${var.deployment}-egress-proxy"
   cluster         = aws_ecs_cluster.fargate-ecs-cluster.id
   task_definition = aws_ecs_task_definition.egress_proxy_fargate.arn
 
