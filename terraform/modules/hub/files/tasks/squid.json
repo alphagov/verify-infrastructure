@@ -3,7 +3,7 @@
     "name": "squid",
     "image": "${image_identifier}",
     "cpu": 1024,
-    "memory": 3500,
+    "memory": 3072,
     "essential": true,
     "portMappings": [
       {
