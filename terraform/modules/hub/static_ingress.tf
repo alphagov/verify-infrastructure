@@ -405,7 +405,7 @@ resource "aws_ecs_service" "static_ingress_http_fargate" {
   load_balancer {
     target_group_arn = aws_lb_target_group.static_ingress_http_fargate.arn
     container_name   = "static-ingress"
-    container_port   = "80"
+    container_port   = "8080"
   }
 
   network_configuration {
@@ -419,7 +419,7 @@ resource "aws_ecs_service" "static_ingress_http_fargate" {
 
   service_registries {
     registry_arn = aws_service_discovery_service.static_ingress_http_fargate.arn
-    port         = 80
+    port         = 8080
   }
 }
 
@@ -437,7 +437,7 @@ resource "aws_ecs_service" "static_ingress_https_fargate" {
   load_balancer {
     target_group_arn = aws_lb_target_group.static_ingress_https_fargate.arn
     container_name   = "static-ingress"
-    container_port   = "443"
+    container_port   = "8443"
   }
 
   network_configuration {
@@ -451,7 +451,7 @@ resource "aws_ecs_service" "static_ingress_https_fargate" {
 
   service_registries {
     registry_arn = aws_service_discovery_service.static_ingress_https_fargate.arn
-    port         = 443
+    port         = 8443
   }
 }
 
