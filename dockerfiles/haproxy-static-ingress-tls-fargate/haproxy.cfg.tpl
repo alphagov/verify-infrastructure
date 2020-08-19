@@ -28,7 +28,7 @@ resolvers vpcdns
 
 frontend nlb
     mode http
-    bind *:$BIND_PORT accept-proxy ssl crt /tmp/tls/chain.pem
+    bind :$BIND_PORT accept-proxy ssl crt /tmp/tls/chain.pem
     default_backend alb
 
 backend alb

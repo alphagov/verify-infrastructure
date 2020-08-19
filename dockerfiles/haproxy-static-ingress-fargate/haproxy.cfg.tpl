@@ -26,7 +26,7 @@ resolvers vpcdns
 
 frontend nlb
     mode tcp
-    bind *:$BIND_PORT accept-proxy
+    bind :$BIND_PORT accept-proxy
     default_backend alb
 
 backend alb
