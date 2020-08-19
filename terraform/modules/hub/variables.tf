@@ -201,6 +201,8 @@ variable "ecs_agent_image_digest" {}
 variable "nginx_image_digest" {}
 variable "static_ingress_image_digest" {}
 variable "static_ingress_tls_image_digest" {}
+variable "static_ingress_fargate_image_digest" {}
+variable "static_ingress_tls_fargate_image_digest" {}
 variable "beat_exporter_image_digest" {}
 variable "cloudwatch_exporter_image_digest" {}
 variable "squid_image_digest" {}
