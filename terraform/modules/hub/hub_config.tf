@@ -62,7 +62,6 @@ module "config_fargate_v2" {
       self_service_enabled     = var.self_service_enabled
       services_metadata_bucket = local.services_metadata_bucket
       metadata_object_key      = local.metadata_object_key
-      memory_hard_limit        = var.config_memory_hard_limit
       jvm_options              = var.jvm_options
       log_level                = var.hub_config_log_level
   })

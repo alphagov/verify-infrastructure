@@ -2,8 +2,6 @@
   {
     "name": "nginx",
     "image": "${nginx_image_identifier}",
-    "cpu": 896,
-    "memory": 250,
     "essential": true,
     "portMappings": [
       {
@@ -36,8 +34,6 @@
   {
     "name": "config",
     "image": "${image_identifier}",
-    "cpu": 1024,
-    "memory": ${memory_hard_limit},
     "essential": true,
     "portMappings": [
       {

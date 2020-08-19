@@ -32,7 +32,6 @@ module "saml_engine_fargate" {
       splunk_url                       = var.splunk_url
       rp_truststore_enabled            = var.rp_truststore_enabled
       certificates_config_cache_expiry = var.certificates_config_cache_expiry
-      memory_hard_limit                = var.saml_engine_memory_hard_limit
       jvm_options                      = var.jvm_options
       log_level                        = var.hub_saml_engine_log_level
       egress_proxy_host                = "${aws_service_discovery_service.egress_proxy_fargate.name}.${aws_service_discovery_private_dns_namespace.hub_apps.name}"

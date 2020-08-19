@@ -2,8 +2,6 @@
   {
     "name": "nginx",
     "image": "${nginx_image_identifier}",
-    "cpu": 256,
-    "memory": 512,
     "essential": true,
     "portMappings": [
       {

@@ -48,7 +48,6 @@ module "policy_fargate" {
     region                        = data.aws_region.region.id
     account_id                    = data.aws_caller_identity.account.account_id
     event_emitter_api_gateway_url = var.event_emitter_api_gateway_url
-    memory_hard_limit             = var.policy_memory_hard_limit
     jvm_options                   = var.jvm_options
 
     redis_host = "rediss://${
