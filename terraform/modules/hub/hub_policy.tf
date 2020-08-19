@@ -57,7 +57,7 @@ module "policy_fargate" {
   })
   container_name    = "nginx"
   container_port    = "8443"
-  number_of_tasks   = var.number_of_apps
+  number_of_tasks   = var.number_of_policy_apps
   health_check_path = "/service-status"
   tools_account_id  = var.tools_account_id
   image_name        = "verify-policy"

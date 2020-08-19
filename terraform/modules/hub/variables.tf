@@ -19,6 +19,51 @@ variable "number_of_frontend_apps" {
   default = 2
 }
 
+variable "number_of_config_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_analytics_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_saml_soap_proxy_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_metadata_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_saml_proxy_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_saml_engine_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_policy_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_egress_proxy_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_static_ingress_apps" {
+  type    = number
+  default = 2
+}
+
 variable "number_of_prometheus_apps" {
   default = 3
 }
