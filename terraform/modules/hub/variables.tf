@@ -73,11 +73,11 @@ variable "prometheus_volume_size" {
 }
 
 variable "publically_accessible_from_cidrs" {
-  type = "list"
+  type = list
 }
 
 variable "mgmt_accessible_from_cidrs" {
-  type = "list"
+  type = list
 }
 
 variable "redis_cache_size" {
