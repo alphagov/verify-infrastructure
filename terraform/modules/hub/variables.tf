@@ -160,26 +160,6 @@ variable "jvm_options" {
   default = "-XX:InitialRAMPercentage=50 -XX:MaxRAMPercentage=80"
 }
 
-variable "config_memory_hard_limit" {
-  default = 3500
-}
-
-variable "saml_proxy_memory_hard_limit" {
-  default = 3500
-}
-
-variable "policy_memory_hard_limit" {
-  default = 3500
-}
-
-variable "saml_engine_memory_hard_limit" {
-  default = 3500
-}
-
-variable "saml_soap_proxy_memory_hard_limit" {
-  default = 3500
-}
-
 variable "instance_type" {
   default = "t3.medium"
 }
