@@ -253,7 +253,7 @@ resource "aws_lb_listener" "static_ingress_https" {
 }
 
 resource "aws_lb" "static_ingress_fargate" {
-  name                             = "${var.deployment}-static-ingress-fargate"
+  name                             = "static-ingress-fargate"
   load_balancer_type               = "network"
   internal                         = false
   enable_cross_zone_load_balancing = true
