@@ -262,7 +262,7 @@ resource "aws_lb" "static_ingress_fargate" {
 
 resource "aws_lb_target_group" "static_ingress_http_fargate" {
   name                 = "static-ingress-http-fargate"
-  port                 = 80
+  port                 = 8080
   protocol             = "TCP"
   vpc_id               = aws_vpc.hub.id
   deregistration_delay = 30
@@ -271,7 +271,7 @@ resource "aws_lb_target_group" "static_ingress_http_fargate" {
 
 resource "aws_lb_target_group" "static_ingress_https_fargate" {
   name                 = "static-ingress-https-fargate"
-  port                 = 443
+  port                 = 8443
   protocol             = "TLS"
   vpc_id               = aws_vpc.hub.id
   deregistration_delay = 30
@@ -307,8 +307,8 @@ resource "aws_ecs_task_definition" "static_ingress_http_fargate" {
     {
       image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-fargate@${var.static_ingress_fargate_image_digest}"
       backend          = var.signin_domain
-      bind_port        = 80
-      backend_port     = 80
+      bind_port        = 8080
+      backend_port     = 8080
       allocated_cpu    = 1024
       allocated_memory = 2 * 1024
       deployment       = var.deployment
@@ -328,8 +328,8 @@ resource "aws_ecs_task_definition" "static_ingress_https_fargate" {
   {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-tls-fargate@${var.static_ingress_tls_fargate_image_digest}"
     backend          = var.signin_domain
-    bind_port        = 443
-    backend_port     = 443
+    bind_port        = 8443
+    backend_port     = 8443
     allocated_cpu    = 1024
     allocated_memory = 3 * 1024
     deployment       = var.deployment
@@ -478,8 +478,8 @@ resource "aws_security_group_rule" "static_ingress_fargate_egress_to_internet_ov
 resource "aws_security_group_rule" "static_ingress_fargate_ingress_from_internet_over_http" {
   type      = "ingress"
   protocol  = "tcp"
-  from_port = 80
-  to_port   = 80
+  from_port = 8080
+  to_port   = 8080
 
   security_group_id = aws_security_group.static_ingress_fargate_task.id
 
@@ -496,8 +496,8 @@ resource "aws_security_group_rule" "static_ingress_fargate_ingress_from_internet
 resource "aws_security_group_rule" "static_ingress_fargate_ingress_from_internet_over_https" {
   type      = "ingress"
   protocol  = "tcp"
-  from_port = 443
-  to_port   = 443
+  from_port = 8443
+  to_port   = 8443
 
   security_group_id = aws_security_group.static_ingress_fargate_task.id
 
