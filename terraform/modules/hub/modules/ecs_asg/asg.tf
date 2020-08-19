@@ -1,30 +1,12 @@
-locals {
-  egress_proxy_url = "egress-proxy.${var.domain}:8080"
-
-  egress_proxy_url_with_protocol = "${
-    var.use_egress_proxy
-    ? "http://${local.egress_proxy_url}"
-    : ""
-  }"
-
-  journalbeat_egress_proxy_setting = "${
-    var.use_egress_proxy
-    ? "proxy_url: ${local.egress_proxy_url_with_protocol}"
-    : ""
-  }"
-}
-
 data "template_file" "cloud_init" {
   template = file("${path.module}/files/cloud-init.sh")
 
   vars = {
-    cluster                          = local.identifier
-    egress_proxy_url_with_protocol   = local.egress_proxy_url_with_protocol
-    journalbeat_egress_proxy_setting = local.journalbeat_egress_proxy_setting
-    logit_elasticsearch_url          = var.logit_elasticsearch_url
-    logit_api_key                    = var.logit_api_key
-    ecs_agent_image_identifier       = var.ecs_agent_image_identifier
-    tools_account_id                 = var.tools_account_id
+    cluster                    = local.identifier
+    logit_elasticsearch_url    = var.logit_elasticsearch_url
+    logit_api_key              = var.logit_api_key
+    ecs_agent_image_identifier = var.ecs_agent_image_identifier
+    tools_account_id           = var.tools_account_id
   }
 }
 

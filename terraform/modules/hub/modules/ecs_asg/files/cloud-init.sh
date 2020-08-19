@@ -11,20 +11,8 @@ function run-until-success() {
   done
 }
 
-CURL="curl"
-if [ -n "${egress_proxy_url_with_protocol}" ]; then
-  CURL="curl --proxy ${egress_proxy_url_with_protocol}"
-fi
-
 # Apt
 echo 'Configuring apt'
-mkdir -p /etc/apt/apt.conf.d
-if [ -n "${egress_proxy_url_with_protocol}" ]; then
-  cat << EOF > /etc/apt/apt.conf.d/egress.conf
-Acquire::http::Proxy "${egress_proxy_url_with_protocol}/";
-Acquire::https::Proxy "${egress_proxy_url_with_protocol}/";
-EOF
-fi
 run-until-success "apt-get update --yes"
 run-until-success "apt-get dist-upgrade --yes"
 
@@ -100,7 +88,7 @@ cat <<EOF > journalbeat-oss-6.8.3-amd64.deb.sha512
 685e571638a3422e8b1c6f6aa7c15db8bf8fa9b91ecfedb4ce7c26dedc418e90b558a37711af2a547cb5025de17361d2fed1042be2d0871d22ec78037f7225a6  journalbeat-oss-6.8.3-amd64.deb
 EOF
 
-$CURL --silent --fail \
+curl --silent --fail \
       -L -O \
       "https://$elastic_beats/journalbeat/journalbeat-oss-6.8.3-amd64.deb"
 
@@ -131,7 +119,6 @@ processors:
     overwrite_keys: false
 
 output.elasticsearch:
-  ${journalbeat_egress_proxy_setting}
   hosts: ["https://${logit_elasticsearch_url}:443"]
   headers:
     Apikey: ${logit_api_key}
