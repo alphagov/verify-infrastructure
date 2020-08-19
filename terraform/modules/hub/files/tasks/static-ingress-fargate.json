@@ -24,12 +24,6 @@
       "Name": "RESOLVER",
       "Value": "169.254.169.253:53"
     }],
-    "systemControls": [
-      {
-        "namespace": "net.ipv4.ip_unprivileged_port_start",
-        "value": "0"
-      }
-    ],
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
