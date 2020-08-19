@@ -303,7 +303,7 @@ resource "aws_lb_listener" "static_ingress_https_fargate" {
 
 resource "aws_ecs_task_definition" "static_ingress_http_fargate" {
   family                   = "${var.deployment}-static-ingress-http-fargate"
-  container_definitions    = templatefile("${path.module}/files/tasks/static-ingress.json",
+  container_definitions    = templatefile("${path.module}/files/tasks/static-ingress-fargate.json",
     {
       image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-fargate@${var.static_ingress_fargate_image_digest}"
       backend          = var.signin_domain
@@ -324,7 +324,7 @@ resource "aws_ecs_task_definition" "static_ingress_http_fargate" {
 
 resource "aws_ecs_task_definition" "static_ingress_https_fargate" {
   family                = "${var.deployment}-static-ingress-https-fargate"
-  container_definitions = templatefile("${path.module}/files/tasks/static-ingress.json",
+  container_definitions = templatefile("${path.module}/files/tasks/static-ingress-fargate.json",
   {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-tls-fargate@${var.static_ingress_tls_fargate_image_digest}"
     backend          = var.signin_domain
