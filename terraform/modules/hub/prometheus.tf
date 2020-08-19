@@ -48,29 +48,11 @@ module "prometheus_can_talk_to_prometheus_node_exporter" {
   port = 9100
 }
 
-module "prometheus_can_talk_to_egress_proxy_node_exporter" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = aws_security_group.prometheus.id
-  destination_sg_id = module.egress_proxy_ecs_asg.instance_sg_id
-
-  port = 9100
-}
-
 module "prometheus_can_talk_to_prometheus_beat_exporter" {
   source = "./modules/microservice_connection"
 
   source_sg_id      = aws_security_group.prometheus.id
   destination_sg_id = aws_security_group.prometheus.id
-
-  port = 9479
-}
-
-module "prometheus_can_talk_to_egress_proxy_beat_exporter" {
-  source = "./modules/microservice_connection"
-
-  source_sg_id      = aws_security_group.prometheus.id
-  destination_sg_id = module.egress_proxy_ecs_asg.instance_sg_id
 
   port = 9479
 }

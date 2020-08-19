@@ -1224,7 +1224,7 @@
         {
           "alias": "Egress Proxy Task",
           "dimensions": {
-            "ClusterName": "prod-egress-proxy",
+            "ClusterName": "prod",
             "ServiceName": "prod-egress-proxy"
           },
           "expression": "",
@@ -1235,26 +1235,6 @@
           "namespace": "AWS/ECS",
           "period": "",
           "refId": "C",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
-        },
-        {
-          "alias": "Egress Proxy Beat Exporter Task",
-          "dimensions": {
-            "ClusterName": "prod-egress-proxy",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "matchExact": true,
-          "metricName": "MemoryUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "D",
           "region": "eu-west-2",
           "returnData": false,
           "statistics": [
@@ -1670,7 +1650,7 @@
         {
           "alias": "Egress Proxy Task",
           "dimensions": {
-            "ClusterName": "prod-egress-proxy",
+            "ClusterName": "prod",
             "ServiceName": "prod-egress-proxy"
           },
           "expression": "",
@@ -1681,26 +1661,6 @@
           "namespace": "AWS/ECS",
           "period": "",
           "refId": "C",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
-        },
-        {
-          "alias": "Egress Proxy Beat Exporter Task",
-          "dimensions": {
-            "ClusterName": "prod-egress-proxy",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "matchExact": true,
-          "metricName": "CPUUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "D",
           "region": "eu-west-2",
           "returnData": false,
           "statistics": [
