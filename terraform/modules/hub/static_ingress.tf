@@ -308,7 +308,7 @@ resource "aws_ecs_task_definition" "static_ingress_http_fargate" {
       image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-fargate@${var.static_ingress_fargate_image_digest}"
       backend          = var.signin_domain
       bind_port        = 8080
-      backend_port     = 8080
+      backend_port     = 80
       allocated_cpu    = 1024
       allocated_memory = 2 * 1024
       deployment       = var.deployment
@@ -329,7 +329,7 @@ resource "aws_ecs_task_definition" "static_ingress_https_fargate" {
     image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-tls-fargate@${var.static_ingress_tls_fargate_image_digest}"
     backend          = var.signin_domain
     bind_port        = 8443
-    backend_port     = 8443
+    backend_port     = 443
     allocated_cpu    = 1024
     allocated_memory = 3 * 1024
     deployment       = var.deployment
