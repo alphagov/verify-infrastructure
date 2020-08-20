@@ -63,6 +63,9 @@ scrape_configs:
       - source_labels: [__meta_ec2_tag_Team]
         target_label: team
       - source_labels: [__meta_ec2_tag_Cluster]
+        regex: 'static-ingress'
+        action: keep
+      - source_labels: [__meta_ec2_tag_Cluster]
         replacement: $${1}_journalbeat
         target_label: job
   - job_name: frontend
