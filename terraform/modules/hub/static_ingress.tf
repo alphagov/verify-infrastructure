@@ -199,17 +199,17 @@ resource "aws_lb" "static_ingress" {
 
   subnet_mapping {
     subnet_id     = element(aws_subnet.ingress.*.id, 0)
-    allocation_id = ""
+    allocation_id = element(aws_eip.ingress.*.id, 0)
   }
 
   subnet_mapping {
     subnet_id     = element(aws_subnet.ingress.*.id, 1)
-    allocation_id = ""
+    allocation_id = element(aws_eip.ingress.*.id, 1)
   }
 
   subnet_mapping {
     subnet_id     = element(aws_subnet.ingress.*.id, 2)
-    allocation_id = ""
+    allocation_id = element(aws_eip.ingress.*.id, 2)
   }
 }
 
@@ -257,20 +257,19 @@ resource "aws_lb" "static_ingress_fargate" {
   load_balancer_type               = "network"
   internal                         = false
   enable_cross_zone_load_balancing = true
-
   subnet_mapping {
     subnet_id     = element(aws_subnet.ingress.*.id, 0)
-    allocation_id = element(aws_eip.ingress.*.id, 0)
+    allocation_id = ""
   }
 
   subnet_mapping {
     subnet_id     = element(aws_subnet.ingress.*.id, 1)
-    allocation_id = element(aws_eip.ingress.*.id, 1)
+    allocation_id = ""
   }
 
   subnet_mapping {
     subnet_id     = element(aws_subnet.ingress.*.id, 2)
-    allocation_id = element(aws_eip.ingress.*.id, 2)
+    allocation_id = ""
   }
 }
 
