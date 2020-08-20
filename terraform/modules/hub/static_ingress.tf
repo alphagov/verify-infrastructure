@@ -267,6 +267,7 @@ resource "aws_lb_target_group" "static_ingress_http_fargate" {
   vpc_id               = aws_vpc.hub.id
   deregistration_delay = 30
   target_type          = "ip"
+  proxy_protocol_v2    = true
 }
 
 resource "aws_lb_target_group" "static_ingress_https_fargate" {
@@ -276,6 +277,7 @@ resource "aws_lb_target_group" "static_ingress_https_fargate" {
   vpc_id               = aws_vpc.hub.id
   deregistration_delay = 30
   target_type          = "ip"
+  proxy_protocol_v2    = true
 }
 
 resource "aws_lb_listener" "static_ingress_http_fargate" {
