@@ -64,7 +64,7 @@ module "saml_proxy_fargate" {
   ecs_cluster_id    = aws_ecs_cluster.fargate-ecs-cluster.id
   cpu               = 2048
   # for a CPU of 2048 we need to set a RAM value between 4096 and 16384 (inclusive) that is a multiple of 1024.
-  memory  = 4096
+  memory  = 8 * 1024
   subnets = aws_subnet.internal.*.id
   additional_task_security_group_ids = [
     aws_security_group.can_connect_to_container_vpc_endpoint.id,
