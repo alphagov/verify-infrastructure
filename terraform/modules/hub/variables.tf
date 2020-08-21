@@ -10,10 +10,6 @@ variable "tools_account_id" {
   description = "AWS account id of the tools account, where docker images will be pulled from"
 }
 
-variable "number_of_apps" {
-  default = 2
-}
-
 variable "number_of_frontend_apps" {
   type    = number
   default = 2
@@ -98,14 +94,6 @@ locals {
 
 variable "wildcard_cert_arn" {
   default = "ACM cert arn for wildcard of signin_domain"
-}
-
-variable "logit_api_key" {
-  description = "Api key used for writing to the logit.io stack"
-}
-
-variable "logit_elasticsearch_url" {
-  description = "URL for logit.io elasticsearch, format: $guid-es.logit.io"
 }
 
 variable "cls_destination_arn" {
@@ -205,10 +193,6 @@ variable "jvm_options" {
   default = "-XX:InitialRAMPercentage=50 -XX:MaxRAMPercentage=80"
 }
 
-variable "instance_type" {
-  default = "t3.medium"
-}
-
 variable "throttling_enabled" {
   description = "Toggles the throttling of IDP traffic on frontend"
   default     = "false"
@@ -224,8 +208,6 @@ variable "hub_metadata_image_digest" {}
 
 variable "ecs_agent_image_digest" {}
 variable "nginx_image_digest" {}
-variable "static_ingress_image_digest" {}
-variable "static_ingress_tls_image_digest" {}
 variable "static_ingress_fargate_image_digest" {}
 variable "static_ingress_tls_fargate_image_digest" {}
 variable "beat_exporter_image_digest" {}

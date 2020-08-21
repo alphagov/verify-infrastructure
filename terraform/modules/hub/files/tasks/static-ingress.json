@@ -2,8 +2,6 @@
   {
     "name": "static-ingress",
     "image": "${image_identifier}",
-    "cpu": ${allocated_cpu},
-    "memory": ${allocated_memory},
     "essential": true,
     "portMappings": [
       {
@@ -24,18 +22,6 @@
       "Name": "RESOLVER",
       "Value": "169.254.169.253:53"
     }],
-    "linuxParameters": {
-      "capabilities": {
-        "add": ["NET_ADMIN", "NET_BIND_SERVICE"],
-        "drop": []
-      }
-    },
-    "systemControls": [
-      {
-        "namespace": "net.ipv4.ip_unprivileged_port_start",
-        "value": "0"
-      }
-    ],
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {

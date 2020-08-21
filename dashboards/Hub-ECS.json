@@ -1384,7 +1384,7 @@
         {
           "alias": "Static Ingress HTTPS Task",
           "dimensions": {
-            "ClusterName": "prod-static-ingress",
+            "ClusterName": "prod",
             "ServiceName": "prod-static-ingress-https"
           },
           "expression": "",
@@ -1404,7 +1404,7 @@
         {
           "alias": "Static Ingress HTTP Task",
           "dimensions": {
-            "ClusterName": "prod-static-ingress",
+            "ClusterName": "prod",
             "ServiceName": "prod-static-ingress-http"
           },
           "expression": "",
@@ -1424,7 +1424,7 @@
         {
           "alias": "Static Ingress Beat Exporter Task",
           "dimensions": {
-            "ClusterName": "prod-static-ingress",
+            "ClusterName": "prod",
             "ServiceName": "prod-beat-exporter"
           },
           "expression": "",
@@ -1810,7 +1810,7 @@
         {
           "alias": "Static Ingress HTTPS Task",
           "dimensions": {
-            "ClusterName": "prod-static-ingress",
+            "ClusterName": "prod",
             "ServiceName": "prod-static-ingress-https"
           },
           "expression": "",
@@ -1830,7 +1830,7 @@
         {
           "alias": "Static Ingress HTTP Task",
           "dimensions": {
-            "ClusterName": "prod-static-ingress",
+            "ClusterName": "prod",
             "ServiceName": "prod-static-ingress-http"
           },
           "expression": "",
@@ -1841,26 +1841,6 @@
           "namespace": "AWS/ECS",
           "period": "",
           "refId": "R",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
-        },
-        {
-          "alias": "Static Ingress Beat Exporter Task",
-          "dimensions": {
-            "ClusterName": "prod-static-ingress",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "matchExact": true,
-          "metricName": "CPUUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "S",
           "region": "eu-west-2",
           "returnData": false,
           "statistics": [
