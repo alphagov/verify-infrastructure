@@ -48,7 +48,6 @@ module "policy_fargate" {
     region                        = data.aws_region.region.id
     account_id                    = data.aws_caller_identity.account.account_id
     event_emitter_api_gateway_url = var.event_emitter_api_gateway_url
-    memory_hard_limit             = var.policy_memory_hard_limit
     jvm_options                   = var.jvm_options
 
     redis_host = "rediss://${
@@ -58,7 +57,7 @@ module "policy_fargate" {
   })
   container_name    = "nginx"
   container_port    = "8443"
-  number_of_tasks   = var.number_of_apps
+  number_of_tasks   = var.number_of_policy_apps
   health_check_path = "/service-status"
   tools_account_id  = var.tools_account_id
   image_name        = "verify-policy"
@@ -66,7 +65,7 @@ module "policy_fargate" {
   ecs_cluster_id    = aws_ecs_cluster.fargate-ecs-cluster.id
   cpu               = 2048
   # for a CPU of 2048 we need to set a RAM value between 4096 and 16384 (inclusive) that is a multiple of 1024.
-  memory  = ceil(max(var.policy_memory_hard_limit + 250, 4096) / 1024) * 1024
+  memory  = 4096
   subnets = aws_subnet.internal.*.id
   additional_task_security_group_ids = [
     aws_security_group.can_connect_to_container_vpc_endpoint.id,

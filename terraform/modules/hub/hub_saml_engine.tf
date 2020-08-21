@@ -32,7 +32,6 @@ module "saml_engine_fargate" {
       splunk_url                       = var.splunk_url
       rp_truststore_enabled            = var.rp_truststore_enabled
       certificates_config_cache_expiry = var.certificates_config_cache_expiry
-      memory_hard_limit                = var.saml_engine_memory_hard_limit
       jvm_options                      = var.jvm_options
       log_level                        = var.hub_saml_engine_log_level
       egress_proxy_host                = "${aws_service_discovery_service.egress_proxy_fargate.name}.${aws_service_discovery_private_dns_namespace.hub_apps.name}"
@@ -40,7 +39,7 @@ module "saml_engine_fargate" {
   })
   container_name    = "nginx"
   container_port    = "8443"
-  number_of_tasks   = var.number_of_apps
+  number_of_tasks   = var.number_of_saml_engine_apps
   health_check_path = "/service-status"
   tools_account_id  = var.tools_account_id
   image_name        = "verify-saml-engine"
@@ -48,7 +47,7 @@ module "saml_engine_fargate" {
   ecs_cluster_id    = aws_ecs_cluster.fargate-ecs-cluster.id
   cpu               = 2048
   # for a CPU of 2048 we need to set a RAM value between 4096 and 16384 (inclusive) that is a multiple of 1024.
-  memory  = ceil(max(var.saml_engine_memory_hard_limit + 250, 4096) / 1024) * 1024
+  memory  = 4096
   subnets = aws_subnet.internal.*.id
   additional_task_security_group_ids = [
     aws_security_group.can_connect_to_container_vpc_endpoint.id,

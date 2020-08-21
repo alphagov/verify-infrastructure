@@ -40,7 +40,7 @@ resource "aws_ecs_service" "metadata_fargate" {
   cluster         = aws_ecs_cluster.fargate-ecs-cluster.id
   task_definition = aws_ecs_task_definition.metadata_fargate.arn
 
-  desired_count                      = var.number_of_apps
+  desired_count                      = var.number_of_metadata_apps
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 

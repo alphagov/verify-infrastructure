@@ -62,13 +62,12 @@ module "config_fargate_v2" {
       self_service_enabled     = var.self_service_enabled
       services_metadata_bucket = local.services_metadata_bucket
       metadata_object_key      = local.metadata_object_key
-      memory_hard_limit        = var.config_memory_hard_limit
       jvm_options              = var.jvm_options
       log_level                = var.hub_config_log_level
   })
   container_name    = "nginx"
   container_port    = "8443"
-  number_of_tasks   = var.number_of_apps
+  number_of_tasks   = var.number_of_config_apps
   health_check_path = "/service-status"
   tools_account_id  = var.tools_account_id
   image_name        = "verify-config"
@@ -76,7 +75,7 @@ module "config_fargate_v2" {
   ecs_cluster_id    = aws_ecs_cluster.fargate-ecs-cluster.id
   cpu               = 2048
   # for a CPU of 2048 we need to set a RAM value between 4096 and 16384 (inclusive) that is a multiple of 1024.
-  memory  = ceil(max(var.config_memory_hard_limit + 250, 4096) / 1024) * 1024
+  memory  = 4096
   subnets = aws_subnet.internal.*.id
   additional_task_security_group_ids = [
     aws_security_group.can_connect_to_container_vpc_endpoint.id,

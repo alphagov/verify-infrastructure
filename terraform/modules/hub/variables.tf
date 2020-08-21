@@ -19,6 +19,51 @@ variable "number_of_frontend_apps" {
   default = 2
 }
 
+variable "number_of_config_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_analytics_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_saml_soap_proxy_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_metadata_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_saml_proxy_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_saml_engine_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_policy_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_egress_proxy_apps" {
+  type    = number
+  default = 2
+}
+
+variable "number_of_static_ingress_apps" {
+  type    = number
+  default = 2
+}
+
 variable "number_of_prometheus_apps" {
   default = 3
 }
@@ -28,11 +73,11 @@ variable "prometheus_volume_size" {
 }
 
 variable "publically_accessible_from_cidrs" {
-  type = "list"
+  type = list
 }
 
 variable "mgmt_accessible_from_cidrs" {
-  type = "list"
+  type = list
 }
 
 variable "redis_cache_size" {
@@ -158,26 +203,6 @@ variable "metadata_exporter_environment" {
 
 variable "jvm_options" {
   default = "-XX:InitialRAMPercentage=50 -XX:MaxRAMPercentage=80"
-}
-
-variable "config_memory_hard_limit" {
-  default = 3500
-}
-
-variable "saml_proxy_memory_hard_limit" {
-  default = 3500
-}
-
-variable "policy_memory_hard_limit" {
-  default = 3500
-}
-
-variable "saml_engine_memory_hard_limit" {
-  default = 3500
-}
-
-variable "saml_soap_proxy_memory_hard_limit" {
-  default = 3500
 }
 
 variable "instance_type" {
