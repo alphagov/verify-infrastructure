@@ -68,6 +68,16 @@ variable "number_of_prometheus_apps" {
   default = 3
 }
 
+variable "policy_memory_limit_mb" {
+  type    = number
+  default = 4 * 1024
+}
+
+variable "saml_proxy_memory_limit_mb" {
+  type    = number
+  default = 4 * 1024
+}
+
 variable "prometheus_volume_size" {
   default = 100
 }
