@@ -44,6 +44,7 @@ module "saml_proxy_fargate" {
       image_identifier                 = "${local.tools_account_ecr_url_prefix}-verify-saml-proxy@${var.hub_saml_proxy_image_digest}"
       nginx_image_identifier           = local.nginx_image_identifier
       domain                           = local.root_domain
+      memory_limit_mb                  = var.saml_proxy_memory_limit_mb
       deployment                       = var.deployment
       location_blocks_base64           = base64encode(local.saml_proxy_fargate_location_blocks)
       region                           = data.aws_region.region.id

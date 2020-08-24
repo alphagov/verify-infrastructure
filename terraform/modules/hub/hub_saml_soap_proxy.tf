@@ -44,6 +44,7 @@ module "saml_soap_proxy_fargate" {
       image_identifier                 = "${local.tools_account_ecr_url_prefix}-verify-saml-soap-proxy@${var.hub_saml_soap_proxy_image_digest}"
       nginx_image_identifier           = local.nginx_image_identifier
       domain                           = local.root_domain
+      memory_limit_mb                  = 4096
       deployment                       = var.deployment
       location_blocks_base64           = base64encode(local.saml_soap_proxy_fargate_location_blocks)
       region                           = data.aws_region.region.id

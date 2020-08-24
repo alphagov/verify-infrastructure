@@ -43,6 +43,7 @@ module "policy_fargate" {
     image_identifier              = "${local.tools_account_ecr_url_prefix}-verify-policy@${var.hub_policy_image_digest}"
     nginx_image_identifier        = local.nginx_image_identifier
     domain                        = local.root_domain
+    memory_limit_mb               = var.policy_memory_limit_mb
     deployment                    = var.deployment
     location_blocks_base64        = base64encode(local.policy_fargate_location_blocks)
     region                        = data.aws_region.region.id
