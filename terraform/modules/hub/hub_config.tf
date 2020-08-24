@@ -54,6 +54,7 @@ module "config_fargate_v2" {
       image_identifier         = "${local.tools_account_ecr_url_prefix}-verify-config@${var.hub_config_image_digest}"
       nginx_image_identifier   = local.nginx_image_identifier
       domain                   = local.root_domain
+      memory_limit_mb          = 4096
       deployment               = var.deployment
       truststore_password      = var.truststore_password
       location_blocks_base64   = local.nginx_config_location_blocks_fargate_base64

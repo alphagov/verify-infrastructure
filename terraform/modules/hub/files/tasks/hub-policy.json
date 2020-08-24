@@ -2,6 +2,7 @@
   {
     "name": "nginx",
     "image": "${nginx_image_identifier}",
+    "memory": 250,
     "essential": true,
     "portMappings": [
       {
@@ -34,6 +35,7 @@
   {
     "name": "policy",
     "image": "${image_identifier}",
+    "memory": ${memory_limit_mb - 250},
     "essential": true,
     "portMappings": [
       {

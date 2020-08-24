@@ -24,6 +24,7 @@ module "saml_engine_fargate" {
       account_id                       = data.aws_caller_identity.account.account_id
       deployment                       = var.deployment
       domain                           = local.root_domain
+      memory_limit_mb                  = 4096
       image_identifier                 = "${local.tools_account_ecr_url_prefix}-verify-saml-engine@${var.hub_saml_engine_image_digest}"
       nginx_image_identifier           = local.nginx_image_identifier
       region                           = data.aws_region.region.id
