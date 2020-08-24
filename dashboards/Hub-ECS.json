@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1597418876862,
+  "iteration": 1598262153622,
   "links": [],
   "panels": [
     {
@@ -1420,26 +1420,6 @@
           "statistics": [
             "Maximum"
           ]
-        },
-        {
-          "alias": "Static Ingress Beat Exporter Task",
-          "dimensions": {
-            "ClusterName": "prod",
-            "ServiceName": "prod-beat-exporter"
-          },
-          "expression": "",
-          "highResolution": false,
-          "id": "",
-          "matchExact": true,
-          "metricName": "MemoryUtilization",
-          "namespace": "AWS/ECS",
-          "period": "",
-          "refId": "S",
-          "region": "eu-west-2",
-          "returnData": false,
-          "statistics": [
-            "Maximum"
-          ]
         }
       ],
       "thresholds": [],
@@ -2567,5 +2547,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 105
+  "version": 107
 }
