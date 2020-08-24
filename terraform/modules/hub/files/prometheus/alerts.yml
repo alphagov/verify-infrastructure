@@ -106,14 +106,6 @@ groups:
     expr: |
       up == 0
     for: 15m
-  - alert: JournalbeatDown
-    labels: *infraticket
-    annotations:
-      message: |
-        beat-exporter couldn't find a running journalbeat.
-    expr: |
-      journalbeat_up == 0
-    for: 15m
   - alert: RebootRequired
     labels: *infraticket
     annotations:
@@ -158,14 +150,6 @@ groups:
           target_group=~"targetgroup/.*-ingress-analytics/.*"
         }[60m])) < 0.95
     for: 15m
-  - alert: NoJournalbeatLogs
-    labels: *infraticket
-    annotations:
-      message: |
-        We haven't seen any journalbeat logs for 20 minutes.
-    for: 20m
-    expr: |
-      rate(journalbeat_libbeat_output_events{type="acked"}[1m]) == 0
   - alert: HighIngressCPU
     labels: *infraticket
     annotations:
