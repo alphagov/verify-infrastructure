@@ -74,8 +74,8 @@ resource "aws_lb_listener" "static_ingress_https_fargate" {
 }
 
 resource "aws_ecs_task_definition" "static_ingress_http_fargate" {
-  family = "${var.deployment}-static-ingress-http-fargate"
-  container_definitions = templatefile("${path.module}/files/tasks/static-ingress.json",
+  family                   = "${var.deployment}-static-ingress-http-fargate"
+  container_definitions    = templatefile("${path.module}/files/tasks/static-ingress.json",
     {
       image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-fargate@${var.static_ingress_fargate_image_digest}"
       backend          = var.signin_domain
@@ -83,32 +83,32 @@ resource "aws_ecs_task_definition" "static_ingress_http_fargate" {
       backend_port     = 80
       deployment       = var.deployment
       region           = data.aws_region.region.id
-  })
+    })
   execution_role_arn       = module.static_ingress_ecs_roles.execution_role_arn
   task_role_arn            = module.static_ingress_ecs_roles.task_role_arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = 256
-  memory                   = 512
+  cpu                      = 1024
+  memory                   = 2 * 1024
 }
 
 resource "aws_ecs_task_definition" "static_ingress_https_fargate" {
-  family = "${var.deployment}-static-ingress-https-fargate"
+  family                = "${var.deployment}-static-ingress-https-fargate"
   container_definitions = templatefile("${path.module}/files/tasks/static-ingress.json",
-    {
-      image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-tls-fargate@${var.static_ingress_tls_fargate_image_digest}"
-      backend          = var.signin_domain
-      bind_port        = 8443
-      backend_port     = 443
-      deployment       = var.deployment
-      region           = data.aws_region.region.id
+  {
+    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-static-ingress-tls-fargate@${var.static_ingress_tls_fargate_image_digest}"
+    backend          = var.signin_domain
+    bind_port        = 8443
+    backend_port     = 443
+    deployment       = var.deployment
+    region           = data.aws_region.region.id
   })
-  execution_role_arn       = module.static_ingress_ecs_roles.execution_role_arn
-  task_role_arn            = module.static_ingress_ecs_roles.task_role_arn
+  execution_role_arn    = module.static_ingress_ecs_roles.execution_role_arn
+  task_role_arn         = module.static_ingress_ecs_roles.task_role_arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = 256
-  memory                   = 512
+  cpu                      = 1024
+  memory                   = 3 * 1024
 }
 
 resource "aws_security_group" "static_ingress_fargate_task" {
