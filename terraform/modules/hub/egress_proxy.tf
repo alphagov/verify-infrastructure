@@ -93,8 +93,8 @@ resource "aws_ecs_task_definition" "egress_proxy_fargate" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
 
-  cpu    = 1024
-  memory = 3072
+  cpu    = 256
+  memory = 512
 }
 
 resource "aws_security_group" "egress_proxy_task" {
