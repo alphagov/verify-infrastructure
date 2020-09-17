@@ -3,7 +3,6 @@ set -ueo pipefail
 
 allowlist="${ALLOWLIST:-${WHITELIST:?ALLOWLIST not set}}"
 allowlist="$(echo "$allowlist" | base64 -d)"
-
 all_acls=""
 
 for regex in $allowlist; do
