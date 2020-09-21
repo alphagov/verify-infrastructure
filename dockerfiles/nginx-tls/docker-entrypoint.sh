@@ -76,5 +76,4 @@ openssl req -x509 \
 
 envsubst > /tmp/nginx.conf < /tmp/nginx.conf.tpl
 
-
 exec nginx -g 'daemon off;' -c /tmp/nginx.conf
