@@ -131,14 +131,6 @@ variable "analytics_endpoint" {
   description = "Analytics endpoint"
 }
 
-variable "splunk_url" {
-  description = "Splunk http event collector endpoint, used by saml-engine"
-}
-
-variable "splunk_hostname" {
-  description = "Splunk hostname, used by saml-engine's egress proxy"
-}
-
 variable "ab_test_file" {
   description = "File containing percentage values for variant and control"
   default     = "deactivated_ab_test.yml"

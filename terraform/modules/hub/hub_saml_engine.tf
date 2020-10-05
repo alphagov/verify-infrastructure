@@ -30,7 +30,6 @@ module "saml_engine_fargate" {
       region                           = data.aws_region.region.id
       location_blocks_base64           = base64encode(local.saml_engine_fargate_location_blocks)
       redis_host                       = "rediss://${aws_elasticache_replication_group.saml_engine_replay_cache.primary_endpoint_address}:6379"
-      splunk_url                       = var.splunk_url
       rp_truststore_enabled            = var.rp_truststore_enabled
       certificates_config_cache_expiry = var.certificates_config_cache_expiry
       jvm_options                      = var.jvm_options
