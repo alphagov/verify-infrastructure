@@ -1,7 +1,7 @@
 resource "aws_db_instance" "self_service" {
   name           = "selfservice"
   engine         = "postgres"
-  engine_version = "11.5"
+  engine_version = "11"
   storage_type   = "gp2"
 
   instance_class    = var.db_instance_class
