@@ -54,6 +54,10 @@
         "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/ecs-app-shared/sentry-dsn"
       },
       {
+        "name": "SENTRY_ENV",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/sentry-env"
+      },
+      {
         "name": "EVENT_EMITTER_ACCESS_KEY_ID",
         "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/saml-proxy/event-emitter-access-key-id"
       },

@@ -16,6 +16,7 @@ locals  {
     asset_host                         = var.asset_host
     asset_prefix                       = "${element(split(":", var.image_digest),1)}/assets/"
     sentry_dsn                         = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/sentry-dsn"
+    sentry_env                         = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/sentry-env"
     hub_environments                   = var.hub_environments
     hub_environments_legacy            = var.hub_environments_legacy
     hub_config_host                    = "https://config-v2-fargate.${local.hub_deployment}${var.hub_host}:443"
