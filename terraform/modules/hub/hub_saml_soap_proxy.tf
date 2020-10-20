@@ -89,7 +89,8 @@ resource "aws_iam_policy" "saml_soap_proxy_parameter_execution" {
       ],
       "Resource": [
         "arn:aws:kms:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:alias/${var.deployment}-saml-soap-proxy-key",
-        "arn:aws:ssm:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/saml-soap-proxy/*"
+        "arn:aws:ssm:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/saml-soap-proxy/*",
+        "arn:aws:ssm:${data.aws_region.region.id}:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/sentry-env"
       ]
     }]
   }
