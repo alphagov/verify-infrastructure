@@ -64,7 +64,8 @@ resource "aws_iam_policy" "execution" {
       ],
       "Resource": [
         "arn:aws:ssm:eu-west-2:${local.account_id}:parameter/${var.deployment}/${var.service_name}/*",
-        "arn:aws:ssm:eu-west-2:${local.account_id}:parameter/${var.deployment}/ecs-app-shared/*"
+        "arn:aws:ssm:eu-west-2:${local.account_id}:parameter/${var.deployment}/ecs-app-shared/*",
+        "arn:aws:ssm:eu-west-2:${local.account_id}:parameter/${var.deployment}/sentry-env"
       ]
     }, {
       "Effect": "Allow",
