@@ -58,6 +58,9 @@
         "name": "SENTRY_DSN",
         "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/frontend/sentry-dsn"
       }, {
+        "name": "SENTRY_ENV",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/sentry-env"
+      }, {
         "name": "ZENDESK_TOKEN",
         "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/frontend/zendesk-token"
       }, {
