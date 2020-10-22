@@ -83,6 +83,10 @@
           "valueFrom": "${sentry_dsn}"
         },
         {
+          "name": "SENTRY_ENV",
+          "valueFrom": "${sentry_env}"
+        },
+        {
           "name": "SELF_SERVICE_AUTHENTICATION_HEADER",
           "valueFrom": "${self_service_authentication_header}"
         },
