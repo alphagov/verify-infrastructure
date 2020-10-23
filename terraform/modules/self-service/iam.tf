@@ -131,7 +131,8 @@ resource "aws_iam_policy" "self_service_secrets_policy" {
           "ssm:GetParametersByPath"
         ],
         "Resource": [
-          "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/*"
+          "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/*",
+          "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/sentry-env"
         ]
       }, {
         "Effect": "Allow",
