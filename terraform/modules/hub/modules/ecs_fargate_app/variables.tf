@@ -13,7 +13,7 @@ variable "image_name" {
 }
 
 variable "lb_subnets" {
-  type = "list"
+  type = list
 }
 
 locals {
@@ -53,7 +53,7 @@ variable "health_check_http_codes" {
 }
 
 variable "ecs_cluster_id" {
-  type = "string"
+  type = string
 }
 
 variable "cpu" {

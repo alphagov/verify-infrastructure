@@ -1,45 +1,38 @@
+data "aws_region" "region" {}
 
-resource "aws_security_group" "metadata_task" {
-  name        = "${var.deployment}-metadata-task"
-  description = "${var.deployment}-metadata-task"
+data "terraform_remote_state" "hub" {
+  backend = "s3"
 
-  vpc_id = aws_vpc.hub.id
+  config = {
+    bucket = "govukverify-tfstate-${var.deployment}"
+    key    = "hub.tfstate"
+    region = "eu-west-2"
+  }
 }
 
 data "template_file" "metadata_task_def" {
-  template = file("${path.module}/files/tasks/metadata.json")
+  template = file("${path.module}/files/metadata.json")
 
   vars = {
     deployment       = var.deployment
     region           = data.aws_region.region.id
-    image_identifier = "${local.tools_account_ecr_url_prefix}-verify-metadata@${var.hub_metadata_image_digest}"
+    image_identifier = "${var.tools_account_id}.dkr.ecr.eu-west-2.amazonaws.com/platform-deployer-verify-metadata@${var.hub_metadata_image_digest}"
   }
-}
-
-module "metadata_ecs_roles" {
-  source = "./modules/ecs_iam_role_pair"
-
-  deployment       = var.deployment
-  service_name     = "metadata"
-  tools_account_id = var.tools_account_id
-  image_name       = "verify-metadata"
 }
 
 resource "aws_ecs_task_definition" "metadata_fargate" {
   family                   = "${var.deployment}-metadata-fargate"
   container_definitions    = data.template_file.metadata_task_def.rendered
   network_mode             = "awsvpc"
-  execution_role_arn       = module.metadata_ecs_roles.execution_role_arn
+  execution_role_arn       = data.terraform_remote_state.hub.outputs.metadata_ecs_execution_role_arn
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
   memory                   = 512
-
-  count = var.manage_metadata
 }
 
 resource "aws_ecs_service" "metadata_fargate" {
-  name            = "${var.deployment}-metadata"
-  cluster         = aws_ecs_cluster.fargate-ecs-cluster.id
+  name            = "${var.deployment}-metadata-from-metadata-pipeline"
+  cluster         = data.terraform_remote_state.hub.outputs.fargate_ecs_cluster_id
   task_definition = aws_ecs_task_definition.metadata_fargate.arn
 
   desired_count                      = var.number_of_metadata_apps
@@ -48,20 +41,18 @@ resource "aws_ecs_service" "metadata_fargate" {
 
   launch_type = "FARGATE"
 
-  count = var.manage_metadata
-
   load_balancer {
-    target_group_arn = aws_lb_target_group.ingress_metadata.arn
+    target_group_arn = data.terraform_remote_state.hub.outputs.ingress_metadata_lb_target_group_arn
     container_name   = "nginx"
     container_port   = "8443"
   }
 
   network_configuration {
-    subnets = aws_subnet.internal.*.id
+    subnets = data.terraform_remote_state.hub.outputs.internal_subnet_ids
     security_groups = [
-      aws_security_group.metadata_task.id,
-      aws_security_group.hub_fargate_microservice.id,
-      aws_security_group.can_connect_to_container_vpc_endpoint.id,
+      data.terraform_remote_state.hub.outputs.metadata_task_security_group_id,
+      data.terraform_remote_state.hub.outputs.hub_fargate_microservice_security_group_id,
+      data.terraform_remote_state.hub.outputs.can_connect_to_container_vpc_endpoint,
     ]
   }
 
@@ -72,14 +63,13 @@ resource "aws_ecs_service" "metadata_fargate" {
 }
 
 resource "aws_service_discovery_service" "metadata_fargate" {
-  name = "${var.deployment}-metadata"
+  name = "${var.deployment}-metadata-from-metadata-pipeline"
 
   description = "service discovery for ${var.deployment}-metadata-fargate instances"
 
-  count = var.manage_metadata
-
   dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.hub_apps.id
+
+    namespace_id = data.terraform_remote_state.hub.outputs.hub_apps_private_dns_namespace_id
 
     dns_records {
       ttl  = 60

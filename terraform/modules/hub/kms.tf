@@ -71,7 +71,7 @@ resource "aws_kms_key" "frontend" {
 
 resource "aws_kms_alias" "frontend" {
   name          = "alias/${var.deployment}-frontend-key"
-  target_key_id = "${aws_kms_key.frontend.key_id}"
+  target_key_id = aws_kms_key.frontend.key_id
 }
 
 data "aws_iam_policy_document" "policy" {
@@ -149,7 +149,7 @@ resource "aws_kms_key" "saml_proxy" {
 
 resource "aws_kms_alias" "saml_proxy" {
   name          = "alias/${var.deployment}-saml-proxy-key"
-  target_key_id = "${aws_kms_key.saml_proxy.key_id}"
+  target_key_id = aws_kms_key.saml_proxy.key_id
 }
 
 data "aws_iam_policy_document" "saml_soap_proxy" {

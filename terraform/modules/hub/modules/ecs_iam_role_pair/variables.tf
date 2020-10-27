@@ -7,11 +7,7 @@ variable "image_name" {
 }
 
 locals {
-  image_name = "${
-    length(var.image_name) == 0
-    ? var.service_name
-    : var.image_name
-  }"
+  image_name = length(var.image_name) == 0 ? var.service_name : var.image_name
 }
 
 data "aws_caller_identity" "account" {}
