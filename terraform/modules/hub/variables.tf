@@ -208,6 +208,11 @@ variable "throttling_enabled" {
   default     = "false"
 }
 
+variable "manage_metadata" {
+  description = "A flag to deploy the metadata and associated infrastructure. Used while moving metadata release to a separate pipeline. Use 1 for true and 0 for false"
+  default     = 1
+}
+
 variable "hub_config_image_digest" {}
 variable "hub_policy_image_digest" {}
 variable "hub_saml_proxy_image_digest" {}

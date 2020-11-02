@@ -1,0 +1,26 @@
+[
+  {
+    "name": "nginx",
+    "image": "${image_identifier}",
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8443,
+        "hostPort": 8443
+      }
+    ],
+    "environment": [{
+      "Name": "DEPLOYMENT",
+      "Value": "${deployment}"
+    }],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${deployment}-hub",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "metadata-nginx",
+        "awslogs-create-group": "true"
+      }
+    }
+  }
+]

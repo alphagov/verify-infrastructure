@@ -12,7 +12,7 @@ resource "aws_nat_gateway" "static_egress" {
   allocation_id = element(aws_eip.egress.*.id, count.index)
   subnet_id     = element(aws_subnet.egress.*.id, count.index)
 
-  depends_on = ["aws_internet_gateway.hub"]
+  depends_on = [aws_internet_gateway.hub]
 
   tags = {
     Deployment = var.deployment

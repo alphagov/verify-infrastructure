@@ -33,18 +33,22 @@ resource "aws_ecs_task_definition" "metadata_fargate" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
   memory                   = 512
+
+  count = var.manage_metadata
 }
 
 resource "aws_ecs_service" "metadata_fargate" {
   name            = "${var.deployment}-metadata"
   cluster         = aws_ecs_cluster.fargate-ecs-cluster.id
-  task_definition = aws_ecs_task_definition.metadata_fargate.arn
+  task_definition = aws_ecs_task_definition.metadata_fargate[count.index].arn
 
   desired_count                      = var.number_of_metadata_apps
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 
   launch_type = "FARGATE"
+
+  count = var.manage_metadata
 
   load_balancer {
     target_group_arn = aws_lb_target_group.ingress_metadata.arn
@@ -62,7 +66,7 @@ resource "aws_ecs_service" "metadata_fargate" {
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.metadata_fargate.arn
+    registry_arn = aws_service_discovery_service.metadata_fargate[count.index].arn
     port         = 8443
   }
 }
@@ -71,6 +75,8 @@ resource "aws_service_discovery_service" "metadata_fargate" {
   name = "${var.deployment}-metadata"
 
   description = "service discovery for ${var.deployment}-metadata-fargate instances"
+
+  count = var.manage_metadata
 
   dns_config {
     namespace_id = aws_service_discovery_private_dns_namespace.hub_apps.id

@@ -29,7 +29,7 @@ resource "aws_lb_target_group" "task" {
   }
 
   depends_on = [
-    "aws_lb.app",
+    aws_lb.app,
   ]
 
   lifecycle {
