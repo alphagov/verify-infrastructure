@@ -40,7 +40,7 @@ resource "aws_ecs_task_definition" "metadata_fargate" {
 resource "aws_ecs_service" "metadata_fargate" {
   name            = "${var.deployment}-metadata"
   cluster         = aws_ecs_cluster.fargate-ecs-cluster.id
-  task_definition = aws_ecs_task_definition.metadata_fargate.arn
+  task_definition = aws_ecs_task_definition.metadata_fargate[count.index].arn
 
   desired_count                      = var.number_of_metadata_apps
   deployment_minimum_healthy_percent = 50
@@ -66,7 +66,7 @@ resource "aws_ecs_service" "metadata_fargate" {
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.metadata_fargate.arn
+    registry_arn = aws_service_discovery_service.metadata_fargate[count.index].arn
     port         = 8443
   }
 }

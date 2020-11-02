@@ -209,8 +209,8 @@ variable "throttling_enabled" {
 }
 
 variable "manage_metadata" {
-  description = "A flag to deploy the metadata and associated infrastructure. Used while moving metadata release to a separate pipeline"
-  default     = true
+  description = "A flag to deploy the metadata and associated infrastructure. Used while moving metadata release to a separate pipeline. Use 1 for true and 0 for false"
+  default     = 1
 }
 
 variable "hub_config_image_digest" {}
