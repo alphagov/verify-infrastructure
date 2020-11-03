@@ -1,5 +1,5 @@
-locals  {
-  hub_deployment = "${var.deployment == "prod" ? "" : "${var.deployment}." }"
+locals {
+  hub_deployment = var.deployment == "prod" ? "" : "${var.deployment}."
 
   task_vars = {
     image_digest                       = var.image_digest
@@ -14,7 +14,7 @@ locals  {
     cognito_client_id                  = module.cognito.user_pool_client_id
     cognito_user_pool_id               = module.cognito.user_pool_id
     asset_host                         = var.asset_host
-    asset_prefix                       = "${element(split(":", var.image_digest),1)}/assets/"
+    asset_prefix                       = "${element(split(":", var.image_digest), 1)}/assets/"
     sentry_dsn                         = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/${local.service}/sentry-dsn"
     sentry_env                         = "arn:aws:ssm:eu-west-2:${data.aws_caller_identity.account.account_id}:parameter/${var.deployment}/sentry-env"
     hub_environments                   = var.hub_environments
@@ -154,7 +154,7 @@ resource "random_string" "rails_secret_key_base" {
   special = false
 }
 
- resource "aws_ssm_parameter" "rails_secret_key_base" {
+resource "aws_ssm_parameter" "rails_secret_key_base" {
   name        = "/${var.deployment}/${local.service}/rails-secret-key-base"
   description = "Rails secret base for self-service"
   type        = "SecureString"

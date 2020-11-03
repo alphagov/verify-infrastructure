@@ -14,7 +14,7 @@ resource "aws_db_instance" "self_service" {
   # NOT THE REAL PASSWORD
   # The password is stored in SSM Parameter Store
   # This was done to avoid it being written to the tfstate file
-  password   = "password"
+  password = "password"
 
   storage_encrypted = true
 
@@ -36,12 +36,12 @@ resource "aws_db_instance" "self_service" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = ["password"]
+    ignore_changes  = [password]
   }
 
   tags = {
-      Name = "${var.deployment}-${local.service}-db"
-   }
+    Name = "${var.deployment}-${local.service}-db"
+  }
 }
 
 resource "aws_db_subnet_group" "self_service_db_subnet_group" {

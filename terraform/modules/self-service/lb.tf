@@ -11,7 +11,7 @@ resource "aws_lb" "self_service_edge" {
   subnets = data.terraform_remote_state.hub.outputs.public_subnet_ids
 
   tags = {
-    Deployment = "${var.deployment}"
+    Deployment = var.deployment
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_lb_target_group" "task" {
   }
 
   depends_on = [
-    "aws_lb.self_service_edge",
+    aws_lb.self_service_edge,
   ]
 }
 
@@ -68,7 +68,7 @@ resource "aws_lb_listener" "cluster_https" {
 }
 
 resource "aws_lb_listener_rule" "disable_health_check_from_public" {
-  listener_arn = "${aws_lb_listener.cluster_https.arn}"
+  listener_arn = aws_lb_listener.cluster_https.arn
 
   action {
     type = "fixed-response"

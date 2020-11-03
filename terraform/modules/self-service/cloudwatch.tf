@@ -3,8 +3,8 @@ resource "aws_cloudwatch_log_group" "self_service" {
 }
 
 resource "aws_cloudwatch_event_rule" "scheduler_rule" {
-  name                = "${var.deployment}-${local.service}-cert-expiry-scheduler-rule"
-  description         = "Run send_cert_expiry_reminder_emails task at a scheduled time"
+  name        = "${var.deployment}-${local.service}-cert-expiry-scheduler-rule"
+  description = "Run send_cert_expiry_reminder_emails task at a scheduled time"
   # scheduled to run every day at 2am
   schedule_expression = "cron(0 2 * * ? *)"
 }

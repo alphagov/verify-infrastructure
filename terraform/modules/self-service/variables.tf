@@ -14,7 +14,7 @@ variable "ssl_certificate_arn" {
 
 variable "accessible_from_cidrs" {
   description = "Accessible from CIDRs"
-  type        = "list"
+  type        = list
   default     = []
 }
 
@@ -22,7 +22,7 @@ data "aws_caller_identity" "account" {}
 
 variable "db_instance_class" {
   description = "Instance class for the Self Service RDS DB"
-  default     =  "db.t3.small"
+  default     = "db.t3.small"
 }
 
 variable "db_allocated_storage" {
@@ -35,7 +35,7 @@ variable "db_multi_az" {
   default     = false
 }
 
-variable "db_backup_retention_period"{
+variable "db_backup_retention_period" {
   description = "Self Service DB backup retention period"
   default     = 7
 }
@@ -75,6 +75,6 @@ variable "hub_environments_legacy" {
 
 variable "additional_buckets" {
   description = "Additional bucket ARNs which the app will publish to"
-  type        = "list"
+  type        = list
   default     = []
 }
