@@ -219,7 +219,6 @@ variable "hub_saml_proxy_image_digest" {}
 variable "hub_saml_soap_proxy_image_digest" {}
 variable "hub_saml_engine_image_digest" {}
 variable "hub_frontend_image_digest" {}
-variable "hub_metadata_image_digest" {}
 
 variable "ecs_agent_image_digest" {}
 variable "nginx_image_digest" {}
