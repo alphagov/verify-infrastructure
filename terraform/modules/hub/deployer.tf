@@ -26,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "deployer_administrator_access" {
 }
 
 resource "aws_iam_role_policy" "deployer_deny_release_address" {
-  role       = aws_iam_role.deployer.name
+  role   = aws_iam_role.deployer.name
   policy = <<-EOF
   {
     "Version": "2012-10-17",
