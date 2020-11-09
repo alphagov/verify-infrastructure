@@ -5,4 +5,5 @@ data "template_file" "service_tickets_dashboard" {
     deployment = var.deployment
     source     = var.data_source
   }
+
 }
