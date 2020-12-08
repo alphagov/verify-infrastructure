@@ -66,6 +66,9 @@
       }, {
         "name": "SELF_SERVICE_AUTHENTICATION_HEADER",
         "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/self-service/authentication-header"
+      }, {
+        "Name": "EIDAS_DISABLED_AFTER",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/frontend/eidas-disabled-after"
       }
     ],
     "environment": [{
