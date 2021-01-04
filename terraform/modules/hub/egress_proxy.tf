@@ -59,7 +59,6 @@ locals {
     "o451922\\.ingest\\.sentry\\.io",                        # Cloud Sentry
     "sentry\\.tools\\.signin\\.service\\.gov\\.uk",          # Tools Sentry
     replace(local.event_emitter_api_gateway[0], ".", "\\."), # API Gateway
-    var.splunk_hostname,                                     # Splunk
   ]
 
   egress_proxy_allowlist = join(" ", local.egress_proxy_allowlist_list)
