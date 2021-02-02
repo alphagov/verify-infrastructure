@@ -57,7 +57,6 @@ locals {
 locals {
   egress_proxy_allowlist_list = [
     "o451922\\.ingest\\.sentry\\.io",                        # Cloud Sentry
-    "sentry\\.tools\\.signin\\.service\\.gov\\.uk",          # Tools Sentry
     replace(local.event_emitter_api_gateway[0], ".", "\\."), # API Gateway
   ]
 
