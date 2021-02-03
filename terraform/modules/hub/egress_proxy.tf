@@ -53,7 +53,6 @@ resource "aws_security_group_rule" "egress_proxy_ingress_from_tasks" {
 locals {
   egress_proxy_allowlist_list = [
     "o451922\\.ingest\\.sentry\\.io",                        # Cloud Sentry
-    "sentry\\.tools\\.signin\\.service\\.gov\\.uk",          # Tools Sentry
   ]
 
   egress_proxy_allowlist = join(" ", local.egress_proxy_allowlist_list)

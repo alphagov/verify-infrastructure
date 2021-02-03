@@ -1,1 +1,0 @@
-https://github.com/getsentry/sentry-auth-github/archive/43f6b270b3fac32326518a78be77562ebe5abacf.zip
