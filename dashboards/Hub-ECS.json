@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1598262153622,
+  "iteration": 1612348206372,
   "links": [],
   "panels": [
     {
@@ -1056,103 +1056,91 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "$Prometheus",
+      "description": "The VSP version by entity ID as reported by Authn requests received by the hub",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {
+            "align": null
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VSP Version"
+            },
+            "properties": [
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          }
+        ]
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 12,
         "x": 12,
         "y": 12
       },
-      "hiddenSeries": false,
-      "id": 2,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "hideEmpty": false,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
+      "id": 35,
       "options": {
-        "dataLinks": []
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "entityId"
+          }
+        ]
       },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "7.0.5",
       "targets": [
         {
-          "expr": "sum(rate(io_dropwizard_jetty_MutableServletContextHandler_5xx_responses_total[1m])) without (instance)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{job}}",
+          "expr": "avg by (entityId, version)(verify_saml_engine_vsp_version)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
-      "title": "5xx responses",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
+      "title": "VSP versions in the wild",
+      "transformations": [
         {
-          "format": "short",
-          "label": "5xx responses per second",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "entityId": "Entity ID",
+              "version": "VSP Version"
+            }
+          }
         }
       ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "table"
     },
     {
       "aliasColors": {},
@@ -1482,15 +1470,18 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 18
+        "y": 19
       },
       "hiddenSeries": false,
-      "id": 4,
+      "id": 2,
       "legend": {
         "avg": false,
         "current": false,
+        "hideEmpty": false,
+        "hideZero": false,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": false
@@ -1512,7 +1503,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total[1m])) without (instance)",
+          "expr": "sum(rate(io_dropwizard_jetty_MutableServletContextHandler_5xx_responses_total[1m])) without (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{job}}",
@@ -1523,7 +1514,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "2xx responses",
+      "title": "5xx responses",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1540,7 +1531,7 @@
       "yaxes": [
         {
           "format": "short",
-          "label": "2xx responses per second",
+          "label": "5xx responses per second",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -1548,7 +1539,7 @@
         },
         {
           "format": "short",
-          "label": null,
+          "label": "",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -1871,7 +1862,10 @@
       }
     },
     {
-      "columns": [],
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": "$Prometheus",
       "fieldConfig": {
         "defaults": {
@@ -1879,150 +1873,89 @@
         },
         "overrides": []
       },
-      "fontSize": "100%",
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
-        "h": 10,
+        "h": 6,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 25
       },
-      "hideTimeOverride": false,
-      "id": 8,
+      "hiddenSeries": false,
+      "id": 4,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
       "links": [],
-      "pageSize": null,
-      "repeat": null,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 3,
-        "desc": false
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
       },
-      "styles": [
-        {
-          "alias": "Application",
-          "align": "auto",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "link": false,
-          "mappingType": 1,
-          "pattern": "job",
-          "preserveFormat": false,
-          "sanitize": false,
-          "thresholds": [
-            ""
-          ],
-          "type": "string",
-          "unit": "decmbytes",
-          "valueMaps": [
-            {
-              "text": "Ingress",
-              "value": "ingress"
-            },
-            {
-              "text": "SAML Proxy",
-              "value": "saml-proxy"
-            },
-            {
-              "text": "SAML Engine",
-              "value": "saml-engine"
-            },
-            {
-              "text": "SAML SOAP Proxy",
-              "value": "saml-soap-proxy"
-            },
-            {
-              "text": "Policy",
-              "value": "policy"
-            },
-            {
-              "text": "Config",
-              "value": "config"
-            },
-            {
-              "text": "Egress Proxy",
-              "value": "egress-proxy"
-            }
-          ]
-        },
-        {
-          "alias": "EC2 Memory Available (GB)",
-          "align": "auto",
-          "colorMode": "value",
-          "colors": [
-            "#890f02",
-            "rgba(237, 129, 40, 0.89)",
-            "#7eb26d"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value",
-          "thresholds": [
-            "0.5",
-            "1.0"
-          ],
-          "type": "number",
-          "unit": "decgbytes"
-        },
-        {
-          "alias": "Time",
-          "align": "auto",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Time",
-          "thresholds": [],
-          "type": "date",
-          "unit": "short"
-        },
-        {
-          "alias": "Instance",
-          "align": "auto",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "instance",
-          "preserveFormat": false,
-          "sanitize": false,
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        }
-      ],
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
-          "expr": "node_memory_MemAvailable / 1024 / 1024 / 1024",
-          "format": "table",
-          "instant": true,
-          "interval": "",
+          "expr": "sum(rate(io_dropwizard_jetty_MutableServletContextHandler_2xx_responses_total[1m])) without (instance)",
+          "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "",
+          "legendFormat": "{{job}}",
           "refId": "A"
         }
       ],
+      "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
-      "title": "EC2 Memory Free Space",
-      "transform": "table",
-      "type": "table-old"
+      "title": "2xx responses",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "2xx responses per second",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "alert": {
@@ -2065,7 +1998,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "hub-prod-prom-1",
+      "datasource": "hub-prod-prom-2",
       "description": "Details about healthy matching services",
       "fieldConfig": {
         "defaults": {
@@ -2182,7 +2115,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 34
+        "y": 31
       },
       "id": 30,
       "links": [],
@@ -2475,7 +2408,7 @@
       "type": "table-old"
     }
   ],
-  "refresh": "15m",
+  "refresh": "30s",
   "schemaVersion": 25,
   "style": "dark",
   "tags": [],
@@ -2547,5 +2480,5 @@
   "timezone": "",
   "title": "Hub ECS",
   "uid": "a5-IQHQmk",
-  "version": 107
+  "version": 113
 }
