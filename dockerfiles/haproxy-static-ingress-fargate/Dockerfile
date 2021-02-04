@@ -1,4 +1,4 @@
-FROM haproxy:2.0.14-alpine
+FROM ghcr.io/alphagov/verify/haproxy:2.0.20-alpine
 
 EXPOSE 4500
 

@@ -1,4 +1,4 @@
-FROM alpine:3.11
+FROM ghcr.io/alphagov/verify/alpine:3.11
 
 RUN apk add --no-cache squid=4.10-r0
 

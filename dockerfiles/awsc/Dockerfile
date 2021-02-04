@@ -1,4 +1,4 @@
-FROM golang:1.12
+FROM ghcr.io/alphagov/verify/golang:1.12
 
 ENV AWSC_VERSION 50283d253d3f5600dc53d5c1454a4ab7cbfccfe4
 ENV GO111MODULE  on
