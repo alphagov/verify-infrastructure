@@ -1,6 +1,6 @@
 FROM ghcr.io/alphagov/verify/alpine:3.11
 
-RUN apk add --no-cache squid=4.10-r0
+RUN apk add --no-cache squid=4.13-r0
 
 RUN    touch /etc/squid/squid.conf \
     && mkdir -p /squid \
