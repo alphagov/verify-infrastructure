@@ -75,7 +75,8 @@ resource "aws_ecs_service" "analytics_fargate" {
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 
-  launch_type = "FARGATE"
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
 
   load_balancer {
     target_group_arn = aws_lb_target_group.ingress_analytics.arn

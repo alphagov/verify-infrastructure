@@ -35,7 +35,8 @@ resource "aws_ecs_service" "app" {
   deployment_minimum_healthy_percent = var.deployment_min_healthy_percent
   deployment_maximum_percent         = var.deployment_max_percent
 
-  launch_type = "FARGATE"
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
 
   load_balancer {
     target_group_arn = aws_lb_target_group.task.arn

@@ -19,6 +19,7 @@ resource "aws_cloudwatch_event_target" "scheduler_target" {
     task_count          = 1
     task_definition_arn = aws_ecs_task_definition.scheduler_task_def.arn
     launch_type         = "FARGATE"
+    platform_version    = "1.4.0"
     network_configuration {
       security_groups = [
         aws_security_group.egress_over_https.id,
