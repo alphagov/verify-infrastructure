@@ -89,11 +89,12 @@ resource "aws_ecs_task_definition" "scheduler_task_def" {
 
 
 resource "aws_ecs_service" "service" {
-  name            = local.service
-  task_definition = aws_ecs_task_definition.task_def.arn
-  cluster         = aws_ecs_cluster.cluster.id
-  desired_count   = 1
-  launch_type     = "FARGATE"
+  name             = local.service
+  task_definition  = aws_ecs_task_definition.task_def.arn
+  cluster          = aws_ecs_cluster.cluster.id
+  desired_count    = 1
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
 
   load_balancer {
     target_group_arn = aws_lb_target_group.task.id
@@ -114,11 +115,12 @@ resource "aws_ecs_service" "service" {
 }
 
 resource "aws_ecs_service" "migrations_service" {
-  name            = "${local.service}-migrations"
-  task_definition = aws_ecs_task_definition.migrations_task_def.arn
-  cluster         = aws_ecs_cluster.cluster.id
-  desired_count   = 0
-  launch_type     = "FARGATE"
+  name             = "${local.service}-migrations"
+  task_definition  = aws_ecs_task_definition.migrations_task_def.arn
+  cluster          = aws_ecs_cluster.cluster.id
+  desired_count    = 0
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
 
   network_configuration {
     security_groups = [
@@ -132,11 +134,12 @@ resource "aws_ecs_service" "migrations_service" {
 }
 
 resource "aws_ecs_service" "scheduler_service" {
-  name            = "${local.service}-scheduler"
-  task_definition = aws_ecs_task_definition.scheduler_task_def.arn
-  cluster         = aws_ecs_cluster.cluster.id
-  desired_count   = 0
-  launch_type     = "FARGATE"
+  name             = "${local.service}-scheduler"
+  task_definition  = aws_ecs_task_definition.scheduler_task_def.arn
+  cluster          = aws_ecs_cluster.cluster.id
+  desired_count    = 0
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
 
   network_configuration {
     security_groups = [

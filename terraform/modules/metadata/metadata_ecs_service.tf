@@ -39,7 +39,8 @@ resource "aws_ecs_service" "metadata_fargate" {
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 
-  launch_type = "FARGATE"
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
 
   load_balancer {
     target_group_arn = data.terraform_remote_state.hub.outputs.ingress_metadata_lb_target_group_arn

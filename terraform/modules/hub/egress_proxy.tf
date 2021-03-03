@@ -106,7 +106,8 @@ resource "aws_ecs_service" "egress_proxy_fargate" {
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
 
-  launch_type = "FARGATE"
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
 
   network_configuration {
     subnets = aws_subnet.internal.*.id
