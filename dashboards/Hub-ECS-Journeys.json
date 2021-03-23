@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 123,
-  "iteration": 1600856137935,
+  "iteration": 1616518012229,
   "links": [],
   "panels": [
     {
@@ -43,7 +43,7 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 16,
+        "h": 15,
         "w": 19,
         "x": 0,
         "y": 0
@@ -118,7 +118,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Hub Journeys (ops/min)",
+      "title": "Hub Journeys ops/min avg over $timerange",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -249,36 +249,93 @@
       "valueName": "current"
     },
     {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                0.9
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "now-15m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "keep_state",
+        "for": "30m",
+        "frequency": "15m",
+        "handler": 1,
+        "message": "📉The rate of egress to IdPs has gone down compared to last month. You might want to take a look.",
+        "name": "low rate of egress to IdPs vs. last month",
+        "noDataState": "ok",
+        "notifications": []
+      },
       "aliasColors": {
-        "{job=\"saml-proxy\"}": "red"
+        "Users arriving from Govt. Service": "dark-red",
+        "Users arriving from RP": "dark-red",
+        "Users going to IDP": "semi-dark-yellow",
+        "Users returning from ID Provider": "blue",
+        "Users returning from IDP": "light-blue",
+        "Users returning to Govt. Service": "green",
+        "Users returning to RP": "dark-green"
       },
       "bars": false,
-      "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$Datasource",
+      "datasource": "hub-prod-prom-1",
+      "description": "",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
         "overrides": []
       },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
+        "h": 4,
         "w": 5,
         "x": 19,
         "y": 3
       },
       "hiddenSeries": false,
-      "id": 6,
+      "id": 11,
+      "interval": "",
       "legend": {
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": false
       },
@@ -290,29 +347,43 @@
         "dataLinks": []
       },
       "percentage": false,
+      "pluginVersion": "7.0.5",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "Users arriving from RP",
+          "yaxis": 1
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count[$timerange]))\n\n /\n\nsum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[$timerange]))",
+          "expr": "(sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h])) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h]))) / (sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h] offset 1m)) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h] offset 1m)))",
           "format": "time_series",
-          "instant": false,
           "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
+          "intervalFactor": 10,
+          "legendFormat": "egress rate to IdPS vs. 1 month ago",
           "refId": "A"
         }
       ],
-      "thresholds": [],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 0.9,
+          "yaxis": "left"
+        }
+      ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "% Returning to Hub from IDPs",
+      "title": "🚨Slacks Alerts",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -324,13 +395,13 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": true,
+        "show": false,
         "values": []
       },
       "yaxes": [
         {
-          "decimals": 0,
-          "format": "percentunit",
+          "decimals": 1,
+          "format": "none",
           "label": "",
           "logBase": 1,
           "max": null,
@@ -339,7 +410,7 @@
         },
         {
           "format": "short",
-          "label": null,
+          "label": "",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -392,7 +463,7 @@
         "h": 2,
         "w": 5,
         "x": 19,
-        "y": 9
+        "y": 7
       },
       "id": 10,
       "options": {
@@ -429,6 +500,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$Datasource",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -441,7 +513,7 @@
         "h": 6,
         "w": 5,
         "x": 19,
-        "y": 11
+        "y": 9
       },
       "hiddenSeries": false,
       "id": 8,
@@ -471,10 +543,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(code) (rate(http_server_requests_total{code=~'[45]..'}[$timerange])) * 60",
+          "expr": "sum by(code) (increase(http_server_requests_total{code=~'[45]..'}[$timerange]))",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "",
+          "legendFormat": "{{code}}",
           "refId": "A"
         }
       ],
@@ -482,7 +555,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Frontend Errors per min",
+      "title": "Frontend Errors per $timerange",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -621,7 +694,7 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {
@@ -647,5 +720,5 @@
   "timezone": "",
   "title": "Hub ECS Journeys",
   "uid": "UBaTMZJWz",
-  "version": 27
+  "version": 39
 }
