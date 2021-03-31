@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 123,
-  "iteration": 1616518012229,
+  "iteration": 1617178676236,
   "links": [],
   "panels": [
     {
@@ -109,6 +109,7 @@
         {
           "expr": "60* sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnResponseFromHub_count[$timerange]))",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Users returning to Govt. Service",
           "refId": "D"
@@ -255,7 +256,7 @@
           {
             "evaluator": {
               "params": [
-                0.9
+                0.8
               ],
               "type": "lt"
             },
@@ -274,6 +275,30 @@
               "type": "avg"
             },
             "type": "query"
+          },
+          {
+            "evaluator": {
+              "params": [
+                0,
+                4
+              ],
+              "type": "outside_range"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "B",
+                "now-1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
           }
         ],
         "executionErrorState": "keep_state",
@@ -281,7 +306,7 @@
         "frequency": "15m",
         "handler": 1,
         "message": "📉The rate of egress to IdPs has gone down compared to last month. You might want to take a look.",
-        "name": "low rate of egress to IdPs vs. last month",
+        "name": "Low rate of egress to IdPs vs. last month",
         "noDataState": "ok",
         "notifications": []
       },
@@ -292,13 +317,16 @@
         "Users returning from ID Provider": "blue",
         "Users returning from IDP": "light-blue",
         "Users returning to Govt. Service": "green",
-        "Users returning to RP": "dark-green"
+        "Users returning to RP": "dark-green",
+        "egress rate to IdPS vs. 1 month ago": "semi-dark-green",
+        "ingress rate from IdP v. 1 month ago": "semi-dark-red",
+        "ingress rate from idp v. 1 month ago": "semi-dark-red"
       },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "hub-prod-prom-1",
-      "description": "",
+      "description": "Slack alerts based on changes v. last week or month",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -319,10 +347,10 @@
         },
         "overrides": []
       },
-      "fill": 1,
+      "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 5,
         "x": 19,
         "y": 3
@@ -362,12 +390,19 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h])) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h]))) / (sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h] offset 1m)) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h] offset 1m)))",
+          "expr": "(sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h])) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h]))) / (sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h] offset 30d)) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h] offset 30d)))",
           "format": "time_series",
           "interval": "",
-          "intervalFactor": 10,
+          "intervalFactor": 4,
           "legendFormat": "egress rate to IdPS vs. 1 month ago",
           "refId": "A"
+        },
+        {
+          "expr": "hour()",
+          "hide": true,
+          "interval": "",
+          "legendFormat": "hour of day",
+          "refId": "B"
         }
       ],
       "thresholds": [
@@ -376,14 +411,14 @@
           "fill": true,
           "line": true,
           "op": "lt",
-          "value": 0.9,
+          "value": 0.8,
           "yaxis": "left"
         }
       ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "🚨Slacks Alerts",
+      "title": "🚨Alerts",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -403,7 +438,7 @@
           "decimals": 1,
           "format": "none",
           "label": "",
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": null,
           "show": true
@@ -421,78 +456,6 @@
         "align": false,
         "alignLevel": null
       }
-    },
-    {
-      "datasource": "$Datasource",
-      "description": "The ratio of requests made from the hub to IDPs vs all requests made from RPs to the hub. As there is a lag from users arriving at the hub to leaving, it may go over 100%. It approximates (1-) the drop-out rate, although is optimistic in times when users are trying multiple identity providers in one session.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "dark-green",
-                "value": null
-              },
-              {
-                "color": "semi-dark-red",
-                "value": 20
-              },
-              {
-                "color": "light-yellow",
-                "value": 40
-              },
-              {
-                "color": "light-green",
-                "value": 50
-              },
-              {
-                "color": "dark-green",
-                "value": 60
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 5,
-        "x": 19,
-        "y": 7
-      },
-      "id": 10,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
-        }
-      },
-      "pluginVersion": "7.0.5",
-      "targets": [
-        {
-          "expr": "sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[$timerange])) / sum without(instance)(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[$timerange]))",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "% of journeys getting to IDPs (approx)",
-      "transparent": true,
-      "type": "stat"
     },
     {
       "aliasColors": {},
@@ -513,7 +476,7 @@
         "h": 6,
         "w": 5,
         "x": 19,
-        "y": 9
+        "y": 8
       },
       "hiddenSeries": false,
       "id": 8,
@@ -720,5 +683,5 @@
   "timezone": "",
   "title": "Hub ECS Journeys",
   "uid": "UBaTMZJWz",
-  "version": 39
+  "version": 46
 }
