@@ -11,6 +11,10 @@ function run-until-success() {
   done
 }
 
+# remove trust-ad from the options line to prevent prometheus from
+# failing when trying to parse this file.
+rm /etc/resolv.conf && sed -e 's/ trust-ad//' < /run/systemd/resolve/stub-resolv.conf > /etc/resolv.conf
+
 # Apt
 run-until-success apt-get update  --yes
 run-until-success apt-get upgrade --yes
