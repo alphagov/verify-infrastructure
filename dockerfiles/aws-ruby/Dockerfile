@@ -1,4 +1,4 @@
-FROM ghcr.io/alphagov/verify/ruby:2.6.6
+FROM ruby:2.6.6
 
 LABEL ruby="2.6.6"
 LABEL aws="3.0.1"

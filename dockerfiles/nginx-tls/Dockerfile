@@ -1,4 +1,4 @@
-FROM ghcr.io/alphagov/verify/nginx:1.17.5-alpine
+FROM nginx:1.17.5-alpine
 
 EXPOSE 8443
 
