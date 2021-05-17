@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 123,
-  "iteration": 1617178676236,
+  "iteration": 1621237763057,
   "links": [],
   "panels": [
     {
@@ -280,7 +280,7 @@
             "evaluator": {
               "params": [
                 0,
-                4
+                6
               ],
               "type": "outside_range"
             },
@@ -683,5 +683,5 @@
   "timezone": "",
   "title": "Hub ECS Journeys",
   "uid": "UBaTMZJWz",
-  "version": 46
+  "version": 47
 }
