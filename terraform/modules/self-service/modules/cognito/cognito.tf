@@ -91,7 +91,7 @@ resource "aws_cognito_user_pool" "user_pool" {
   ]
 
   sms_configuration {
-    external_id = "self-service-external"
+    external_id    = "self-service-external"
     sns_caller_arn = aws_iam_role.cognito_sns_role.arn
   }
 
@@ -127,7 +127,7 @@ resource "aws_cognito_user_pool" "user_pool" {
         <p style="font-weight: bold;">The GOV.UK Verify team<br>
         <a href="https://www.verify.service.gov.uk/">https://www.verify.service.gov.uk/</a></p>
       EOT
-      sms_message = "Sign in at ${var.domain} using the following temporary password {####} and your email {username}."
+      sms_message   = "Sign in at ${var.domain} using the following temporary password {####} and your email {username}."
     }
   }
 
