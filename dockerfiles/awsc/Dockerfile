@@ -1,4 +1,5 @@
-FROM golang:1.16.4
+ARG base_image=golang:1.16.4
+FROM ${base_image}
 
 ENV AWSC_VERSION 50283d253d3f5600dc53d5c1454a4ab7cbfccfe4
 ENV GO111MODULE  on

@@ -1,4 +1,5 @@
-FROM nginx:1.17.5-alpine
+ARG base_image=nginx:1.17.5-alpine
+FROM ${base_image}
 
 EXPOSE 8443
 

@@ -1,4 +1,5 @@
-FROM alpine:3.11
+ARG base_image=alpine:3.11
+FROM ${base_image}
 
 RUN apk add --no-cache squid=4.15-r0
 
