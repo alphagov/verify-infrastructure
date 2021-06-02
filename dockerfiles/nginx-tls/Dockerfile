@@ -3,12 +3,9 @@ FROM ${base_image}
 
 EXPOSE 8443
 
-RUN apk add --no-cache gettext openssl && \
-    chown nginx /etc/hosts
+RUN apk add --no-cache gettext openssl
 
 WORKDIR /tmp
-
-USER nginx
 
 COPY . /tmp
 

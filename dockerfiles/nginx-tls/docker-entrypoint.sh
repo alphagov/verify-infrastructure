@@ -1,6 +1,10 @@
 #!/usr/bin/env ash
 set -ueo pipefail
 
+chown nginx /etc/hosts
+sed -e 's/\(^nginx.*\:\)\/sbin\/nologin/\1\/bin\/sh/' -i /etc/passwd
+su nginx
+
 location_blocks="${LOCATION_BLOCKS:?LOCATION_BLOCKS not set}"
 location_blocks="$(echo "$location_blocks" | base64 -d)"
 export location_blocks
