@@ -16,8 +16,6 @@ data "template_file" "metadata_exporter_task_def" {
     deployment       = var.deployment
     region           = data.aws_region.region.id
     environment      = var.metadata_exporter_environment
-    region           = data.aws_region.region.id
-    account_id       = data.aws_caller_identity.account.account_id
   }
 }
 
