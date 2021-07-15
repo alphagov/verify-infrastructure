@@ -14,7 +14,13 @@
     "entryPoint": [
       "bash",
       "-c",
-      "bundle exec bin/prometheus-metadata-exporter -m https://${signin_domain}/SAML2/metadata/federation -p 9199 --cas /tmp/cas/${deployment}"
+      "bundle exec bin/prometheus-metadata-exporter -m https://${signin_domain}/SAML2/metadata/federation -p 9199 --cas /tmp/cas/${deployment} -e ${deployment}"
+    ],
+    "secrets": [
+      {
+        "name": "GITHUB_API_TOKEN",
+        "valueFrom": "arn:aws:ssm:${region}:${account_id}:parameter/${deployment}/metadata-exporter/github-read-only-api-token"
+      }
     ],
     "environment": [{
       "Name": "APP_ENV",
