@@ -93,6 +93,10 @@
         {
           "name": "NOTIFY_KEY",
           "valueFrom": "${notify_key}"
+        },
+        {
+          "name": "SUPPORT_EMAIL",
+          "valueFrom": "${support_email}"
         }
       ],
       "logConfiguration": {
