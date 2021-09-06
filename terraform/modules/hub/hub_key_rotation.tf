@@ -76,5 +76,28 @@ resource "aws_ecr_repository_policy" "hub_key_rotation_policy" {
         }
     ]
   }
-  EOF
+EOF
+}
+
+resource "aws_ecr_lifecycle_policy" "hkr_lifecycle_policy" {
+  repository = aws_ecr_repository.hub_key_rotation.name
+
+  policy = <<EOF
+  {
+    "rules": [
+      {
+        "rulePriority": 1,
+        "description": "Expire images older than 200 days",
+        "selection": {
+          "tagStatus": "any",
+          "countType": "imageCountMoreThan",
+          "countNumber": 200
+        },
+        "action": {
+          "type": "expire"
+        }
+      }
+    ]
+  }
+EOF
 }
