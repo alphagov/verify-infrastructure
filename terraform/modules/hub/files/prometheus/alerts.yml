@@ -110,9 +110,10 @@ groups:
     labels: *infraticket
     annotations:
       message: |
-        An instance has installed an upgrade which requires a reboot to take effect.
+        An instance has installed an upgrade and the automatic reboot has not run.
     expr: |
       node_reboot_required == 1
+    for: 24h
   - alert: NtpOffsetTooGreat
     labels: *infraticket
     annotations:
