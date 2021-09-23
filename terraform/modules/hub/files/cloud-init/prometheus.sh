@@ -166,7 +166,6 @@ function run-until-success() {
 
 # Make sure unattended upgrades is available and we automatically reboot at 3:00
 # as required in HUB-1057.
-echo unattended-upgrades unattended-upgrades/enable_auto_updates boolean true | debconf-set-selections
 run-until-success "apt-get install --yes unattended-upgrades update-notifier-common"
 cat >> /etc/apt/apt.conf.d/50unattended-upgrades <<'EOF'
 Unattended-Upgrade::Automatic-Reboot "true";
