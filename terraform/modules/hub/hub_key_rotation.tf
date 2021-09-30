@@ -116,15 +116,6 @@ resource "aws_security_group" "sg_hkr_lambda" {
   vpc_id = aws_vpc.hub.id
 }
 
-resource "aws_security_group_rule" "sg_hkr_lambda_ingress" {
-  type      = "ingress"
-  from_port = "0"
-  to_port   = "65535"
-  protocol  = "tcp"
-  cidr_blocks = [aws_vpc.hub.cidr_block]
-  security_group_id = aws_security_group.sg_hkr_lambda.id
-}
-
 resource "aws_security_group_rule" "sg_hkr_lambda_egress" {
   type      = "egress"
   from_port = "0"
