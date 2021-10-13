@@ -47,8 +47,6 @@ resource "aws_elasticache_replication_group" "saml_engine_replay_cache" {
   availability_zones            = local.azs
   replication_group_id          = local.trunc_saml_engine_replace_cache_id
   replication_group_description = "Replication group for the ${var.deployment} SAML Engine replay cache"
-  engine_version                = "5.0.6"
-  apply_immediately             = true
   maintenance_window            = "tue:02:00-tue:04:00"
   node_type                     = "cache.t2.small"
   number_cache_clusters         = local.number_of_availability_zones
