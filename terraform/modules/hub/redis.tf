@@ -3,6 +3,8 @@ resource "aws_elasticache_replication_group" "policy_session_store" {
   availability_zones            = local.azs
   replication_group_id          = "${var.deployment}-policy"
   replication_group_description = "Replication group for the ${var.deployment} Policy session store"
+  engine_version                = "5.0.6"
+  apply_immediately             = true
   maintenance_window            = "tue:02:00-tue:04:00"
   node_type                     = var.redis_cache_size
   number_cache_clusters         = local.number_of_availability_zones
