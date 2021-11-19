@@ -62,7 +62,8 @@ resource "aws_ecr_repository_policy" "hub_key_rotation_policy" {
             "Sid": "AllowPushPullForDeployerRole",
             "Effect": "Allow",
             "Principal": {
-              "AWS": ["arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/accounts-deployer-role"]
+              "AWS": ["arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/accounts-deployer-role"],
+              "Service": "lambda.amazonaws.com"
             },
             "Action": [
               "ecr:BatchGetImage",
