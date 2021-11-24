@@ -92,7 +92,7 @@ resource "aws_ecr_lifecycle_policy" "hkr_lifecycle_policy" {
         "selection": {
           "tagStatus": "any",
           "countType": "imageCountMoreThan",
-          "countNumber": 200
+          "countNumber": 999
         },
         "action": {
           "type": "expire"
