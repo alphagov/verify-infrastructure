@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 123,
-  "iteration": 1621237763057,
+  "iteration": 1636552824560,
   "links": [],
   "panels": [
     {
@@ -256,7 +256,7 @@
           {
             "evaluator": {
               "params": [
-                0.8
+                0.7
               ],
               "type": "lt"
             },
@@ -279,10 +279,10 @@
           {
             "evaluator": {
               "params": [
-                0,
-                6
+                9,
+                18
               ],
-              "type": "outside_range"
+              "type": "within_range"
             },
             "operator": {
               "type": "and"
@@ -350,7 +350,7 @@
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 5,
+        "h": 7,
         "w": 5,
         "x": 19,
         "y": 3
@@ -368,7 +368,7 @@
         "values": false
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "options": {
@@ -390,8 +390,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h])) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h]))) / (sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h] offset 30d)) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h] offset 30d)))",
+          "expr": "(sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h])) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h]))) / (sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h] offset 4w)) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h] offset 4w)))",
           "format": "time_series",
+          "hide": false,
+          "instant": false,
           "interval": "",
           "intervalFactor": 4,
           "legendFormat": "egress rate to IdPS vs. 1 month ago",
@@ -411,14 +413,14 @@
           "fill": true,
           "line": true,
           "op": "lt",
-          "value": 0.8,
+          "value": 0.7,
           "yaxis": "left"
         }
       ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "🚨Alerts",
+      "title": "🚨to IDP Alert",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -430,15 +432,15 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": false,
+        "show": true,
         "values": []
       },
       "yaxes": [
         {
           "decimals": 1,
-          "format": "none",
+          "format": "short",
           "label": "",
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
           "min": null,
           "show": true
@@ -446,6 +448,364 @@
         {
           "format": "short",
           "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                0.8
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          },
+          {
+            "evaluator": {
+              "params": [
+                9,
+                18
+              ],
+              "type": "within_range"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "B",
+                "now-1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "keep_state",
+        "for": "30m",
+        "frequency": "30m",
+        "handler": 1,
+        "message": "📉The rate of return from IDPs has gone down compared to two weeks ago.\nThis indicates that we're getting less responses from our IDPs.\nIf the rate is very low, there may be an outage.. In this case, manually check a complete journey from RP to IDP and back and raise a zendesk ticket to the IDP.",
+        "name": "Return from IDP alert",
+        "noDataState": "keep_state",
+        "notifications": []
+      },
+      "aliasColors": {
+        "rate of return from IDPs now": "semi-dark-blue"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "hub-prod-prom-1",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 5,
+        "x": 19,
+        "y": 10
+      },
+      "hiddenSeries": false,
+      "id": 13,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "rate of return from IDPs now",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "(sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count[1d])) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1d]))) / \n\n(sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count[1d] offset 14d)) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1d] offset 14d)))",
+          "interval": "",
+          "intervalFactor": 10,
+          "legendFormat": "rate from IDPs v 2w ago",
+          "refId": "A"
+        },
+        {
+          "expr": "hour()",
+          "hide": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "expr": "(sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleResponsePost_count[1d])) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1d])))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "rate of return from IDPs now",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 0.8,
+          "yaxis": "left"
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "🚨Rate of return from IDP Alert",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 1,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "decimals": 1,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                0.5
+              ],
+              "type": "lt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          },
+          {
+            "evaluator": {
+              "params": [
+                9,
+                18
+              ],
+              "type": "within_range"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "B",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "30m",
+        "frequency": "5m",
+        "handler": 1,
+        "message": "📉The rate of egress to IdPs has gone down below 50% last 1 hour. You might want to take a look.",
+        "name": "Verify Hub egress rate last 1 hour",
+        "noDataState": "keep_state",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "hub-prod-prom-1",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "hiddenSeries": false,
+      "id": 15,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "(sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageSenderApi_sendJsonAuthnRequestFromHub_count[1h])) / sum(rate(uk_gov_ida_hub_samlproxy_resources_SamlMessageReceiverApi_handleRequestPost_count[1h])))",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "expr": "hour()",
+          "hide": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "lt",
+          "value": 0.5
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Hub egress rate",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
@@ -470,13 +830,13 @@
         },
         "overrides": []
       },
-      "fill": 1,
+      "fill": 0,
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 5,
         "x": 19,
-        "y": 8
+        "y": 17
       },
       "hiddenSeries": false,
       "id": 8,
@@ -508,8 +868,9 @@
         {
           "expr": "sum by(code) (increase(http_server_requests_total{code=~'[45]..'}[$timerange]))",
           "format": "time_series",
+          "instant": false,
           "interval": "",
-          "intervalFactor": 1,
+          "intervalFactor": 10,
           "legendFormat": "{{code}}",
           "refId": "A"
         }
@@ -548,7 +909,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -683,5 +1044,5 @@
   "timezone": "",
   "title": "Hub ECS Journeys",
   "uid": "UBaTMZJWz",
-  "version": 47
+  "version": 68
 }
