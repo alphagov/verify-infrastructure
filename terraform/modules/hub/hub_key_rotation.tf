@@ -62,7 +62,8 @@ resource "aws_ecr_repository_policy" "hub_key_rotation_policy" {
             "Sid": "AllowPushPullForDeployerRole",
             "Effect": "Allow",
             "Principal": {
-              "AWS": ["arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/accounts-deployer-role"]
+              "AWS": ["arn:aws:iam::${data.aws_caller_identity.account.account_id}:role/accounts-deployer-role"],
+              "Service": "lambda.amazonaws.com"
             },
             "Action": [
               "ecr:BatchGetImage",
@@ -91,7 +92,7 @@ resource "aws_ecr_lifecycle_policy" "hkr_lifecycle_policy" {
         "selection": {
           "tagStatus": "any",
           "countType": "imageCountMoreThan",
-          "countNumber": 200
+          "countNumber": 999
         },
         "action": {
           "type": "expire"
