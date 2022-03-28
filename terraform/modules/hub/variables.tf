@@ -75,7 +75,7 @@ variable "saml_proxy_memory_limit_mb" {
 }
 
 variable "prometheus_volume_size" {
-  default = 100
+  default = 120
 }
 
 variable "publically_accessible_from_cidrs" {
