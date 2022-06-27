@@ -384,7 +384,7 @@ EOF
 }
 
 
-resource "aws_dlm_lifecycle_policy" "example" {
+resource "aws_dlm_lifecycle_policy" "prometheus" {
   description        = "${var.deployment} Prometheus DLM lifecycle policy"
   execution_role_arn = aws_iam_role.dlm_lifecycle_role.arn
   state              = "ENABLED"
@@ -394,12 +394,12 @@ resource "aws_dlm_lifecycle_policy" "example" {
 
     schedule {
       name = "24 hours weeks of hourly snapshots"
-      create_rule { cron_expression = "0 * * * ? *" }
+      create_rule { cron_expression = "cron(0 * * * ? *)" }
       retain_rule { count = 24 }
     }
     schedule {
       name = "2 weeks of daily snapshots"
-      create_rule { cron_expression = "30 0 * * ? *" }
+      create_rule { cron_expression = "cron(30 0 * * ? *)" }
       retain_rule { count = 14 }
     }
 
