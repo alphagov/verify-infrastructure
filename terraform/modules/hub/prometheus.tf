@@ -394,12 +394,12 @@ resource "aws_dlm_lifecycle_policy" "prometheus" {
 
     schedule {
       name = "24 hours weeks of hourly snapshots"
-      create_rule { cron_expression = "cron(0 * * * ? *)" }
+      create_rule { interval = "cron(0 * * * ? *)" }
       retain_rule { count = 24 }
     }
     schedule {
       name = "2 weeks of daily snapshots"
-      create_rule { cron_expression = "cron(30 0 * * ? *)" }
+      create_rule { interval = "cron(30 0 * * ? *)" }
       retain_rule { count = 14 }
     }
 
