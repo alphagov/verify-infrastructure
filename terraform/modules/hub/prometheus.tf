@@ -319,6 +319,7 @@ resource "aws_ebs_volume" "prometheus" {
   tags = {
     Name       = "${var.deployment}-prometheus"
     Deployment = var.deployment
+    Snapshot   = "true"
   }
 }
 
@@ -328,6 +329,84 @@ resource "aws_volume_attachment" "prometheus_prometheus" {
   device_name = "/dev/xvdp"
   volume_id   = element(aws_ebs_volume.prometheus.*.id, count.index)
   instance_id = element(aws_instance.prometheus.*.id, count.index)
+}
+
+resource "aws_iam_role" "dlm_lifecycle_role" {
+  name = "${var.deployment}-prometheus-dlm-lifecycle-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "dlm.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "dlm_lifecycle" {
+  name = "${var.deployment}-prometheus-dlm-lifecycle-policy"
+  role = aws_iam_role.dlm_lifecycle_role.id
+
+  policy = <<EOF
+{
+   "Version": "2012-10-17",
+   "Statement": [
+      {
+         "Effect": "Allow",
+         "Action": [
+            "ec2:CreateSnapshot",
+            "ec2:CreateSnapshots",
+            "ec2:DeleteSnapshot",
+            "ec2:DescribeInstances",
+            "ec2:DescribeVolumes",
+            "ec2:DescribeSnapshots"
+         ],
+         "Resource": "*"
+      },
+      {
+         "Effect": "Allow",
+         "Action": [
+            "ec2:CreateTags"
+         ],
+         "Resource": "arn:aws:ec2:*::snapshot/*"
+      }
+   ]
+}
+EOF
+}
+
+
+resource "aws_dlm_lifecycle_policy" "prometheus" {
+  description        = "${var.deployment} Prometheus DLM lifecycle policy"
+  execution_role_arn = aws_iam_role.dlm_lifecycle_role.arn
+  state              = "ENABLED"
+
+  policy_details {
+    resource_types = ["VOLUME"]
+
+    schedule {
+      name = "24 hours weeks of hourly snapshots"
+      create_rule { cron_expression = "cron(0 * * * ? *)" }
+      retain_rule { count = 24 }
+    }
+    schedule {
+      name = "2 weeks of daily snapshots"
+      create_rule { cron_expression = "cron(30 0 * * ? *)" }
+      retain_rule { count = 14 }
+    }
+
+    target_tags = {
+      Snapshot = "true"
+    }
+  }
 }
 
 resource "aws_lb_target_group" "prometheus" {
