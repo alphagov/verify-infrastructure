@@ -107,6 +107,7 @@ variable "wildcard_cert_arn" {
 }
 
 variable "cls_destination_arn" {
+  type        = list(string)
   description = "ARN of the CSLS destination to send logs to"
 }
 
