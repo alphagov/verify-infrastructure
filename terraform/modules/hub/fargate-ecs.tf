@@ -8,8 +8,9 @@ resource "aws_cloudwatch_log_group" "fargate-logs" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "csls-subscription" {
-  name            = "${var.deployment}-hub-csls"
+  count           = length(var.logging_endpoint_arns)
+  name            = "${var.deployment}-hub-csls-${count.index}"
   log_group_name  = aws_cloudwatch_log_group.fargate-logs.name
   filter_pattern  = ""
-  destination_arn = var.cls_destination_arn
+  destination_arn = var.cls_destination_arn[count.index]
 }
