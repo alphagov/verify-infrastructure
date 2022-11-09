@@ -7,6 +7,7 @@ resource "aws_cloudwatch_log_group" "fargate-logs" {
   retention_in_days = 7
 }
 
+
 resource "aws_cloudwatch_log_subscription_filter" "csls-subscription" {
   count           = length(var.cls_destination_arn)
   name            = "${var.deployment}-hub-csls-${count.index}"
