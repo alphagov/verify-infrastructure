@@ -6,6 +6,7 @@ resource "aws_internet_gateway" "hub" {
   }
 }
 
+
 resource "aws_nat_gateway" "static_egress" {
   count = local.number_of_availability_zones
 
