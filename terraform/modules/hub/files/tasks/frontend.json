@@ -182,6 +182,10 @@
         "Value": "${cross_gov_ga_tracker_id}"
       },
       {
+        "Name": "SIGN_UPS_ENABLED",
+        "Value": "${sign_ups_enabled}"
+      },
+      {
         "Name": "CROSS_GOV_GOOGLE_ANALYTICS_DOMAIN_LIST",
         "Value": "${cross_gov_ga_domain_names}"
       },

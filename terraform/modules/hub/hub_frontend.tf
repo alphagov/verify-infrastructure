@@ -70,6 +70,7 @@ data "template_file" "frontend_task_def" {
     ab_test_file               = var.ab_test_file
     analytics_endpoint         = var.analytics_endpoint
     cross_gov_ga_tracker_id    = var.cross_gov_ga_tracker_id
+    sign_ups_enabled           = var.sign_ups_enabled
     cross_gov_ga_domain_names  = var.cross_gov_ga_domain_names
     publish_hub_config_enabled = var.publish_hub_config_enabled
     log_level                  = var.hub_frontend_log_level
