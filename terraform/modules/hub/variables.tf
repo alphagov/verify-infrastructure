@@ -147,6 +147,11 @@ variable "cross_gov_ga_tracker_id" {
   default     = ""
 }
 
+variable "sign_ups_enabled" {
+  description = "Enables sign ups"
+  default     = "true"
+}
+
 variable "cross_gov_ga_domain_names" {
   description = "List of (space delimited) domains to automatically enable links and forms for cross-domain analytics"
   default     = "www.gov.uk"
