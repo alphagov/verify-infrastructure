@@ -7,5 +7,4 @@ RUN apk add --no-cache gettext openssl
 USER www-data
 WORKDIR /tmp
 COPY --chown=www-data . /tmp
-
 ENTRYPOINT ["/tmp/docker-entrypoint.sh"]
