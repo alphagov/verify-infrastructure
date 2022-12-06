@@ -4,7 +4,9 @@ FROM ${base_image}
 EXPOSE 8443
 RUN apk add --no-cache gettext openssl
 
-USER www-data
+USER nginx
 WORKDIR /tmp
-COPY --chown=www-data . /tmp
+COPY --chown=nginx . /tmp
+
+USER root
 ENTRYPOINT ["/tmp/docker-entrypoint.sh"]
