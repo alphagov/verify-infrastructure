@@ -3,7 +3,6 @@ FROM ${base_image}
 
 EXPOSE 8443
 RUN apk add --no-cache gettext openssl
-RUN adduser -D www-data
 
 USER www-data
 WORKDIR /tmp
