@@ -3,10 +3,11 @@ FROM ${base_image}
 
 EXPOSE 8443
 RUN apk add --no-cache gettext openssl
+RUN adduser -D www-data
 
-USER nginx
+USER www-data
 WORKDIR /tmp
-COPY --chown=nginx . /tmp
+COPY --chown=www-data . /tmp
 
-USER root
+
 ENTRYPOINT ["/tmp/docker-entrypoint.sh"]
