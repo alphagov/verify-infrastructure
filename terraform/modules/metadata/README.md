@@ -36,4 +36,4 @@ No Modules.
 
 ## Outputs
 
-No output.
+No outputs.
