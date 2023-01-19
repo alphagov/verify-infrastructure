@@ -1,5 +1,5 @@
 worker_processes  auto;
-pid               /tmp/nginx.pid;
+pid               /var/lib/nginx/nginx.pid;
 
 events {
   worker_connections  4096;
@@ -36,4 +36,3 @@ http {
     $location_blocks
   }
 }
-
