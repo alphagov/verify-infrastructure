@@ -10,6 +10,7 @@ data "terraform_remote_state" "hub" {
   }
 }
 
+
 data "template_file" "metadata_task_def" {
   template = file("${path.module}/files/metadata.json")
 
