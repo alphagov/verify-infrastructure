@@ -200,6 +200,7 @@ resource "aws_lb_listener_rule" "ingress_root" {
 
     redirect {
       host        = "www.gov.uk"
+      path        = "/government/publications/introducing-govuk-verify/introducing-govuk-verify"
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
