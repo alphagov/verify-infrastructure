@@ -209,7 +209,7 @@ resource "aws_lb_listener_rule" "ingress_root_staging" {
 
   condition {
     path_pattern {
-      values = ["/*"]
+      values = ["/"]
     }
   }
 }
