@@ -194,7 +194,7 @@ resource "aws_lb_listener_rule" "ingress_metadata_sp" {
 resource "aws_lb_listener_rule" "ingress_root_staging" {
   count = var.deployment == "staging" ? 1 : 0
   listener_arn = aws_lb_listener.ingress_https.arn
-  priority     = 140
+  priority     = 90
 
   action {
     type = "redirect"
@@ -209,7 +209,7 @@ resource "aws_lb_listener_rule" "ingress_root_staging" {
 
   condition {
     path_pattern {
-      values = ["/"]
+      values = ["/*"]
     }
   }
 }
@@ -217,7 +217,7 @@ resource "aws_lb_listener_rule" "ingress_root_staging" {
 resource "aws_lb_listener_rule" "ingress_root_non_staging" {
   count = var.deployment == "staging" ? 0 : 1
   listener_arn = aws_lb_listener.ingress_https.arn
-  priority     = 140
+  priority     = 90
 
   action {
     type = "redirect"
@@ -232,7 +232,7 @@ resource "aws_lb_listener_rule" "ingress_root_non_staging" {
 
   condition {
     path_pattern {
-      values = ["/"]
+      values = ["/*"]
     }
   }
 }
