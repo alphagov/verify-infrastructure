@@ -4,16 +4,6 @@ global:
   external_labels:
     product: verify
     deployment: ${deployment}
-alerting:
-  alertmanagers:
-  - scheme: https
-    static_configs:
-    - targets:
-      - alerts-eu-west-1a.monitoring.gds-reliability.engineering
-      - alerts-eu-west-1b.monitoring.gds-reliability.engineering
-      - alerts-eu-west-1c.monitoring.gds-reliability.engineering
-rule_files:
-  - "alerts.yml"
 scrape_configs:
   - job_name: prometheus
     ec2_sd_configs:
